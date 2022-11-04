@@ -52,10 +52,6 @@ extensions = [
     "myst_parser",
 ]
 
-myst_heading_anchors = 2
-# enable replacement of (tm) & friends
-myst_enable_extensions = ["replacements"]
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -89,10 +85,6 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
 
-# options for latex output
-latex_engine = "lualatex"
-latex_show_urls = "footnote"
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -119,8 +111,8 @@ html_static_path = ["_static"]
 htmlhelp_basename = "Omniperfdoc"
 
 html_theme_options = {
-    "analytics_id": "G-C5DYLCE9ED",  #  Provided by Google in your dashboard
-    "analytics_anonymize_ip": False,
+    # "analytics_id": "G-1HLBBRSTT9",  #  Provided by Google in your dashboard
+    # "analytics_anonymize_ip": False,
     "logo_only": False,
     "display_version": True,
     "prev_next_buttons_location": "bottom",
@@ -146,7 +138,6 @@ for pref in preferences:
         break
 
 from recommonmark.transform import AutoStructify
-
 
 # app setup hook
 def setup(app):

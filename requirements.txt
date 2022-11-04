@@ -1,14 +1,12 @@
 astunparse==1.6.2
 colorlover
-dash>=1.12.0
+dash
 matplotlib
-numpy>=1.17.5
-pandas>=1.4.3
+numpy
+pandas
 pymongo
 pyyaml
 tabulate
 tqdm
 dash-svg
 dash-bootstrap-components
-kaleido
-setuptools

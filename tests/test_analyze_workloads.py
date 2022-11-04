@@ -1,9 +1,8 @@
 import pytest
 from unittest.mock import patch
-from importlib.machinery import SourceFileLoader
+import imp
 
-omniperf = SourceFileLoader("omniperf", "src/omniperf").load_module()
-
+omniperf = imp.load_source("omniperf", "src/omniperf")
 ##################################################
 ##          Generated tests                     ##
 ##################################################

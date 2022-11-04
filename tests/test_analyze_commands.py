@@ -2,9 +2,9 @@ import os.path
 from pathlib import Path
 from unittest.mock import patch
 import pytest
-from importlib.machinery import SourceFileLoader
+import imp
 
-omniperf = SourceFileLoader("omniperf", "src/omniperf").load_module()
+omniperf = imp.load_source("omniperf", "src/omniperf")
 
 
 def test_valid_path_mi100():
@@ -145,7 +145,7 @@ def test_filter_dispatch_ids_mi100():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi100",
-                "--dispatch",
+                "--filter-dispatch-ids",
                 "0",
             ],
         ):
@@ -162,7 +162,7 @@ def test_filter_dispatch_ids_inv_mi100():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi100",
-                "--dispatch",
+                "--filter-dispatch-ids",
                 "99",
             ],
         ):
@@ -179,7 +179,7 @@ def test_filter_gpu_ids_mi100():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi100",
-                "--gpu-id",
+                "--filter-gpu-ids",
                 "0",
             ],
         ):
@@ -196,7 +196,7 @@ def test_filter_gpu_ids_inv_mi100():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi100",
-                "--gpu-id",
+                "--filter-gpu-ids",
                 "99",
             ],
         ):
@@ -490,7 +490,7 @@ def test_filter_dispatch_ids_mi200():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi200",
-                "--dispatch",
+                "--filter-dispatch-ids",
                 "0",
             ],
         ):
@@ -507,7 +507,7 @@ def test_filter_dispatch_ids_inv_mi200():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi200",
-                "--dispatch",
+                "--filter-dispatch-ids",
                 "99",
             ],
         ):
@@ -524,7 +524,7 @@ def test_filter_gpu_ids_mi200():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi200",
-                "--gpu-id",
+                "--filter-gpu-ids",
                 "0",
             ],
         ):
@@ -541,7 +541,7 @@ def test_filter_gpu_ids_inv_mi200():
                 "analyze",
                 "--path",
                 "tests/workloads/mixbench/mi200",
-                "--gpu-id",
+                "--filter-gpu-ids",
                 "99",
             ],
         ):

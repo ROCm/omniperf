@@ -1,4 +1,3 @@
 module.exports = {
-  // Prettier configuration provided by Grafana scaffolding
-  ...require("./.config/.prettierrc.js")
-};
+    ...require("./node_modules/@grafana/toolkit/src/config/prettier.plugin.config.json"),
+  };

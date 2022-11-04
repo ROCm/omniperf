@@ -10,28 +10,24 @@
 
 1. **Launch & Profile the target application with the command line profiler**
    
-    The command line profiler launches the target application, calls the rocProfiler API, and collects profile results for the specified kernels, dispatches, and/or IP blocks.  If not specified, Omniperf will default to collecting all available counters for all kernels/dispatches launched by the user's executable.
+    The command line profiler launches the target application, calls the rocProfiler API, and collects profile results for the specified kernels, dispatches, and/or ipblock’s.
 
-    To collect the default set of data for all kernels in the target application, launch, e.g.:
+    To collect the default set of data for all kernels in the target application, launch:
     ```shell
-    $ omniperf profile -n vcopy_data -- ./vcopy 1048576 256
+    $ omniperf profile -n vcopy -- ./vcopy 1048576 256
     ```
-    The app runs, each kernel is launched, and profiling results are generated. By default, results are written to (e.g.,) ./workloads/vcopy_data (configurable via the `-n` argument). To collect all requested profile information, it may be required to replay kernels multiple times.
+    The app runs, each kernel is launched, and profiling results are generated. By default, results are written to ./workloads/\<name>. To collect all requested profile information, it may be required to replay kernels multiple times.
 
 2. **Customize data collection**
     
-    Options are available to specify for which kernels/metrics data should be collected.
-    Note that filtering can be applied either in the profiling or analysis stage, however filtering at during profiling collection will often speed up your overall profiling run time.
+    Options are available to specify for which kernels data should be collected.
+    `-k`/`--kernel` enables filtering kernels by name. `-d`/`--dispatch` enables filtering based on dispatch ID. `-b`/`--ipblocks` enables profiling on one or more IP Block(s).
 
-    Some common filters include:
-
-    - `-k`/`--kernel` enables filtering kernels by name. `-d`/`--dispatch` enables filtering based on dispatch ID
-    - `-b`/`--ipblocks` enables collects metrics for only the specified (one or more) IP Blocks.
-
-    To view available metrics by IP Block you can use the `--list-metrics` argument to view a list of all available metrics organized by IP Block.
+    To view available metrics by IP Block you can always use `--list-metrics` to view a list of all available metrics organized by IP Block. 
     ```shell
     $ omniperf analyze --list-metrics <sys_arch>
     ```
+    Note that filtering can also be applied after the fact, at the analysis stage, however filtering at the profiling level will often speed up your overall profiling run time.
 
 3. **Analyze at the command line**
    
@@ -73,9 +69,7 @@ Modes change the fundamental behavior of the Omniperf command line tool. Dependi
 
 - **Database**: Our detailed Grafana GUI is built on a MongoDB database. `--import` profiling results to the DB to interact with the workload in Grafana or `--remove` the workload from the DB.
 
-    Connection options will need to be specified. See the [*Grafana
-    Analysis*](https://amdresearch.github.io/omniperf/analysis.html#grafana-gui-import) import section
-    for more details on this.
+    Connection options will need to be specified. See the [*Omniperf Performance Analysis*](performance_analysis.md#omniperf-grafana-gui-import) section for more details on this.
 
     ```shell
     $ omniperf database --help
@@ -86,8 +80,7 @@ Modes change the fundamental behavior of the Omniperf command line tool. Dependi
 Operation | Mode | Required Arguments
 :--|:--|:--
 Profile a workload | profile | `--name`, `-- <profile_cmd>`
-Standalone roofline analysis | profile | `--name`, `--roof-only`, `-- <profile_cmd>`
+Standalone roofline analysis | profile | `--name`, `--only-roof`, `-- <profile_cmd>`
 Import a workload to database | database | `--import`, `--host`, `--username`, `--workload`, `--team`
 Remove a workload from database | database | `--remove`, `--host`, `--username`, `--workload`, `--team`
-Launch standalone GUI from CLI | analyze | `--path`, `--gui`
-Interact with profiling results from CLI | analyze | `--path`
+Interact with profiling results from CLI | analyze | `--path`, `--gui`

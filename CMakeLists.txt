@@ -16,13 +16,12 @@ message(STATUS "Hostname: ${LOCALHOST}")
 # Versioning info derived from file
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" FULL_VERSION_STRING LIMIT_COUNT 1)
 string(REGEX REPLACE "(\n|\r)" "" FULL_VERSION_STRING "${FULL_VERSION_STRING}")
-set(OMNIPERF_FULL_VERSION "${FULL_VERSION_STRING}")
 string(REGEX REPLACE "([0-9]+)\.([0-9]+)\.([0-9]+)(.*)" "\\1.\\2.\\3" OMNIPERF_VERSION
                      "${FULL_VERSION_STRING}")
 
-# string(REGEX REPLACE "(${OMNIPERF_VERSION})(.*)" "\\2" OMNIPERF_VERSION_TWEAK
-# "${FULL_VERSION_STRING}")
-# string(REGEX REPLACE "^\\." "" OMNIPERF_VERSION_TWEAK "${OMNIPERF_VERSION_TWEAK}")
+string(REGEX REPLACE "(${OMNIPERF_VERSION})(.*)" "\\2" OMNIPERF_VERSION_TWEAK
+                     "${FULL_VERSION_STRING}")
+string(REGEX REPLACE "^\\." "" OMNIPERF_VERSION_TWEAK "${OMNIPERF_VERSION_TWEAK}")
 
 project(
     omniperf
@@ -33,19 +32,6 @@ project(
 
 include(ExternalProject)
 include(GNUInstallDirs)
-
-# version control info
-find_package(Git)
-if(Git_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    execute_process(
-        COMMAND git log --pretty=format:%h -n 1
-        OUTPUT_VARIABLE OMNIPERF_GIT_REV
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    message(STATUS "Git revision: ${OMNIPERF_GIT_REV}")
-    set(GIT_CLONE TRUE)
-else()
-    set(GIT_CLONE FALSER)
-endif()
 
 set(CMAKE_BUILD_TYPE "Release")
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -84,8 +70,7 @@ set(pythonDeps
     "tabulate"
     "tqdm"
     "dash_svg"
-    "dash_bootstrap_components"
-    "kaleido")
+    "dash_bootstrap_components")
 
 message(STATUS "Checking for required Python package dependencies...")
 set_property(GLOBAL PROPERTY pythonDepsFlag "groovy")
@@ -139,7 +124,7 @@ set(moduleFileTemplate "omniperf.lua.in")
 
 configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/${moduleFileTemplate}
-    ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
+    ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${PROJECT_VERSION}.lua
     @ONLY)
 
 # Crusher mods
@@ -149,27 +134,21 @@ if(LOCALHOST MATCHES ".*\.crusher\.olcf\.ornl\.gov")
     file(READ ${PROJECT_SOURCE_DIR}/cmake/modfile.crusher.mod mod_additions)
     file(
         APPEND
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
+        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${PROJECT_VERSION}.lua
         ${mod_additions})
     list(POP_BACK CMAKE_MESSAGE_INDENT)
 endif()
 
 # Thera mods
-if(LOCALHOST MATCHES "TheraS01|.*\.thera\.amd\.com|thera-hn")
+if(LOCALHOST MATCHES ".*\.thera\.amd\.com")
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
     message(STATUS "Using thera-specific modulefile modification")
     file(READ ${PROJECT_SOURCE_DIR}/cmake/modfile.thera.mod mod_additions)
     file(
         APPEND
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
+        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${PROJECT_VERSION}.lua
         ${mod_additions})
     list(POP_BACK CMAKE_MESSAGE_INDENT)
-endif()
-
-# git versioning file
-if(${GIT_CLONE})
-    configure_file(${PROJECT_SOURCE_DIR}/cmake/VERSION.sha.in
-                   ${PROJECT_SOURCE_DIR}/VERSION.sha @ONLY)
 endif()
 
 enable_testing()
@@ -217,12 +196,12 @@ add_test(
 install(PROGRAMS src/omniperf TYPE BIN)
 install(FILES src/parser.py TYPE BIN)
 install(FILES src/common.py TYPE BIN)
-install(FILES VERSION VERSION.sha DESTINATION ${CMAKE_INSTALL_PREFIX})
-# src/omniperf_analyze
+install(FILES VERSION DESTINATION ${CMAKE_INSTALL_PREFIX})
+# src/omniperf_cli
 install(
-    DIRECTORY src/omniperf_analyze
+    DIRECTORY src/omniperf_cli
     TYPE BIN
-    PATTERN src/omniperf_analyze/tests EXCLUDE
+    PATTERN src/omniperf_cli/tests EXCLUDE
     PATTERN "__pycache__" EXCLUDE)
 # src/utils
 install(
@@ -230,11 +209,9 @@ install(
     TYPE BIN
     PATTERN "rooflines*" EXCLUDE)
 # src/utils/rooflines
-install(
-    PROGRAMS src/utils/rooflines/roofline-rhel8-mi200-rocm5
-             src/utils/rooflines/roofline-sle15sp3-mi200-rocm5
-             src/utils/rooflines/roofline-ubuntu20_04-mi200-rocm5
-    DESTINATION ${CMAKE_INSTALL_BINDIR}/utils/rooflines)
+install(PROGRAMS src/utils/rooflines/roofline-rhel8-mi200-rocm5
+                 src/utils/rooflines/roofline-sle15sp3-mi200-rocm5
+        DESTINATION ${CMAKE_INSTALL_BINDIR}/utils/rooflines)
 # src/perfmon_pub
 install(
     DIRECTORY src/perfmon_pub
@@ -253,7 +230,7 @@ install(DIRECTORY sample TYPE DATA)
 # modulefile
 install(
     FILES
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
+        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${PROJECT_VERSION}.lua
     DESTINATION ${MOD_INSTALL_PATH}/${PROJECT_NAME})
 
 # install(PROGRAMS src/omniperf.py DESTINATION ${OMNIPERF_PYINSTALLER_PATH})
@@ -293,27 +270,8 @@ install(
 # set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "omniperf") set(CPACK_RESOURCE_FILE_LICENSE
 # "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 
-# License header update(s)
-add_custom_target(
-    license
-    COMMAND
-        ${PROJECT_SOURCE_DIR}/utils/update_license.py --source ${PROJECT_SOURCE_DIR}/src
-        --license ${PROJECT_SOURCE_DIR}/LICENSE --extension '.py'
-    COMMAND
-        ${PROJECT_SOURCE_DIR}/utils/update_license.py --source ${PROJECT_SOURCE_DIR}
-        --license ${PROJECT_SOURCE_DIR}/LICENSE --file
-        "src/omniperf,cmake/Dockerfile,cmake/rocm_install.sh,docker/docker-entrypoint.sh,src/omniperf_analyze/convertor/mongodb/convert"
-    )
-
 # Source tarball
 set(CPACK_SOURCE_GENERATOR "TGZ")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-${FULL_VERSION_STRING})
-set(CPACK_SOURCE_IGNORE_FILES
-    ".*~$"
-    \.git/
-    \.github
-    \.gitmodules
-    \.gitignore
-    /tests
-    /build)
+set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-${PROJECT_VERSION})
+set(CPACK_SOURCE_IGNORE_FILES ".*~$" \.git/ \.github /tests /build)
 include(CPack)

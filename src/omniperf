@@ -312,8 +312,7 @@ def detect_roofline():
         and int(sles_distro[3]) >= 3  # SLES15 and SP >= 3
     ):
         # Must be a valid SLES machine
-        # Use SP3 binary for all forward compatible service pack versions
-        distro = "15.3"
+        distro = sles_distro
     elif ubuntu_distro == "20.04":
         # Must be a valid Ubuntu machine
         distro = ubuntu_distro

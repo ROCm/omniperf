@@ -87,9 +87,17 @@ Version 1.0.4 (11 Nov 2022)
   * addition of progress bar indicator in web-based GUI (#8)
   * reduced default content for web-based GUI to reduce load times (#9)
   * minor packaging and CI updates 
+<<<<<<< HEAD
   * variety of documentation updates  
   * added an optional argument to vcopy.cpp workload example to specify device id
 
 Version 1.0.3 (07 Nov 2022)
 
   * initial Omniperf release
+=======
+  * variety of documentatinon updates  
+
+Version 1.0.3 (07 Nov 2022)
+
+  * initial Omniperf release
+>>>>>>> relocate changelog to top-level dir

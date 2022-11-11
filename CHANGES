@@ -1,3 +1,12 @@
+Version 1.1.0-PR1 (13 Oct 2023)
+
+  * standardize headers to use 'avg' instead of 'mean'
+  * add color code thresholds to standalone gui to match grafana
+  * modify kernel name shortener to use cpp_filt (#168)
+  * enable stochastic kernel dispatch selection (#183)
+  * patch grafana plugin module to address a known issue in the latest version (#186)
+  * enhanced communication between analyze mode kernel flags (#187)
+
 Version 1.0.10 (22 Aug 2023)
 
   * critical patch for detection of llvm in rocm installs on SLURM systems
@@ -87,17 +96,9 @@ Version 1.0.4 (11 Nov 2022)
   * addition of progress bar indicator in web-based GUI (#8)
   * reduced default content for web-based GUI to reduce load times (#9)
   * minor packaging and CI updates 
-<<<<<<< HEAD
   * variety of documentation updates  
   * added an optional argument to vcopy.cpp workload example to specify device id
 
 Version 1.0.3 (07 Nov 2022)
 
   * initial Omniperf release
-=======
-  * variety of documentatinon updates  
-
-Version 1.0.3 (07 Nov 2022)
-
-  * initial Omniperf release
->>>>>>> relocate changelog to top-level dir

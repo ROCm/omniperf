@@ -24,7 +24,7 @@ from dash import html, dash_table, dcc
 import dash_bootstrap_components as dbc
 from matplotlib.style import available
 
-from omniperf_cli.utils import schema
+from omniperf_analyze.utils import schema
 
 avail_normalizations = ["per_wave", "per_cycle", "per_second", "per_kernel"]
 

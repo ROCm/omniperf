@@ -40,13 +40,13 @@ import sys
 import argparse
 import os.path
 from pathlib import Path
-from omniperf_cli.utils import parser, file_io
+from omniperf_analyze.utils import parser, file_io
 
 
 def initialize_run(args, normalization_filter=None):
     import pandas as pd
     from collections import OrderedDict
-    from omniperf_cli.utils import schema
+    from omniperf_analyze.utils import schema
     from tabulate import tabulate
 
     # Fixme: cur_root.parent.joinpath('soc_params')
@@ -90,11 +90,9 @@ def initialize_run(args, normalization_filter=None):
 
     # Use original normalization or user input from GUI
     if not normalization_filter:
-        print("Used CLI normalization: ", args.normal_unit)
         for k, v in archConfigs.items():
             parser.build_metric_value_string(v.dfs, v.dfs_type, args.normal_unit)
     else: 
-        print("Used GUI normalization: ", normalization_filter)
         for k, v in archConfigs.items():
             parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter)
 
@@ -130,7 +128,7 @@ def initialize_run(args, normalization_filter=None):
 
 def run_gui(args, runs):
     import dash
-    from omniperf_cli.utils import gui
+    from omniperf_analyze.utils import gui
     import dash_bootstrap_components as dbc
 
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
@@ -174,7 +172,7 @@ def run_gui(args, runs):
         print("Multiple runs not supported yet")
 
 def run_cli(args, runs):
-    from omniperf_cli.utils import tty
+    from omniperf_analyze.utils import tty
     # NB:
     # If we assume the panel layout for all archs are similar, it doesn't matter
     # which archConfig passed into show_all function.

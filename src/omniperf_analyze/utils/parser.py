@@ -29,7 +29,7 @@ from matplotlib.pyplot import axis
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
-from omniperf_cli.utils import schema
+from omniperf_analyze.utils import schema
 
 # ------------------------------------------------------------------------------
 # Internal global definitions

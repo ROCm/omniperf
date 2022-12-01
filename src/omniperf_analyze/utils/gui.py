@@ -36,12 +36,12 @@ import plotly.express as px
 
 import colorlover
 
-from omniperf_cli.utils import parser, file_io, schema
+from omniperf_analyze.utils import parser, file_io, schema
 
-from omniperf_cli.utils.gui_components.header import get_header
-from omniperf_cli.utils.gui_components.roofline import get_roofline
-from omniperf_cli.utils.gui_components.memchart import get_memchart
-from omniperf_cli.omniperf_cli import initialize_run
+from omniperf_analyze.utils.gui_components.header import get_header
+from omniperf_analyze.utils.gui_components.roofline import get_roofline
+from omniperf_analyze.utils.gui_components.memchart import get_memchart
+from omniperf_analyze.omniperf_analyze import initialize_run
 
 pd.set_option(
     "mode.chained_assignment", None

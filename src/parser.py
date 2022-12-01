@@ -402,7 +402,7 @@ def parse(my_parser):
         dest="config_dir",
         metavar="",
         help="\t\tSpecify the directory of customized configs.",
-        default=OMNIPERF_HOME.joinpath("omniperf_cli/configs"),
+        default=OMNIPERF_HOME.joinpath("omniperf_analyze/configs"),
     )
     analyze_group.add_argument(
         "-t",

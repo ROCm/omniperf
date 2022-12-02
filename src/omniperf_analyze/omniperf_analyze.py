@@ -224,6 +224,7 @@ def run_gui(args, runs):
         print("Multiple runs not yet supported in GUI. Retry without --gui flag.")
 
 
+
 def run_cli(args, runs):
     from omniperf_analyze.utils import tty
 

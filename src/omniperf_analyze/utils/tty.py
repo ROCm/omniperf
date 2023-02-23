@@ -143,8 +143,12 @@ def show_all(runs, archConfigs, output, decimal, time_unit, selected_cols, verbo
 
                                         df = pd.concat([df, t_df], axis=1)
                                     else:
-                                        df = pd.concat([df, cur_df[header]], axis=1)
+                                        cur_df[header] = [
+                                            round(float(x), decimal) if x != "" else x
+                                            for x in base_df[header]
+                                        ]
 
+                                        df = pd.concat([df, cur_df[header]], axis=1)
                 if not df.empty:
                     # subtitle for each table in a panel if existing
                     if "title" in table_config and table_config["title"]:

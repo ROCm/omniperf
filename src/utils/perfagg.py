@@ -83,6 +83,19 @@ perfmon_config = {
         "GDS": 4,
         "TCC_channels": 32,
     },
+    "mi300": {
+        "SQ": 8,
+        "TA": 2,
+        "TD": 2,
+        "TCP": 4,
+        "TCC": 4,
+        "CPC": 2,
+        "CPF": 2,
+        "SPI": 2,
+        "GRBM": 2,
+        "GDS": 4,
+        "TCC_channels": 32,
+    },
 }
 
 

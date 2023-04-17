@@ -1,2 +1,2 @@
 name,numSE,numCU,numSIMD,numWavesPerCU,numSQC,L2Banks,Freq,mclk
-mi300,8,110,440,32,56,32,1700,1600
+mi300,8,38,4,32,56,32,1950,1300

@@ -1,0 +1,60 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          GPU Busy:
+            avg: AVG(GRBM_GUI_ACTIVE),
+            min: MIN(GRBM_GUI_ACTIVE),
+            max: MAX(GRBM_GUI_ACTIVE),
+            unit: Cycles,
+            tips: 
+          CS Busy:
+            avg: AVG(SPI_CSN_BUSY),
+            min: MIN(SPI_CSN_BUSY),
+            max: MAX(SPI_CSN_BUSY),
+            unit: Cycles,
+            tips: 
+          SPI Busy:
+            avg: AVG(GRBM_SPI_BUSY),
+            min: MIN(GRBM_SPI_BUSY),
+            max: MAX(GRBM_SPI_BUSY),
+            unit: Cycles,
+            tips: 
+          SQ Busy:
+            avg: AVG(SQ_BUSY_CYCLES),
+            min: MIN(SQ_BUSY_CYCLES),
+            max: MAX(SQ_BUSY_CYCLES),
+            unit: Cycles,
+            tips: 
+          Dispatched Workgroups:
+            avg: AVG(SPI_CSN_NUM_THREADGROUPS),
+            min: MIN(SPI_CSN_NUM_THREADGROUPS),
+            max: MAX(SPI_CSN_NUM_THREADGROUPS),
+            unit: Workgroups,
+            tips: 
+          Dispatched Wavefronts:
+            avg: AVG(SPI_CSN_WAVE),
+            min: MIN(SPI_CSN_WAVE),
+            max: MAX(SPI_CSN_WAVE),
+            unit: Wavefronts,
+            tips: 
+          Wave Alloc Failed:
+            avg: AVG(SPI_RA_REQ_NO_ALLOC),
+            min: MIN(SPI_RA_REQ_NO_ALLOC),
+            max: MAX(SPI_RA_REQ_NO_ALLOC),
+            unit: Cycles,
+            tips: 
+          Wave Alloc Failed - CS:
+            avg: AVG(SPI_RA_REQ_NO_ALLOC_CSN),
+            min: MIN(SPI_RA_REQ_NO_ALLOC_CSN),
+            max: MAX(SPI_RA_REQ_NO_ALLOC_CSN),
+            unit: Cycles,
+            tips: 
+      

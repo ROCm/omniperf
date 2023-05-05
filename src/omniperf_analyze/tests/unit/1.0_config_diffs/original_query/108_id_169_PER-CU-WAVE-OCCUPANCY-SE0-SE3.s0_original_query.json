@@ -1,0 +1,45 @@
+[
+    {"$project": {
+      "_id": 0,
+      "Dispatch": 1,
+      "SE": 1,
+      "CU": 1,
+      "Occupancy":1
+    }},
+    {"$unionWith": {
+        "coll": "wave_occu_se1",
+        "pipeline": [
+            {"$project": {
+                "_id": 0,
+                "Dispatch": 1,
+                "SE": 1,
+                "CU": 1,
+                "Occupancy":1
+            }}
+        ]
+    }},
+    {"$unionWith": {
+        "coll": "wave_occu_se2",
+        "pipeline": [
+            {"$project": {
+                "_id": 0,
+                "Dispatch": 1,
+                "SE": 1,
+                "CU": 1,
+                "Occupancy":1
+            }}
+        ]
+    }},
+    {"$unionWith": {
+        "coll": "wave_occu_se3",
+        "pipeline": [
+            {"$project": {
+                "_id": 0,
+                "Dispatch": 1,
+                "SE": 1,
+                "CU": 1,
+                "Occupancy":1
+            }}
+        ]
+    }}
+]

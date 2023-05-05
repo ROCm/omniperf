@@ -1,0 +1,165 @@
+[
+    {"$project": {
+      "_id": 0,
+      "SE":1,
+      "SIMDs": 1,
+      "wCycles": 1,
+      "wPct": 1,
+      "sCycles": 1,
+      "sPct": 1,
+      "iCycles": 1,
+      "iPct": 1,
+      "wsCycles": 1,
+      "wsPct": 1,
+      "wsiCycles": 1,
+      "wsiPct": 1
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se1",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se2",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se3",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se4",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se5",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se6",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_mem_perf_se7",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+                "SE":1,
+
+                "SIMDs": 1,
+                "wCycles": 1,
+                "wPct": 1,
+                "sCycles": 1,
+                "sPct": 1,
+                "iCycles": 1,
+                "iPct": 1,
+                "wsCycles": 1,
+                "wsPct": 1,
+                "wsiCycles": 1,
+                "wsiPct": 1
+            }}
+      ]
+    }}
+
+
+ ]

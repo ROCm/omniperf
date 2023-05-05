@@ -1,0 +1,33 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          type: type
+          count: count
+          tips: Tips
+        metric:
+          Buffer Instr:
+            count: AVG((TA_BUFFER_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Buffer Read:
+            count: AVG((TA_BUFFER_READ_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Buffer Write:
+            count: AVG((TA_BUFFER_WRITE_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Buffer Atomic:
+            count: AVG((TA_BUFFER_WRITE_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Flat Instr:
+            count: AVG((TA_FLAT_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Flat Read:
+            count: AVG((TA_FLAT_READ_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Flat Write:
+            count: AVG((TA_FLAT_WRITE_WAVEFRONTS_sum / $denom)),
+            tips: 
+          Flat Atomic:
+            count: AVG((TA_FLAT_ATOMIC_WAVEFRONTS_sum / $denom)),
+            tips: 
+      

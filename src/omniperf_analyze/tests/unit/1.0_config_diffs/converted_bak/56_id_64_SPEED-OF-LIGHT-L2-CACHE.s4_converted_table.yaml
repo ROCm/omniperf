@@ -1,0 +1,24 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          value: Value
+          tips: Tips
+        metric:
+          L2 Util:
+            value: AVG(((TCC_BUSY_sum * 100) / (TO_INT($L2Banks) * GRBM_GUI_ACTIVE))),
+            tips: 
+          Cache Hit:
+            value: AVG((((100 * TCC_HIT_sum) / (TCC_HIT_sum + TCC_MISS_sum)) if ((TCC_HIT_sum
+              + TCC_MISS_sum) != 0) else 0)),
+            tips: 
+          L2-EA Rd BW:
+            value: AVG((((TCC_EA_RDREQ_32B_sum * 32) + ((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum)
+              * 64)) / (EndNs - BeginNs))),
+            tips: 
+          L2-EA Wr BW:
+            value: AVG((((TCC_EA_WRREQ_64B_sum * 64) + ((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum)
+              * 32)) / (EndNs - BeginNs))),
+            tips: 
+      

@@ -1,0 +1,174 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Bandwidth (Aggreated):
+            avg: (32 * PhyCasBW_avg)
+            min: (32 * PhyCasBW_min)
+            max: (32 * PhyCasBW_max)
+            unit: GB/s
+            tips: 
+          Bandwidth (per-channel):
+            avg: PhyCasBW_avg
+            min: PhyCasBW_min
+            max: PhyCasBW_max
+            unit: GB/s
+            tips: 
+          Bandwidth (per-channel Read):
+            avg: PhyCasRdBW_avg
+            min: PhyCasRdBW_min
+            max: PhyCasRdBW_max
+            unit: GB/s
+            tips: 
+          Bandwidth (per-channel Write):
+            avg: PhyCasWrBW_avg
+            min: PhyCasWrBW_min
+            max: PhyCasWrBW_max
+            unit: GB/s
+            tips: 
+          Bus Util:
+            avg: PhyBusUtilPct_avg
+            min: PhyBusUtilPct_min
+            max: PhyBusUtilPct_max
+            unit: pct
+            tips: 
+          Read/Write TurnAround:
+            avg: PhyTaTotal_avg
+            min: PhyTaTotal_min
+            max: PhyTaTotal_max
+            unit: MReq/s
+            tips: 
+          Read2Write (Threshold):
+            avg: PhyRd2WrTaTh_avg
+            min: PhyRd2WrTaTh_min
+            max: PhyRd2WrTaTh_max
+            unit: MReq/s
+            tips: 
+          Write2Read (Threshold):
+            avg: PhyWr2RdTaTh_avg
+            min: PhyWr2RdTaTh_min
+            max: PhyWr2RdTaTh_max
+            unit: MReq/s
+            tips: 
+          Precharge:
+            avg: PhyPrechgRate_avg
+            min: PhyPrechgRate_min
+            max: PhyPrechgRate_max
+            unit: MReq/s
+            tips: 
+          Precharge (Conflict):
+            avg: PhyPrechgConflictPct_avg
+            min: PhyPrechgConflictPct_min
+            max: PhyPrechgConflictPct_max
+            unit: pct
+            tips: 
+          Precharge (Idle Timeout):
+            avg: PhyPrechgSpecPct_avg
+            min: PhyPrechgSpecPct_min
+            max: PhyPrechgSpecPct_max
+            unit: pct
+            tips: 
+          Precharge (All Cmd):
+            avg: PhyPrechgAllcmdPct_avg
+            min: PhyPrechgAllcmdPct_min
+            max: PhyPrechgAllcmdPct_max
+            unit: pct
+            tips: 
+          Precharge (Other):
+            avg: PhyPrechgOtherPct_avg
+            min: PhyPrechgOtherPct_min
+            max: PhyPrechgOtherPct_max
+            unit: pct
+            tips: 
+          ACT Rate:
+            avg: PhyActRate_avg
+            min: PhyActRate_min
+            max: PhyActRate_max
+            unit: MReq/s
+            tips: 
+          CAS Rate:
+            avg: PhyCasRate_avg
+            min: PhyCasRate_min
+            max: PhyCasRate_max
+            unit: MReq/s
+            tips: 
+          CAS/ACT:
+            avg: PhyCasPerAct_avg
+            min: PhyCasPerAct_min
+            max: PhyCasPerAct_max
+            unit: 
+            tips: 
+          CAS-AP/ACT:
+            avg: PhyCasApPerAct_avg
+            min: PhyCasApPerAct_min
+            max: PhyCasApPerAct_max
+            unit: 
+            tips: 
+          CAS Read:
+            avg: PhyCasRdPct_avg
+            min: PhyCasRdPct_min
+            max: PhyCasRdPct_max
+            unit: pct
+            tips: 
+          CAS Wr:
+            avg: PhyCasWrPct_avg
+            min: PhyCasWrPct_min
+            max: PhyCasWrPct_max
+            unit: pct
+            tips: 
+          CAS (32B Req):
+            avg: PhyCas32BPct_avg
+            min: PhyCas32BPct_min
+            max: PhyCas32BPct_max
+            unit: pct
+            tips: 
+          CAS (64B Req):
+            avg: PhyCas64BPct_avg
+            min: PhyCas64BPct_min
+            max: PhyCas64BPct_max
+            unit: pct
+            tips: 
+          CAS (Pri:Low):
+            avg: PhyCasPriLowPct_avg
+            min: PhyCasPriLowPct_min
+            max: PhyCasPriLowPct_max
+            unit: pct
+            tips: 
+          CAS (Pri:Med):
+            avg: PhyCasPriMedPct_avg
+            min: PhyCasPriMedPct_min
+            max: PhyCasPriMedPct_max
+            unit: pct
+            tips: 
+          CAS (Pri:Hi):
+            avg: PhyCasPriHiPct_avg
+            min: PhyCasPriHiPct_min
+            max: PhyCasPriHiPct_max
+            unit: pct
+            tips: 
+          CAS (Pri:Urg):
+            avg: PhyCasPriUrgPct_avg
+            min: PhyCasPriUrgPct_min
+            max: PhyCasPriUrgPct_max
+            unit: pct
+            tips: 
+          CAS (Ch0):
+            avg: PhyCasCh0Pct_avg
+            min: PhyCasCh0Pct_min
+            max: PhyCasCh0Pct_max
+            unit: pct
+            tips: 
+          CAS (Ch1):
+            avg: PhyCasCh1Pct_avg
+            min: PhyCasCh1Pct_min
+            max: PhyCasCh1Pct_max
+            unit: pct
+            tips: 
+      

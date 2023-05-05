@@ -1,0 +1,17 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          value: Value
+          tips: Tips
+        metric:
+          numActiveCUs:
+            value: TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / GRBM_GUI_ACTIVE)),
+              0) / $maxWavesPerCU) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES)
+              / GRBM_GUI_ACTIVE)), 0), $maxWavesPerCU), 8)), $numCU))
+            tips: 
+          kernelBusyCycles:
+            value: ROUND(AVG((((EndNs - BeginNs) / 1000) * $sclk)), 0)
+            tips: 
+      

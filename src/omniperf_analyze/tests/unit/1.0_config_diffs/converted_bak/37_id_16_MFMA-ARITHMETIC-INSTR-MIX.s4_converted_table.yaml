@@ -1,0 +1,24 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          type: type
+          count: count
+          tips: Tips
+        metric:
+          MFMA-I8:
+            count: AVG((SQ_INSTS_VALU_MFMA_I8 / SQ_WAVES)),
+            tips: 
+          MFMA-F16:
+            count: AVG((SQ_INSTS_VALU_MFMA_F16 / SQ_WAVES)),
+            tips: 
+          MFMA-BF16:
+            count: AVG((SQ_INSTS_VALU_MFMA_BF16 / SQ_WAVES)),
+            tips: 
+          MFMA-F32:
+            count: AVG((SQ_INSTS_VALU_MFMA_F32 / SQ_WAVES)),
+            tips: 
+          MFMA-F64:
+            count: AVG((SQ_INSTS_VALU_MFMA_F64 / SQ_WAVES)),
+            tips: 
+      

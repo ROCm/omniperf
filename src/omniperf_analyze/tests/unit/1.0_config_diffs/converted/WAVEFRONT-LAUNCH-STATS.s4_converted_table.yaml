@@ -1,0 +1,72 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Grid Size:
+            avg: AVG(grd)
+            min: MIN(grd)
+            max: MAX(grd)
+            unit: Work Items
+            tips: 
+          Workgroup Size:
+            avg: AVG(wgr)
+            min: MIN(wgr)
+            max: MAX(wgr)
+            unit: Work Items
+            tips: 
+          Total Wavefronts:
+            avg: AVG(SPI_CSN_WAVE)
+            min: MIN(SPI_CSN_WAVE)
+            max: MAX(SPI_CSN_WAVE)
+            unit: Wavefronts
+            tips: 
+          Saved Wavefronts:
+            avg: AVG(SQ_WAVES_SAVED)
+            min: MIN(SQ_WAVES_SAVED)
+            max: MAX(SQ_WAVES_SAVED)
+            unit: Wavefronts
+            tips: 
+          Restored Wavefronts:
+            avg: AVG(SQ_WAVES_RESTORED)
+            min: MIN(SQ_WAVES_RESTORED)
+            max: MAX(SQ_WAVES_RESTORED)
+            unit: Wavefronts
+            tips: 
+          VGPRs:
+            avg: AVG(vgpr)
+            min: MIN(vgpr)
+            max: MAX(vgpr)
+            unit: Registers
+            tips: 
+          SGPRs:
+            avg: AVG(sgpr)
+            min: MIN(sgpr)
+            max: MAX(sgpr)
+            unit: Registers
+            tips: 
+          LDS Allocation:
+            avg: AVG(lds)
+            min: MIN(lds)
+            max: MAX(lds)
+            unit: Bytes
+            tips: 
+          Scratch Allocation:
+            avg: AVG(scr)
+            min: MIN(scr)
+            max: MAX(scr)
+            unit: Bytes
+            tips: 
+          Kernel Time:
+            avg: AVG((EndNs - BeginNs))
+            min: MIN((EndNs - BeginNs))
+            max: MAX((EndNs - BeginNs))
+            unit: ns
+            tips: 
+      

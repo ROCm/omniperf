@@ -1,0 +1,85 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          avg: avg
+          min: min
+          max: max
+          unit: Unit
+          tips: Tips
+        metric:
+          Wave Cycles:
+            avg: AVG(((4 * SQ_WAVE_CYCLES) / SQ_WAVES))
+            min: MIN(((4 * SQ_WAVE_CYCLES) / SQ_WAVES))
+            max: MAX(((4 * SQ_WAVE_CYCLES) / SQ_WAVES))
+            unit: Cycles/Wave
+            tips: 
+          LDS Instrs:
+            avg: AVG((SQ_INSTS_LDS / $denom))
+            min: MIN((SQ_INSTS_LDS / $denom))
+            max: MAX((SQ_INSTS_LDS / $denom))
+            unit: (Instr  + $normUnit)
+            tips: 
+          Bandwidth:
+            avg: AVG(((((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) * 4) * TO_INT($L2Banks))
+              / $denom))
+            min: MIN(((((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) * 4) * TO_INT($L2Banks))
+              / $denom))
+            max: MAX(((((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) * 4) * TO_INT($L2Banks))
+              / $denom))
+            unit: (Bytes  + $normUnit)
+            tips: 
+          Bank Conficts/Access:
+            avg: AVG(((SQ_LDS_BANK_CONFLICT / (SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT))
+              if ((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) != 0) else None))
+            min: MIN(((SQ_LDS_BANK_CONFLICT / (SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT))
+              if ((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) != 0) else None))
+            max: MAX(((SQ_LDS_BANK_CONFLICT / (SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT))
+              if ((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) != 0) else None))
+            unit: Conflicts/Access
+            tips: 
+          Index Accesses:
+            avg: AVG((SQ_LDS_IDX_ACTIVE / $denom))
+            min: MIN((SQ_LDS_IDX_ACTIVE / $denom))
+            max: MAX((SQ_LDS_IDX_ACTIVE / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+          Atomic Cycles:
+            avg: AVG((SQ_LDS_ATOMIC_RETURN / $denom))
+            min: MIN((SQ_LDS_ATOMIC_RETURN / $denom))
+            max: MAX((SQ_LDS_ATOMIC_RETURN / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+          Bank Conflict:
+            avg: AVG((SQ_LDS_BANK_CONFLICT / $denom))
+            min: MIN((SQ_LDS_BANK_CONFLICT / $denom))
+            max: MAX((SQ_LDS_BANK_CONFLICT / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+          Addr Conflict:
+            avg: AVG((SQ_LDS_ADDR_CONFLICT / $denom))
+            min: MIN((SQ_LDS_ADDR_CONFLICT / $denom))
+            max: MAX((SQ_LDS_ADDR_CONFLICT / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+          Unaligned Stall:
+            avg: AVG((SQ_LDS_UNALIGNED_STALL / $denom))
+            min: MIN((SQ_LDS_UNALIGNED_STALL / $denom))
+            max: MAX((SQ_LDS_UNALIGNED_STALL / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+          Mem Violations:
+            avg: AVG((SQ_LDS_MEM_VIOLATIONS / $denom))
+            min: MIN((SQ_LDS_MEM_VIOLATIONS / $denom))
+            max: MAX((SQ_LDS_MEM_VIOLATIONS / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          LDS Latency:
+            avg: AVG(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0) else None))
+            min: MIN(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0) else None))
+            max: MAX(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0) else None))
+            unit: Cycles
+            coll_level: SQ_INST_LEVEL_LDS
+            tips: 
+      

@@ -1,0 +1,93 @@
+[
+    {"$group": {
+        "_id": null,
+        "timeSum": {
+            "$sum": { "$subtract": ["&EndTime", "&BeginTime"] }
+        },
+        "maxEnd": {
+          "$max": "&EndTime"
+        },
+        "minBegin": {
+          "$min": "&BeginTime"
+        }
+    }},
+    {"$project": {
+      "_id": 0,
+      "Shader Engine": "SE0",
+      "Avg Wave Occupancy": {
+        "$divide": ["&timeSum", { "$subtract": ["&maxEnd", "&minBegin"] }]
+      }
+    }},
+    {"$unionWith": {
+      "coll": "wave_timing_se1",
+      "pipeline": [
+        {"$group": {
+            "_id": null,
+            "timeSum": {
+                "$sum": { "$subtract": ["&EndTime", "&BeginTime"] }
+            },
+            "maxEnd": {
+              "$max": "&EndTime"
+            },
+            "minBegin": {
+              "$min": "&BeginTime"
+            }
+        }},
+        {"$project": {
+          "_id": 0,
+          "Shader Engine": "SE1",
+          "Avg Wave Occupancy": {
+            "$divide": ["&timeSum", { "$subtract": ["&maxEnd", "&minBegin"] }]
+          }
+        }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "wave_timing_se2",
+      "pipeline": [
+        {"$group": {
+            "_id": null,
+            "timeSum": {
+                "$sum": { "$subtract": ["&EndTime", "&BeginTime"] }
+            },
+            "maxEnd": {
+              "$max": "&EndTime"
+            },
+            "minBegin": {
+              "$min": "&BeginTime"
+            }
+        }},
+        {"$project": {
+          "_id": 0,
+          "Shader Engine": "SE2",
+          "Avg Wave Occupancy": {
+            "$divide": ["&timeSum", { "$subtract": ["&maxEnd", "&minBegin"] }]
+          }
+        }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "wave_timing_se3",
+      "pipeline": [
+        {"$group": {
+            "_id": null,
+            "timeSum": {
+                "$sum": { "$subtract": ["&EndTime", "&BeginTime"] }
+            },
+            "maxEnd": {
+              "$max": "&EndTime"
+            },
+            "minBegin": {
+              "$min": "&BeginTime"
+            }
+        }},
+        {"$project": {
+          "_id": 0,
+          "Shader Engine": "SE3",
+          "Avg Wave Occupancy": {
+            "$divide": ["&timeSum", { "$subtract": ["&maxEnd", "&minBegin"] }]
+          }
+        }}
+      ]
+    }}
+]

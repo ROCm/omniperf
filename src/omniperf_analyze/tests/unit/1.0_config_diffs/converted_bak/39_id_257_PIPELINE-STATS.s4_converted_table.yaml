@@ -1,0 +1,66 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          IPC (Avg):
+            avg: AVG((SQ_INSTS / SQ_BUSY_CU_CYCLES)),
+            min: MIN((SQ_INSTS / SQ_BUSY_CU_CYCLES)),
+            max: MAX((SQ_INSTS / SQ_BUSY_CU_CYCLES)),
+            unit: Instr/cycle,
+            tips: 
+          IPC (Issue):
+            avg: AVG(((((((((SQ_INSTS_VALU + SQ_INSTS_VMEM) + SQ_INSTS_SALU) + SQ_INSTS_SMEM)
+              + SQ_INSTS_GDS) + SQ_INSTS_BRANCH) + SQ_INSTS_SENDMSG) + SQ_INSTS_VSKIPPED)
+              / SQ_ACTIVE_INST_ANY)),
+            min: MIN(((((((((SQ_INSTS_VALU + SQ_INSTS_VMEM) + SQ_INSTS_SALU) + SQ_INSTS_SMEM)
+              + SQ_INSTS_GDS) + SQ_INSTS_BRANCH) + SQ_INSTS_SENDMSG) + SQ_INSTS_VSKIPPED)
+              / SQ_ACTIVE_INST_ANY)),
+            max: MAX(((((((((SQ_INSTS_VALU + SQ_INSTS_VMEM) + SQ_INSTS_SALU) + SQ_INSTS_SMEM)
+              + SQ_INSTS_GDS) + SQ_INSTS_BRANCH) + SQ_INSTS_SENDMSG) + SQ_INSTS_VSKIPPED)
+              / SQ_ACTIVE_INST_ANY)),
+            unit: Instr/cycle,
+            tips: 
+          SALU Util:
+            avg: AVG((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU)),
+            min: MIN((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU)),
+            max: MAX((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU)),
+            unit: pct,
+            tips: 
+          VALU Util:
+            avg: AVG((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU)),
+            min: MIN((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU)),
+            max: MAX((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU)),
+            unit: pct,
+            tips: 
+          VALU Active Threads:
+            avg: AVG(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU) if (SQ_ACTIVE_INST_VALU
+              != 0) else None)),
+            min: MIN(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU) if (SQ_ACTIVE_INST_VALU
+              != 0) else None)),
+            max: MAX(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU) if (SQ_ACTIVE_INST_VALU
+              != 0) else None)),
+            unit: Threads,
+            tips: 
+          MFMA Util:
+            avg: AVG(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE))),
+            min: MIN(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE))),
+            max: MAX(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE))),
+            unit: pct,
+            tips: 
+          MFMA Instr Cycles:
+            avg: AVG(((SQ_VALU_MFMA_BUSY_CYCLES / SQ_INSTS_MFMA) if (SQ_INSTS_MFMA != 0)
+              else None)),
+            min: MIN(((SQ_VALU_MFMA_BUSY_CYCLES / SQ_INSTS_MFMA) if (SQ_INSTS_MFMA != 0)
+              else None)),
+            max: MAX(((SQ_VALU_MFMA_BUSY_CYCLES / SQ_INSTS_MFMA) if (SQ_INSTS_MFMA != 0)
+              else None)),
+            unit: cycles/instr,
+            tips: 
+      

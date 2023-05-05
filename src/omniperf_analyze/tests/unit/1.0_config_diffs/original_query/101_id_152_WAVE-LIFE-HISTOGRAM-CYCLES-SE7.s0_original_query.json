@@ -1,0 +1,10 @@
+[
+    {"$addFields": {
+        "elapsedTime1": { "$divide": [    {"$multiply": [{"$subtract": ["&EndTime", "&BeginTime"]}, 1000]},   $sclk]}
+    }},
+
+    {"$project": {
+      "_id": 0,
+      "elapsedTime1": 1
+    }}
+]

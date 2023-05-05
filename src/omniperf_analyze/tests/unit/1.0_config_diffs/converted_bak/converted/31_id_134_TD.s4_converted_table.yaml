@@ -1,0 +1,57 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          avg: avg
+          min: min
+          max: max
+          unit: Unit
+          tips: Tips
+        metric:
+          TD Busy:
+            avg: AVG(((100 * TD_TD_BUSY_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            min: MIN(((100 * TD_TD_BUSY_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            max: MAX(((100 * TD_TD_BUSY_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            unit: pct
+            tips: 
+          TC2TD Stall:
+            avg: AVG(((100 * TD_TC_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            min: MIN(((100 * TD_TC_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            max: MAX(((100 * TD_TC_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            unit: pct
+            tips: 
+          SPI2TD Stall:
+            avg: AVG(((100 * TD_SPI_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            min: MIN(((100 * TD_SPI_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            max: MAX(((100 * TD_SPI_STALL_sum) / (GRBM_GUI_ACTIVE * $numCU)))
+            unit: pct
+            tips: 
+          Coalescable Instr:
+            avg: AVG((TD_COALESCABLE_WAVEFRONT_sum / $denom))
+            min: MIN((TD_COALESCABLE_WAVEFRONT_sum / $denom))
+            max: MAX((TD_COALESCABLE_WAVEFRONT_sum / $denom))
+            unit: (Instr  + $normUnit)
+            tips: 
+          Load Instr:
+            avg: AVG((((TD_LOAD_WAVEFRONT_sum - TD_STORE_WAVEFRONT_sum) - TD_ATOMIC_WAVEFRONT_sum)
+              / $denom))
+            min: MIN((((TD_LOAD_WAVEFRONT_sum - TD_STORE_WAVEFRONT_sum) - TD_ATOMIC_WAVEFRONT_sum)
+              / $denom))
+            max: MAX((((TD_LOAD_WAVEFRONT_sum - TD_STORE_WAVEFRONT_sum) - TD_ATOMIC_WAVEFRONT_sum)
+              / $denom))
+            unit: (Instr  + $normUnit)
+            tips: 
+          Store Instr:
+            avg: AVG((TD_STORE_WAVEFRONT_sum / $denom))
+            min: MIN((TD_STORE_WAVEFRONT_sum / $denom))
+            max: MAX((TD_STORE_WAVEFRONT_sum / $denom))
+            unit: (Instr  + $normUnit)
+            tips: 
+          Atomic Instr:
+            avg: AVG((TD_ATOMIC_WAVEFRONT_sum / $denom))
+            min: MIN((TD_ATOMIC_WAVEFRONT_sum / $denom))
+            max: MAX((TD_ATOMIC_WAVEFRONT_sum / $denom))
+            unit: (Instr  + $normUnit)
+            tips: 
+      

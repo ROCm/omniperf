@@ -1,0 +1,61 @@
+[
+    {"$group": {
+        "_id": null,
+
+        "SdpReqRate_avg":{"$avg": "&SdpReqRate"},
+        "SdpReqRate_min":{"$min": "&SdpReqRate"},
+        "SdpReqRate_max":{"$max": "&SdpReqRate"},
+
+        "SdpPageHitPct_avg":{"$avg": "&SdpPageHitPct"},
+        "SdpPageHitPct_min":{"$min": "&SdpPageHitPct"},
+        "SdpPageHitPct_max":{"$max": "&SdpPageHitPct"},
+
+        "SdpPageMissPct_avg":{"$avg": "&SdpPageMissPct"},
+        "SdpPageMissPct_min":{"$min": "&SdpPageMissPct"},
+        "SdpPageMissPct_max":{"$max": "&SdpPageMissPct"},
+
+        "SdpPageConflictPct_avg":{"$avg": "&SdpPageConflictPct"},
+        "SdpPageConflictPct_min":{"$min": "&SdpPageConflictPct"},
+        "SdpPageConflictPct_max":{"$max": "&SdpPageConflictPct"}
+
+    }},
+
+    {"$set": {
+        "array": [
+            {
+            "Metric": "SDP Request",
+            "Avg": "&SdpReqRate_avg",
+            "Min": "&SdpReqRate_min",
+            "Max": "&SdpReqRate_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "Page Hit",
+            "Avg": "&SdpPageHitPct_avg",
+            "Min": "&SdpPageHitPct_min",
+            "Max": "&SdpPageHitPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Page Miss",
+            "Avg": "&SdpPageMissPct_avg",
+            "Min": "&SdpPageMissPct_min",
+            "Max": "&SdpPageMissPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Page Conflict",
+            "Avg": "&SdpPageConflictPct_avg",
+            "Min": "&SdpPageConflictPct_min",
+            "Max": "&SdpPageConflictPct_max", 
+            "Unit": "pct"
+            }
+     ]
+    }},
+    {"$unwind": {
+        "path": "&array"
+    }},
+    {"$replaceRoot": {
+        "newRoot": "&array"
+    }}
+]

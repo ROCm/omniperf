@@ -1,0 +1,127 @@
+[
+    {"$project": {
+      "_id": 0,
+      "SE":1,
+      "Instructions": 1,
+      "TotalTime": 1,
+      "ActiveTime": 1,
+      "IssueTime":1,
+      "avgIPC":1,
+      "IssueIPC":1,
+      "activeIPC":1
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se1",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se2",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se3",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se4",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se5",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se6",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_ipc_perf_se7",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "Instructions": 1,
+            "TotalTime": 1,
+            "ActiveTime": 1,
+            "IssueTime":1,
+            "avgIPC":1,
+            "IssueIPC":1,
+            "activeIPC":1
+            }}
+      ]
+    }}
+
+
+ ]

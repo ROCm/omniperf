@@ -1,0 +1,320 @@
+[
+    {"$group": {
+        "_id": null,
+
+        "PhyCasBW_avg":{"$avg": "&PhyCasBW"},
+        "PhyCasBW_min":{"$min": "&PhyCasBW"},
+        "PhyCasBW_max":{"$max": "&PhyCasBW"},
+
+        "PhyCasRdBW_avg":{"$avg": "&PhyCasRdBW"},
+        "PhyCasRdBW_min":{"$min": "&PhyCasRdBW"},
+        "PhyCasRdBW_max":{"$max": "&PhyCasRdBW"},
+
+        "PhyCasWrBW_avg":{"$avg": "&PhyCasWrBW"},
+        "PhyCasWrBW_min":{"$min": "&PhyCasWrBW"},
+        "PhyCasWrBW_max":{"$max": "&PhyCasWrBW"},
+
+        "PhyBusUtilPct_avg":{"$avg": "&PhyBusUtilPct"},
+        "PhyBusUtilPct_min":{"$min": "&PhyBusUtilPct"},
+        "PhyBusUtilPct_max":{"$max": "&PhyBusUtilPct"},
+
+        "PhyTaTotal_avg":{"$avg": "&PhyTaTotal"},
+        "PhyTaTotal_min":{"$min": "&PhyTaTotal"},
+        "PhyTaTotal_max":{"$max": "&PhyTaTotal"},
+
+        "PhyRd2WrTaTh_avg":{"$avg": "&PhyRd2WrTaTh"},
+        "PhyRd2WrTaTh_min":{"$min": "&PhyRd2WrTaTh"},
+        "PhyRd2WrTaTh_max":{"$max": "&PhyRd2WrTaTh"},
+
+        "PhyWr2RdTaTh_avg":{"$avg": "&PhyWr2RdTaTh"},
+        "PhyWr2RdTaTh_min":{"$min": "&PhyWr2RdTaTh"},
+        "PhyWr2RdTaTh_max":{"$max": "&PhyWr2RdTaTh"},
+
+        "PhyPrechgRate_avg":{"$avg": "&PhyPrechgRate"},
+        "PhyPrechgRate_min":{"$min": "&PhyPrechgRate"},
+        "PhyPrechgRate_max":{"$max": "&PhyPrechgRate"},
+
+        "PhyPrechgConflictPct_avg":{"$avg": "&PhyPrechgConflictPct"},
+        "PhyPrechgConflictPct_min":{"$min": "&PhyPrechgConflictPct"},
+        "PhyPrechgConflictPct_max":{"$max": "&PhyPrechgConflictPct"},
+
+        "PhyPrechgSpecPct_avg":{"$avg": "&PhyPrechgSpecPct"},
+        "PhyPrechgSpecPct_min":{"$min": "&PhyPrechgSpecPct"},
+        "PhyPrechgSpecPct_max":{"$max": "&PhyPrechgSpecPct"},
+
+        "PhyPrechgAllcmdPct_avg":{"$avg": "&PhyPrechgAllcmdPct"},
+        "PhyPrechgAllcmdPct_min":{"$min": "&PhyPrechgAllcmdPct"},
+        "PhyPrechgAllcmdPct_max":{"$max": "&PhyPrechgAllcmdPct"},
+
+        "PhyPrechgOtherPct_avg":{"$avg": "&PhyPrechgOtherPct"},
+        "PhyPrechgOtherPct_min":{"$min": "&PhyPrechgOtherPct"},
+        "PhyPrechgOtherPct_max":{"$max": "&PhyPrechgOtherPct"},
+
+
+        "PhyActRate_avg":{"$avg": "&PhyActRate"},
+        "PhyActRate_min":{"$min": "&PhyActRate"},
+        "PhyActRate_max":{"$max": "&PhyActRate"},
+
+        "PhyCasRate_avg":{"$avg": "&PhyCasRate"},
+        "PhyCasRate_min":{"$min": "&PhyCasRate"},
+        "PhyCasRate_max":{"$max": "&PhyCasRate"},
+
+        "PhyCasAPRate_avg":{"$avg": "&PhyCasAPRate"},
+        "PhyCasAPRate_min":{"$min": "&PhyCasAPRate"},
+        "PhyCasAPRate_max":{"$max": "&PhyCasAPRate"},
+
+        "PhyCasPerAct_avg":{"$avg": "&PhyCasPerAct"},
+        "PhyCasPerAct_min":{"$min": "&PhyCasPerAct"},
+        "PhyCasPerAct_max":{"$max": "&PhyCasPerAct"},
+
+        "PhyCasApPerAct_avg":{"$avg": "&PhyCasApPerAct"},
+        "PhyCasApPerAct_min":{"$min": "&PhyCasApPerAct"},
+        "PhyCasApPerAct_max":{"$max": "&PhyCasApPerAct"},
+
+        "PhyCasRdPct_avg":{"$avg": "&PhyCasRdPct"},
+        "PhyCasRdPct_min":{"$min": "&PhyCasRdPct"},
+        "PhyCasRdPct_max":{"$max": "&PhyCasRdPct"},
+
+        "PhyCasWrPct_avg":{"$avg": "&PhyCasWrPct"},
+        "PhyCasWrPct_min":{"$min": "&PhyCasWrPct"},
+        "PhyCasWrPct_max":{"$max": "&PhyCasWrPct"},
+
+        "PhyCas32BPct_avg":{"$avg": "&PhyCas32BPct"},
+        "PhyCas32BPct_min":{"$min": "&PhyCas32BPct"},
+        "PhyCas32BPct_max":{"$max": "&PhyCas32BPct"},
+
+        "PhyCas64BPct_avg":{"$avg": "&PhyCas64BPct"},
+        "PhyCas64BPct_min":{"$min": "&PhyCas64BPct"},
+        "PhyCas64BPct_max":{"$max": "&PhyCas64BPct"},
+
+        "PhyCasPriLowPct_avg":{"$avg": "&PhyCasPriLowPct"},
+        "PhyCasPriLowPct_min":{"$min": "&PhyCasPriLowPct"},
+        "PhyCasPriLowPct_max":{"$max": "&PhyCasPriLowPct"},
+
+        "PhyCasPriMedPct_avg":{"$avg": "&PhyCasPriMedPct"},
+        "PhyCasPriMedPct_min":{"$min": "&PhyCasPriMedPct"},
+        "PhyCasPriMedPct_max":{"$max": "&PhyCasPriMedPct"},
+
+        "PhyCasPriHiPct_avg":{"$avg": "&PhyCasPriHiPct"},
+        "PhyCasPriHiPct_min":{"$min": "&PhyCasPriHiPct"},
+        "PhyCasPriHiPct_max":{"$max": "&PhyCasPriHiPct"},
+
+        "PhyCasPriUrgPct_avg":{"$avg": "&PhyCasPriUrgPct"},
+        "PhyCasPriUrgPct_min":{"$min": "&PhyCasPriUrgPct"},
+        "PhyCasPriUrgPct_max":{"$max": "&PhyCasPriUrgPct"},
+
+        "PhyCasCh0Pct_avg":{"$avg": "&PhyCasCh0Pct"},
+        "PhyCasCh0Pct_min":{"$min": "&PhyCasCh0Pct"},
+        "PhyCasCh0Pct_max":{"$max": "&PhyCasCh0Pct"},
+
+        "PhyCasCh1Pct_avg":{"$avg": "&PhyCasCh1Pct"},
+        "PhyCasCh1Pct_min":{"$min": "&PhyCasCh1Pct"},
+        "PhyCasCh1Pct_max":{"$max": "&PhyCasCh1Pct"}
+
+    }},
+
+    {"$set": {
+        "array": [
+            {
+            "Metric": "Bandwidth (Aggreated)",
+            "Avg": {"$multiply":[32, "&PhyCasBW_avg"]},
+            "Min": {"$multiply":[32, "&PhyCasBW_min"]},
+            "Max": {"$multiply":[32, "&PhyCasBW_max"]}, 
+            "Unit": "GB/s"
+            },
+
+            {
+            "Metric": "Bandwidth (per-channel)",
+            "Avg": "&PhyCasBW_avg",
+            "Min": "&PhyCasBW_min",
+            "Max": "&PhyCasBW_max", 
+            "Unit": "GB/s"
+            },
+            {
+            "Metric": "Bandwidth (per-channel Read)",
+            "Avg": "&PhyCasRdBW_avg",
+            "Min": "&PhyCasRdBW_min",
+            "Max": "&PhyCasRdBW_max", 
+            "Unit": "GB/s"
+            },
+            {
+            "Metric": "Bandwidth (per-channel Write)",
+            "Avg": "&PhyCasWrBW_avg",
+            "Min": "&PhyCasWrBW_min",
+            "Max": "&PhyCasWrBW_max", 
+            "Unit": "GB/s"
+            },
+            {
+            "Metric": "Bus Util",
+            "Avg": "&PhyBusUtilPct_avg",
+            "Min": "&PhyBusUtilPct_min",
+            "Max": "&PhyBusUtilPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Read/Write TurnAround",
+            "Avg": "&PhyTaTotal_avg",
+            "Min": "&PhyTaTotal_min",
+            "Max": "&PhyTaTotal_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "Read2Write (Threshold)",
+            "Avg": "&PhyRd2WrTaTh_avg",
+            "Min": "&PhyRd2WrTaTh_min",
+            "Max": "&PhyRd2WrTaTh_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "Write2Read (Threshold)",
+            "Avg": "&PhyWr2RdTaTh_avg",
+            "Min": "&PhyWr2RdTaTh_min",
+            "Max": "&PhyWr2RdTaTh_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "Precharge",
+            "Avg": "&PhyPrechgRate_avg",
+            "Min": "&PhyPrechgRate_min",
+            "Max": "&PhyPrechgRate_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "Precharge (Conflict)",
+            "Avg": "&PhyPrechgConflictPct_avg",
+            "Min": "&PhyPrechgConflictPct_min",
+            "Max": "&PhyPrechgConflictPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Precharge (Idle Timeout)",
+            "Avg": "&PhyPrechgSpecPct_avg",
+            "Min": "&PhyPrechgSpecPct_min",
+            "Max": "&PhyPrechgSpecPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Precharge (All Cmd)",
+            "Avg": "&PhyPrechgAllcmdPct_avg",
+            "Min": "&PhyPrechgAllcmdPct_min",
+            "Max": "&PhyPrechgAllcmdPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Precharge (Other)",
+            "Avg": "&PhyPrechgOtherPct_avg",
+            "Min": "&PhyPrechgOtherPct_min",
+            "Max": "&PhyPrechgOtherPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "ACT Rate",
+            "Avg": "&PhyActRate_avg",
+            "Min": "&PhyActRate_min",
+            "Max": "&PhyActRate_max", 
+            "Unit": "MReq/s"
+            },
+            {
+            "Metric": "CAS Rate",
+            "Avg": "&PhyCasRate_avg",
+            "Min": "&PhyCasRate_min",
+            "Max": "&PhyCasRate_max", 
+            "Unit": "MReq/s"
+            },
+
+            {
+            "Metric": "CAS/ACT",
+            "Avg": "&PhyCasPerAct_avg",
+            "Min": "&PhyCasPerAct_min",
+            "Max": "&PhyCasPerAct_max", 
+            "Unit": ""
+            },
+            {
+            "Metric": "CAS-AP/ACT",
+            "Avg": "&PhyCasApPerAct_avg",
+            "Min": "&PhyCasApPerAct_min",
+            "Max": "&PhyCasApPerAct_max", 
+            "Unit": ""
+            },
+
+            {
+            "Metric": "CAS Read",
+            "Avg": "&PhyCasRdPct_avg",
+            "Min": "&PhyCasRdPct_min",
+            "Max": "&PhyCasRdPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS Wr",
+            "Avg": "&PhyCasWrPct_avg",
+            "Min": "&PhyCasWrPct_min",
+            "Max": "&PhyCasWrPct_max", 
+            "Unit": "pct"
+            },
+
+            {
+            "Metric": "CAS (32B Req)",
+            "Avg": "&PhyCas32BPct_avg",
+            "Min": "&PhyCas32BPct_min",
+            "Max": "&PhyCas32BPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (64B Req)",
+            "Avg": "&PhyCas64BPct_avg",
+            "Min": "&PhyCas64BPct_min",
+            "Max": "&PhyCas64BPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Pri:Low)",
+            "Avg": "&PhyCasPriLowPct_avg",
+            "Min": "&PhyCasPriLowPct_min",
+            "Max": "&PhyCasPriLowPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Pri:Med)",
+            "Avg": "&PhyCasPriMedPct_avg",
+            "Min": "&PhyCasPriMedPct_min",
+            "Max": "&PhyCasPriMedPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Pri:Hi)",
+            "Avg": "&PhyCasPriHiPct_avg",
+            "Min": "&PhyCasPriHiPct_min",
+            "Max": "&PhyCasPriHiPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Pri:Urg)",
+            "Avg": "&PhyCasPriUrgPct_avg",
+            "Min": "&PhyCasPriUrgPct_min",
+            "Max": "&PhyCasPriUrgPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Ch0)",
+            "Avg": "&PhyCasCh0Pct_avg",
+            "Min": "&PhyCasCh0Pct_min",
+            "Max": "&PhyCasCh0Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "CAS (Ch1)",
+            "Avg": "&PhyCasCh1Pct_avg",
+            "Min": "&PhyCasCh1Pct_min",
+            "Max": "&PhyCasCh1Pct_max", 
+            "Unit": "pct"
+            }
+
+        ]
+    }},
+    {"$unwind": {
+        "path": "&array"
+    }},
+    {"$replaceRoot": {
+        "newRoot": "&array"
+    }}
+]

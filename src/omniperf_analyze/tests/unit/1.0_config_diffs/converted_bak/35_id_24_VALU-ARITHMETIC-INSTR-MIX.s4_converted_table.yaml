@@ -1,0 +1,54 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          count: count
+          tips: Tips
+        metric:
+          INT32:
+            count: AVG((SQ_INSTS_VALU_INT32 / $denom)),
+            tips: 
+          INT64:
+            count: AVG((SQ_INSTS_VALU_INT64 / $denom)),
+            tips: 
+          F16-ADD:
+            count: AVG((SQ_INSTS_VALU_ADD_F16 / $denom)),
+            tips: 
+          F16-MUL:
+            count: AVG((SQ_INSTS_VALU_MUL_F16 / $denom)),
+            tips: 
+          F16-FMA:
+            count: AVG((SQ_INSTS_VALU_FMA_F16 / $denom)),
+            tips: 
+          F16-Trans:
+            count: AVG((SQ_INSTS_VALU_TRANS_F16 / $denom)),
+            tips: 
+          F32-ADD:
+            count: AVG((SQ_INSTS_VALU_ADD_F32 / $denom)),
+            tips: 
+          F32-MUL:
+            count: AVG((SQ_INSTS_VALU_MUL_F32 / $denom)),
+            tips: 
+          F32-FMA:
+            count: AVG((SQ_INSTS_VALU_FMA_F32 / $denom)),
+            tips: 
+          F32-Trans:
+            count: AVG((SQ_INSTS_VALU_TRANS_F32 / $denom)),
+            tips: 
+          F64-ADD:
+            count: AVG((SQ_INSTS_VALU_ADD_F64 / $denom)),
+            tips: 
+          F64-MUL:
+            count: AVG((SQ_INSTS_VALU_MUL_F64 / $denom)),
+            tips: 
+          F64-FMA:
+            count: AVG((SQ_INSTS_VALU_FMA_F64 / $denom)),
+            tips: 
+          F64-Trans:
+            count: AVG((SQ_INSTS_VALU_TRANS_F64 / $denom)),
+            tips: 
+          Conversion:
+            count: AVG((SQ_INSTS_VALU_CVT / $denom)),
+            tips: 
+      

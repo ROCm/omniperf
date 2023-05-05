@@ -1,0 +1,78 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          FLOPs (Total):
+            avg: AVG((((((((64 * (((SQ_INSTS_VALU_ADD_F16 + SQ_INSTS_VALU_MUL_F16) + SQ_INSTS_VALU_TRANS_F16)
+              + (SQ_INSTS_VALU_FMA_F16 * 2))) + ((512 * SQ_INSTS_VALU_MFMA_MOPS_F16) + (512
+              * SQ_INSTS_VALU_MFMA_MOPS_BF16))) + (64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32)
+              + SQ_INSTS_VALU_TRANS_F32) + (SQ_INSTS_VALU_FMA_F32 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32))
+              + (64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) /
+              $denom)),
+            min: MIN((((((((64 * (((SQ_INSTS_VALU_ADD_F16 + SQ_INSTS_VALU_MUL_F16) + SQ_INSTS_VALU_TRANS_F16)
+              + (SQ_INSTS_VALU_FMA_F16 * 2))) + ((512 * SQ_INSTS_VALU_MFMA_MOPS_F16) + (512
+              * SQ_INSTS_VALU_MFMA_MOPS_BF16))) + (64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32)
+              + SQ_INSTS_VALU_TRANS_F32) + (SQ_INSTS_VALU_FMA_F32 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32))
+              + (64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) /
+              $denom)),
+            max: MAX((((((((64 * (((SQ_INSTS_VALU_ADD_F16 + SQ_INSTS_VALU_MUL_F16) + SQ_INSTS_VALU_TRANS_F16)
+              + (SQ_INSTS_VALU_FMA_F16 * 2))) + ((512 * SQ_INSTS_VALU_MFMA_MOPS_F16) + (512
+              * SQ_INSTS_VALU_MFMA_MOPS_BF16))) + (64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32)
+              + SQ_INSTS_VALU_TRANS_F32) + (SQ_INSTS_VALU_FMA_F32 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32))
+              + (64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2)))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) /
+              $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+          INT8 OPs:
+            avg: AVG(((SQ_INSTS_VALU_MFMA_MOPS_I8 * 512) / $denom)),
+            min: MIN(((SQ_INSTS_VALU_MFMA_MOPS_I8 * 512) / $denom)),
+            max: MAX(((SQ_INSTS_VALU_MFMA_MOPS_I8 * 512) / $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+          F16 OPs:
+            avg: AVG(((((((64 * SQ_INSTS_VALU_ADD_F16) + (64 * SQ_INSTS_VALU_MUL_F16)) +
+              (64 * SQ_INSTS_VALU_TRANS_F16)) + (128 * SQ_INSTS_VALU_FMA_F16)) + (512 *
+              SQ_INSTS_VALU_MFMA_MOPS_F16)) / $denom)),
+            min: MIN(((((((64 * SQ_INSTS_VALU_ADD_F16) + (64 * SQ_INSTS_VALU_MUL_F16)) +
+              (64 * SQ_INSTS_VALU_TRANS_F16)) + (128 * SQ_INSTS_VALU_FMA_F16)) + (512 *
+              SQ_INSTS_VALU_MFMA_MOPS_F16)) / $denom)),
+            max: MAX(((((((64 * SQ_INSTS_VALU_ADD_F16) + (64 * SQ_INSTS_VALU_MUL_F16)) +
+              (64 * SQ_INSTS_VALU_TRANS_F16)) + (128 * SQ_INSTS_VALU_FMA_F16)) + (512 *
+              SQ_INSTS_VALU_MFMA_MOPS_F16)) / $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+          BF16 OPs:
+            avg: AVG(((512 * SQ_INSTS_VALU_MFMA_MOPS_BF16) / $denom)),
+            min: MIN(((512 * SQ_INSTS_VALU_MFMA_MOPS_BF16) / $denom)),
+            max: MAX(((512 * SQ_INSTS_VALU_MFMA_MOPS_BF16) / $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+          F32 OPs:
+            avg: AVG((((64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32) + SQ_INSTS_VALU_TRANS_F32)
+              + (SQ_INSTS_VALU_FMA_F32 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32)) / $denom)),
+            min: MIN((((64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32) + SQ_INSTS_VALU_TRANS_F32)
+              + (SQ_INSTS_VALU_FMA_F32 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32)) / $denom)),
+            max: MAX((((64 * (((SQ_INSTS_VALU_ADD_F32 + SQ_INSTS_VALU_MUL_F32) + SQ_INSTS_VALU_TRANS_F32)
+              + (SQ_INSTS_VALU_FMA_F32 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F32)) / $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+          F64 OPs:
+            avg: AVG((((64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) / $denom)),
+            min: MIN((((64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) / $denom)),
+            max: MAX((((64 * (((SQ_INSTS_VALU_ADD_F64 + SQ_INSTS_VALU_MUL_F64) + SQ_INSTS_VALU_TRANS_F64)
+              + (SQ_INSTS_VALU_FMA_F64 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) / $denom)),
+            unit: (OPs  + $normUnit),
+            tips: 
+      

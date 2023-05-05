@@ -1,0 +1,138 @@
+[
+    {"$group": {
+        "_id": null,
+
+        "DcqPendingReq_avg":{"$avg": "&DcqPendingReq"},
+        "DcqPendingReq_min":{"$min": "&DcqPendingReq"},
+        "DcqPendingReq_max":{"$max": "&DcqPendingReq"},
+
+        "DcqReqPerEntry_avg":{"$avg": "&DcqReqPerEntry"},
+        "DcqReqPerEntry_min":{"$min": "&DcqReqPerEntry"},
+        "DcqReqPerEntry_max":{"$max": "&DcqReqPerEntry"},
+
+        "DcqEmptyPct_avg":{"$avg": "&DcqEmptyPct"},
+        "DcqEmptyPct_min":{"$min": "&DcqEmptyPct"},
+        "DcqEmptyPct_max":{"$max": "&DcqEmptyPct"},
+
+        "DcqOcc1to4Pct_avg":{"$avg": "&DcqOcc1to4Pct"},
+        "DcqOcc1to4Pct_min":{"$min": "&DcqOcc1to4Pct"},
+        "DcqOcc1to4Pct_max":{"$max": "&DcqOcc1to4Pct"},
+
+        "DcqOcc5to8Pct_avg":{"$avg": "&DcqOcc5to8Pct"},
+        "DcqOcc5to8Pct_min":{"$min": "&DcqOcc5to8Pct"},
+        "DcqOcc5to8Pct_max":{"$max": "&DcqOcc5to8Pct"},
+
+        "DcqOcc9to12Pct_avg":{"$avg": "&DcqOcc9to12Pct"},
+        "DcqOcc9to12Pct_min":{"$min": "&DcqOcc9to12Pct"},
+        "DcqOcc9to12Pct_max":{"$max": "&DcqOcc9to12Pct"},
+
+        "DcqOcc13to16Pct_avg":{"$avg": "&DcqOcc13to16Pct"},
+        "DcqOcc13to16Pct_min":{"$min": "&DcqOcc13to16Pct"},
+        "DcqOcc13to16Pct_max":{"$max": "&DcqOcc13to16Pct"},
+
+        "DcqOcc17to20Pct_avg":{"$avg": "&DcqOcc17to20Pct"},
+        "DcqOcc17to20Pct_min":{"$min": "&DcqOcc17to20Pct"},
+        "DcqOcc17to20Pct_max":{"$max": "&DcqOcc17to20Pct"},
+
+        "DcqOcc21to24Pct_avg":{"$avg": "&DcqOcc21to24Pct"},
+        "DcqOcc21to24Pct_min":{"$min": "&DcqOcc21to24Pct"},
+        "DcqOcc21to24Pct_max":{"$max": "&DcqOcc21to24Pct"},
+
+        "DcqOcc25to31Pct_avg":{"$avg": "&DcqOcc25to31Pct"},
+        "DcqOcc25to31Pct_min":{"$min": "&DcqOcc25to31Pct"},
+        "DcqOcc25to31Pct_max":{"$max": "&DcqOcc25to31Pct"},
+
+        "DcqOccFullPct_avg":{"$avg": "&DcqOccFullPct"},
+        "DcqOccFullPct_min":{"$min": "&DcqOccFullPct"},
+        "DcqOccFullPct_max":{"$max": "&DcqOccFullPct"}
+    }},
+
+    {"$set": {
+        "array": [
+            {
+            "Metric": "Pending Req",
+            "Avg": "&DcqPendingReq_avg",
+            "Min": "&DcqPendingReq_min",
+            "Max": "&DcqPendingReq_max", 
+            "Unit": "Req"
+            },
+            {
+            "Metric": "Req per Entry",
+            "Avg": "&DcqReqPerEntry_avg",
+            "Min": "&DcqReqPerEntry_min",
+            "Max": "&DcqReqPerEntry_max", 
+            "Unit": "Req/Entry"
+            },
+            {
+            "Metric": "Occupancy - Empty",
+            "Avg": "&DcqEmptyPct_avg",
+            "Min": "&DcqEmptyPct_min",
+            "Max": "&DcqEmptyPct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 1~4 Entries",
+            "Avg": "&DcqOcc1to4Pct_avg",
+            "Min": "&DcqOcc1to4Pct_min",
+            "Max": "&DcqOcc1to4Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 5~8 Entries",
+            "Avg": "&DcqOcc5to8Pct_avg",
+            "Min": "&DcqOcc5to8Pct_min",
+            "Max": "&DcqOcc5to8Pct_max", 
+            "Unit": "pct"
+            },
+
+            {
+            "Metric": "Occupancy - 9~12 Entries",
+            "Avg": "&DcqOcc9to12Pct_avg",
+            "Min": "&DcqOcc9to12Pct_min",
+            "Max": "&DcqOcc9to12Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 13~16 Entries",
+            "Avg": "&DcqOcc13to16Pct_avg",
+            "Min": "&DcqOcc13to16Pct_min",
+            "Max": "&DcqOcc13to16Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 17~20 Entries",
+            "Avg": "&DcqOcc17to20Pct_avg",
+            "Min": "&DcqOcc17to20Pct_min",
+            "Max": "&DcqOcc17to20Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 21~24 Entries",
+            "Avg": "&DcqOcc21to24Pct_avg",
+            "Min": "&DcqOcc21to24Pct_min",
+            "Max": "&DcqOcc21to24Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - 25~31 Entries",
+            "Avg": "&DcqOcc25to31Pct_avg",
+            "Min": "&DcqOcc25to31Pct_min",
+            "Max": "&DcqOcc25to31Pct_max", 
+            "Unit": "pct"
+            },
+            {
+            "Metric": "Occupancy - Full",
+            "Avg": "&DcqOccFullPct_avg",
+            "Min": "&DcqOccFullPct_min",
+            "Max": "&DcqOccFullPct_max", 
+            "Unit": "pct"
+            }
+     ]
+    }},
+    {"$unwind": {
+        "path": "&array"
+    }},
+    {"$replaceRoot": {
+        "newRoot": "&array"
+    }}
+]

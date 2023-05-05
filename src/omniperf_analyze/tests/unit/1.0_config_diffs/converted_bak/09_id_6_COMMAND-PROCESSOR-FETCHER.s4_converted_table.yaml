@@ -1,0 +1,102 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          GPU Busy Cycles:
+            avg: AVG(GRBM_GUI_ACTIVE),
+            min: MIN(GRBM_GUI_ACTIVE),
+            max: MAX(GRBM_GUI_ACTIVE),
+            unit: Cycles/Kernel,
+            tips: 
+          CPF Clock:
+            avg: AVG(CPF_ALWAYS_COUNT),
+            min: MIN(CPF_ALWAYS_COUNT),
+            max: MAX(CPF_ALWAYS_COUNT),
+            unit: Cycles/Kernel,
+            tips: 
+          CPF Busy:
+            avg: AVG(CPF_CPF_STAT_BUSY),
+            min: MIN(CPF_CPF_STAT_BUSY),
+            max: MAX(CPF_CPF_STAT_BUSY),
+            unit: Cycles/Kernel,
+            tips: 
+          CPF Util:
+            avg: AVG((((100 * CPF_CPF_STAT_BUSY) / (CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE))
+              if ((CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE) != 0) else None)),
+            min: MIN((((100 * CPF_CPF_STAT_BUSY) / (CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE))
+              if ((CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE) != 0) else None)),
+            max: MAX((((100 * CPF_CPF_STAT_BUSY) / (CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE))
+              if ((CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE) != 0) else None)),
+            unit: pct,
+            tips: 
+          CPF Stall:
+            avg: AVG((((100 * CPF_CPF_STAT_STALL) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
+              != 0) else None)),
+            min: MIN((((100 * CPF_CPF_STAT_STALL) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
+              != 0) else None)),
+            max: MAX((((100 * CPF_CPF_STAT_STALL) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
+              != 0) else None)),
+            unit: Cycles/Kernel,
+            tips: 
+          L2Cache Intf Busy:
+            avg: AVG(CPF_CPF_TCIU_BUSY),
+            min: MIN(CPF_CPF_TCIU_BUSY),
+            max: MAX(CPF_CPF_TCIU_BUSY),
+            unit: Cycles/Kernel,
+            tips: 
+          L2Cache Intf Util:
+            avg: AVG((((100 * CPF_CPF_TCIU_BUSY) / (CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE))
+              if ((CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE) != 0) else None)),
+            min: MIN((((100 * CPF_CPF_TCIU_BUSY) / (CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE))
+              if ((CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE) != 0) else None)),
+            max: MAX((((100 * CPF_CPF_TCIU_BUSY) / (CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE))
+              if ((CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE) != 0) else None)),
+            unit: pct,
+            tips: 
+          L2Cache Intf Stall:
+            avg: AVG((((100 * CPF_CPF_TCIU_STALL) / CPF_CPF_TCIU_BUSY) if (CPF_CPF_TCIU_BUSY
+              != 0) else None)),
+            min: MIN((((100 * CPF_CPF_TCIU_STALL) / CPF_CPF_TCIU_BUSY) if (CPF_CPF_TCIU_BUSY
+              != 0) else None)),
+            max: MAX((((100 * CPF_CPF_TCIU_STALL) / CPF_CPF_TCIU_BUSY) if (CPF_CPF_TCIU_BUSY
+              != 0) else None)),
+            unit: pct,
+            tips: 
+          UTCL1 Stall:
+            avg: AVG(CPF_CMP_UTCL1_STALL_ON_TRANSLATION),
+            min: MIN(CPF_CMP_UTCL1_STALL_ON_TRANSLATION),
+            max: MAX(CPF_CMP_UTCL1_STALL_ON_TRANSLATION),
+            unit: Cycles/Kernel,
+            tips: 
+          UTCL2 Intf Busy:
+            avg: AVG(CPF_CPF_UTCL2IU_BUSY),
+            min: MIN(CPF_CPF_UTCL2IU_BUSY),
+            max: MAX(CPF_CPF_UTCL2IU_BUSY),
+            unit: Cycles/Kernel,
+            tips: 
+          UTCL2 Intf Util:
+            avg: AVG((((100 * CPF_CPF_UTCL2IU_BUSY) / (CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE))
+              if ((CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE) != 0) else None)),
+            min: MIN((((100 * CPF_CPF_UTCL2IU_BUSY) / (CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE))
+              if ((CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE) != 0) else None)),
+            max: MAX((((100 * CPF_CPF_UTCL2IU_BUSY) / (CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE))
+              if ((CPF_CPF_UTCL2IU_BUSY + CPF_CPF_UTCL2IU_IDLE) != 0) else None)),
+            unit: pct,
+            tips: 
+          UTCL2 Intf Stall:
+            avg: AVG((((100 * CPF_CPF_UTCL2IU_STALL) / CPF_CPF_UTCL2IU_BUSY) if (CPF_CPF_UTCL2IU_BUSY
+              != 0) else None)),
+            min: MIN((((100 * CPF_CPF_UTCL2IU_STALL) / CPF_CPF_UTCL2IU_BUSY) if (CPF_CPF_UTCL2IU_BUSY
+              != 0) else None)),
+            max: MAX((((100 * CPF_CPF_UTCL2IU_STALL) / CPF_CPF_UTCL2IU_BUSY) if (CPF_CPF_UTCL2IU_BUSY
+              != 0) else None)),
+            unit: pct,
+            tips: 
+      

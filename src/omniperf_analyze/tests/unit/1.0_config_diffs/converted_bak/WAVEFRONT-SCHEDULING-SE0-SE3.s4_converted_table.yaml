@@ -1,0 +1,42 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          shader engine: Shader Engine
+          rate - million waves/sec: Rate - Million Waves/sec
+          mean - cycles: Mean - cycles
+          min - cycles: Min - cycles
+          max - cycles: Max - cycles
+          tips: Tips
+        metric:
+          SE0:
+            rate - million waves/sec: (($sclk * sum(1)) / (MAX(EndTime) - MIN(BeginTime))),
+            mean - cycles: AVG(inter_arrival),
+            min - cycles: MIN(inter_arrival),
+            max - cycles: MAX(inter_arrival),
+            tips: 
+          SE1:
+            rate - million waves/sec: (($sclk * $totalCount) / (MAX(EndTime) -
+              MIN(BeginTime))),
+            mean - cycles: AVG(inter_arrival),
+            min - cycles: MIN(inter_arrival),
+            max - cycles: MAX(inter_arrival),
+            coll_level: wave_timing_se1,
+            tips: 
+          SE2:
+            rate - million waves/sec: (($sclk * $totalCount) / (MAX(EndTime) -
+              MIN(BeginTime))),
+            mean - cycles: AVG(inter_arrival),
+            min - cycles: MIN(inter_arrival),
+            max - cycles: MAX(inter_arrival),
+            coll_level: wave_timing_se2,
+            tips: 
+          SE3:
+            rate - million waves/sec: (($sclk * $totalCount) / (MAX(EndTime) -
+              MIN(BeginTime))),
+            mean - cycles: AVG(inter_arrival),
+            min - cycles: MIN(inter_arrival),
+            max - cycles: MAX(inter_arrival),
+            coll_level: wave_timing_se3,
+            tips: 
+      

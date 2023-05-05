@@ -1,0 +1,33 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          count: count
+          tips: Tips
+        metric:
+          VALU - Vector:
+            count: AVG(((SQ_INSTS_VALU - SQ_INSTS_MFMA) / $denom)),
+            tips: 
+          VMEM:
+            count: AVG(((SQ_INSTS_VMEM - SQ_INSTS_FLAT_LDS_ONLY) / $denom)),
+            tips: 
+          LDS:
+            count: AVG((SQ_INSTS_LDS / $denom)),
+            tips: 
+          VALU - MFMA:
+            count: AVG((SQ_INSTS_MFMA / $denom)),
+            tips: 
+          SALU:
+            count: AVG((SQ_INSTS_SALU / $denom)),
+            tips: 
+          SMEM:
+            count: AVG((SQ_INSTS_SMEM / $denom)),
+            tips: 
+          Branch:
+            count: AVG((SQ_INSTS_BRANCH / $denom)),
+            tips: 
+          GDS:
+            count: AVG((SQ_INSTS_GDS / $denom)),
+            tips: 
+      

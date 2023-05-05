@@ -1,0 +1,36 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          SDP Request:
+            avg: SdpReqRate_avg
+            min: SdpReqRate_min
+            max: SdpReqRate_max
+            unit: MReq/s
+            tips: 
+          Page Hit:
+            avg: SdpPageHitPct_avg
+            min: SdpPageHitPct_min
+            max: SdpPageHitPct_max
+            unit: pct
+            tips: 
+          Page Miss:
+            avg: SdpPageMissPct_avg
+            min: SdpPageMissPct_min
+            max: SdpPageMissPct_max
+            unit: pct
+            tips: 
+          Page Conflict:
+            avg: SdpPageConflictPct_avg
+            min: SdpPageConflictPct_min
+            max: SdpPageConflictPct_max
+            unit: pct
+            tips: 
+      

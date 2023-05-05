@@ -1,0 +1,129 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          avg: avg
+          min: min
+          max: max
+          unit: Unit
+          tips: Tips
+        metric:
+          Total Req:
+            avg: AVG((TCP_TOTAL_ACCESSES_sum / $denom))
+            min: MIN((TCP_TOTAL_ACCESSES_sum / $denom))
+            max: MAX((TCP_TOTAL_ACCESSES_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Read Req:
+            avg: AVG((TCP_TOTAL_READ_sum / $denom))
+            min: MIN((TCP_TOTAL_READ_sum / $denom))
+            max: MAX((TCP_TOTAL_READ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write Req:
+            avg: AVG((TCP_TOTAL_WRITE_sum / $denom))
+            min: MIN((TCP_TOTAL_WRITE_sum / $denom))
+            max: MAX((TCP_TOTAL_WRITE_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Atomic Req:
+            avg: AVG(((TCP_TOTAL_ATOMIC_WITH_RET_sum + TCP_TOTAL_ATOMIC_WITHOUT_RET_sum)
+              / $denom))
+            min: MIN(((TCP_TOTAL_ATOMIC_WITH_RET_sum + TCP_TOTAL_ATOMIC_WITHOUT_RET_sum)
+              / $denom))
+            max: MAX(((TCP_TOTAL_ATOMIC_WITH_RET_sum + TCP_TOTAL_ATOMIC_WITHOUT_RET_sum)
+              / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Cache Accesses:
+            avg: AVG((TCP_TOTAL_CACHE_ACCESSES_sum / $denom))
+            min: MIN((TCP_TOTAL_CACHE_ACCESSES_sum / $denom))
+            max: MAX((TCP_TOTAL_CACHE_ACCESSES_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Cache Hits:
+            avg: AVG(((TCP_TOTAL_CACHE_ACCESSES_sum - (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum)
+              + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              / $denom))
+            min: MIN(((TCP_TOTAL_CACHE_ACCESSES_sum - (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum)
+              + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              / $denom))
+            max: MAX(((TCP_TOTAL_CACHE_ACCESSES_sum - (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum)
+              + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Cache Hit Rate:
+            avg: AVG(((100 - ((100 * (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum) +
+              TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) /
+              TCP_TOTAL_CACHE_ACCESSES_sum)) if (TCP_TOTAL_CACHE_ACCESSES_sum != 0) else
+              None))
+            min: MIN(((100 - ((100 * (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum) +
+              TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) /
+              TCP_TOTAL_CACHE_ACCESSES_sum)) if (TCP_TOTAL_CACHE_ACCESSES_sum != 0) else
+              None))
+            max: MAX(((100 - ((100 * (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum) +
+              TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) /
+              TCP_TOTAL_CACHE_ACCESSES_sum)) if (TCP_TOTAL_CACHE_ACCESSES_sum != 0) else
+              None))
+            unit: pct
+            tips: 
+          Invalidate:
+            avg: AVG((TCP_TOTAL_WRITEBACK_INVALIDATES_sum / $denom))
+            min: MIN((TCP_TOTAL_WRITEBACK_INVALIDATES_sum / $denom))
+            max: MAX((TCP_TOTAL_WRITEBACK_INVALIDATES_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          L1-TCR Read:
+            avg: AVG((TCP_TCC_READ_REQ_sum / $denom))
+            min: MIN((TCP_TCC_READ_REQ_sum / $denom))
+            max: MAX((TCP_TCC_READ_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          L1-L2 Write:
+            avg: AVG((TCP_TCC_WRITE_REQ_sum / $denom))
+            min: MIN((TCP_TCC_WRITE_REQ_sum / $denom))
+            max: MAX((TCP_TCC_WRITE_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          L1-L2 Atomic:
+            avg: AVG(((TCP_TCC_ATOMIC_WITH_RET_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
+              / $denom))
+            min: MIN(((TCP_TCC_ATOMIC_WITH_RET_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
+              / $denom))
+            max: MAX(((TCP_TCC_ATOMIC_WITH_RET_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
+              / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          L1 Access Latency:
+            avg: AVG(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
+              != 0) else None))
+            min: MIN(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
+              != 0) else None))
+            max: MAX(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
+              != 0) else None))
+            unit: Cycles
+            tips: 
+          L1-L2 Read Latency:
+            avg: AVG(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
+              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None))
+            min: MIN(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
+              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None))
+            max: MAX(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
+              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None))
+            unit: Cycles
+            tips: 
+          L1-L2 Write Latency:
+            avg: AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum) != 0) else
+              None))
+            min: MIN(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum) != 0) else
+              None))
+            max: MAX(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
+              if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum) != 0) else
+              None))
+            unit: Cycles
+            tips: 
+      

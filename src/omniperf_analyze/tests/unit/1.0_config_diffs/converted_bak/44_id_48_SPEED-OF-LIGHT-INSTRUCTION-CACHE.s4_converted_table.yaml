@@ -1,0 +1,23 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          value: Value
+          tips: Tips
+        metric:
+          BW Pct-of-Peak:
+            value: AVG(((SQC_ICACHE_REQ * 100000) / (($sclk * $numSQC)
+              * (EndNs - BeginNs)))),
+            tips: 
+          Util:
+            value: AVG(((SQC_ICACHE_BUSY_CYCLES * 100) / (GRBM_GUI_ACTIVE * $numSQC))),
+            tips: 
+          Stall:
+            value: AVG(((SQC_ICACHE_INPUT_VALID_READYB * 100) / SQC_ICACHE_BUSY_CYCLES)),
+            tips: 
+          Cache Hit:
+            value: AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+              + SQC_ICACHE_MISSES_DUPLICATE))),
+            tips: 
+      

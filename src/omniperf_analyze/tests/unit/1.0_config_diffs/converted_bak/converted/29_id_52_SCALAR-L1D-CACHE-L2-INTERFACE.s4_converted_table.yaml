@@ -1,0 +1,36 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          mean: Mean
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Read Req:
+            mean: AVG((SQC_TC_DATA_READ_REQ / $denom))
+            min: MIN((SQC_TC_DATA_READ_REQ / $denom))
+            max: MAX((SQC_TC_DATA_READ_REQ / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write Req:
+            mean: AVG((SQC_TC_DATA_WRITE_REQ / $denom))
+            min: MIN((SQC_TC_DATA_WRITE_REQ / $denom))
+            max: MAX((SQC_TC_DATA_WRITE_REQ / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Atomic Req:
+            mean: AVG((SQC_TC_DATA_ATOMIC_REQ / $denom))
+            min: MIN((SQC_TC_DATA_ATOMIC_REQ / $denom))
+            max: MAX((SQC_TC_DATA_ATOMIC_REQ / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Stall:
+            mean: AVG((SQC_TC_STALL / $denom))
+            min: MIN((SQC_TC_STALL / $denom))
+            max: MAX((SQC_TC_STALL / $denom))
+            unit: (Cycles  + $normUnit)
+            tips: 
+      

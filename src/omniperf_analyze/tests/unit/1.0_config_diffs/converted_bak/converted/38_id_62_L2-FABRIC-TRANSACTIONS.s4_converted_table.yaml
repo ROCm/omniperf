@@ -1,0 +1,105 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Read BW:
+            avg: AVG((((TCC_EA_RDREQ_32B_sum * 32) + ((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum)
+              * 64)) / $denom))
+            min: MIN((((TCC_EA_RDREQ_32B_sum * 32) + ((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum)
+              * 64)) / $denom))
+            max: MAX((((TCC_EA_RDREQ_32B_sum * 32) + ((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum)
+              * 64)) / $denom))
+            unit: (Bytes  + $normUnit)
+            tips: 
+          Write BW:
+            avg: AVG((((TCC_EA_WRREQ_64B_sum * 64) + ((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum)
+              * 32)) / $denom))
+            min: MIN((((TCC_EA_WRREQ_64B_sum * 64) + ((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum)
+              * 32)) / $denom))
+            max: MAX((((TCC_EA_WRREQ_64B_sum * 64) + ((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum)
+              * 32)) / $denom))
+            unit: (Bytes  + $normUnit)
+            tips: 
+          Read (32B):
+            avg: AVG((TCC_EA_RDREQ_32B_sum / $denom))
+            min: MIN((TCC_EA_RDREQ_32B_sum / $denom))
+            max: MAX((TCC_EA_RDREQ_32B_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Read (Uncached 32B):
+            avg: AVG((TCC_EA_RD_UNCACHED_32B_sum / $denom))
+            min: MIN((TCC_EA_RD_UNCACHED_32B_sum / $denom))
+            max: MAX((TCC_EA_RD_UNCACHED_32B_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Read (64B):
+            avg: AVG(((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum) / $denom))
+            min: MIN(((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum) / $denom))
+            max: MAX(((TCC_EA_RDREQ_sum - TCC_EA_RDREQ_32B_sum) / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          HBM Read:
+            avg: AVG((TCC_EA_RDREQ_DRAM_sum / $denom))
+            min: MIN((TCC_EA_RDREQ_DRAM_sum / $denom))
+            max: MAX((TCC_EA_RDREQ_DRAM_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write (32B):
+            avg: AVG(((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum) / $denom))
+            min: MIN(((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum) / $denom))
+            max: MAX(((TCC_EA_WRREQ_sum - TCC_EA_WRREQ_64B_sum) / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write (Uncached 32B):
+            avg: AVG((TCC_EA_WR_UNCACHED_32B_sum / $denom))
+            min: MIN((TCC_EA_WR_UNCACHED_32B_sum / $denom))
+            max: MAX((TCC_EA_WR_UNCACHED_32B_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write (64B):
+            avg: AVG((TCC_EA_WRREQ_64B_sum / $denom))
+            min: MIN((TCC_EA_WRREQ_64B_sum / $denom))
+            max: MAX((TCC_EA_WRREQ_64B_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          HBM Write:
+            avg: AVG((TCC_EA_WRREQ_DRAM_sum / $denom))
+            min: MIN((TCC_EA_WRREQ_DRAM_sum / $denom))
+            max: MAX((TCC_EA_WRREQ_DRAM_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Read Latency:
+            avg: AVG(((TCC_EA_RDREQ_LEVEL_sum / TCC_EA_RDREQ_sum) if (TCC_EA_RDREQ_sum !=
+              0) else None))
+            min: MIN(((TCC_EA_RDREQ_LEVEL_sum / TCC_EA_RDREQ_sum) if (TCC_EA_RDREQ_sum !=
+              0) else None))
+            max: MAX(((TCC_EA_RDREQ_LEVEL_sum / TCC_EA_RDREQ_sum) if (TCC_EA_RDREQ_sum !=
+              0) else None))
+            unit: Cycles
+            tips: 
+          Write Latency:
+            avg: AVG(((TCC_EA_WRREQ_LEVEL_sum / TCC_EA_WRREQ_sum) if (TCC_EA_WRREQ_sum !=
+              0) else None))
+            min: MIN(((TCC_EA_WRREQ_LEVEL_sum / TCC_EA_WRREQ_sum) if (TCC_EA_WRREQ_sum !=
+              0) else None))
+            max: MAX(((TCC_EA_WRREQ_LEVEL_sum / TCC_EA_WRREQ_sum) if (TCC_EA_WRREQ_sum !=
+              0) else None))
+            unit: Cycles
+            tips: 
+          Atomic Latency:
+            avg: AVG(((TCC_EA_ATOMIC_LEVEL_sum / TCC_EA_ATOMIC_sum) if (TCC_EA_ATOMIC_sum
+              != 0) else None))
+            min: MIN(((TCC_EA_ATOMIC_LEVEL_sum / TCC_EA_ATOMIC_sum) if (TCC_EA_ATOMIC_sum
+              != 0) else None))
+            max: MAX(((TCC_EA_ATOMIC_LEVEL_sum / TCC_EA_ATOMIC_sum) if (TCC_EA_ATOMIC_sum
+              != 0) else None))
+            unit: Cycles
+            tips: 
+      

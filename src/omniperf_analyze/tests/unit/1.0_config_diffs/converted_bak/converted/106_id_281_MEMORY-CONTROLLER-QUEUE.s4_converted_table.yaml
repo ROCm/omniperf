@@ -1,0 +1,78 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Pending Req:
+            avg: DcqPendingReq_avg
+            min: DcqPendingReq_min
+            max: DcqPendingReq_max
+            unit: Req
+            tips: 
+          Req per Entry:
+            avg: DcqReqPerEntry_avg
+            min: DcqReqPerEntry_min
+            max: DcqReqPerEntry_max
+            unit: Req/Entry
+            tips: 
+          Occupancy - Empty:
+            avg: DcqEmptyPct_avg
+            min: DcqEmptyPct_min
+            max: DcqEmptyPct_max
+            unit: pct
+            tips: 
+          Occupancy - 1~4 Entries:
+            avg: DcqOcc1to4Pct_avg
+            min: DcqOcc1to4Pct_min
+            max: DcqOcc1to4Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 5~8 Entries:
+            avg: DcqOcc5to8Pct_avg
+            min: DcqOcc5to8Pct_min
+            max: DcqOcc5to8Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 9~12 Entries:
+            avg: DcqOcc9to12Pct_avg
+            min: DcqOcc9to12Pct_min
+            max: DcqOcc9to12Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 13~16 Entries:
+            avg: DcqOcc13to16Pct_avg
+            min: DcqOcc13to16Pct_min
+            max: DcqOcc13to16Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 17~20 Entries:
+            avg: DcqOcc17to20Pct_avg
+            min: DcqOcc17to20Pct_min
+            max: DcqOcc17to20Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 21~24 Entries:
+            avg: DcqOcc21to24Pct_avg
+            min: DcqOcc21to24Pct_min
+            max: DcqOcc21to24Pct_max
+            unit: pct
+            tips: 
+          Occupancy - 25~31 Entries:
+            avg: DcqOcc25to31Pct_avg
+            min: DcqOcc25to31Pct_min
+            max: DcqOcc25to31Pct_max
+            unit: pct
+            tips: 
+          Occupancy - Full:
+            avg: DcqOccFullPct_avg
+            min: DcqOccFullPct_min
+            max: DcqOccFullPct_max
+            unit: pct
+            tips: 
+      

@@ -1,0 +1,15 @@
+${Workload1}.df_lat_Atomic_perf.aggregate(
+  [{
+    "$project": {
+     "_id":0,
+      "Target": 1,
+      "Socket4,GCD0": 1,
+      "Socket4,GCD1": 1,
+      "Socket5,GCD0": 1,
+      "Socket5,GCD1": 1,
+      "Socket6,GCD0": 1,
+      "Socket6,GCD1": 1,
+      "Socket7,GCD0": 1,
+      "Socket7,GCD1": 1
+    }
+}])

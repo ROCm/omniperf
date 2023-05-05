@@ -1,0 +1,23 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          value: Value
+          tips: Tips
+        metric:
+          Utilization:
+            value: AVG(((100 * SQ_LDS_IDX_ACTIVE) / (GRBM_GUI_ACTIVE * $numCU)))
+            tips: 
+          Access Rate:
+            value: AVG(((200 * SQ_ACTIVE_INST_LDS) / (GRBM_GUI_ACTIVE * $numCU)))
+            tips: 
+          Bandwith (Pct-of-Peak):
+            value: AVG((((((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) * 4) * TO_INT($L2Banks))
+              / (EndNs - BeginNs)) / (($sclk * $numCU) * 0.00128)))
+            tips: 
+          Bank Conflict Rate:
+            value: AVG((((SQ_LDS_BANK_CONFLICT * 3.125) / (SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT))
+              if ((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) != 0) else 0))
+            tips: 
+      

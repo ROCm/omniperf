@@ -1,0 +1,54 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          Read - IO Stall:
+            avg: AVG((TCC_EA_RDREQ_IO_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_RDREQ_IO_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_RDREQ_IO_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Read - GMI Stall:
+            avg: AVG((TCC_EA_RDREQ_GMI_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_RDREQ_GMI_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_RDREQ_GMI_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Read - HBM Stall:
+            avg: AVG((TCC_EA_RDREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_RDREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_RDREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Write - IO Stall:
+            avg: AVG((TCC_EA_WRREQ_IO_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_WRREQ_IO_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_WRREQ_IO_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Write - GMI Stall:
+            avg: AVG((TCC_EA_WRREQ_GMI_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_WRREQ_GMI_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_WRREQ_GMI_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Write - HBM Stall:
+            avg: AVG((TCC_EA_WRREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            min: MIN((TCC_EA_WRREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            max: MAX((TCC_EA_WRREQ_DRAM_CREDIT_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+          Write - Credit Starvation:
+            avg: AVG((TCC_TOO_MANY_EA_WRREQS_STALL_sum / $denom)),
+            min: MIN((TCC_TOO_MANY_EA_WRREQS_STALL_sum / $denom)),
+            max: MAX((TCC_TOO_MANY_EA_WRREQS_STALL_sum / $denom)),
+            unit: (Req  + $normUnit),
+            tips: 
+      

@@ -1,0 +1,39 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          shader engine: Shader Engine
+          unit: Unit
+          mean: Mean
+          min: Min
+          max: Max
+          tips: Tips
+        metric:
+          SE4:
+            unit: Cycles
+            mean: AVG((EndTime - BeginTime))
+            min: MIN((EndTime - BeginTime))
+            max: MAX((EndTime - BeginTime))
+            tips: 
+          SE5:
+            unit: Cycles
+            mean: AVG((EndTime - BeginTime))
+            min: MIN((EndTime - BeginTime))
+            max: MAX((EndTime - BeginTime))
+            coll_level: wave_timing_se5
+            tips: 
+          SE6:
+            unit: Cycles
+            mean: AVG((EndTime - BeginTime))
+            min: MIN((EndTime - BeginTime))
+            max: MAX((EndTime - BeginTime))
+            coll_level: wave_timing_se6
+            tips: 
+          SE7:
+            unit: Cycles
+            mean: AVG((EndTime - BeginTime))
+            min: MIN((EndTime - BeginTime))
+            max: MAX((EndTime - BeginTime))
+            coll_level: wave_timing_se7
+            tips: 
+      

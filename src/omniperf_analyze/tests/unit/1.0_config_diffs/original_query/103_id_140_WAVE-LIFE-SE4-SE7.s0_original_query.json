@@ -1,0 +1,106 @@
+[
+    {"$group": {
+        "_id": null,
+        "mean4": {
+            "$avg": { "$subtract": ["&EndTime", "&BeginTime"] }
+        },
+        "min4": {
+            "$min": { "$subtract": ["&EndTime", "&BeginTime"] }
+        },
+        "max4": {
+            "$max": { "$subtract": ["&EndTime", "&BeginTime"] }
+        }
+    }},
+    {"$set": {
+        "array": [
+            {
+                "Shader Engine": "SE4",
+                "Unit": "Cycles",
+                "Mean": "&mean4",
+                "Min": "&min4",
+                "Max": "&max4"
+            }
+        ]
+    }},
+    {"$unwind": {
+        "path": "$array"
+    }},
+    {"$replaceRoot": {
+        "newRoot": "$array"
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se5",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "mean5": {
+                        "$avg": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "min5": {
+                        "$min": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "max5": {
+                        "$max": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE5",
+                    "Unit": "Cycles",
+                    "Mean": "&mean5",
+                    "Min": "&min5",
+                    "Max": "&max5"
+                }}
+            ]
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se6",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "mean6": {
+                        "$avg": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "min6": {
+                        "$min": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "max6": {
+                        "$max": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE6",
+                    "Unit": "Cycles",
+                    "Mean": "&mean6",
+                    "Min": "&min6",
+                    "Max": "&max6"
+                }}
+            ]
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se7",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "mean7": {
+                        "$avg": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "min7": {
+                        "$min": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    },
+                    "max7": {
+                        "$max": { "$subtract": ["&EndTime", "&BeginTime"] }
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE7",
+                    "Unit": "Cycles",
+                    "Mean": "&mean7",
+                    "Min": "&min7",
+                    "Max": "&max7"
+                }}
+            ]
+    }}
+]

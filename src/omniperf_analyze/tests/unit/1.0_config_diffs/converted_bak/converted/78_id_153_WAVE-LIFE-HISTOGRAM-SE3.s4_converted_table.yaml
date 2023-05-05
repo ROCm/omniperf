@@ -1,0 +1,12 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: Metric
+          value: Value
+          tips: Tips
+        metric:
+          elapsedTime1:
+            value: (((EndTime - BeginTime) * 1000) / $sclk)
+            tips: 
+      

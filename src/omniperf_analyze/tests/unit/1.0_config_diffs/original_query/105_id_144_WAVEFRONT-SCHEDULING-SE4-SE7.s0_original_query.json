@@ -1,0 +1,142 @@
+[
+    {"$group": {
+        "_id": null,
+        "totalCount": {
+            "$sum": 1
+        },
+        "maxEnd":{
+            "$max": "&EndTime"
+        },
+        "minBegin":{
+            "$min": "&BeginTime"
+        },
+        "mean0": {
+            "$avg": "&inter_arrival"
+        },
+        "min0": {
+            "$min": "&inter_arrival"
+        },
+        "max0": {
+            "$max": "&inter_arrival"
+        }
+    }},
+    {"$set": {
+        "array": [
+            {
+                "Shader Engine": "SE4",
+                "Rate - Million Waves/sec": { "$divide": [{ "$multiply": [$sclk, "$totalCount"] }, { "$subtract": ["&maxEnd", "&minBegin"] }] },
+                "Mean - cycles": "$mean0",
+                "Min - cycles": "$min0",
+                "Max - cycles": "$max0"
+            }
+        ]
+    }},
+    {"$unwind": {
+        "path": "$array"
+    }},
+    {"$replaceRoot": {
+        "newRoot": "$array"
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se5",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "totalCount": {
+                        "$sum": 1
+                    },
+                    "maxEnd":{
+                        "$max": "&EndTime"
+                    },
+                    "minBegin":{
+                        "$min": "&BeginTime"
+                    },
+                    "mean1": {
+                        "$avg": "&inter_arrival"
+                    },
+                    "min1": {
+                        "$min": "&inter_arrival"
+                    },
+                    "max1": {
+                        "$max": "&inter_arrival"
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE5",
+                    "Rate - Million Waves/sec":{ "$divide": [{ "$multiply": [$sclk, "$totalCount"] }, { "$subtract": ["&maxEnd", "&minBegin"] }] },
+                    "Mean - cycles": "&mean1",
+                    "Min - cycles": "&min1",
+                    "Max - cycles": "&max1"
+                }}
+            ]
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se6",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "totalCount": {
+                        "$sum": 1
+                    },
+                    "maxEnd":{
+                        "$max": "&EndTime"
+                    },
+                    "minBegin":{
+                        "$min": "&BeginTime"
+                    },
+                    "mean2": {
+                        "$avg": "&inter_arrival"
+                    },
+                    "min2": {
+                        "$min": "&inter_arrival"
+                    },
+                    "max2": {
+                        "$max": "&inter_arrival"
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE6",
+                    "Rate - Million Waves/sec":{ "$divide": [{ "$multiply": [$sclk, "$totalCount"] }, { "$subtract": ["&maxEnd", "&minBegin"] }] },
+                    "Mean - cycles": "&mean2",
+                    "Min - cycles": "&min2",
+                    "Max - cycles": "&max2"
+                }}
+            ]
+    }},
+    {"$unionWith": {
+            "coll": "wave_timing_se7",
+            "pipeline": [
+                {"$group": {
+                    "_id": null,
+                    "totalCount": {
+                        "$sum": 1
+                    },
+                    "maxEnd":{
+                        "$max": "&EndTime"
+                    },
+                    "minBegin":{
+                        "$min": "&BeginTime"
+                    },
+                    "mean3": {
+                        "$avg": "&inter_arrival"
+                    },
+                    "min3": {
+                        "$min": "&inter_arrival"
+                    },
+                    "max3": {
+                        "$max": "&inter_arrival"
+                    }
+                }},
+                {"$project": {
+                    "_id": 0,
+                    "Shader Engine": "SE7",
+                    "Rate - Million Waves/sec":{ "$divide": [{ "$multiply": [$sclk, "$totalCount"] }, { "$subtract": ["&maxEnd", "&minBegin"] }] },
+                    "Mean - cycles": "&mean3",
+                    "Min - cycles": "&min3",
+                    "Max - cycles": "&max3"
+                }}
+            ]
+    }}
+]

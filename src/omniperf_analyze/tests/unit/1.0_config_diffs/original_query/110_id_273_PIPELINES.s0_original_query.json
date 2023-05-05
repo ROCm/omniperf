@@ -1,0 +1,117 @@
+[
+    {"$project": {
+      "_id": 0,
+      "SE":1,
+      "CU":1,
+      "Pipeline":1,
+      "Issues":1,
+      "PipelineUtil":1,
+      "Stalls":1,
+      "StallPc":1
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se1",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se2",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se3",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se4",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se5",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se6",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }},
+    {"$unionWith": {
+      "coll": "sqtt_pipeline_perf_se6",
+      "pipeline": [
+            {"$project": {
+            "_id": 0,
+            "SE":1,
+            "CU":1,
+            "Pipeline":1,
+            "Issues":1,
+            "PipelineUtil":1,
+            "Stalls":1,
+            "StallPc":1
+            }}
+      ]
+    }}
+ ]

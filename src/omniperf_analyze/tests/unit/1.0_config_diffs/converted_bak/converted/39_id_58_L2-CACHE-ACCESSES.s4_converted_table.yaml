@@ -1,0 +1,129 @@
+      metric_table:
+        id: -1
+        title: 
+        header:
+          metric: metric
+          avg: avg
+          min: min
+          max: max
+          unit: Unit
+          tips: Tips
+        metric:
+          Req:
+            avg: AVG((TCC_REQ_sum / $denom))
+            min: MIN((TCC_REQ_sum / $denom))
+            max: MAX((TCC_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Streaming Req:
+            avg: AVG((TCC_STREAMING_REQ_sum / $denom))
+            min: MIN((TCC_STREAMING_REQ_sum / $denom))
+            max: MAX((TCC_STREAMING_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Read Req:
+            avg: AVG((TCC_READ_sum / $denom))
+            min: MIN((TCC_READ_sum / $denom))
+            max: MAX((TCC_READ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Write Req:
+            avg: AVG((TCC_WRITE_sum / $denom))
+            min: MIN((TCC_WRITE_sum / $denom))
+            max: MAX((TCC_WRITE_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Atomic Req:
+            avg: AVG((TCC_ATOMIC_sum / $denom))
+            min: MIN((TCC_ATOMIC_sum / $denom))
+            max: MAX((TCC_ATOMIC_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Probe Req:
+            avg: AVG((TCC_PROBE_sum / $denom))
+            min: MIN((TCC_PROBE_sum / $denom))
+            max: MAX((TCC_PROBE_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Hits:
+            avg: AVG((TCC_HIT_sum / $denom))
+            min: MIN((TCC_HIT_sum / $denom))
+            max: MAX((TCC_HIT_sum / $denom))
+            unit: (Hits  + $normUnit)
+            tips: 
+          Misses:
+            avg: AVG((TCC_MISS_sum / $denom))
+            min: MIN((TCC_MISS_sum / $denom))
+            max: MAX((TCC_MISS_sum / $denom))
+            unit: (Misses  + $normUnit)
+            tips: 
+          Cache Hit:
+            avg: AVG((((100 * TCC_HIT_sum) / (TCC_HIT_sum + TCC_MISS_sum)) if ((TCC_HIT_sum
+              + TCC_MISS_sum) != 0) else None))
+            min: MIN((((100 * TCC_HIT_sum) / (TCC_HIT_sum + TCC_MISS_sum)) if ((TCC_HIT_sum
+              + TCC_MISS_sum) != 0) else None))
+            max: MAX((((100 * TCC_HIT_sum) / (TCC_HIT_sum + TCC_MISS_sum)) if ((TCC_HIT_sum
+              + TCC_MISS_sum) != 0) else None))
+            unit: pct
+            tips: 
+          Writeback:
+            avg: AVG((TCC_WRITEBACK_sum / $denom))
+            min: MIN((TCC_WRITEBACK_sum / $denom))
+            max: MAX((TCC_WRITEBACK_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          NC Req:
+            avg: AVG((TCC_NC_REQ_sum / $denom))
+            min: MIN((TCC_NC_REQ_sum / $denom))
+            max: MAX((TCC_NC_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          UC Req:
+            avg: AVG((TCC_UC_REQ_sum / $denom))
+            min: MIN((TCC_UC_REQ_sum / $denom))
+            max: MAX((TCC_UC_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          CC Req:
+            avg: AVG((TCC_CC_REQ_sum / $denom))
+            min: MIN((TCC_CC_REQ_sum / $denom))
+            max: MAX((TCC_CC_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          RW Req:
+            avg: AVG((TCC_RW_REQ_sum / $denom))
+            min: MIN((TCC_RW_REQ_sum / $denom))
+            max: MAX((TCC_RW_REQ_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+          Writeback (Normal):
+            avg: AVG((TCC_NORMAL_WRITEBACK_sum / $denom))
+            min: MIN((TCC_NORMAL_WRITEBACK_sum / $denom))
+            max: MAX((TCC_NORMAL_WRITEBACK_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          Writeback (TC Req):
+            avg: AVG((TCC_ALL_TC_OP_WB_WRITEBACK_sum / $denom))
+            min: MIN((TCC_ALL_TC_OP_WB_WRITEBACK_sum / $denom))
+            max: MAX((TCC_ALL_TC_OP_WB_WRITEBACK_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          Evict (Normal):
+            avg: AVG((TCC_NORMAL_EVICT_sum / $denom))
+            min: MIN((TCC_NORMAL_EVICT_sum / $denom))
+            max: MAX((TCC_NORMAL_EVICT_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          Evict (TC Req):
+            avg: AVG((TCC_ALL_TC_OP_INV_EVICT_sum / $denom))
+            min: MIN((TCC_ALL_TC_OP_INV_EVICT_sum / $denom))
+            max: MAX((TCC_ALL_TC_OP_INV_EVICT_sum / $denom))
+            unit: ( + $normUnit)
+            tips: 
+          128B Read Req:
+            avg: AVG((TCP_TCR_REQ_XFER128B_COMBINING_sum / $denom))
+            min: MIN((TCP_TCR_REQ_XFER128B_COMBINING_sum / $denom))
+            max: MAX((TCP_TCR_REQ_XFER128B_COMBINING_sum / $denom))
+            unit: (Req  + $normUnit)
+            tips: 
+      

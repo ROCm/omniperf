@@ -22,7 +22,11 @@ Panel Config:
             tips:
           Active CUs:
             #alias: active_cu_
-            value: ($numActiveCUs / $numCU)
+            value: $numActiveCUs
+            tips:
+          Num CUs:
+            #alias: num_cu_
+            value: $numCU
             tips:
           SALU:
             #alias: salu_

@@ -1,4 +1,4 @@
-##############################################################################bl
+###############################################################################
 # MIT License
 #
 # Copyright (c) 2022 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
@@ -20,7 +20,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-##############################################################################
+###############################################################################
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Mapping, Generator
@@ -29,7 +29,9 @@ from plotille import Canvas
 
 
 # A basic rect frame for any block or group of wires where all its elements should
-# be within this range, except the label(title) might be on the top of it.
+# be within this range, except: (a) the label(title) might be on the top of it,
+# (b) some wires around it don't have to be grouped specifically.
+
 @dataclass
 class RectFrame:
     label: str
@@ -72,6 +74,17 @@ class InstrBuff(RectFrame):
                     self.y_min + 2.0,
                     "{val:>5}  cycles".format(val=self.wave_life),
                     color='yellow')
+
+
+# Wires between Instr Buff and Instr Dispatch
+@dataclass
+class Wire_InstrBuff_InstrDispatch(RectFrame):
+    def draw(self, canvas):
+        # Todo: finer wires for connections
+        canvas.line(self.x_min + 2, self.y_min, self.x_min + 2, self.y_max)
+        canvas.line(self.x_max, self.y_min + 1.5, self.x_max, self.y_max - 1.5)
+        canvas.line(self.x_min + 2, self.y_min, self.x_max, self.y_min + 1.5)
+        canvas.line(self.x_min + 2, self.y_max, self.x_max - 0.5, self.y_max - 1.5)
 
 
 # Instr Dispatch Block
@@ -164,6 +177,7 @@ class Exec(RectFrame):
         canvas.text(self.x_min + 4.0, self.y_max - 26.0, "Workgroups:") 
         canvas.text(self.x_min + 4.0, self.y_max - 27.0, "{val:>13}".format(val=self.workgroups))
 
+
 # Wires between Exec block and GDS, LDS, Vector L1 cache, Scalar L1D Cache
 @dataclass
 class Wire_E_GLVS(RectFrame):
@@ -200,6 +214,23 @@ class Wire_E_GLVS(RectFrame):
             "{key:<6}: {val:>4}".format(key="Rd", val=self.scalar_L1D_rd))
         canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 23.0,
                     "<---------------")
+
+
+# Wire between Instr Buff and Instr L1 Cache
+@dataclass
+class Wire_InstrBuff_IL1Cache(RectFrame):
+    fetch: int = 0
+
+    def draw(self, canvas):
+        end_col = int(self.y_max - self.y_min)
+        canvas.text(self.x_min, self.y_max - 1, "^")
+        for i in range(2, end_col):
+            canvas.text(self.x_min, self.y_max - i, "|")
+        canvas.text(self.x_min + 27, self.y_max - end_col + 1,
+                    "{key:<6}: {val:>4}".format(key="Fetch", val=self.fetch))
+        canvas.text(self.x_min, self.y_max - end_col,
+                    "-" * (int(self.x_max - self.x_min)))
+
 
 # GDS Block
 @dataclass
@@ -329,14 +360,14 @@ class InstrL1Cache(RectFrame):
             "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
 
 
-# Wires between Vector L1 cache, Const L1 cache, Instr L1 cache and L2 Cache
+# Wires between Vector L1 cache, Scalar L1D Cache, Instr L1 cache and L2 Cache
 @dataclass
-class Wire_VCI_L2(RectFrame):
-    text_v_x_offset: float = 30.0
+class Wire_VSI_L2(RectFrame):
+    text_v_x_offset: float = 0.0
 
-    tcp_L2_rd: float = 0.0
-    tcp_L2_wr: float = 0.0
-    tcp_L2_atomic: float = 0.0
+    vl1_l2_rd: float = 0.0
+    vl1_l2_wr: float = 0.0
+    vl1_l2_atomic: float = 0.0
     constL1_L2_rd: float = 0.0
     constL1_L2_wr: float = 0.0
     constL1_L2_atomic: float = 0.0
@@ -344,38 +375,38 @@ class Wire_VCI_L2(RectFrame):
 
     def draw(self, canvas):
 
-        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 4.0,
-                    "{key:<6}: {val:>4}".format(key="Rd", val=self.tcp_L2_rd))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 5.0,
+        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 2.0,
+                    "{key:<6}: {val:>4}".format(key="Rd", val=self.vl1_l2_rd))
+        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 3.0,
                     "<---------------")
-        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 6.0,
-                    "{key:<6}: {val:>4}".format(key="Wr", val=self.tcp_L2_wr))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 7.0,
+        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 4.0,
+                    "{key:<6}: {val:>4}".format(key="Wr", val=self.vl1_l2_wr))
+        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 5.0,
                     "--------------->")
         canvas.text(
-            self.x_min + self.text_v_x_offset, self.y_max - 8.0,
-            "{key:<6}: {val:>4}".format(key="Atomic", val=self.tcp_L2_atomic))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 9.0,
-                    "--------------->")
+            self.x_min + self.text_v_x_offset, self.y_max - 6.0,
+            "{key:<6}: {val:>4}".format(key="Atomic", val=self.vl1_l2_atomic))
+        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 7.0,
+                    "<-------------->")
 
+        canvas.text(
+            self.x_min, self.y_max - 12.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.constL1_L2_rd))
+        canvas.text(self.x_min - 2, self.y_max - 13.0, "<---------------")
+        canvas.text(
+            self.x_min, self.y_max - 14.0,
+            "{key:<6}: {val:>4}".format(key="Wr", val=self.constL1_L2_wr))
+        canvas.text(self.x_min - 2, self.y_max - 15.0, "--------------->")
         canvas.text(
             self.x_min, self.y_max - 16.0,
-            "{key:<6}: {val:>4}".format(key="Rd", val=self.constL1_L2_rd))
-        canvas.text(self.x_min - 2, self.y_max - 17.0, "<" + "-" * 45)
-        canvas.text(
-            self.x_min, self.y_max - 18.0,
-            "{key:<6}: {val:>4}".format(key="Wr", val=self.constL1_L2_wr))
-        canvas.text(self.x_min - 2, self.y_max - 19.0, "-" * 45 + ">")
-        canvas.text(
-            self.x_min, self.y_max - 20.0,
             "{key:<6}: {val:>4}".format(key="Atomic",
                                         val=self.constL1_L2_atomic))
-        canvas.text(self.x_min - 2, self.y_max - 21.0, "-" * 45 + ">")
+        canvas.text(self.x_min - 2, self.y_max - 17.0, "<-------------->")
 
         canvas.text(
-            self.x_min, self.y_max - 26.0,
+            self.x_min, self.y_max - 22.0,
             "{key:<6}: {val:>4}".format(key="Req", val=self.instrL1_L2_req))
-        canvas.text(self.x_min - 2, self.y_max - 27.0, "<" + "-" * 45)
+        canvas.text(self.x_min - 2, self.y_max - 23.0, "<---------------")
 
 
 # L2 Cache
@@ -392,30 +423,36 @@ class L2Cache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 24.0, self.x_max - 2.0,
-                    self.y_max - 16.0)
-        canvas.text(self.x_min + 3.0, self.y_max - 18.0,
+        canvas.rect(self.x_min + 2.0, self.y_max - 5.0, self.x_max - 2.0,
+                    self.y_max - 3.0)
+        canvas.text(self.x_min + 4.0, self.y_max - 4.0,
+                    "{key:<6}: {val:>4} %".format(key="Hit", val=self.hit))
+
+        canvas.text(self.x_min + 2.0, self.y_max - 7.0, "Request")
+        canvas.rect(self.x_min + 2.0, self.y_max - 16.0, self.x_max - 2.0,
+                    self.y_max - 7.5)
+        canvas.text(self.x_min + 4.0, self.y_max - 10.0,
                     "{key:<6}: {val:>4}".format(key="Rd", val=self.rd))
-        canvas.text(self.x_min + 3.0, self.y_max - 20.0,
+        canvas.text(self.x_min + 4.0, self.y_max - 12.0,
                     "{key:<6}: {val:>4}".format(key="Wr", val=self.wr))
-        canvas.text(self.x_min + 3.0, self.y_max - 22.0,
+        canvas.text(self.x_min + 4.0, self.y_max - 14.0,
                     "{key:<6}: {val:>4}".format(key="Atomic", val=self.atomic))
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 34.0, self.x_max - 2.0,
-                    self.y_max - 26.0)
-        canvas.text(self.x_min + 3.0, self.y_max - 28.0,
-                    "{key:<6}: {val:>4} %".format(key="Hit", val=self.hit))
+        canvas.text(self.x_min + 2.0, self.y_max - 19.0, "Latency (cycles)")
+        canvas.rect(self.x_min + 2.0, self.y_max - 25.0, self.x_max - 2.0,
+                    self.y_max - 19.5)
+
         canvas.text(
-            self.x_min + 3.0, self.y_max - 30.0,
-            "{key:<6}: {val:>4} cycles".format(key="Rd", val=self.rd_cycles))
+            self.x_min + 4.0, self.y_max - 22.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.rd_cycles))
         canvas.text(
-            self.x_min + 3.0, self.y_max - 32.0,
-            "{key:<6}: {val:>4} cycles".format(key="Wr", val=self.wr_cycles))
+            self.x_min + 4.0, self.y_max - 24.0,
+            "{key:<6}: {val:>4}".format(key="Wr", val=self.wr_cycles))
 
 
-# Wires between L2 block and EA
+# Wires between L2 block and Fabric
 @dataclass
-class Wire_L2_EA(RectFrame):
+class Wire_L2_Fabric(RectFrame):
     text_x_offset: float = 3.0
 
     rd: float = 0.0
@@ -435,6 +472,79 @@ class Wire_L2_EA(RectFrame):
                     "{key:<6}: {val:>4}".format(key="Atomic", val=self.atomic))
         canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 7.0,
                     "--------------->")
+
+
+# xGMI/PCIe block with wires to fabric
+@dataclass
+class xGMI_PCIe(RectFrame):
+    def draw(self, canvas):
+        canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
+        canvas.text(self.x_min + 1.0, self.y_max - 2.0, self.label)
+        canvas.text(self.x_min + 3.0 , self.y_max - 5.0, "^   |")
+        canvas.text(self.x_min + 3.0 , self.y_max - 6.0, "|   |")
+        canvas.text(self.x_min + 3.0 , self.y_max - 7.0, "|   |")
+        canvas.text(self.x_min + 3.0 , self.y_max - 8.0, "|   v")
+
+
+# Fabric Cache Block
+@dataclass
+class Fabric(RectFrame):
+    rd: int = 0
+    wr: int = 0
+    atomic: int = 0
+
+    def draw(self, canvas):
+        canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
+        canvas.text(self.x_min + 6.0, self.y_max - 2.0, "   " + self.label)
+        canvas.text(self.x_min + 2.0, self.y_max - 4.0, "Latency (cycles)")
+
+        canvas.rect(self.x_min + 2.0, self.y_max - 9, self.x_max - 2.0,
+                    self.y_max - 4.5)
+        canvas.text(self.x_min + 4.0, self.y_max - 5.5,
+                    "{key:<6}: {val:>6}".format(key="Rd", val=self.rd))
+        canvas.text(self.x_min + 4.0, self.y_max - 6.5,
+                    "{key:<6}: {val:>6} ".format(key="Wr", val=self.wr))
+        canvas.text(self.x_min + 4.0, self.y_max - 7.5,
+                    "{key:<6}: {val:>6}".format(key="Atomic", val=self.atomic))
+
+
+# GMI block with wires to fabric
+@dataclass
+class GMI(RectFrame):
+    def draw(self, canvas):
+        canvas.text(self.x_min + 3.0 , self.y_max + 4.0, "^   |")
+        canvas.text(self.x_min + 3.0 , self.y_max + 3.0, "|   |")
+        canvas.text(self.x_min + 3.0 , self.y_max + 2.0, "|   |")
+        canvas.text(self.x_min + 3.0 , self.y_max + 1.0, "|   v")
+        canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
+        canvas.text(self.x_min + 4.0, self.y_max - 2.0, self.label)
+
+
+# Wires between fabric and HBM
+@dataclass
+class Wire_Fabric_HBM(RectFrame):
+    text_x_offset: float = 3.0
+
+    rd: int = 0
+    wr: int = 0
+
+    def draw(self, canvas):
+        canvas.text(self.x_min + self.text_x_offset, self.y_max,
+                    "{key:<2}: {val:>4}".format(key="Rd", val=self.rd))
+        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 1.0,
+                    "<-----------")
+        canvas.text(self.x_min + self.text_x_offset, self.y_max - 2.0,
+                    "{key:<2}: {val:>4}".format(key="Wr", val=self.wr))
+        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 3.0,
+                    "----------->")
+
+
+# HBM
+@dataclass
+class HBM(RectFrame):
+    def draw(self, canvas):
+        canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
+        canvas.text(self.x_min + 4.0, self.y_max - 2.0, self.label)
 
 
 def plot_mem_chart(df, arch):
@@ -457,6 +567,10 @@ def plot_mem_chart(df, arch):
     mem_chart_data["Num CUs"] = 120
     mem_chart_data["VGPR"] = 8
     mem_chart_data["SGPR"] = 24
+    mem_chart_data["LDS Allocation"] = 24000
+    mem_chart_data["Scratch Allocation"] = 879
+    mem_chart_data["Wavefronts"] = 16
+    mem_chart_data["Workgroups"] = 8000
 
     mem_chart_data["LDS Req"] = 0.0
     mem_chart_data["VL1 Rd"] = 16.0
@@ -479,24 +593,24 @@ def plot_mem_chart(df, arch):
     mem_chart_data["instr_L1_hit"] = 100.0
     mem_chart_data["instr_L1_latency"] = 9.0
 
-    mem_chart_data["tcp_L2_rd"] = 2
-    mem_chart_data["tcp_L2_wr"] = 0
-    mem_chart_data["tcp_L2_atomic"] = 0
+    mem_chart_data["VL1_L2 Rd"] = 2
+    mem_chart_data["VL1_L2 Wr"] = 0
+    mem_chart_data["VL1_L2 Atomic"] = 0
     mem_chart_data["constL1_L2_rd"] = 2
     mem_chart_data["constL1_L2_wr"] = 1
     mem_chart_data["constL1_L2_atomic"] = 0
     mem_chart_data["instrL1_L2_req"] = 3
 
-    mem_chart_data["L2_rd"] = 2
-    mem_chart_data["L2_wr"] = 0
-    mem_chart_data["L2_atomic"] = 0
-    mem_chart_data["L2_hit"] = 2
-    mem_chart_data["L2_rd_cycles"] = 601
-    mem_chart_data["L2_wr_cycles"] = 3450
+    mem_chart_data["L2 Rd"] = 2
+    mem_chart_data["L2 Wr"] = 0
+    mem_chart_data["L2 Atomic"] = 0
+    mem_chart_data["L2 Hit"] = 2
+    mem_chart_data["L2 Rd Lat"] = 601
+    mem_chart_data["L2 Wr Lat"] = 3450
 
-    mem_chart_data["L2_EA_rd"] = 3
-    mem_chart_data["L2_EA_wr"] = 1
-    mem_chart_data["L2_EA_atomic"] = 0
+    mem_chart_data["L2_Fabric_rd"] = 3
+    mem_chart_data["L2_Fabric_wr"] = 1
+    mem_chart_data["L2_Fabric_atomic"] = 0
 
     # Memory chart top pannel for 1 instance
     class MemChart:
@@ -509,13 +623,13 @@ def plot_mem_chart(df, arch):
 
         def draw(self, canvas, mem_chart_data):
 
-            #######################################################################
+            # ----------------------------------------
             # Overall rect and title
             canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
             canvas.text(self.x_min + 2.0, self.y_max - 2.0,
                         "Memory Chart(Normalization: per Sec)")
 
-            #######################################################################
+            # ----------------------------------------
             # Instr Buff Block
             block_instr_buff = InstrBuff(label="Instr Buff")
             block_instr_buff.x_min = 2.0
@@ -528,7 +642,16 @@ def plot_mem_chart(df, arch):
 
             block_instr_buff.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
+            # Wires between Instr Buff and Instr Dispatch
+            wire_I_I = Wire_InstrBuff_InstrDispatch(label="Wire_InstrBuff_InstrDispatch",
+                                    x_min=block_instr_buff.x_max + 1,
+                                    x_max=block_instr_buff.x_max + 7,
+                                    y_min=block_instr_buff.y_min,
+                                    y_max=block_instr_buff.y_max)
+            wire_I_I.draw(canvas)
+
+            # ----------------------------------------
             # Instr Dispatch Block
             block_instr_disp = InstrDispatch(label="Instr Dispatch")
             block_instr_disp.x_min = block_instr_buff.x_max + 9.0
@@ -547,7 +670,7 @@ def plot_mem_chart(df, arch):
 
             block_instr_disp.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # Exec Block
             block_exec = Exec(label="Exec")
             block_exec.x_min = block_instr_disp.x_max
@@ -559,10 +682,14 @@ def plot_mem_chart(df, arch):
             block_exec.num_cus = mem_chart_data["Num CUs"]
             block_exec.vgprs = mem_chart_data["VGPR"]
             block_exec.sgprs = mem_chart_data["SGPR"]
+            block_exec.lds_alloc = mem_chart_data["LDS Allocation"]
+            block_exec.scratch_alloc = mem_chart_data["Scratch Allocation"]
+            block_exec.wavefronts = mem_chart_data["Wavefronts"]
+            block_exec.workgroups = mem_chart_data["Workgroups"]
 
             block_exec.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # Wires between Exec block and GDS, LDS, Vector L1 cache
             wires_EGLV = Wire_E_GLVS(label="Wire_E_GLVS")
             wires_EGLV.x_min = block_exec.x_max
@@ -570,6 +697,7 @@ def plot_mem_chart(df, arch):
             wires_EGLV.y_min = block_instr_disp.y_min
             wires_EGLV.y_max = block_instr_disp.y_max
 
+            # fixme
             wires_EGLV.lds_req = mem_chart_data["LDS Req"]
             wires_EGLV.vector_L1_rd = mem_chart_data["VL1 Rd"]
             wires_EGLV.vector_L1_wr = mem_chart_data["VL1 Wr"]
@@ -578,7 +706,19 @@ def plot_mem_chart(df, arch):
 
             wires_EGLV.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
+            # Wire between Instr Buff and Instr L1 Cache
+            wire_InstrBuff_IL1Cache = Wire_InstrBuff_IL1Cache(label="Wire_InstrBuff_IL1Cache",
+                                                              x_min=block_instr_buff.x_max / 2,
+                                                              x_max=block_instr_buff.x_max / 2 + 80,
+                                                              y_min=block_exec.y_min - 1,
+                                                              y_max=block_instr_buff.y_min)
+            
+            # fixme wire_InstrBuff_IL1Cache.fetch = 
+
+            wire_InstrBuff_IL1Cache.draw(canvas)
+
+            # ----------------------------------------
             # GDS block
             # block_gds = GDS(label="GDS")
             # block_gds.x_min = wires_EGLV.x_max + 1
@@ -591,7 +731,7 @@ def plot_mem_chart(df, arch):
 
             # block_gds.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # LDS block
             block_lds = LDS(label="LDS")
             block_lds.x_min = wires_EGLV.x_max + 1
@@ -599,11 +739,12 @@ def plot_mem_chart(df, arch):
             block_lds.y_max = wires_EGLV.y_max
             block_lds.y_min = block_lds.y_max - 5
 
+            #fixme
             block_lds.latency = mem_chart_data["lds_latency"]
 
             block_lds.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # Vector L1 Cache Block
             block_vector_L1 = VectorL1Cache(label="Vector L1 Cache")
             block_vector_L1.x_min = block_lds.x_min
@@ -621,8 +762,8 @@ def plot_mem_chart(df, arch):
 
             block_vector_L1.draw(canvas)
 
-            #######################################################################
-            # Const L1 Cache block
+            # ----------------------------------------
+            # Scalar L1D Cache block
             block_const_L1 = ScalarL1DCache(label="Scalar L1D Cache")
             block_const_L1.x_min = block_lds.x_min
             block_const_L1.x_max = block_lds.x_max
@@ -634,7 +775,7 @@ def plot_mem_chart(df, arch):
 
             block_const_L1.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # Instr L1 Cache block
             block_instr_L1 = InstrL1Cache(label="Instr L1 Cache")
             block_instr_L1.x_min = block_const_L1.x_min
@@ -647,59 +788,109 @@ def plot_mem_chart(df, arch):
 
             block_instr_L1.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # Wires between Vector L1 cache, Const L1 cache, Instr L1 cache and L2 Cache
-            wires_VCI_L2 = Wire_VCI_L2(label="Wire_VCI_L2")
-            wires_VCI_L2.x_min = block_instr_L1.x_max + 4
-            wires_VCI_L2.x_max = wires_VCI_L2.x_min + 44
-            wires_VCI_L2.y_min = block_instr_L1.y_min
-            wires_VCI_L2.y_max = block_vector_L1.y_max
-            wires_VCI_L2.tcp_L2_rd = mem_chart_data["tcp_L2_rd"]
-            wires_VCI_L2.tcp_L2_wr = mem_chart_data["tcp_L2_wr"]
-            wires_VCI_L2.tcp_L2_atomic = mem_chart_data["tcp_L2_atomic"]
-            wires_VCI_L2.constL1_L2_rd = mem_chart_data["constL1_L2_rd"]
-            wires_VCI_L2.constL1_L2_wr = mem_chart_data["constL1_L2_wr"]
-            wires_VCI_L2.constL1_L2_atomic = mem_chart_data["constL1_L2_atomic"]
-            wires_VCI_L2.instrL1_L2_req = mem_chart_data["instrL1_L2_req"]
+            wires_VSI_L2Rd = Wire_VSI_L2(label="Wire_VSI_L2")
+            wires_VSI_L2Rd.x_min = block_instr_L1.x_max + 4
+            wires_VSI_L2Rd.x_max = wires_VSI_L2Rd.x_min + 14
+            wires_VSI_L2Rd.y_min = block_instr_L1.y_min
+            wires_VSI_L2Rd.y_max = block_vector_L1.y_max
+            wires_VSI_L2Rd.vl1_l2_rd = mem_chart_data["VL1_L2 Rd"]
+            wires_VSI_L2Rd.vl1_l2_wr = mem_chart_data["VL1_L2 Wr"]
+            wires_VSI_L2Rd.vl1_l2_atomic = mem_chart_data["VL1_L2 Atomic"]
+            wires_VSI_L2Rd.constL1_L2_rd = mem_chart_data["constL1_L2_rd"]
+            wires_VSI_L2Rd.constL1_L2_wr = mem_chart_data["constL1_L2_wr"]
+            wires_VSI_L2Rd.constL1_L2_atomic = mem_chart_data["constL1_L2_atomic"]
+            wires_VSI_L2Rd.instrL1_L2_req = mem_chart_data["instrL1_L2_req"]
 
-            wires_VCI_L2.draw(canvas)
+            wires_VSI_L2Rd.draw(canvas)
 
-            #######################################################################
+            # ----------------------------------------
             # L2 Cache block
             block_L2 = L2Cache(label="L2 Cache")
 
-            block_L2.x_min = wires_VCI_L2.x_max + 1
+            block_L2.x_min = wires_VSI_L2Rd.x_max + 1
             block_L2.x_max = block_L2.x_min + 24
             block_L2.y_min = block_instr_L1.y_min
             block_L2.y_max = block_lds.y_max
 
-            block_L2.rd = mem_chart_data["L2_rd"]
-            block_L2.wr = mem_chart_data["L2_wr"]
-            block_L2.atomic = mem_chart_data["L2_atomic"]
-            block_L2.hit = mem_chart_data["L2_hit"]
-            block_L2.rd_cycles = mem_chart_data["L2_rd_cycles"]
-            block_L2.wr_cycles = mem_chart_data["L2_wr_cycles"]
+            block_L2.rd = mem_chart_data["L2 Rd"]
+            block_L2.wr = mem_chart_data["L2 Wr"]
+            block_L2.atomic = mem_chart_data["L2 Atomic"]
+            block_L2.hit = mem_chart_data["L2 Hit"]
+            block_L2.rd_cycles = mem_chart_data["L2 Rd Lat"]
+            block_L2.wr_cycles = mem_chart_data["L2 Wr Lat"]
 
             block_L2.draw(canvas)
 
-            #######################################################################
-            # Wires between L2 block and EA
-            wires_L2_EA = Wire_L2_EA(label="Wire_L2_EA",
-                                    x_min=block_L2.x_max,
-                                    x_max=self.x_min + 16,
-                                    y_min=block_instr_L1.y_min + 10,
-                                    y_max=block_instr_L1.y_min + 20)
+            # ----------------------------------------
+            # Wires between L2 block and Fabric
+            wires_L2_Fabric = Wire_L2_Fabric(label="Wire_L2_Fabric",
+                                    x_min=block_L2.x_max + 1,
+                                    x_max=block_L2.x_max + 16,
+                                    y_min=block_L2.y_max - 18,
+                                    y_max=block_L2.y_max - 10)
 
-            wires_L2_EA.rd = mem_chart_data["L2_EA_rd"]
-            wires_L2_EA.wr = mem_chart_data["L2_EA_wr"]
-            wires_L2_EA.atomic = mem_chart_data["L2_EA_atomic"]
+            wires_L2_Fabric.rd = mem_chart_data["L2_Fabric_rd"]
+            wires_L2_Fabric.wr = mem_chart_data["L2_Fabric_wr"]
+            wires_L2_Fabric.atomic = mem_chart_data["L2_Fabric_atomic"]
 
-            wires_L2_EA.draw(canvas)
+            wires_L2_Fabric.draw(canvas)
 
+            # ----------------------------------------
+            # xGMI/PCIe block with wires to fabric
+            block_xgmi_pcie = xGMI_PCIe(label="xGMI/PCIe",
+                                x_min=wires_L2_Fabric.x_max + 10,
+                                x_max=wires_L2_Fabric.x_max + 20,
+                                y_min=block_L2.y_max - 4,
+                                y_max=block_L2.y_max)
+            block_xgmi_pcie.draw(canvas)
 
-    canvas = Canvas(width=260, height=54, xmax=260, ymax=54)
+            # ----------------------------------------
+            # Data Fabric Block
+            block_fabric = Fabric(label="Fabric",
+                            x_min=wires_L2_Fabric.x_max + 3,
+                            x_max=wires_L2_Fabric.x_max + 27,
+                            y_max=block_xgmi_pcie.y_min - 5,
+                            y_min=block_xgmi_pcie.y_min - 5 - 11)
+            block_fabric.draw(canvas)
 
-    mc = MemChart(0, 0, 259, 53)
+            # ----------------------------------------
+            # GMI block with wires to fabric
+            block_gmi = GMI(label="GMI",
+                            x_min=block_xgmi_pcie.x_min,
+                            x_max=block_xgmi_pcie.x_max,
+                            y_min=block_fabric.y_min - 9,
+                            y_max=block_fabric.y_min - 5)
+            block_gmi.draw(canvas)
+
+            # ----------------------------------------
+            # Wires between fabric and HBM
+            # Wire_Fabric_HBM
+            wires_Fabric_HBM = Wire_Fabric_HBM(label="Wire_Fabric_HBM",
+                                    x_min=block_fabric.x_max + 1,
+                                    x_max=block_fabric.x_max + 15,
+                                    y_min=block_fabric.y_max - 2,
+                                    y_max=block_fabric.y_max - 4)
+
+            # fixme
+            #wires_Fabric_HBM.rd = mem_chart_data["L2_Fabric_rd"]
+            #wires_Fabric_HBM.wr = mem_chart_data["L2_Fabric_wr"]
+
+            wires_Fabric_HBM.draw(canvas)
+
+            # ----------------------------------------
+            # HBM block
+            block_hbm = HBM(label="HBM",
+                            x_min=wires_Fabric_HBM.x_max,
+                            x_max=wires_Fabric_HBM.x_max + 10,
+                            y_min=block_fabric.y_max - 7,
+                            y_max=block_fabric.y_max - 3)
+            block_hbm.draw(canvas)
+
+    canvas = Canvas(width=234, height=42, xmax=234, ymax=42)
+
+    mc = MemChart(0, 0, 233, 41)
     mc.draw(canvas, mem_chart_data)
 
     # return the plot string stream

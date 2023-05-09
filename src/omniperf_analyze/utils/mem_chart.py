@@ -31,7 +31,6 @@ from plotille import Canvas
 # A basic rect frame for any block or group of wires where all its elements should
 # be within this range, except: (a) the label(title) might be on the top of it,
 # (b) some wires around it don't have to be grouped specifically.
-
 @dataclass
 class RectFrame:
     label: str
@@ -112,10 +111,6 @@ class InstrDispatch(RectFrame):
         for k, v in self.instrs.items():
             #print(k,v)
             text = "{key:<6}: {val:>4.0f}".format(key=k, val=v)
-            canvas.rect(self.top_rect_x_min,
-                        self.top_rect_y_min - self.rect_y_offset * i,
-                        self.top_rect_x_max,
-                        self.top_rect_y_max - self.rect_y_offset * i)
             canvas.text(
                 self.top_rect_x_min + self.text_x_offset, self.top_rect_y_min -
                 self.rect_y_offset * i + self.text_y_offset, text)
@@ -264,18 +259,12 @@ class LDS(RectFrame):
     def draw(self, canvas):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
-
-        canvas.rect(self.x_min + 2.0, self.y_max - 2.5, self.x_max - 2.0,
-                    self.y_max - 1.0)
         canvas.text(
-            self.x_min + 4.0, self.y_max - 2.0,
-            "{key:<4}: {val:>4} %".format(key="Util", val=self.util))
-        
-        canvas.rect(self.x_min + 2.0, self.y_max - 4.5, self.x_max - 2.0,
-                    self.y_max - 3.0)
+            self.x_min + 2.0, self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Util", val=self.util))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 4.0,
-            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0, self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
 
 
 # Vector L1 Cache Block
@@ -290,30 +279,18 @@ class VectorL1Cache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 2.5, self.x_max - 2.0,
-                    self.y_max - 1.0)
         canvas.text(
-            self.x_min + 4.0, self.y_max - 2.0,
-            "{key:<4}: {val:>4} %".format(key="hit", val=self.hit))
-        
-        canvas.rect(self.x_min + 2.0, self.y_max - 4.5, self.x_max - 2.0,
-                    self.y_max - 3.0)
+            self.x_min + 2.0, self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 4.0,
-            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
-        
-
-        canvas.rect(self.x_min + 2.0, self.y_max - 6.5, self.x_max - 2.0,
-                    self.y_max - 5.0)
+            self.x_min + 2.0, self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 6.0,
-            "{key:<4}: {val:>4} %".format(key="Coales", val=self.coales))
-        
-        canvas.rect(self.x_min + 2.0, self.y_max - 8.5, self.x_max - 2.0,
-                    self.y_max - 7.0)
+            self.x_min + 2.0, self.y_max - 6.0,
+            "{key:<6}: {val:>6} %".format(key="Coales", val=self.coales))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 8.0,
-            "{key:<4}: {val:>4} cycles".format(key="Stall", val=self.stall))
+            self.x_min + 2.0, self.y_max - 8.0,
+            "{key:<6}: {val:>6} cycles".format(key="Stall", val=self.stall))
             
 
 # Scalar L1D Cache
@@ -326,16 +303,11 @@ class ScalarL1DCache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_min + 2.5, self.x_max - 2.0,
-                    self.y_max - 1.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 2.0,
-                    "{key:<4}: {val:>4} %".format(key="Hit", val=self.hit))
-
-        canvas.rect(self.x_min + 2.0, self.y_min + 0.5, self.x_max - 2.0,
-                    self.y_min + 2.0)
+        canvas.text(self.x_min + 2.0, self.y_max - 2.0,
+                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 4.0,
-            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0, self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
 
 
 # Instr L1 Cache
@@ -348,16 +320,11 @@ class InstrL1Cache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_min + 2.5, self.x_max - 2.0,
-                    self.y_max - 1.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 2.0,
-                    "{key:<4}: {val:>4} %".format(key="Hit", val=self.hit))
-
-        canvas.rect(self.x_min + 2.0, self.y_min + 0.5, self.x_max - 2.0,
-                    self.y_min + 2.0)
+        canvas.text(self.x_min + 2.0, self.y_max - 2.0,
+                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
         canvas.text(
-            self.x_min + 4.0, self.y_max - 4.0,
-            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0, self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
 
 
 # Wires between Vector L1 cache, Scalar L1D Cache, Instr L1 cache and L2 Cache
@@ -426,17 +393,17 @@ class L2Cache(RectFrame):
         canvas.rect(self.x_min + 2.0, self.y_max - 5.0, self.x_max - 2.0,
                     self.y_max - 3.0)
         canvas.text(self.x_min + 4.0, self.y_max - 4.0,
-                    "{key:<6}: {val:>4} %".format(key="Hit", val=self.hit))
+                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
 
         canvas.text(self.x_min + 2.0, self.y_max - 7.0, "Request")
         canvas.rect(self.x_min + 2.0, self.y_max - 16.0, self.x_max - 2.0,
                     self.y_max - 7.5)
         canvas.text(self.x_min + 4.0, self.y_max - 10.0,
-                    "{key:<6}: {val:>4}".format(key="Rd", val=self.rd))
+                    "{key:<6}: {val:>6}".format(key="Rd", val=self.rd))
         canvas.text(self.x_min + 4.0, self.y_max - 12.0,
-                    "{key:<6}: {val:>4}".format(key="Wr", val=self.wr))
+                    "{key:<6}: {val:>6}".format(key="Wr", val=self.wr))
         canvas.text(self.x_min + 4.0, self.y_max - 14.0,
-                    "{key:<6}: {val:>4}".format(key="Atomic", val=self.atomic))
+                    "{key:<6}: {val:>6}".format(key="Atomic", val=self.atomic))
 
         canvas.text(self.x_min + 2.0, self.y_max - 19.0, "Latency (cycles)")
         canvas.rect(self.x_min + 2.0, self.y_max - 25.0, self.x_max - 2.0,
@@ -444,10 +411,10 @@ class L2Cache(RectFrame):
 
         canvas.text(
             self.x_min + 4.0, self.y_max - 22.0,
-            "{key:<6}: {val:>4}".format(key="Rd", val=self.rd_lat))
+            "{key:<6}: {val:>6}".format(key="Rd", val=self.rd_lat))
         canvas.text(
             self.x_min + 4.0, self.y_max - 24.0,
-            "{key:<6}: {val:>4}".format(key="Wr", val=self.wr_lat))
+            "{key:<6}: {val:>6}".format(key="Wr", val=self.wr_lat))
 
 
 # Wires between L2 block and Fabric
@@ -706,7 +673,7 @@ class MemChart:
         block_const_L1.draw(canvas)
 
         # ----------------------------------------
-        # Instr L1 Cache block
+        # Instr L1 Cache Block
         block_instr_L1 = InstrL1Cache(label="Instr L1 Cache")
         block_instr_L1.x_min = block_const_L1.x_min
         block_instr_L1.x_max = block_const_L1.x_max
@@ -736,7 +703,7 @@ class MemChart:
         wires_VSI_L2Rd.draw(canvas)
 
         # ----------------------------------------
-        # L2 Cache block
+        # L2 Cache Block
         block_L2 = L2Cache(label="L2 Cache")
 
         block_L2.x_min = wires_VSI_L2Rd.x_max + 1
@@ -754,7 +721,7 @@ class MemChart:
         block_L2.draw(canvas)
 
         # ----------------------------------------
-        # Wires between L2 block and Fabric
+        # Wires between L2 and Fabric
         wires_L2_Fabric = Wire_L2_Fabric(label="Wire_L2_Fabric",
                                 x_min=block_L2.x_max + 1,
                                 x_max=block_L2.x_max + 16,
@@ -768,7 +735,7 @@ class MemChart:
         wires_L2_Fabric.draw(canvas)
 
         # ----------------------------------------
-        # xGMI/PCIe block with wires to fabric
+        # xGMI/PCIe Block with wires to fabric
         block_xgmi_pcie = xGMI_PCIe(label="xGMI/PCIe",
                             x_min=wires_L2_Fabric.x_max + 10,
                             x_max=wires_L2_Fabric.x_max + 20,
@@ -791,7 +758,7 @@ class MemChart:
         block_fabric.draw(canvas)
 
         # ----------------------------------------
-        # GMI block with wires to fabric
+        # GMI Block with wires to fabric
         block_gmi = GMI(label="GMI",
                         x_min=block_xgmi_pcie.x_min,
                         x_max=block_xgmi_pcie.x_max,
@@ -814,7 +781,7 @@ class MemChart:
         wires_Fabric_HBM.draw(canvas)
 
         # ----------------------------------------
-        # HBM block
+        # HBM Block
         block_hbm = HBM(label="HBM",
                         x_min=wires_Fabric_HBM.x_max,
                         x_max=wires_Fabric_HBM.x_max + 10,

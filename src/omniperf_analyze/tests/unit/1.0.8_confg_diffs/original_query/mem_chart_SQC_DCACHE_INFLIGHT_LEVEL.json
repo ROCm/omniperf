@@ -1,0 +1,54 @@
+$Workload1.pmc_perf.aggregate([
+	{"$match": {
+		"Index": { "$in": [${DispatchIDFilter:raw}] },
+      		"gpu-id": { "$in": [${gpuFilter:raw}] },
+      		"KernelName": { "$in": ${KernelNameFilter:json}}
+  	}},
+	{"$lookup": {
+		"from": "SQ_IFETCH_LEVEL",
+		"localField": "Index",
+		"foreignField": "Index",
+		"as": "SQ_IFETCH_LEVEL",
+		"pipeline": [
+			{"$match": {
+				"Index": { "$in": [${DispatchIDFilter:raw}] },
+      				"gpu-id": { "$in": [${gpuFilter:raw}] },
+      				"KernelName": { "$in": ${KernelNameFilter:json}}
+  			}},
+			{"$project":{
+				"_id": 0,
+				"SQ_ACCUM_PREV_HIRES": 1
+			}}
+		]
+	}},
+	{"$unwind":{
+		"path": "&SQ_IFETCH_LEVEL"
+	}},
+	{"$group":{
+		"_id": null,
+		"sl1_lat": {
+			"$avg":{
+				"$cond":[
+						{"$ne":["&SQC_DCACHE_REQ",0]},
+						{"$divide":["&SQ_IFETCH_LEVEL.SQ_ACCUM_PREV_HIRES","&SQC_DCACHE_REQ"]},
+						null
+					]
+			}
+		} 
+	}},
+	{"$set": {
+    		"array": [
+        		{
+          			"Metric": "vL1D Lat",
+          			"Alias": "sl1_lat_",
+          			"Value": { "$round": ["&sl1_lat", 0] }
+        		}
+      		]
+	}},
+  	{"$unwind": {
+    		"path": "&array"
+  	}},
+  	{"$replaceRoot": {
+    		"newRoot": "&array"
+  	}}
+]);

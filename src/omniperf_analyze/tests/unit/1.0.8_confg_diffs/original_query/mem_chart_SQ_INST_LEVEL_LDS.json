@@ -1,0 +1,34 @@
+$Workload1.SQ_INST_LEVEL_LDS.aggregate([
+  {"$match": {
+      "Index": { "$in": [${DispatchIDFilter:raw}] },
+      "gpu-id": { "$in": [${gpuFilter:raw}] },
+      "KernelName": { "$in": ${KernelNameFilter:json}}
+  }},
+  {"$group": {
+    "_id": null,
+    "lds_lat": {
+          "$avg": { 
+            "$cond": [
+              { "$ne": ["&SQ_INSTS_LDS", 0] },
+              { "$divide": ["&SQ_ACCUM_PREV_HIRES", "&SQ_INSTS_LDS"] },
+              null
+            ]
+          }
+      }
+  }},
+  {"$set": {
+    "array": [
+        {
+          "Metric": "LDS Lat",
+          "Alias": "lds_lat_",
+          "Value":{ "$round": ["&lds_lat", 0] }
+        }
+      ]
+  }},
+  {"$unwind": {
+    "path": "&array"
+  }},
+  {"$replaceRoot": {
+    "newRoot": "&array"
+  }}
+]);

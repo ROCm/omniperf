@@ -1,0 +1,28 @@
+$Workload1.SQ_LEVEL_WAVES.aggregate([
+  {"$match": {
+      "Index": { "$in": [${DispatchIDFilter:raw}] },
+      "gpu-id": { "$in": [${gpuFilter:raw}] },
+      "KernelName": { "$in": ${KernelNameFilter:json}}
+  }},
+  {"$group": {
+    "_id": null,
+    "wave_occ": {
+        "$avg": { "$divide": [{ "$divide": ["&SQ_ACCUM_PREV_HIRES","&GRBM_GUI_ACTIVE"] }, $numActiveCUs]}
+    }
+  }},
+  {"$set": {
+    "array": [
+        {
+          "Metric": "Wave Occupancy",
+          "Alias": "wave_occ_",
+          "Value":{ "$round": ["&wave_occ", 0] }
+        }
+      ]
+  }},
+  {"$unwind": {
+    "path": "&array"
+  }},
+  {"$replaceRoot": {
+    "newRoot": "&array"
+  }}
+]);

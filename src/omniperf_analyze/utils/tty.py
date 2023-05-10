@@ -26,7 +26,7 @@ import pandas as pd
 from pathlib import Path
 from tabulate import tabulate
 
-from omniperf_analyze.utils import schema, parser, mem_chart
+from omniperf_analyze.utils import schema, parser, mem_chart, roofline_calc, simple_charts
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
@@ -48,13 +48,11 @@ def string_multiple_lines(source, width, max_rows):
     return "\n".join(lines)
 
 
-def show_all(
-    runs, archConfigs, output, df_file_dir, decimal, time_unit, selected_cols, verbose
-):
+def show_all(args, runs, archConfigs, output):
     """
     Show all panels with their data in plain text mode.
     """
-    comparable_columns = parser.build_comparable_columns(time_unit)
+    comparable_columns = parser.build_comparable_columns(args.time_unit)
 
     for panel_id, panel in archConfigs.panel_configs.items():
         # Skip panels that don't support baseline comparison
@@ -72,11 +70,8 @@ def show_all(
 
                 for header in list(base_df.keys()):
                     if (
-                        (not selected_cols)
-                        or (
-                            selected_cols
-                            and base_df.columns.get_loc(header) in selected_cols
-                        )
+                        (not args.cols)
+                        or (args.cols and base_df.columns.get_loc(header) in args.cols)
                         or (type == "raw_csv_table")
                     ):
                         if header in hidden_columns:
@@ -126,7 +121,7 @@ def show_all(
                                             .pct_change(axis="columns")
                                             .iloc[:, 1]
                                         )
-                                        if verbose >= 2:
+                                        if args.verbose >= 2:
                                             print("---------", header, t_df)
 
                                         # show value + percentage
@@ -134,12 +129,12 @@ def show_all(
                                         t_df = (
                                             cur_df[header]
                                             .astype(float)
-                                            .round(decimal)
+                                            .round(args.decimal)
                                             .map(str)
                                             + " ("
                                             + t_df.astype(float)
                                             .mul(100)
-                                            .round(decimal)
+                                            .round(args.decimal)
                                             .map(str)
                                             + "%)"
                                         )
@@ -147,7 +142,9 @@ def show_all(
                                         df = pd.concat([df, t_df], axis=1)
                                     else:
                                         cur_df[header] = [
-                                            round(float(x), decimal) if x != "" else x
+                                            round(float(x), args.decimal)
+                                            if x != ""
+                                            else x
                                             for x in base_df[header]
                                         ]
 
@@ -164,8 +161,8 @@ def show_all(
                     if "title" in table_config and table_config["title"]:
                         ss += table_id_str + " " + table_config["title"] + "\n"
 
-                    if df_file_dir:
-                        p = Path(df_file_dir)
+                    if args.df_file_dir:
+                        p = Path(args.df_file_dir)
                         if not p.exists():
                             p.mkdir()
                         if p.is_dir():
@@ -176,14 +173,33 @@ def show_all(
                                 index=False,
                             )
 
-                    # Todo: make a dict for all styles
-                    if "style" in table_config and table_config["style"] == "mem_chart":
-                        # Todo: check the unnecessary rounding
-                        # df.to_dict(index=False) should work for pandas > 2.0 ?
-                        ss += mem_chart.plot_mem_chart("", "per_kernel",
-                                pd.DataFrame([df["Metric"], df["Value"]]).transpose().set_index('Metric').to_dict()["Value"])
-                    else :
+                    # debug
+                    # if "cli_style" in table_config and table_config["cli_style"] == "simple_multiple_bar":
+                    #     print(df.transpose().to_dict("split"))
 
+                    if not args.table and "cli_style" in table_config:
+                        # FIXME: support single run only for now
+                        # TODO: make a dict for all styles
+                        if table_config["cli_style"] == "mem_chart":
+                            # Todo: display N/A properly
+                            # df.to_dict(index=False) should work for pandas > 2.0 ?
+                            ss += mem_chart.plot_mem_chart(
+                                "",
+                                args.normal_unit,
+                                pd.DataFrame([df["Metric"], df["Value"]])
+                                .transpose()
+                                .set_index("Metric")
+                                .to_dict()["Value"],
+                            )
+                        elif table_config["cli_style"] == "roofline_chart":
+                            ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
+                        elif table_config["cli_style"] == "simple_bar":
+                            ss += simple_charts.simple_bar(df)
+                        elif table_config["cli_style"] == "simple_box":
+                            ss += simple_charts.simple_box(df)
+                        elif table_config["cli_style"] == "simple_multiple_bar":
+                            ss += simple_charts.simple_multiple_bar(df)
+                    else:
                         # NB:
                         # "columnwise: True" is a special attr of a table/df
                         # For raw_csv_table, such as system_info, we transpose the
@@ -199,10 +215,10 @@ def show_all(
                                 else df,
                                 headers="keys",
                                 tablefmt="fancy_grid",
-                                floatfmt="." + str(decimal) + "f",
+                                floatfmt="." + str(args.decimal) + "f",
                             )
                             + "\n"
-                    )
+                        )
 
         if ss:
             print("\n" + "-" * 80, file=output)
@@ -210,7 +226,7 @@ def show_all(
             print(ss, file=output)
 
 
-def show_kernels(runs, archConfigs, output, decimal):
+def show_kernels(args, runs, archConfigs, output):
     """
     Show the kernels from top stats.
     """
@@ -230,7 +246,10 @@ def show_kernels(runs, archConfigs, output, decimal):
 
     print(
         tabulate(
-            df, headers="keys", tablefmt="fancy_grid", floatfmt="." + str(decimal) + "f"
+            df,
+            headers="keys",
+            tablefmt="fancy_grid",
+            floatfmt="." + str(args.decimal) + "f",
         ),
         file=output,
     )

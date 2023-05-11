@@ -25,7 +25,7 @@
 import pandas as pd
 from tabulate import tabulate
 
-from omniperf_analyze.utils import schema, parser
+from omniperf_analyze.utils import schema, parser, mem_chart
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
@@ -162,24 +162,32 @@ def show_all(runs, archConfigs, output, decimal, time_unit, selected_cols, verbo
                             + "\n"
                         )
 
-                    # NB:
-                    # "columnwise: True" is a special attr of a table/df
-                    # For raw_csv_table, such as system_info, we transpose the
-                    # df when load it, because we need those items in column.
-                    # For metric_table, we only need to show the data in column
-                    # fash for now.
-                    ss += (
-                        tabulate(
-                            df.transpose()
-                            if type != "raw_csv_table"
-                            and "columnwise" in table_config
-                            and table_config["columnwise"] == True
-                            else df,
-                            headers="keys",
-                            tablefmt="fancy_grid",
-                            floatfmt="." + str(decimal) + "f",
-                        )
-                        + "\n"
+                    # Todo: make a dict for all styles
+                    if "style" in table_config and table_config["style"] == "mem_chart":
+                        # Todo: check the unnecessary rounding
+                        # df.to_dict(index=False) should work for pandas > 2.0 ?
+                        ss += mem_chart.plot_mem_chart("", "per_kernel",
+                                pd.DataFrame([df["Metric"], df["Value"]]).transpose().set_index('Metric').to_dict()["Value"])
+                    else :
+
+                        # NB:
+                        # "columnwise: True" is a special attr of a table/df
+                        # For raw_csv_table, such as system_info, we transpose the
+                        # df when load it, because we need those items in column.
+                        # For metric_table, we only need to show the data in column
+                        # fash for now.
+                        ss += (
+                            tabulate(
+                                df.transpose()
+                                if type != "raw_csv_table"
+                                and "columnwise" in table_config
+                                and table_config["columnwise"] == True
+                                else df,
+                                headers="keys",
+                                tablefmt="fancy_grid",
+                                floatfmt="." + str(decimal) + "f",
+                            )
+                            + "\n"
                     )
 
         if ss:

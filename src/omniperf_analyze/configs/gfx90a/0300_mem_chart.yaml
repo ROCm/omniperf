@@ -309,3 +309,6 @@ Panel Config:
             #alias: hbm_wr_
             value: ROUND(AVG((TCC_EA_WRREQ_DRAM_sum / $denom)), 0)
             tips:
+
+        comparable: false # for now
+        style: mem_chart

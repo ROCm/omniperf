@@ -25,6 +25,7 @@
 from selectors import EpollSelector
 import sys
 import copy
+import os.path
 import pandas as pd
 from dash.dash_table import FormatTemplate
 from dash.dash_table.Format import Format, Scheme, Symbol
@@ -52,13 +53,16 @@ HIDDEN_SECTIONS = ["Memory Chart Analysis", "Kernels"]
 HIDDEN_COLUMNS = ["Tips", "coll_level"]
 IS_DARK = True  # default dark theme
 
+# Define any elements which will have full width
+full_width_elmt = {1801}
+
 # Define different types of bar charts
 barchart_elements = {
     # Group table ids by chart type
     "instr_mix": [1001, 1002],
     "multi_bar": [1604, 1704],
     "sol": [1101, 1201, 1301, 1401, 1601, 1701],
-    "l2_cache_per_chan": [1801, 1802],
+    "l2_cache_per_chan": [1802, 1803],
 }
 
 
@@ -342,6 +346,8 @@ def build_table_chart(
         style_cell_conditional=[
             {"if": {"column_id": display_columns[0]}, "textAlign": "left"}
         ],
+        # style cell
+        style_cell={"maxWidth": "500px"},
         # display style
         style_header={
             "backgroundColor": "rgb(30, 30, 30)",
@@ -350,7 +356,12 @@ def build_table_chart(
         }
         if IS_DARK
         else {},
-        style_data={"backgroundColor": "rgb(50, 50, 50)", "color": "white"}
+        style_data={
+            "backgroundColor": "rgb(50, 50, 50)",
+            "color": "white",
+            "whiteSpace": "normal",
+            "height": "auto",
+        }
         if IS_DARK
         else {},
         style_data_conditional=[
@@ -412,10 +423,11 @@ def build_layout(
         [Input("kernel-filt", "value")],
         [Input("gcd-filt", "value")],
         [Input("norm-filt", "value")],
+        [Input("top-n-filt", "value")],
         [State("container", "children")],
     )
     def generate_from_filter(
-        disp_filt, kernel_filter, gcd_filter, norm_filt, div_children
+        disp_filt, kernel_filter, gcd_filter, norm_filt, top_n_filt, div_children
     ):
         if verbose >= 1:
             print("normalization is ", norm_filt)
@@ -427,18 +439,19 @@ def build_layout(
         if verbose >= 1:
             print("disp-filter is ", disp_filt)
             print("kernel-filter is ", kernel_filter)
-            print("gpu-filter is ", gcd_filter, "\n")
+            print("gpu-filter is ", gcd_filter)
+            print("top-n kernel filter is ", top_n_filter, "\n")
         base_data[base_run].filter_kernel_ids = kernel_filter
         base_data[base_run].filter_gpu_ids = gcd_filter
         base_data[base_run].filter_dispatch_ids = disp_filt
+        base_data[base_run].filter_top_n = top_n_filt
         # Reload the pmc_kernel_top.csv for Top Stats panel
-        num_results = 10
         file_io.create_df_kernel_top_stats(
             path_to_dir,
             base_data[base_run].filter_gpu_ids,
             base_data[base_run].filter_dispatch_ids,
             time_unit,
-            num_results,
+            base_data[base_run].filter_top_n,
         )
         is_gui = True
         # Only display basic metrics if no filters are applied
@@ -466,13 +479,15 @@ def build_layout(
             get_memchart(panel_configs[1900]["data source"], base_data[base_run])
         )
         # append roofline section
-        div_children.append(
-            get_roofline(
-                path_to_dir,
-                parser.apply_filters(base_data[base_run], is_gui, debug),
-                verbose,
+        has_roofline = os.path.isfile(path_to_dir + "/roofline.csv")
+        if has_roofline:
+            div_children.append(
+                get_roofline(
+                    path_to_dir,
+                    parser.apply_filters(base_data[base_run], is_gui, debug),
+                    verbose,
+                )
             )
-        )
         # Iterate over each section as defined in panel configs
         for panel_id, panel in panel_configs.items():
             title = str(panel_id // 100) + ". " + panel["title"]
@@ -570,11 +585,20 @@ def build_layout(
                                     style={"color": "white" if IS_DARK else ""},
                                 ),
                             )
-
                         # Update content for this section
-                        html_section.append(
-                            html.Div(className="float-child", children=content)
-                        )
+                        if table_config["id"] in full_width_elmt:
+                            # Optionally override default (50%) width
+                            html_section.append(
+                                html.Div(
+                                    className="float-child",
+                                    children=content,
+                                    style={"width": "100%"},
+                                )
+                            )
+                        else:
+                            html_section.append(
+                                html.Div(className="float-child", children=content)
+                            )
 
                 # Append the new section with all of it's contents
                 div_children.append(
@@ -589,5 +613,18 @@ def build_layout(
                         ],
                     )
                 )
+
+        # Display pop-up message if no filters are applied
+        if not (disp_filt or kernel_filter or gcd_filter):
+            div_children.append(
+                html.Section(
+                    id="popup",
+                    children=[
+                        html.Div(
+                            children="To dive deeper, use the top drop down menus to isolate particular kernel(s) or dispatch(s). You will then see the web page update with additional low-level metrics specific to the filter you've applied.",
+                        ),
+                    ],
+                )
+            )
 
         return div_children

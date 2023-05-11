@@ -38,6 +38,7 @@ import sys
 
 
 import copy
+import random
 import sys
 import argparse
 import os.path
@@ -137,13 +138,12 @@ def run_gui(args, runs):
     app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
     if len(runs) == 1:
-        num_results = 10
         file_io.create_df_kernel_top_stats(
             args.path[0][0],
             runs[args.path[0][0]].filter_gpu_ids,
             runs[args.path[0][0]].filter_dispatch_ids,
             args.time_unit,
-            num_results,
+            args.max_kernel_num,
         )
         runs[args.path[0][0]].raw_pmc = file_io.create_df_pmc(
             args.path[0][0], args.verbose
@@ -155,6 +155,7 @@ def run_gui(args, runs):
             "gpu": runs[args.path[0][0]].filter_gpu_ids,
             "dispatch": runs[args.path[0][0]].filter_dispatch_ids,
             "normalization": args.normal_unit,
+            "top_n": args.max_kernel_num,
         }
 
         gui.build_layout(
@@ -170,9 +171,12 @@ def run_gui(args, runs):
             args.verbose,
             args,
         )
-        app.run_server(debug=False, host="0.0.0.0", port=args.gui)
+        if args.random_port:
+            app.run_server(debug=False, host="0.0.0.0", port=random.randint(1024, 49151))
+        else:
+            app.run_server(debug=False, host="0.0.0.0", port=args.gui)
     else:
-        print("Multiple runs not supported yet")
+        print("Multiple runs not yet supported in GUI. Retry without --gui flag.")
 
 
 def run_cli(args, runs):
@@ -183,13 +187,12 @@ def run_cli(args, runs):
     # which archConfig passed into show_all function.
     # After decide to how to manage kernels display patterns, we can revisit it.
     for d in args.path:
-        num_results = 10
         file_io.create_df_kernel_top_stats(
             d[0],
             runs[d[0]].filter_gpu_ids,
             runs[d[0]].filter_dispatch_ids,
             args.time_unit,
-            num_results,
+            args.max_kernel_num,
         )
         runs[d[0]].raw_pmc = file_io.create_df_pmc(
             d[0], args.verbose
@@ -199,17 +202,9 @@ def run_cli(args, runs):
             runs[d[0]], d[0], is_gui, args.g, args.verbose
         )  # create the loaded table
     if args.list_kernels:
-        tty.show_kernels(runs, archConfigs["gfx90a"], output, args.decimal)
+        tty.show_kernels(args, runs, archConfigs["gfx90a"], output)
     else:
-        tty.show_all(
-            runs,
-            archConfigs["gfx90a"],
-            output,
-            args.decimal,
-            args.time_unit,
-            args.cols,
-            args.verbose,
-        )
+        tty.show_all(args, runs, archConfigs["gfx90a"], output)
 
 
 def roofline_only(path_to_dir, dev_id, sort_type, mem_level, kernel_names, verbose):
@@ -281,4 +276,7 @@ def analyze(args):
     if args.gui:
         run_gui(args, runs)
     else:
+        if args.random_port:
+            print("ERROR: --gui flag required to enable --random-port")
+            sys.exit(1)
         run_cli(args, runs)

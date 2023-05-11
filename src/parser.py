@@ -24,7 +24,8 @@
 
 import os
 import argparse
-import subprocess
+import shutil
+
 
 from common import (
     OMNIPERF_HOME,
@@ -120,10 +121,8 @@ def parse(my_parser):
         help="\t\t\tKernel filtering.",
     )
 
-    result = subprocess.run(
-        ["which", "rocscope"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-    )
-    if result.returncode == 0:
+    result = shutil.which("rocscope")
+    if result:
         profile_group.add_argument(
             "-l",
             "--i-feel-lucky",
@@ -447,6 +446,14 @@ def parse(my_parser):
         help="\t\tSpecify the normalization unit: (DEFAULT: per_wave)\n\t\t   per_wave\n\t\t   per_cycle\n\t\t   per_second\n\t\t   per_kernel",
     )
     analyze_group.add_argument(
+        "--max-kernel-num",
+        dest="max_kernel_num",
+        metavar="",
+        type=int,
+        default=10,
+        help="\t\tSpecify the maximum number of kernels shown (DEFAULT: 10)",
+    )
+    analyze_group.add_argument(
         "--config-dir",
         dest="config_dir",
         metavar="",
@@ -470,6 +477,12 @@ def parse(my_parser):
         help="\t\tSpecify the decimal to display. (DEFAULT: 2)",
     )
     analyze_group.add_argument(
+        "--save-dfs",
+        dest="df_file_dir",
+        metavar="",
+        help="\t\tSpecify the dirctory to save analysis dataframe csv files.",
+    )
+    analyze_group.add_argument(
         "--cols",
         type=int,
         dest="cols",
@@ -487,4 +500,9 @@ def parse(my_parser):
         nargs="?",
         const=8050,
         help="\t\tActivate a GUI to interate with Omniperf metrics.\n\t\tOptionally, specify port to launch application (DEFAULT: 8050)",
+    )
+    analyze_group.add_argument(
+        "--random-port",
+        action="store_true",
+        help="\t\tRandomly generate a port to launch GUI application.\n\t\tRegistered Ports range inclusive (1024-49151).",
     )

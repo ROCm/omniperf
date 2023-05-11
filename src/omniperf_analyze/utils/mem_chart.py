@@ -329,7 +329,7 @@ class InstrL1Cache(RectFrame):
 
 # Wires between Vector L1 cache, Scalar L1D Cache, Instr L1 cache and L2 Cache
 @dataclass
-class Wire_VSI_L2(RectFrame):
+class Wires_L1_L2(RectFrame):
     text_v_x_offset: float = 0.0
 
     vl1_l2_rd: int = -1
@@ -526,7 +526,7 @@ class MemChart:
         # Overall rect and title
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min + 2.0, self.y_max - 2.0,
-                    "Memory Chart (Normalization: " + normal_unit + ")")
+                    "(Normalization: " + normal_unit + ")")
 
         # Typically, the drawing order would be: left->right, top->down
 
@@ -592,19 +592,19 @@ class MemChart:
 
         # ----------------------------------------
         # Wires between Exec block and GDS, LDS, Vector L1 cache
-        wires_EGLV = Wire_E_GLVS(label="Wire_E_GLVS")
-        wires_EGLV.x_min = block_exec.x_max
-        wires_EGLV.x_max = wires_EGLV.x_min + 16
-        wires_EGLV.y_min = block_instr_disp.y_min
-        wires_EGLV.y_max = block_instr_disp.y_max
+        wires_E_GLV = Wire_E_GLVS(label="Wire_E_GLVS")
+        wires_E_GLV.x_min = block_exec.x_max
+        wires_E_GLV.x_max = wires_E_GLV.x_min + 16
+        wires_E_GLV.y_min = block_instr_disp.y_min
+        wires_E_GLV.y_max = block_instr_disp.y_max
 
-        wires_EGLV.lds_req = metric_dict["LDS Req"]
-        wires_EGLV.vl1_rd = metric_dict["VL1 Rd"]
-        wires_EGLV.vl1_wr = metric_dict["VL1 Wr"]
-        wires_EGLV.vl1_atomic = metric_dict["VL1 Atomic"]
-        wires_EGLV.sl1_rd = metric_dict["VL1D Rd"]
+        wires_E_GLV.lds_req = metric_dict["LDS Req"]
+        wires_E_GLV.vl1_rd = metric_dict["VL1 Rd"]
+        wires_E_GLV.vl1_wr = metric_dict["VL1 Wr"]
+        wires_E_GLV.vl1_atomic = metric_dict["VL1 Atomic"]
+        wires_E_GLV.sl1_rd = metric_dict["VL1D Rd"]
 
-        wires_EGLV.draw(canvas)
+        wires_E_GLV.draw(canvas)
 
         # ----------------------------------------
         # Wire between Instr Buff and Instr L1 Cache
@@ -621,9 +621,9 @@ class MemChart:
         # ----------------------------------------
         # GDS block
         # block_gds = GDS(label="GDS")
-        # block_gds.x_min = wires_EGLV.x_max + 1
+        # block_gds.x_min = wires_E_GLV.x_max + 1
         # block_gds.x_max = block_gds.x_min + 24
-        # block_gds.y_max = wires_EGLV.y_max
+        # block_gds.y_max = wires_E_GLV.y_max
         # block_gds.y_min = block_gds.y_max - 5
 
         # block_gds.gws = metric_dict["gds_gws"]
@@ -634,9 +634,9 @@ class MemChart:
         # ----------------------------------------
         # LDS block
         block_lds = LDS(label="LDS")
-        block_lds.x_min = wires_EGLV.x_max + 1
+        block_lds.x_min = wires_E_GLV.x_max + 1
         block_lds.x_max = block_lds.x_min + 24
-        block_lds.y_max = wires_EGLV.y_max
+        block_lds.y_max = wires_E_GLV.y_max
         block_lds.y_min = block_lds.y_max - 5
 
         block_lds.util = metric_dict["LDS Util"]
@@ -687,26 +687,26 @@ class MemChart:
 
         # ----------------------------------------
         # Wires between Vector L1 cache, Scalar L1D cache, Instr L1 cache and L2 Cache
-        wires_VSI_L2Rd = Wire_VSI_L2(label="Wire_VSI_L2")
-        wires_VSI_L2Rd.x_min = block_instr_L1.x_max + 4
-        wires_VSI_L2Rd.x_max = wires_VSI_L2Rd.x_min + 14
-        wires_VSI_L2Rd.y_min = block_instr_L1.y_min
-        wires_VSI_L2Rd.y_max = block_vector_L1.y_max
-        wires_VSI_L2Rd.vl1_l2_rd = metric_dict["VL1_L2 Rd"]
-        wires_VSI_L2Rd.vl1_l2_wr = metric_dict["VL1_L2 Wr"]
-        wires_VSI_L2Rd.vl1_l2_atomic = metric_dict["VL1_L2 Atomic"]
-        wires_VSI_L2Rd.sl1_l2_rd = metric_dict["VL1D_L2 Rd"]
-        wires_VSI_L2Rd.sl1_l2_wr = metric_dict["VL1D_L2 Wr"]
-        wires_VSI_L2Rd.sl1_l2_atomic = metric_dict["VL1D_L2 Atomic"]
-        wires_VSI_L2Rd.il1_l2_req = metric_dict["IL1_L2 Rd"]
+        wires_L1_L2 = Wires_L1_L2(label="Wires_L1_L2")
+        wires_L1_L2.x_min = block_instr_L1.x_max + 4
+        wires_L1_L2.x_max = wires_L1_L2.x_min + 14
+        wires_L1_L2.y_min = block_instr_L1.y_min
+        wires_L1_L2.y_max = block_vector_L1.y_max
+        wires_L1_L2.vl1_l2_rd = metric_dict["VL1_L2 Rd"]
+        wires_L1_L2.vl1_l2_wr = metric_dict["VL1_L2 Wr"]
+        wires_L1_L2.vl1_l2_atomic = metric_dict["VL1_L2 Atomic"]
+        wires_L1_L2.sl1_l2_rd = metric_dict["VL1D_L2 Rd"]
+        wires_L1_L2.sl1_l2_wr = metric_dict["VL1D_L2 Wr"]
+        wires_L1_L2.sl1_l2_atomic = metric_dict["VL1D_L2 Atomic"]
+        wires_L1_L2.il1_l2_req = metric_dict["IL1_L2 Rd"]
 
-        wires_VSI_L2Rd.draw(canvas)
+        wires_L1_L2.draw(canvas)
 
         # ----------------------------------------
         # L2 Cache Block
         block_L2 = L2Cache(label="L2 Cache")
 
-        block_L2.x_min = wires_VSI_L2Rd.x_max + 1
+        block_L2.x_min = wires_L1_L2.x_max + 1
         block_L2.x_max = block_L2.x_min + 24
         block_L2.y_min = block_instr_L1.y_min
         block_L2.y_max = block_lds.y_max

@@ -25,6 +25,10 @@
 import sys
 
 from dataclasses import dataclass
+import pandas as pd
+from collections import OrderedDict
+import os.path
+import plotext as plt
 import csv
 
 ################################################
@@ -530,3 +534,153 @@ def empirical_roof(roof_info, mem_level, verbose):
     #     print(key, "->", results[key])
 
     return results
+
+
+def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
+    line_data = empirical_roof(roof_info, mem_level, verbose)
+
+    if verbose >= 1:
+        print("Line data:\n", line_data)
+
+    color_schame = {
+        "HBM": "blue+",
+        "L2": "green+",
+        "L1": "red+",
+        "LDS": "orange+",
+        "VALU": "white",
+        "MFMA": "magenta+",
+    }
+
+    kernel_markers = {
+        0: "star",
+        1: "heart",
+        2: "sd",
+        3: "shamrock",
+        4: "cross",
+    }
+
+    # plot BW Lines
+    if mem_level == "ALL":
+        cacheHierarchy = ["HBM", "L2", "L1", "LDS"]
+    else:
+        cacheHierarchy = mem_level
+
+    for cacheLevel in cacheHierarchy:
+        plt.plot(
+            line_data[cacheLevel.lower()][0],
+            line_data[cacheLevel.lower()][1],
+            label="{}-{}".format(cacheLevel, roof_info["dtype"]),
+            marker="braille",
+            color=color_schame[cacheLevel],
+        )
+
+    # plot VALU and MFMA Peak
+    if roof_info["dtype"] != "FP16" and roof_info["dtype"] != "I8":
+        plt.plot(
+            line_data["valu"][0],
+            line_data["valu"][1],
+            label="Peak VALU-{}".format(roof_info["dtype"]),
+            marker="braille",
+            color=color_schame["VALU"],
+        )
+
+        plt.plot(
+            line_data["mfma"][0],
+            line_data["mfma"][1],
+            label="Peak MFMA-{}".format(roof_info["dtype"]),
+            marker="braille",
+            color=color_schame["MFMA"],
+        )
+
+    # TODO
+    # if roof_info["dtype"] == "FP16":
+    #     pos = "bottom left"
+    # else:
+    #     pos = "top left"
+
+    # plot Application AI,  todo: show kernel name
+    # print(ai_data)
+    for cacheLevel in cacheHierarchy:
+        key = "ai_" + cacheLevel.lower()
+        if key in ai_data:
+            for i in range(len(ai_data[key][0])):
+                plt.plot(
+                    [ai_data[key][0][i]],
+                    [ai_data[key][1][i]],
+                    label="AI_" + cacheLevel + "_kernel_{}".format(str(i)),
+                    color=color_schame[cacheLevel],
+                    marker=kernel_markers[i % len(kernel_markers)],
+                )
+
+            # print("-----------------")
+            # print(ai_data["ai_" + cacheLevel.lower()][0])
+            # print(ai_data["ai_" + cacheLevel.lower()][1])
+
+    # # TODO
+    #     xaxis_title="Arithmetic Intensity (FLOPs/Byte)",
+    #     yaxis_title="Performance (GFLOP/sec)",
+    # )
+
+    # canvas config
+    plt.theme("pro")
+    plt.xscale("log")
+    plt.yscale("log")
+
+    # build all figures
+    # plt.show()
+    return plt.build()
+
+
+def cli_get_roofline(
+    path_to_dir,
+    verbose,
+    dev_id=None,
+    sort_type="kernels",
+    mem_level="ALL",
+    kernel_names=False,
+):
+    # Roofline settings
+    fp32_details = {
+        "path": path_to_dir,
+        "sort": sort_type,
+        "device": 0,
+        "dtype": "FP32",
+    }
+    fp16_details = {
+        "path": path_to_dir,
+        "sort": sort_type,
+        "device": 0,
+        "dtype": "FP16",
+    }
+    int8_details = {"path": path_to_dir, "sort": sort_type, "device": 0, "dtype": "I8"}
+
+    # FIXME: no hard coded reading
+    app_path = path_to_dir + "/pmc_perf.csv"
+    roofline_exists = os.path.isfile(app_path)
+    if not roofline_exists:
+        print("Error: {} does not exist")
+        sys.exit(0)
+    t_df = OrderedDict()
+    t_df["pmc_perf"] = pd.read_csv(app_path)
+
+    # Generate roofline plots
+    # print("-------------Path: ", path_to_dir)
+    ai_data = plot_application(sort_type, t_df, verbose)
+    if verbose >= 1:
+        # print AI data for each mem level
+        print("AI at each mem level")
+        for i in ai_data:
+            print(i, "->", ai_data[i])
+        print("\n")
+
+    fp32_fig = cli_generate_plots(fp32_details, ai_data, mem_level, kernel_names, verbose)
+
+    # TODO
+    # fp16_fig = cli_generate_plots(
+    #     fp16_details, ai_data, mem_level, kernel_names, verbose
+    # )
+    # ml_combo_fig = generate_plots(
+    #     int8_details, ai_data, mem_level, kernel_names, verbose, fp16_fig
+    # )
+
+    return fp32_fig

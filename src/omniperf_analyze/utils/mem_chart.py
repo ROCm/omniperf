@@ -47,32 +47,39 @@ class InstrBuff(RectFrame):
     wave_life: int = -1
 
     def draw(self, canvas):
-        #print("---------", self.x_min, self.y_min, self.x_max, self.y_max)
+        # print("---------", self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
 
         canvas.rect(self.x_min, self.y_min, self.x_max - 2.0, self.y_max - 1.0)
-        canvas.rect(self.x_min + 1.0, self.y_min + 0.5, self.x_max - 1.0,
-                    self.y_max - 0.5)
+        canvas.rect(
+            self.x_min + 1.0, self.y_min + 0.5, self.x_max - 1.0, self.y_max - 0.5
+        )
         canvas.rect(self.x_min + 2.0, self.y_min + 1.0, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 4.0, self.y_max - 3.5, self.x_max - 4.0,
-                    self.y_max - 2.0)
+        canvas.rect(
+            self.x_min + 4.0, self.y_max - 3.5, self.x_max - 4.0, self.y_max - 2.0
+        )
         canvas.text(self.x_min + 5.0, self.y_max - 3.0, r"Wave   0 Instr Buf")
 
-        canvas.rect(self.x_min + 4.0, self.y_max - 7.5, self.x_max - 4.0,
-                    self.y_max - 6.0)
+        canvas.rect(
+            self.x_min + 4.0, self.y_max - 7.5, self.x_max - 4.0, self.y_max - 6.0
+        )
         canvas.text(self.x_min + 5.0, self.y_max - 7.0, r"Wave N-1 Instr Buf")
 
         canvas.text(self.x_min + 7.0, self.y_min + 5.0, r"Wave Occupancy")
-        canvas.text(self.x_min + 10.0,
-                    self.y_min + 4.0,
-                    "{val:>3}  per CU".format(val=self.wave_occupancy),
-                    color='yellow')
+        canvas.text(
+            self.x_min + 10.0,
+            self.y_min + 4.0,
+            "{val:>3}  per CU".format(val=self.wave_occupancy),
+            color="yellow",
+        )
         canvas.text(self.x_min + 7.0, self.y_min + 3.0, r"Wave Life")
-        canvas.text(self.x_min + 8.0,
-                    self.y_min + 2.0,
-                    "{val:>5}  cycles".format(val=self.wave_life),
-                    color='yellow')
+        canvas.text(
+            self.x_min + 8.0,
+            self.y_min + 2.0,
+            "{val:>5}  cycles".format(val=self.wave_life),
+            color="yellow",
+        )
 
 
 # Wires between Instr Buff and Instr Dispatch
@@ -109,14 +116,18 @@ class InstrDispatch(RectFrame):
 
         i = 0
         for k, v in self.instrs.items():
-            #print(k,v)
+            # print(k,v)
             text = "{key:<6}: {val:>4.0f}".format(key=k, val=v)
             canvas.text(
-                self.top_rect_x_min + self.text_x_offset, self.top_rect_y_min -
-                self.rect_y_offset * i + self.text_y_offset, text)
-            canvas.text(self.top_rect_x_min - 2,
-                        self.top_rect_y_min - self.rect_y_offset * i,
-                        "------------------>")
+                self.top_rect_x_min + self.text_x_offset,
+                self.top_rect_y_min - self.rect_y_offset * i + self.text_y_offset,
+                text,
+            )
+            canvas.text(
+                self.top_rect_x_min - 2,
+                self.top_rect_y_min - self.rect_y_offset * i,
+                "------------------>",
+            )
             i = i + 1
 
 
@@ -137,40 +148,64 @@ class Exec(RectFrame):
 
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min + 2.0, self.y_max - 2.0, "Active CUs")
-        canvas.text(self.x_min + 2.0,
-                    self.y_max - 3.0,
-                    "{a}/{n}".format(a=self.active_cus, n=self.num_cus),
-                    color="yellow")
+        canvas.text(
+            self.x_min + 2.0,
+            self.y_max - 3.0,
+            "{a}/{n}".format(a=self.active_cus, n=self.num_cus),
+            color="yellow",
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 7.0, self.x_max - 2.0,
-                    self.y_max - 5.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 6.0,
-                    "{key:<6}: {val:>5}".format(key="VGPRs", val=self.vgprs))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 7.0, self.x_max - 2.0, self.y_max - 5.0
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 6.0,
+            "{key:<6}: {val:>5}".format(key="VGPRs", val=self.vgprs),
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 10.0, self.x_max - 2.0,
-                    self.y_max - 8.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 9.0,
-                    "{key:<6}: {val:>5}".format(key="SGPRs", val=self.sgprs))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 10.0, self.x_max - 2.0, self.y_max - 8.0
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 9.0,
+            "{key:<6}: {val:>5}".format(key="SGPRs", val=self.sgprs),
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 15.0, self.x_max - 2.0,
-                    self.y_max - 12.0)
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 15.0, self.x_max - 2.0, self.y_max - 12.0
+        )
         canvas.text(self.x_min + 4.0, self.y_max - 13.0, "LDS Alloc:")
-        canvas.text(self.x_min + 4.0, self.y_max - 14.0, "{val:>13}".format(val=self.lds_alloc))
+        canvas.text(
+            self.x_min + 4.0, self.y_max - 14.0, "{val:>13}".format(val=self.lds_alloc)
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 19.0, self.x_max - 2.0,
-                    self.y_max - 16.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 17.0, "Scratch Alloc:") 
-        canvas.text(self.x_min + 4.0, self.y_max - 18.0, "{val:>13}".format(val=self.scratch_alloc))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 19.0, self.x_max - 2.0, self.y_max - 16.0
+        )
+        canvas.text(self.x_min + 4.0, self.y_max - 17.0, "Scratch Alloc:")
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 18.0,
+            "{val:>13}".format(val=self.scratch_alloc),
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 24.0, self.x_max - 2.0,
-                    self.y_max - 21.0)
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 24.0, self.x_max - 2.0, self.y_max - 21.0
+        )
         canvas.text(self.x_min + 4.0, self.y_max - 22.0, "Wavefronts:")
-        canvas.text(self.x_min + 4.0, self.y_max - 23.0, "{val:>13}".format(val=self.wavefronts))
+        canvas.text(
+            self.x_min + 4.0, self.y_max - 23.0, "{val:>13}".format(val=self.wavefronts)
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 28.0, self.x_max - 2.0,
-                    self.y_max - 25.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 26.0, "Workgroups:") 
-        canvas.text(self.x_min + 4.0, self.y_max - 27.0, "{val:>13}".format(val=self.workgroups))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 28.0, self.x_max - 2.0, self.y_max - 25.0
+        )
+        canvas.text(self.x_min + 4.0, self.y_max - 26.0, "Workgroups:")
+        canvas.text(
+            self.x_min + 4.0, self.y_max - 27.0, "{val:>13}".format(val=self.workgroups)
+        )
 
 
 # Wires between Exec block and GDS, LDS, Vector L1 cache, Scalar L1D Cache
@@ -185,30 +220,48 @@ class Wire_E_GLVS(RectFrame):
     sl1_rd: int = -1
 
     def draw(self, canvas):
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 2.0,
-                    "{key:<6}: {val:>4}".format(key="Req", val=self.lds_req))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 3.0,
-                    "<---------------")
-
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 10.0,
-                    "{key:<6}: {val:>4}".format(key="Rd", val=self.vl1_rd))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 11.0,
-                    "<---------------")
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 12.0,
-                    "{key:<6}: {val:>4}".format(key="Wt", val=self.vl1_wr))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 13.0,
-                    "--------------->")
         canvas.text(
-            self.x_min + self.text_x_offset, self.y_max - 14.0,
-            "{key:<6}: {val:>4}".format(key="Atomic", val=self.vl1_atomic))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 15.0,
-                    "<-------------->")
+            self.x_min + self.text_x_offset,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>4}".format(key="Req", val=self.lds_req),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 3.0, "<---------------"
+        )
 
         canvas.text(
-            self.x_min + self.text_x_offset, self.y_max - 22.0,
-            "{key:<6}: {val:>4}".format(key="Rd", val=self.sl1_rd))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 23.0,
-                    "<---------------")
+            self.x_min + self.text_x_offset,
+            self.y_max - 10.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.vl1_rd),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 11.0, "<---------------"
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 12.0,
+            "{key:<6}: {val:>4}".format(key="Wt", val=self.vl1_wr),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 13.0, "--------------->"
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 14.0,
+            "{key:<6}: {val:>4}".format(key="Atomic", val=self.vl1_atomic),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 15.0, "<-------------->"
+        )
+
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 22.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.sl1_rd),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 23.0, "<---------------"
+        )
 
 
 # Wire between Instr Buff and Instr L1 Cache
@@ -221,10 +274,14 @@ class Wire_InstrBuff_IL1Cache(RectFrame):
         canvas.text(self.x_min, self.y_max - 1, "^")
         for i in range(2, end_col):
             canvas.text(self.x_min, self.y_max - i, "|")
-        canvas.text(self.x_min + 27, self.y_max - end_col + 1,
-                    "{key:<6}: {val:>4}".format(key="Fetch", val=self.il1_fetch))
-        canvas.text(self.x_min, self.y_max - end_col,
-                    "-" * (int(self.x_max - self.x_min)))
+        canvas.text(
+            self.x_min + 27,
+            self.y_max - end_col + 1,
+            "{key:<6}: {val:>4}".format(key="Fetch", val=self.il1_fetch),
+        )
+        canvas.text(
+            self.x_min, self.y_max - end_col, "-" * (int(self.x_max - self.x_min))
+        )
 
 
 # GDS Block
@@ -237,17 +294,23 @@ class GDS(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_min + 2.5, self.x_max - 2.0,
-                    self.y_max - 1.0)
+        canvas.rect(
+            self.x_min + 2.0, self.y_min + 2.5, self.x_max - 2.0, self.y_max - 1.0
+        )
         canvas.text(
-            self.x_min + 4.0, self.y_max - 2.0,
-            "{key:<4}: {val:>4} cycles".format(key="GWS", val=self.gws))
+            self.x_min + 4.0,
+            self.y_max - 2.0,
+            "{key:<4}: {val:>4} cycles".format(key="GWS", val=self.gws),
+        )
 
-        canvas.rect(self.x_min + 2.0, self.y_min + 0.5, self.x_max - 2.0,
-                    self.y_min + 2.0)
+        canvas.rect(
+            self.x_min + 2.0, self.y_min + 0.5, self.x_max - 2.0, self.y_min + 2.0
+        )
         canvas.text(
-            self.x_min + 4.0, self.y_max - 4.0,
-            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 4.0,
+            self.y_max - 4.0,
+            "{key:<4}: {val:>4} cycles".format(key="Lat", val=self.latency),
+        )
 
 
 # LDS Block
@@ -260,11 +323,15 @@ class LDS(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(
-            self.x_min + 2.0, self.y_max - 2.0,
-            "{key:<6}: {val:>6} %".format(key="Util", val=self.util))
+            self.x_min + 2.0,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Util", val=self.util),
+        )
         canvas.text(
-            self.x_min + 2.0, self.y_max - 4.0,
-            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency),
+        )
 
 
 # Vector L1 Cache Block
@@ -280,18 +347,26 @@ class VectorL1Cache(RectFrame):
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
         canvas.text(
-            self.x_min + 2.0, self.y_max - 2.0,
-            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
+            self.x_min + 2.0,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit),
+        )
         canvas.text(
-            self.x_min + 2.0, self.y_max - 4.0,
-            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency),
+        )
         canvas.text(
-            self.x_min + 2.0, self.y_max - 6.0,
-            "{key:<6}: {val:>6} %".format(key="Coales", val=self.coales))
+            self.x_min + 2.0,
+            self.y_max - 6.0,
+            "{key:<6}: {val:>6} %".format(key="Coales", val=self.coales),
+        )
         canvas.text(
-            self.x_min + 2.0, self.y_max - 8.0,
-            "{key:<6}: {val:>6} cycles".format(key="Stall", val=self.stall))
-            
+            self.x_min + 2.0,
+            self.y_max - 8.0,
+            "{key:<6}: {val:>6} cycles".format(key="Stall", val=self.stall),
+        )
+
 
 # Scalar L1D Cache
 @dataclass
@@ -303,11 +378,16 @@ class ScalarL1DCache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.text(self.x_min + 2.0, self.y_max - 2.0,
-                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
         canvas.text(
-            self.x_min + 2.0, self.y_max - 4.0,
-            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit),
+        )
+        canvas.text(
+            self.x_min + 2.0,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency),
+        )
 
 
 # Instr L1 Cache
@@ -320,11 +400,16 @@ class InstrL1Cache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.text(self.x_min + 2.0, self.y_max - 2.0,
-                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
         canvas.text(
-            self.x_min + 2.0, self.y_max - 4.0,
-            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency))
+            self.x_min + 2.0,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit),
+        )
+        canvas.text(
+            self.x_min + 2.0,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>6} cycles".format(key="Lat", val=self.latency),
+        )
 
 
 # Wires between Vector L1 cache, Scalar L1D Cache, Instr L1 cache and L2 Cache
@@ -341,38 +426,55 @@ class Wires_L1_L2(RectFrame):
     il1_l2_req: int = -1
 
     def draw(self, canvas):
-
-        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 2.0,
-                    "{key:<6}: {val:>4}".format(key="Rd", val=self.vl1_l2_rd))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 3.0,
-                    "<---------------")
-        canvas.text(self.x_min + self.text_v_x_offset, self.y_max - 4.0,
-                    "{key:<6}: {val:>4}".format(key="Wr", val=self.vl1_l2_wr))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 5.0,
-                    "--------------->")
         canvas.text(
-            self.x_min + self.text_v_x_offset, self.y_max - 6.0,
-            "{key:<6}: {val:>4}".format(key="Atomic", val=self.vl1_l2_atomic))
-        canvas.text(self.x_min + self.text_v_x_offset - 2, self.y_max - 7.0,
-                    "<-------------->")
+            self.x_min + self.text_v_x_offset,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.vl1_l2_rd),
+        )
+        canvas.text(
+            self.x_min + self.text_v_x_offset - 2, self.y_max - 3.0, "<---------------"
+        )
+        canvas.text(
+            self.x_min + self.text_v_x_offset,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>4}".format(key="Wr", val=self.vl1_l2_wr),
+        )
+        canvas.text(
+            self.x_min + self.text_v_x_offset - 2, self.y_max - 5.0, "--------------->"
+        )
+        canvas.text(
+            self.x_min + self.text_v_x_offset,
+            self.y_max - 6.0,
+            "{key:<6}: {val:>4}".format(key="Atomic", val=self.vl1_l2_atomic),
+        )
+        canvas.text(
+            self.x_min + self.text_v_x_offset - 2, self.y_max - 7.0, "<-------------->"
+        )
 
         canvas.text(
-            self.x_min, self.y_max - 12.0,
-            "{key:<6}: {val:>4}".format(key="Rd", val=self.sl1_l2_rd))
+            self.x_min,
+            self.y_max - 12.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.sl1_l2_rd),
+        )
         canvas.text(self.x_min - 2, self.y_max - 13.0, "<---------------")
         canvas.text(
-            self.x_min, self.y_max - 14.0,
-            "{key:<6}: {val:>4}".format(key="Wr", val=self.sl1_l2_wr))
+            self.x_min,
+            self.y_max - 14.0,
+            "{key:<6}: {val:>4}".format(key="Wr", val=self.sl1_l2_wr),
+        )
         canvas.text(self.x_min - 2, self.y_max - 15.0, "--------------->")
         canvas.text(
-            self.x_min, self.y_max - 16.0,
-            "{key:<6}: {val:>4}".format(key="Atomic",
-                                        val=self.sl1_l2_atomic))
+            self.x_min,
+            self.y_max - 16.0,
+            "{key:<6}: {val:>4}".format(key="Atomic", val=self.sl1_l2_atomic),
+        )
         canvas.text(self.x_min - 2, self.y_max - 17.0, "<-------------->")
 
         canvas.text(
-            self.x_min, self.y_max - 22.0,
-            "{key:<6}: {val:>4}".format(key="Req", val=self.il1_l2_req))
+            self.x_min,
+            self.y_max - 22.0,
+            "{key:<6}: {val:>4}".format(key="Req", val=self.il1_l2_req),
+        )
         canvas.text(self.x_min - 2, self.y_max - 23.0, "<---------------")
 
 
@@ -390,31 +492,50 @@ class L2Cache(RectFrame):
         canvas.text(self.x_min, self.y_max + 1.0, self.label)
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
 
-        canvas.rect(self.x_min + 2.0, self.y_max - 5.0, self.x_max - 2.0,
-                    self.y_max - 3.0)
-        canvas.text(self.x_min + 4.0, self.y_max - 4.0,
-                    "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 5.0, self.x_max - 2.0, self.y_max - 3.0
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>6} %".format(key="Hit", val=self.hit),
+        )
 
         canvas.text(self.x_min + 2.0, self.y_max - 7.0, "Request")
-        canvas.rect(self.x_min + 2.0, self.y_max - 16.0, self.x_max - 2.0,
-                    self.y_max - 7.5)
-        canvas.text(self.x_min + 4.0, self.y_max - 10.0,
-                    "{key:<6}: {val:>6}".format(key="Rd", val=self.rd))
-        canvas.text(self.x_min + 4.0, self.y_max - 12.0,
-                    "{key:<6}: {val:>6}".format(key="Wr", val=self.wr))
-        canvas.text(self.x_min + 4.0, self.y_max - 14.0,
-                    "{key:<6}: {val:>6}".format(key="Atomic", val=self.atomic))
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 16.0, self.x_max - 2.0, self.y_max - 7.5
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 10.0,
+            "{key:<6}: {val:>6}".format(key="Rd", val=self.rd),
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 12.0,
+            "{key:<6}: {val:>6}".format(key="Wr", val=self.wr),
+        )
+        canvas.text(
+            self.x_min + 4.0,
+            self.y_max - 14.0,
+            "{key:<6}: {val:>6}".format(key="Atomic", val=self.atomic),
+        )
 
         canvas.text(self.x_min + 2.0, self.y_max - 19.0, "Latency (cycles)")
-        canvas.rect(self.x_min + 2.0, self.y_max - 25.0, self.x_max - 2.0,
-                    self.y_max - 19.5)
+        canvas.rect(
+            self.x_min + 2.0, self.y_max - 25.0, self.x_max - 2.0, self.y_max - 19.5
+        )
 
         canvas.text(
-            self.x_min + 4.0, self.y_max - 22.0,
-            "{key:<6}: {val:>6}".format(key="Rd", val=self.rd_lat))
+            self.x_min + 4.0,
+            self.y_max - 22.0,
+            "{key:<6}: {val:>6}".format(key="Rd", val=self.rd_lat),
+        )
         canvas.text(
-            self.x_min + 4.0, self.y_max - 24.0,
-            "{key:<6}: {val:>6}".format(key="Wr", val=self.wr_lat))
+            self.x_min + 4.0,
+            self.y_max - 24.0,
+            "{key:<6}: {val:>6}".format(key="Wr", val=self.wr_lat),
+        )
 
 
 # Wires between L2 block and Fabric
@@ -427,18 +548,30 @@ class Wire_L2_Fabric(RectFrame):
     atomic: int = -1
 
     def draw(self, canvas):
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 2.0,
-                    "{key:<6}: {val:>4}".format(key="Rd", val=self.rd))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 3.0,
-                    "<---------------")
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 4.0,
-                    "{key:<6}: {val:>4}".format(key="Wr", val=self.wr))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 5.0,
-                    "--------------->")
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 6.0,
-                    "{key:<6}: {val:>4}".format(key="Atomic", val=self.atomic))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 7.0,
-                    "--------------->")
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 2.0,
+            "{key:<6}: {val:>4}".format(key="Rd", val=self.rd),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 3.0, "<---------------"
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 4.0,
+            "{key:<6}: {val:>4}".format(key="Wr", val=self.wr),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 5.0, "--------------->"
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 6.0,
+            "{key:<6}: {val:>4}".format(key="Atomic", val=self.atomic),
+        )
+        canvas.text(
+            self.x_min + self.text_x_offset - 2, self.y_max - 7.0, "--------------->"
+        )
 
 
 # xGMI/PCIe block with wires to fabric
@@ -447,10 +580,10 @@ class xGMI_PCIe(RectFrame):
     def draw(self, canvas):
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min + 1.0, self.y_max - 2.0, self.label)
-        canvas.text(self.x_min + 3.0 , self.y_max - 5.0, "^   |")
-        canvas.text(self.x_min + 3.0 , self.y_max - 6.0, "|   |")
-        canvas.text(self.x_min + 3.0 , self.y_max - 7.0, "|   |")
-        canvas.text(self.x_min + 3.0 , self.y_max - 8.0, "|   v")
+        canvas.text(self.x_min + 3.0, self.y_max - 5.0, "^   |")
+        canvas.text(self.x_min + 3.0, self.y_max - 6.0, "|   |")
+        canvas.text(self.x_min + 3.0, self.y_max - 7.0, "|   |")
+        canvas.text(self.x_min + 3.0, self.y_max - 8.0, "|   v")
 
 
 # Fabric Cache Block
@@ -462,24 +595,24 @@ class Fabric(RectFrame):
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min + 6.0, self.y_max - 2.0, "   " + self.label)
         canvas.text(self.x_min + 2.0, self.y_max - 4.0, "Latency (cycles)")
-        canvas.rect(self.x_min + 2.0, self.y_max - 9, self.x_max - 2.0,
-                    self.y_max - 4.5)
+        canvas.rect(self.x_min + 2.0, self.y_max - 9, self.x_max - 2.0, self.y_max - 4.5)
 
         i = 1
         for k, v in self.lat.items():
-            #print(k,v)
+            # print(k,v)
             text = "{key:<6}: {val:>6}".format(key=k, val=v)
             canvas.text(self.x_min + 4.0, self.y_max - 4.5 - i, text)
             i = i + 1
+
 
 # GMI block with wires to fabric
 @dataclass
 class GMI(RectFrame):
     def draw(self, canvas):
-        canvas.text(self.x_min + 3.0 , self.y_max + 4.0, "^   |")
-        canvas.text(self.x_min + 3.0 , self.y_max + 3.0, "|   |")
-        canvas.text(self.x_min + 3.0 , self.y_max + 2.0, "|   |")
-        canvas.text(self.x_min + 3.0 , self.y_max + 1.0, "|   v")
+        canvas.text(self.x_min + 3.0, self.y_max + 4.0, "^   |")
+        canvas.text(self.x_min + 3.0, self.y_max + 3.0, "|   |")
+        canvas.text(self.x_min + 3.0, self.y_max + 2.0, "|   |")
+        canvas.text(self.x_min + 3.0, self.y_max + 1.0, "|   v")
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
         canvas.text(self.x_min + 4.0, self.y_max - 2.0, self.label)
 
@@ -493,14 +626,18 @@ class Wire_Fabric_HBM(RectFrame):
     wr: int = 0
 
     def draw(self, canvas):
-        canvas.text(self.x_min + self.text_x_offset, self.y_max,
-                    "{key:<2}: {val:>4}".format(key="Rd", val=self.rd))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 1.0,
-                    "<-----------")
-        canvas.text(self.x_min + self.text_x_offset, self.y_max - 2.0,
-                    "{key:<2}: {val:>4}".format(key="Wr", val=self.wr))
-        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 3.0,
-                    "----------->")
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max,
+            "{key:<2}: {val:>4}".format(key="Rd", val=self.rd),
+        )
+        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 1.0, "<-----------")
+        canvas.text(
+            self.x_min + self.text_x_offset,
+            self.y_max - 2.0,
+            "{key:<2}: {val:>4}".format(key="Wr", val=self.wr),
+        )
+        canvas.text(self.x_min + self.text_x_offset - 2, self.y_max - 3.0, "----------->")
 
 
 # HBM
@@ -513,7 +650,6 @@ class HBM(RectFrame):
 
 # Memory chart pannel for 1 instance
 class MemChart:
-
     def __init__(self, x_min, y_min, x_max, y_max):
         self.x_min = x_min
         self.x_max = x_max
@@ -521,12 +657,12 @@ class MemChart:
         self.y_max = y_max
 
     def draw(self, canvas, normal_unit, metric_dict):
-
         # ----------------------------------------
         # Overall rect and title
         canvas.rect(self.x_min, self.y_min, self.x_max, self.y_max)
-        canvas.text(self.x_min + 2.0, self.y_max - 2.0,
-                    "(Normalization: " + normal_unit + ")")
+        canvas.text(
+            self.x_min + 2.0, self.y_max - 2.0, "(Normalization: " + normal_unit + ")"
+        )
 
         # Typically, the drawing order would be: left->right, top->down
 
@@ -545,11 +681,13 @@ class MemChart:
 
         # ----------------------------------------
         # Wires between Instr Buff and Instr Dispatch
-        wire_I_I = Wire_InstrBuff_InstrDispatch(label="Wire_InstrBuff_InstrDispatch",
-                                x_min=block_instr_buff.x_max + 1,
-                                x_max=block_instr_buff.x_max + 7,
-                                y_min=block_instr_buff.y_min,
-                                y_max=block_instr_buff.y_max)
+        wire_I_I = Wire_InstrBuff_InstrDispatch(
+            label="Wire_InstrBuff_InstrDispatch",
+            x_min=block_instr_buff.x_max + 1,
+            x_max=block_instr_buff.x_max + 7,
+            y_min=block_instr_buff.y_min,
+            y_max=block_instr_buff.y_max,
+        )
         wire_I_I.draw(canvas)
 
         # ----------------------------------------
@@ -608,12 +746,14 @@ class MemChart:
 
         # ----------------------------------------
         # Wire between Instr Buff and Instr L1 Cache
-        wire_InstrBuff_IL1Cache = Wire_InstrBuff_IL1Cache(label="Wire_InstrBuff_IL1Cache",
-                                                            x_min=block_instr_buff.x_max / 2,
-                                                            x_max=block_instr_buff.x_max / 2 + 80,
-                                                            y_min=block_exec.y_min - 1,
-                                                            y_max=block_instr_buff.y_min)
-        
+        wire_InstrBuff_IL1Cache = Wire_InstrBuff_IL1Cache(
+            label="Wire_InstrBuff_IL1Cache",
+            x_min=block_instr_buff.x_max / 2,
+            x_max=block_instr_buff.x_max / 2 + 80,
+            y_min=block_exec.y_min - 1,
+            y_max=block_instr_buff.y_min,
+        )
+
         wire_InstrBuff_IL1Cache.il1_fetch = metric_dict["IL1 Fetch"]
 
         wire_InstrBuff_IL1Cache.draw(canvas)
@@ -722,11 +862,13 @@ class MemChart:
 
         # ----------------------------------------
         # Wires between L2 and Fabric
-        wires_L2_Fabric = Wire_L2_Fabric(label="Wire_L2_Fabric",
-                                x_min=block_L2.x_max + 1,
-                                x_max=block_L2.x_max + 16,
-                                y_min=block_L2.y_max - 18,
-                                y_max=block_L2.y_max - 10)
+        wires_L2_Fabric = Wire_L2_Fabric(
+            label="Wire_L2_Fabric",
+            x_min=block_L2.x_max + 1,
+            x_max=block_L2.x_max + 16,
+            y_min=block_L2.y_max - 18,
+            y_max=block_L2.y_max - 10,
+        )
 
         wires_L2_Fabric.rd = metric_dict["Fabric_L2 Rd"]
         wires_L2_Fabric.wr = metric_dict["Fabric_L2 Wr"]
@@ -736,21 +878,25 @@ class MemChart:
 
         # ----------------------------------------
         # xGMI/PCIe Block with wires to fabric
-        block_xgmi_pcie = xGMI_PCIe(label="xGMI/PCIe",
-                            x_min=wires_L2_Fabric.x_max + 10,
-                            x_max=wires_L2_Fabric.x_max + 20,
-                            y_min=block_L2.y_max - 4,
-                            y_max=block_L2.y_max)
+        block_xgmi_pcie = xGMI_PCIe(
+            label="xGMI/PCIe",
+            x_min=wires_L2_Fabric.x_max + 10,
+            x_max=wires_L2_Fabric.x_max + 20,
+            y_min=block_L2.y_max - 4,
+            y_max=block_L2.y_max,
+        )
         block_xgmi_pcie.draw(canvas)
 
         # ----------------------------------------
         # Data Fabric Block
-        block_fabric = Fabric(label="Fabric",
-                        x_min=wires_L2_Fabric.x_max + 3,
-                        x_max=wires_L2_Fabric.x_max + 27,
-                        y_max=block_xgmi_pcie.y_min - 5,
-                        y_min=block_xgmi_pcie.y_min - 5 - 11)
-        
+        block_fabric = Fabric(
+            label="Fabric",
+            x_min=wires_L2_Fabric.x_max + 3,
+            x_max=wires_L2_Fabric.x_max + 27,
+            y_max=block_xgmi_pcie.y_min - 5,
+            y_min=block_xgmi_pcie.y_min - 5 - 11,
+        )
+
         block_fabric.lat["Rd"] = metric_dict["Fabric Rd Lat"]
         block_fabric.lat["Wr"] = metric_dict["Fabric Wr Lat"]
         block_fabric.lat["Atomic"] = metric_dict["Fabric Atomic Lat"]
@@ -759,21 +905,25 @@ class MemChart:
 
         # ----------------------------------------
         # GMI Block with wires to fabric
-        block_gmi = GMI(label="GMI",
-                        x_min=block_xgmi_pcie.x_min,
-                        x_max=block_xgmi_pcie.x_max,
-                        y_min=block_fabric.y_min - 9,
-                        y_max=block_fabric.y_min - 5)
+        block_gmi = GMI(
+            label="GMI",
+            x_min=block_xgmi_pcie.x_min,
+            x_max=block_xgmi_pcie.x_max,
+            y_min=block_fabric.y_min - 9,
+            y_max=block_fabric.y_min - 5,
+        )
         block_gmi.draw(canvas)
 
         # ----------------------------------------
         # Wires between fabric and HBM
         # Wire_Fabric_HBM
-        wires_Fabric_HBM = Wire_Fabric_HBM(label="Wire_Fabric_HBM",
-                                x_min=block_fabric.x_max + 1,
-                                x_max=block_fabric.x_max + 15,
-                                y_min=block_fabric.y_max - 2,
-                                y_max=block_fabric.y_max - 4)
+        wires_Fabric_HBM = Wire_Fabric_HBM(
+            label="Wire_Fabric_HBM",
+            x_min=block_fabric.x_max + 1,
+            x_max=block_fabric.x_max + 15,
+            y_min=block_fabric.y_max - 2,
+            y_max=block_fabric.y_max - 4,
+        )
 
         wires_Fabric_HBM.rd = metric_dict["HBM Rd"]
         wires_Fabric_HBM.wr = metric_dict["HBM Wr"]
@@ -782,16 +932,18 @@ class MemChart:
 
         # ----------------------------------------
         # HBM Block
-        block_hbm = HBM(label="HBM",
-                        x_min=wires_Fabric_HBM.x_max,
-                        x_max=wires_Fabric_HBM.x_max + 10,
-                        y_min=block_fabric.y_max - 7,
-                        y_max=block_fabric.y_max - 3)
+        block_hbm = HBM(
+            label="HBM",
+            x_min=wires_Fabric_HBM.x_max,
+            x_max=wires_Fabric_HBM.x_max + 10,
+            y_min=block_fabric.y_max - 7,
+            y_max=block_fabric.y_max - 3,
+        )
         block_hbm.draw(canvas)
 
 
 def plot_mem_chart(arch, normal_unit, metric_dict):
-    '''plot memory chart from an arch with given metrics dict'''
+    """plot memory chart from an arch with given metrics dict"""
 
     # TODO: verify metrics dict for given arch first
 
@@ -803,8 +955,7 @@ def plot_mem_chart(arch, normal_unit, metric_dict):
     return canvas.plot()
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     # Unit test
     metric_dict = {}
     metric_dict["Wavefront Occupancy"] = 1
@@ -853,7 +1004,7 @@ if __name__ == '__main__':
     metric_dict["VL1_L2 Rd"] = 36
     metric_dict["VL1_L2 Wr"] = 37
     metric_dict["VL1_L2 Atomic"] = 38
-    
+
     metric_dict["VL1D_L2 Rd"] = 39
     metric_dict["VL1D_L2 Wr"] = 40
     metric_dict["VL1D_L2 Atomic"] = 41

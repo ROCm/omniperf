@@ -573,6 +573,13 @@ def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
             marker="braille",
             color=color_schame[cacheLevel],
         )
+        plt.text(
+            str(round(line_data[cacheLevel.lower()][2])) + " GB/s",
+            x=line_data[cacheLevel.lower()][0][0],
+            y=line_data[cacheLevel.lower()][1][0],
+            background="black",
+            color="white",
+        )
 
     # plot VALU and MFMA Peak
     if roof_info["dtype"] != "FP16" and roof_info["dtype"] != "I8":
@@ -583,6 +590,13 @@ def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
             marker="braille",
             color=color_schame["VALU"],
         )
+        plt.text(
+            str(round(line_data["valu"][2])) + " GFLOP/s",
+            x=line_data["valu"][0][1] - 800,
+            y=line_data["valu"][1][1],
+            background="black",
+            color="white",
+        )
 
         plt.plot(
             line_data["mfma"][0],
@@ -590,6 +604,13 @@ def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
             label="Peak MFMA-{}".format(roof_info["dtype"]),
             marker="braille",
             color=color_schame["MFMA"],
+        )
+        plt.text(
+            str(round(line_data["mfma"][2])) + " GFLOP/s",
+            x=line_data["mfma"][0][1] - 800,
+            y=line_data["mfma"][1][1],
+            background="black",
+            color="white",
         )
 
     # TODO
@@ -616,10 +637,8 @@ def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
             # print(ai_data["ai_" + cacheLevel.lower()][0])
             # print(ai_data["ai_" + cacheLevel.lower()][1])
 
-    # # TODO
-    #     xaxis_title="Arithmetic Intensity (FLOPs/Byte)",
-    #     yaxis_title="Performance (GFLOP/sec)",
-    # )
+    plt.xlabel("Arithmetic Intensity (FLOPs/Byte)")
+    plt.ylabel("Performance (GFLOP/sec)")
 
     # canvas config
     plt.theme("pro")

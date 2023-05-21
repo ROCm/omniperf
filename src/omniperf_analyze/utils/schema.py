@@ -83,7 +83,7 @@ supported_field = [
     "Pct",
     "Std Dev",
     # Special keywords for Memory chart
-    #"Alias",
+    # "Alias",
     # Special keywords for L2 channel
     "Channel",
     "L2 Cache Hit Rate (%)",

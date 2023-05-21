@@ -141,19 +141,19 @@ Panel Config:
               ROUND(AVG(((100 - ((100 * (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum)
               + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
               / TCP_TOTAL_CACHE_ACCESSES_sum)) if (TCP_TOTAL_CACHE_ACCESSES_sum != 0) else
-              0 )), 0)
+              None )), 0)
             tips:
           VL1 Lat:
             #alias: vl1_lat_
             value:
               ROUND(AVG(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
-              != 0) else 0)), 0)
+              != 0) else None)), 0)
             tips:
           VL1 Coalesce:
             #alias: vl1_coales_
             value:
               ROUND(AVG(((((TA_TOTAL_WAVEFRONTS_sum * 64) * 100) / (TCP_TOTAL_ACCESSES_sum
-              * 4)) if (TCP_TOTAL_ACCESSES_sum != 0) else 0)), 0)
+              * 4)) if (TCP_TOTAL_ACCESSES_sum != None) else 0)), 0)
             tips:
           VL1 Stall:
             #alias: vl1_stall_
@@ -256,7 +256,7 @@ Panel Config:
             #alias: l2_rd_lat_
             value:
               ROUND(AVG(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
-              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else  0)),
+              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None)),
               0)
             tips:
           L2 Wr Lat:
@@ -264,7 +264,7 @@ Panel Config:
             value:
               ROUND(AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum +
               TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
-              != 0) else 0)), 0)
+              != 0) else None)), 0)
             tips:
 
           # ----------------------------------------

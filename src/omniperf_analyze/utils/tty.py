@@ -26,7 +26,7 @@ import pandas as pd
 from pathlib import Path
 from tabulate import tabulate
 
-from omniperf_analyze.utils import schema, parser, mem_chart
+from omniperf_analyze.utils import schema, parser, mem_chart, roofline_calc
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]

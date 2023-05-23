@@ -172,10 +172,22 @@ def show_all(args, runs, archConfigs, output):
                                 p.joinpath(table_id_str.replace(" ", "_") + ".csv"),
                                 index=False,
                             )
-                    # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
-                    if (
-                        type == "raw_csv_table"
-                        and table_config["source"] == "pmc_kernel_top.csv"
+
+                    # Todo: make a dict for all styles
+                    if "style" in table_config and table_config["style"] == "mem_chart":
+                        # Todo: display N/A properly
+                        # df.to_dict(index=False) should work for pandas > 2.0 ?
+                        ss += mem_chart.plot_mem_chart(
+                            "",
+                            args.normal_unit,
+                            pd.DataFrame([df["Metric"], df["Value"]])
+                            .transpose()
+                            .set_index("Metric")
+                            .to_dict()["Value"],
+                        )
+                    elif (
+                        "style" in table_config
+                        and table_config["style"] == "roofline_chart"
                     ):
                         # FIXME: support single run only for now
                         ss += roofline_calc.cli_get_roofline(base_run, args.verbose)

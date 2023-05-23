@@ -553,10 +553,11 @@ def cli_generate_plots(roof_info, ai_data, mem_level, kernel_names, verbose):
 
     kernel_markers = {
         0: "star",
-        1: "heart",
+        1: "cross",
         2: "sd",
         3: "shamrock",
-        4: "cross",
+        4: "at",
+        5: "atom",
     }
 
     # plot BW Lines

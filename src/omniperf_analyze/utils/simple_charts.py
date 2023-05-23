@@ -1,7 +1,11 @@
 ##############################################################################bl
 # MIT License
 #
+<<<<<<< HEAD
 # Copyright (c) 2021 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+=======
+# Copyright (c) 2023 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+>>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +26,7 @@
 # SOFTWARE.
 ##############################################################################el
 
+<<<<<<< HEAD
 import plotly.express as px
 import pandas as pd
 
@@ -117,3 +122,14 @@ def simple_multi_bar(df, title=None, id=None):
             .update_yaxes(showgrid=False)
         )
     return dfigs
+=======
+from dataclasses import dataclass
+import pandas as pd
+import plotext as plt
+
+
+def simple_bar(metric_dict, title=None):
+    plt.simple_bar(list(metric_dict.keys()), list(metric_dict.values()), width=80)
+    # plt.show()
+    return "\n" + plt.build() + "\n"
+>>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)

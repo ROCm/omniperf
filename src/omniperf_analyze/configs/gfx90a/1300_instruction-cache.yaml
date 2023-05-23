@@ -25,13 +25,24 @@ Panel Config:
           Bandwidth:
             value: AVG(((SQC_ICACHE_REQ * 100000) / (($sclk * $numSQC)
               * (EndNs - BeginNs))))
+<<<<<<< HEAD
             unit: Pct of Peak
             tips: 
+=======
+            tips:
+>>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
           Cache Hit:
-            value: AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+            value:
+              AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
+<<<<<<< HEAD
             unit: Pct of Peak
             tips: 
+=======
+            tips:
+        comparable: false # for now
+        style: simple_bar
+>>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
 
     - metric_table:
         id: 1302
@@ -49,31 +60,38 @@ Panel Config:
             min: MIN((SQC_ICACHE_REQ / $denom))
             max: MAX((SQC_ICACHE_REQ / $denom))
             unit: (Req  + $normUnit)
-            tips: 
+            tips:
           Hits:
             avg: AVG((SQC_ICACHE_HITS / $denom))
             min: MIN((SQC_ICACHE_HITS / $denom))
             max: MAX((SQC_ICACHE_HITS / $denom))
             unit: (Hits  + $normUnit)
-            tips: 
+            tips:
           Misses - Non Duplicated:
             avg: AVG((SQC_ICACHE_MISSES / $denom))
             min: MIN((SQC_ICACHE_MISSES / $denom))
             max: MAX((SQC_ICACHE_MISSES / $denom))
             unit: (Misses  + $normUnit)
-            tips: 
+            tips:
           Misses - Duplicated:
             avg: AVG((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             min: MIN((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             max: MAX((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             unit: (Misses  + $normUnit)
-            tips: 
+            tips:
           Cache Hit:
+<<<<<<< HEAD
             avg: AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+=======
+            mean:
+              AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+>>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            min: MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            min:
+              MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
-            max: MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            max:
+              MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
             unit: pct
-            tips: 
+            tips:

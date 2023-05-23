@@ -26,7 +26,7 @@ import pandas as pd
 from pathlib import Path
 from tabulate import tabulate
 
-from omniperf_analyze.utils import schema, parser, mem_chart, roofline_calc
+from omniperf_analyze.utils import schema, parser, mem_chart, roofline_calc, simple_charts
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
@@ -177,24 +177,37 @@ def show_all(args, runs, archConfigs, output):
                         type == "raw_csv_table"
                         and table_config["source"] == "pmc_kernel_top.csv"
                     ):
-                        df = df.head(args.max_kernel_num)
-
-                    # NB:
-                    # "columnwise: True" is a special attr of a table/df
-                    # For raw_csv_table, such as system_info, we transpose the
-                    # df when load it, because we need those items in column.
-                    # For metric_table, we only need to show the data in column
-                    # fash for now.
-                    ss += (
-                        tabulate(
-                            df.transpose()
-                            if type != "raw_csv_table"
-                            and "columnwise" in table_config
-                            and table_config["columnwise"] == True
-                            else df,
-                            headers="keys",
-                            tablefmt="fancy_grid",
-                            floatfmt="." + str(args.decimal) + "f",
+                        # FIXME: support single run only for now
+                        ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
+                    elif (
+                        "style" in table_config and table_config["style"] == "simple_bar"
+                    ):
+                        # FIXME: support single run only for now
+                        ss += simple_charts.simple_bar(
+                            pd.DataFrame([df["Metric"], df["Value"]])
+                            .transpose()
+                            .set_index("Metric")
+                            .to_dict()["Value"]
+                        )
+                    else:
+                        # NB:
+                        # "columnwise: True" is a special attr of a table/df
+                        # For raw_csv_table, such as system_info, we transpose the
+                        # df when load it, because we need those items in column.
+                        # For metric_table, we only need to show the data in column
+                        # fash for now.
+                        ss += (
+                            tabulate(
+                                df.transpose()
+                                if type != "raw_csv_table"
+                                and "columnwise" in table_config
+                                and table_config["columnwise"] == True
+                                else df,
+                                headers="keys",
+                                tablefmt="fancy_grid",
+                                floatfmt="." + str(args.decimal) + "f",
+                            )
+                            + "\n"
                         )
                         + "\n"
                     )

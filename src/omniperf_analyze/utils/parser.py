@@ -93,6 +93,7 @@ supported_call = {
     "TO_INT": "to_int",
     # Support the below with 2 inputs
     "ROUND": "to_round",
+    "QUANTILE": "to_quantile",
     "MOD": "to_mod",
     # Concat operation from the memory chart "active cus"
     "CONCAT": "to_concat",
@@ -163,6 +164,13 @@ def to_round(a, b):
         return a.round(b)
     else:
         return round(a, b)
+
+
+def to_quantile(a, b):
+    if isinstance(a, pd.core.series.Series):
+        return a.quantile(b)
+    else:
+        raise Exception("to_quantile: unsupported type.")
 
 
 def to_mod(a, b):
@@ -335,6 +343,15 @@ def build_dfs(archConfigs, filter_metrics):
     #         if not metric in avail_ip_blocks:
     #             print("{} is not a valid metric to filter".format(metric))
     #             exit(1)
+
+    simple_box = {
+        "Min": ["MIN(", ")"],
+        "Q1": ["QUANTILE(", ", 0.25)"],
+        "Median": ["MEDIAN(", ")"],
+        "Q3": ["QUANTILE(", ", 0.75)"],
+        "Max": ["MAX(", ")"],
+    }
+
     d = {}
     metric_list = {}
     dfs_type = {}
@@ -343,9 +360,21 @@ def build_dfs(archConfigs, filter_metrics):
             for type, data_cofig in data_source.items():
                 if type == "metric_table":
                     headers = ["Index"]
-                    for key, tile in data_cofig["header"].items():
-                        if key != "tips":
-                            headers.append(tile)
+
+                    if "style" in data_cofig and data_cofig["style"] == "simple_box":
+                        headers.append("Metric")
+                        for k in simple_box.keys():
+                            headers.append(k)
+
+                        for key, tile in data_cofig["header"].items():
+                            if key != "metric" and key != "tips" and key != "expr":
+                                headers.append(tile)
+                    else:
+                        for key, tile in data_cofig["header"].items():
+                            if key != "tips":
+                                headers.append(tile)
+
+                    # always need one?
                     headers.append("coll_level")
 
                     if "tips" in data_cofig["header"].keys():
@@ -375,9 +404,27 @@ def build_dfs(archConfigs, filter_metrics):
                         ):
                             values.append(metric_idx)
                             values.append(key)
-                            for k, v in entries.items():
-                                if k != "tips" and k != "coll_level" and k != "alias":
-                                    values.append(v)
+
+                            if (
+                                "style" in data_cofig
+                                and data_cofig["style"] == "simple_box"
+                            ):
+                                for k, v in entries.items():
+                                    if k == "expr":
+                                        for bk, bv in simple_box.items():
+                                            values.append(bv[0] + v + bv[1])
+                                    else:
+                                        if (
+                                            k != "tips"
+                                            and k != "coll_level"
+                                            and k != "alias"
+                                        ):
+                                            values.append(v)
+
+                            else:
+                                for k, v in entries.items():
+                                    if k != "tips" and k != "coll_level" and k != "alias":
+                                        values.append(v)
 
                             if "alias" in entries.keys():
                                 values.append(entries["alias"])
@@ -390,7 +437,9 @@ def build_dfs(archConfigs, filter_metrics):
                             if "tips" in entries.keys():
                                 values.append(entries["tips"])
 
+                            # print(headers, values)
                             # print(key, entries)
+
                             df_new_row = pd.DataFrame([values], columns=headers)
                             df = pd.concat([df, df_new_row])
 

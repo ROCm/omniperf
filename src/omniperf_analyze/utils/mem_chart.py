@@ -70,14 +70,14 @@ class InstrBuff(RectFrame):
         canvas.text(
             self.x_min + 10.0,
             self.y_min + 4.0,
-            "{val:>3}  per CU".format(val=self.wave_occupancy),
+            "{val:>3.0f}  per CU".format(val=self.wave_occupancy),
             color="yellow",
         )
         canvas.text(self.x_min + 7.0, self.y_min + 3.0, r"Wave Life")
         canvas.text(
             self.x_min + 8.0,
             self.y_min + 2.0,
-            "{val:>5}  cycles".format(val=self.wave_life),
+            "{val:>5.0f}  cycles".format(val=self.wave_life),
             color="yellow",
         )
 
@@ -196,7 +196,9 @@ class Exec(RectFrame):
         )
         canvas.text(self.x_min + 4.0, self.y_max - 22.0, "Wavefronts:")
         canvas.text(
-            self.x_min + 4.0, self.y_max - 23.0, "{val:>13.0f}".format(val=self.wavefronts)
+            self.x_min + 4.0,
+            self.y_max - 23.0,
+            "{val:>13.0f}".format(val=self.wavefronts),
         )
 
         canvas.rect(
@@ -204,7 +206,9 @@ class Exec(RectFrame):
         )
         canvas.text(self.x_min + 4.0, self.y_max - 26.0, "Workgroups:")
         canvas.text(
-            self.x_min + 4.0, self.y_max - 27.0, "{val:>13.0f}".format(val=self.workgroups)
+            self.x_min + 4.0,
+            self.y_max - 27.0,
+            "{val:>13.0f}".format(val=self.workgroups),
         )
 
 

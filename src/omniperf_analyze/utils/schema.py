@@ -85,6 +85,9 @@ supported_field = [
     "Mean",
     "Pct",
     "Std Dev",
+    "Q1",
+    "Q3",
+    "Expression",
     # Special keywords for Memory chart
     # "Alias",
     # Special keywords for L2 channel

@@ -194,8 +194,8 @@ Panel Config:
             value:
               ROUND((AVG(((SQ_ACCUM_PREV_HIRES / SQC_DCACHE_REQ) if (SQC_DCACHE_REQ !=
               0) else None)) * 100), 0)
-            coll_level: SQ_IFETCH_LEVEL
-            tips: ??? SQC_DCACHE_INFLIGHT_LEVEL
+            coll_level: SQC_DCACHE_INFLIGHT_LEVEL
+            tips:
 
           VL1D_L2 Rd:
             #alias: sl1_l2_rd_

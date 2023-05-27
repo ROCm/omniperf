@@ -355,39 +355,70 @@ def build_dfs(archConfigs, filter_metrics):
     d = {}
     metric_list = {}
     dfs_type = {}
+
+    # resolve placeholders before any other operations
     for panel_id, panel in archConfigs.panel_configs.items():
         for data_source in panel["data source"]:
-            for type, data_cofig in data_source.items():
+            for type, data_config in data_source.items():
+                if (
+                    type == "metric_table"
+                    and "metric" in data_config
+                    and "placeholder_range" in data_config["metric"]
+                ):
+                    # print(data_config["metric"])
+                    new_metrics = {}
+                    # NB: support single expr and single placeholder for now!!
+                    #     FIXME: remove the hack code relate to the tag "expr"
+                    p_range = data_config["metric"].pop("placeholder_range")
+                    metric, metric_expr = data_config["metric"].popitem()
+                    # print(len(data_config["metric"]))
+                    # data_config['metric'].clear()
+                    for p, r in p_range.items():
+                        for i in range(r):
+                            new_key = metric.replace(p, str(i))
+                            new_val = {"expr": metric_expr["expr"].replace(p, str(i))}
+                            # print(new_val)
+                            new_metrics[new_key] = new_val
+
+                    # print(p_range)
+                    # print(new_metrics)
+                    data_config["metric"] = new_metrics
+                    # print(data_config)
+                    # print(data_config["metric"])
+
+    for panel_id, panel in archConfigs.panel_configs.items():
+        for data_source in panel["data source"]:
+            for type, data_config in data_source.items():
                 if type == "metric_table":
                     headers = ["Index"]
 
-                    if "style" in data_cofig and data_cofig["style"] == "simple_box":
+                    if "style" in data_config and data_config["style"] == "simple_box":
                         headers.append("Metric")
                         for k in simple_box.keys():
                             headers.append(k)
 
-                        for key, tile in data_cofig["header"].items():
+                        for key, tile in data_config["header"].items():
                             if key != "metric" and key != "tips" and key != "expr":
                                 headers.append(tile)
                     else:
-                        for key, tile in data_cofig["header"].items():
+                        for key, tile in data_config["header"].items():
                             if key != "tips":
                                 headers.append(tile)
 
                     # always need one?
                     headers.append("coll_level")
 
-                    if "tips" in data_cofig["header"].keys():
-                        headers.append(data_cofig["header"]["tips"])
+                    if "tips" in data_config["header"].keys():
+                        headers.append(data_config["header"]["tips"])
 
                     df = pd.DataFrame(columns=headers)
 
                     i = 0
-                    for key, entries in data_cofig["metric"].items():
+                    for key, entries in data_config["metric"].items():
                         data_source_idx = (
-                            str(data_cofig["id"] // 100)
+                            str(data_config["id"] // 100)
                             + "."
-                            + str(data_cofig["id"] % 100)
+                            + str(data_config["id"] % 100)
                         )
                         metric_idx = data_source_idx + "." + str(i)
                         values = []
@@ -406,9 +437,12 @@ def build_dfs(archConfigs, filter_metrics):
                             values.append(key)
 
                             if (
-                                "style" in data_cofig
-                                and data_cofig["style"] == "simple_box"
+                                "style" in data_config
+                                and data_config["style"] == "simple_box"
                             ):
+                                # print("~~~~~~~~~~~~~~~~~")
+                                # print(entries)
+                                # print("~~~~~~~~~~~~~~~~~")
                                 for k, v in entries.items():
                                     if k == "expr":
                                         for bk, bv in simple_box.items():
@@ -451,22 +485,22 @@ def build_dfs(archConfigs, filter_metrics):
                     # df.set_index('Metric', inplace=True)
                     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
                 elif type == "raw_csv_table":
-                    data_source_idx = str(data_cofig["id"] // 100)
+                    data_source_idx = str(data_config["id"] // 100)
                     if (
                         (not filter_metrics)
                         or (data_source_idx == "0")  # no filter
                         or (data_source_idx in filter_metrics)
                     ):
                         if (
-                            "columnwise" in data_cofig
-                            and data_cofig["columnwise"] == True
+                            "columnwise" in data_config
+                            and data_config["columnwise"] == True
                         ):
                             df = pd.DataFrame(
-                                [data_cofig["source"]], columns=["from_csv_columnwise"]
+                                [data_config["source"]], columns=["from_csv_columnwise"]
                             )
                         else:
                             df = pd.DataFrame(
-                                [data_cofig["source"]], columns=["from_csv"]
+                                [data_config["source"]], columns=["from_csv"]
                             )
                         metric_list[data_source_idx] = panel["title"]
                     else:
@@ -474,8 +508,8 @@ def build_dfs(archConfigs, filter_metrics):
                 else:
                     df = pd.DataFrame()
 
-                d[data_cofig["id"]] = df
-                dfs_type[data_cofig["id"]] = type
+                d[data_config["id"]] = df
+                dfs_type[data_config["id"]] = type
 
     setattr(archConfigs, "dfs", d)
     setattr(archConfigs, "metric_list", metric_list)

@@ -22,6 +22,7 @@
 # SOFTWARE.
 ##############################################################################el
 
+import math
 from dataclasses import dataclass
 import pandas as pd
 import plotext as plt
@@ -38,11 +39,44 @@ def simple_bar(metric_dict, title=None):
 
     # adjust plot size along x axis based on the max value
     w = max(list(metric_dict.values()))
-    if w < 20:
+    if w < 20 and w > 1:
         w *= 3
     elif w < 1:
         w *= 100
     plt.simple_bar(list(metric_dict.keys()), list(metric_dict.values()), width=w)
+    # plt.show()
+    return "\n" + plt.build() + "\n"
+
+
+def simple_multiple_bar(df, title=None):
+    """
+    Plot data with simple multiple bar chart
+    """
+
+    # TODO: handle Nan and None properly
+
+    plt.clear_figure()
+    t_df = df.fillna(0)
+    sub_labels = t_df.transpose().to_dict("split")["index"]
+    sub_labels.pop(0)
+    data = t_df.transpose().to_dict("split")["data"]
+    labels = data.pop(0)
+
+    # plt.simple_multiple_bar(labels, data, labels = sub_labels) #, width=w)
+
+    # print(data)
+    plt.theme("pro")
+    # adjust plot size along y axis based on the max value
+    h = max(max(y) for y in data)
+    # print(h)
+    if h < 20 and h > 0.5:
+        h *= 10
+    elif h < 0.5 or math.isclose(h, 0.5):
+        h *= 300
+
+    plt.plot_size(height=h)
+    plt.multiple_bar(labels, data, label=sub_labels, color=["blue", "blue+", 68, 63])
+
     # plt.show()
     return "\n" + plt.build() + "\n"
 
@@ -77,7 +111,7 @@ def simple_box(df, orientation="v", title=None):
     data = []
 
     # TODO:
-    # handle None properly
+    # handle Nan and None properly
     # error checking for labels
     # show unit if provided
 
@@ -95,8 +129,9 @@ def simple_box(df, orientation="v", title=None):
     # print("~~~~~~~~~~~~~~~~~~~~")
     # print(plt.bar.__doc__)
 
-    # adjust plot size along x axis based on total labels length
-    plt.plot_size(labels_length, 30)
+    if orientation == "v":
+        # adjust plot size along x axis based on total labels length
+        plt.plot_size(labels_length, 30)
 
     plt.box(
         labels,

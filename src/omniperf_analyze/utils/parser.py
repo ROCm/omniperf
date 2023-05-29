@@ -433,8 +433,7 @@ def build_dfs(archConfigs, filter_metrics):
                 ):
                     # print(data_config["metric"])
                     new_metrics = {}
-                    # NB: support single expr and single placeholder for now!!
-                    #     FIXME: remove the hack code relate to the tag "expr"
+                    # NB: support single placeholder for now!!
                     p_range = data_config["metric"].pop("placeholder_range")
                     metric, metric_expr = data_config["metric"].popitem()
                     # print(len(data_config["metric"]))
@@ -442,7 +441,9 @@ def build_dfs(archConfigs, filter_metrics):
                     for p, r in p_range.items():
                         for i in range(r):
                             new_key = metric.replace(p, str(i))
-                            new_val = {"expr": metric_expr["expr"].replace(p, str(i))}
+                            new_val = {}
+                            for k, v in metric_expr.items():
+                                new_val[k] = metric_expr[k].replace(p, str(i))
                             # print(new_val)
                             new_metrics[new_key] = new_val
 

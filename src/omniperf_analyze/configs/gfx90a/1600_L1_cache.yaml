@@ -26,53 +26,33 @@ Panel Config:
             value:
               AVG(((((TA_TOTAL_WAVEFRONTS_sum * 64) * 100) / (TCP_TOTAL_ACCESSES_sum
               * 4)) if (TCP_TOTAL_ACCESSES_sum != 0) else None))
-<<<<<<< HEAD
-            unit: Pct of Peak
-            tips: 
-=======
             tips:
->>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
           Cache Util:
             value:
               AVG((((TCP_GATE_EN2_sum * 100) / TCP_GATE_EN1_sum) if (TCP_GATE_EN1_sum
               != 0) else None))
-<<<<<<< HEAD
-            unit: Pct of Peak
-            tips: 
-=======
             tips:
->>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
           Cache BW:
             value:
               ((100 * AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / (EndNs - BeginNs))))
               / ((($sclk / 1000) * 64) * $numCU))
-<<<<<<< HEAD
-            unit: Pct of Peak
-            tips: 
-=======
             tips:
->>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
           Cache Hit:
             value:
               AVG(((100 - ((100 * (((TCP_TCC_READ_REQ_sum + TCP_TCC_WRITE_REQ_sum)
               + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum))
               / TCP_TOTAL_CACHE_ACCESSES_sum)) if (TCP_TOTAL_CACHE_ACCESSES_sum != 0) else
-<<<<<<< HEAD
-               None))
-            unit: Pct of Peak
-            tips: 
-=======
               None))
             tips:
         comparable: false # for now
         style: simple_bar
->>>>>>> 71059ec (simple_bar: apply simple_bar chart to block 1200 1300 1400 1600)
 
     - metric_table:
         id: 1602
-        title: L1D Cache Stalls
+        title: L1D Cache Stalls (%)
         header:
           metric: Metric
+<<<<<<< HEAD
           avg: Avg
           min: Min
           max: Max
@@ -158,6 +138,35 @@ Panel Config:
               MAX((((100 * TCP_ATOMIC_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
               if (TCP_GATE_EN1_sum != 0) else None))
             unit: pct
+=======
+          expr: Expression
+          tips: Tips
+        metric:
+          Stalled on L2 Data:
+            expr:
+              (((100 * TCP_PENDING_STALL_CYCLES_sum) / TCP_GATE_EN1_sum) if (TCP_GATE_EN1_sum
+              != 0) else None)
+            tips:
+          Stalled on L2 Req:
+            expr:
+              (((100 * TCP_TCR_TCP_STALL_CYCLES_sum) / TCP_GATE_EN1_sum) if (TCP_GATE_EN1_sum
+              != 0) else None)
+            tips:
+          Tag RAM Stall (Read):
+            expr:
+              (((100 * TCP_READ_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
+              if (TCP_GATE_EN1_sum != 0) else None)
+            tips:
+          Tag RAM Stall (Write):
+            expr:
+              (((100 * TCP_WRITE_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
+              if (TCP_GATE_EN1_sum != 0) else None)
+            tips:
+          Tag RAM Stall (Atomic):
+            expr:
+              (((100 * TCP_ATOMIC_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
+              if (TCP_GATE_EN1_sum != 0) else None)
+>>>>>>> ca01add (simplify 1600_L1_cache.yaml)
             tips:
 
     - metric_table:

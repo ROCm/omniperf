@@ -28,12 +28,29 @@ import pandas as pd
 import plotext as plt
 
 
-def simple_bar(metric_dict, title=None):
+# Notes:
+#   This file includes implementation of a few simple but common charts in CLI.
+#   We try to auto-size the layout to cover most of the cases as default. If it
+#   doesn't work, we could expose more controls for the ui designers with style
+#   config in yaml for each dashboard.
+
+
+def simple_bar(df, title=None):
     """
     Plot data with simple bar chart
     """
 
     # TODO: handle None properly
+
+    if "Metric" in df.columns and "Value" in df.columns:
+        metric_dict = (
+            pd.DataFrame([df["Metric"], df["Value"]])
+            .transpose()
+            .set_index("Metric")
+            .to_dict()["Value"]
+        )
+    else:
+        raise NameError("simple_bar: No Metric or Value in df columns!")
 
     plt.clear_figure()
 
@@ -86,11 +103,6 @@ def simple_box(df, orientation="v", title=None):
     Plot data with simple box/whisker chart.
     Accept pre-calculated data only for now.
     """
-
-    # Notes:
-    #   We try to auto-size the layout to cover most of the cases as default.
-    #   If it doesn't work, we could expose more controls for the ui designers
-    #   with style config in yaml for each dashboard.
 
     # Example:
     # labels = ["apple", "bee", "cat", "dog"]

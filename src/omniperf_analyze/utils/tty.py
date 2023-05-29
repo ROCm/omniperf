@@ -80,10 +80,10 @@ def show_all(args, runs, archConfigs, output):
                             if (
                                 type == "raw_csv_table"
                                 and table_config["source"] == "pmc_kernel_top.csv"
-                                and header == "Kernel_Name"
+                                and header == "KernelName"
                             ):
                                 # NB: the width of kernel name might depend on the header of the table.
-                                adjusted_name = base_df["Kernel_Name"].apply(
+                                adjusted_name = base_df["KernelName"].apply(
                                     lambda x: string_multiple_lines(x, 40, 3)
                                 )
                                 df = pd.concat([df, adjusted_name], axis=1)
@@ -199,14 +199,7 @@ def show_all(args, runs, archConfigs, output):
                         "style" in table_config and table_config["style"] == "simple_bar"
                     ):
                         # FIXME: support single run only for now
-                        ss += simple_charts.simple_bar(
-                            pd.DataFrame([df["Metric"], df["Value"]])
-                            .transpose()
-                            .set_index("Metric")
-                            .to_dict()["Value"]
-                        )
-<<<<<<< HEAD
-=======
+                        ss += simple_charts.simple_bar(df)
                     elif (
                         "style" in table_config and table_config["style"] == "simple_box"
                     ):
@@ -218,7 +211,6 @@ def show_all(args, runs, archConfigs, output):
                     ):
                         # FIXME: support single run only for now
                         ss += simple_charts.simple_multiple_bar(df)
->>>>>>> 1d056f7 (support simple_multiple_bar)
                     else:
                         # NB:
                         # "columnwise: True" is a special attr of a table/df
@@ -239,8 +231,6 @@ def show_all(args, runs, archConfigs, output):
                             )
                             + "\n"
                         )
-                        + "\n"
-                    )
 
         if ss:
             print("\n" + "-" * 80, file=output)
@@ -264,7 +254,7 @@ def show_kernels(args, runs, archConfigs, output):
                     # NB:
                     #   For pmc_kernel_top.csv, have to sort here if not
                     #   sorted when load_table_data.
-                    df = pd.concat([df, single_df["Kernel_Name"]], axis=1)
+                    df = pd.concat([df, single_df["KernelName"]], axis=1)
 
     print(
         tabulate(

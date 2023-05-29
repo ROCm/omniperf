@@ -173,6 +173,10 @@ def show_all(args, runs, archConfigs, output):
                                 index=False,
                             )
 
+                    # debug
+                    # if "style" in table_config and table_config["style"] == "simple_multiple_bar":
+                    #     print(df.transpose().to_dict("split"))
+
                     # Todo: make a dict for all styles
                     if "style" in table_config and table_config["style"] == "mem_chart":
                         # Todo: display N/A properly
@@ -201,6 +205,20 @@ def show_all(args, runs, archConfigs, output):
                             .set_index("Metric")
                             .to_dict()["Value"]
                         )
+<<<<<<< HEAD
+=======
+                    elif (
+                        "style" in table_config and table_config["style"] == "simple_box"
+                    ):
+                        # FIXME: support single run only for now
+                        ss += simple_charts.simple_box(df)
+                    elif (
+                        "style" in table_config
+                        and table_config["style"] == "simple_multiple_bar"
+                    ):
+                        # FIXME: support single run only for now
+                        ss += simple_charts.simple_multiple_bar(df)
+>>>>>>> 1d056f7 (support simple_multiple_bar)
                     else:
                         # NB:
                         # "columnwise: True" is a special attr of a table/df

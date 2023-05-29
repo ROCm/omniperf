@@ -477,6 +477,11 @@ def parse(my_parser):
         help="\t\tSpecify the decimal to display. (DEFAULT: 2)",
     )
     analyze_group.add_argument(
+        "--table",
+        action="store_true",
+        help="\t\tShow data in plain table view",
+    )
+    analyze_group.add_argument(
         "--save-dfs",
         dest="df_file_dir",
         metavar="",

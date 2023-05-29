@@ -177,40 +177,28 @@ def show_all(args, runs, archConfigs, output):
                     # if "style" in table_config and table_config["style"] == "simple_multiple_bar":
                     #     print(df.transpose().to_dict("split"))
 
-                    # Todo: make a dict for all styles
-                    if "style" in table_config and table_config["style"] == "mem_chart":
-                        # Todo: display N/A properly
-                        # df.to_dict(index=False) should work for pandas > 2.0 ?
-                        ss += mem_chart.plot_mem_chart(
-                            "",
-                            args.normal_unit,
-                            pd.DataFrame([df["Metric"], df["Value"]])
-                            .transpose()
-                            .set_index("Metric")
-                            .to_dict()["Value"],
-                        )
-                    elif (
-                        "style" in table_config
-                        and table_config["style"] == "roofline_chart"
-                    ):
+                    if not args.table and "style" in table_config:
                         # FIXME: support single run only for now
-                        ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
-                    elif (
-                        "style" in table_config and table_config["style"] == "simple_bar"
-                    ):
-                        # FIXME: support single run only for now
-                        ss += simple_charts.simple_bar(df)
-                    elif (
-                        "style" in table_config and table_config["style"] == "simple_box"
-                    ):
-                        # FIXME: support single run only for now
-                        ss += simple_charts.simple_box(df)
-                    elif (
-                        "style" in table_config
-                        and table_config["style"] == "simple_multiple_bar"
-                    ):
-                        # FIXME: support single run only for now
-                        ss += simple_charts.simple_multiple_bar(df)
+                        # TODO: make a dict for all styles
+                        if table_config["style"] == "mem_chart":
+                            # Todo: display N/A properly
+                            # df.to_dict(index=False) should work for pandas > 2.0 ?
+                            ss += mem_chart.plot_mem_chart(
+                                "",
+                                args.normal_unit,
+                                pd.DataFrame([df["Metric"], df["Value"]])
+                                .transpose()
+                                .set_index("Metric")
+                                .to_dict()["Value"],
+                            )
+                        elif table_config["style"] == "roofline_chart":
+                            ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
+                        elif table_config["style"] == "simple_bar":
+                            ss += simple_charts.simple_bar(df)
+                        elif table_config["style"] == "simple_box":
+                            ss += simple_charts.simple_box(df)
+                        elif table_config["style"] == "simple_multiple_bar":
+                            ss += simple_charts.simple_multiple_bar(df)
                     else:
                         # NB:
                         # "columnwise: True" is a special attr of a table/df

@@ -43,42 +43,36 @@ Panel Config:
 
     - metric_table:
         id: 1602
-        title: L1D Cache Stalls
+        title: L1D Cache Stalls (%)
         header:
           metric: Metric
           expr: Expression
-          unit: Unit
           tips: Tips
         metric:
           Stalled on L2 Data:
             expr:
               (((100 * TCP_PENDING_STALL_CYCLES_sum) / TCP_GATE_EN1_sum) if (TCP_GATE_EN1_sum
               != 0) else None)
-            unit: pct
             tips:
           Stalled on L2 Req:
             expr:
               (((100 * TCP_TCR_TCP_STALL_CYCLES_sum) / TCP_GATE_EN1_sum) if (TCP_GATE_EN1_sum
               != 0) else None)
-            unit: pct
             tips:
           Tag RAM Stall (Read):
             expr:
               (((100 * TCP_READ_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
               if (TCP_GATE_EN1_sum != 0) else None)
-            unit: pct
             tips:
           Tag RAM Stall (Write):
             expr:
               (((100 * TCP_WRITE_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
               if (TCP_GATE_EN1_sum != 0) else None)
-            unit: pct
             tips:
           Tag RAM Stall (Atomic):
             expr:
               (((100 * TCP_ATOMIC_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
               if (TCP_GATE_EN1_sum != 0) else None)
-            unit: pct
             tips:
         style: simple_box
 

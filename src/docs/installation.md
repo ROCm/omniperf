@@ -172,9 +172,9 @@ $ sudo apt install ./mongodb-database-tools-ubuntu2004-x86_64-100.6.1.deb
 ```
 > Installation instructions for alternative distributions can be found [here](https://www.mongodb.com/download-center/database-tools/releases/archive)
 
-### 2) Persistent Storage
+### Persistent Storage
 
-The user will also bind MongoDB to a directory on the host OS to create a local backup in case of a crash or reset. In the Docker world, this is known as "creating a persistent volume":
+The user may also choose to bind MongoDB to a directory on the host OS to create a local backup in case of a crash or reset:
 
 ```bash
 $ sudo mkdir -p /usr/local/persist && cd /usr/local/persist/

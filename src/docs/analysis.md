@@ -545,7 +545,7 @@ Connection Options:
 
 **omniperf import for vcopy:**
 ```shell-session
-$ omniperf database --import -H dummybox -u temp -t asw -w workloads/vcopy/mi200/
+$ omniperf database --import -H pavii1 -u temp -t asw -w workloads/vcopy/mi200/
 ROC Profiler:  /usr/bin/rocprof
  
 --------

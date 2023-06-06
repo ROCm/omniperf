@@ -328,9 +328,7 @@ ROCProfiler: input from "/tmp/rpl_data_230411_170300_29696/input0.xml"
 ```
 
 #### Dispatch Filtering
-Dispatch filtering is based on the *global* dispatch index of kernels in a run. 
-
-The following example profiles only the 0th dispatched kernel:
+The following example demonstrates profiling on selected dispatches:
 ```shell-session
 $ omniperf profile --name vcopy -d 0 -- ./vcopy 1048576 256
 Resolving rocprof

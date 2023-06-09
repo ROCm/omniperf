@@ -133,7 +133,9 @@ def to_avg(a):
 
 
 def to_median(a):
-    if isinstance(a, pd.core.series.Series):
+    if a is None:
+        return None
+    elif isinstance(a, pd.core.series.Series):
         return a.median()
     else:
         raise Exception("to_median: unsupported type.")
@@ -168,8 +170,11 @@ def to_round(a, b):
 
 
 def to_quantile(a, b):
-    if isinstance(a, pd.core.series.Series):
+    if a is None:
+        return None
+    elif isinstance(a, pd.core.series.Series):
         return a.quantile(b)
+
     else:
         raise Exception("to_quantile: unsupported type.")
 
@@ -330,7 +335,37 @@ def update_normUnit_string(equation, unit):
     ).capitalize()
 
 
-def build_dfs(archConfigs, filter_metrics):
+def calc_buildin_var(var, sys_info):
+    """
+    Calculate build-in variable based on sys_info:
+    """
+    if isinstance(var, int):
+        return var
+    elif isinstance(var, str) and var.startswith("$totalL2Banks"):
+        # Fixme: support all supported partitioning mode
+        # Fixme: "name" is a bad name!
+        totalL2Banks = sys_info.L2Banks
+        if (
+            sys_info["name"].lower() == "mi300a_a0"
+            or sys_info["name"].lower() == "mi300a_a1"
+        ):
+            totalL2Banks = sys_info.L2Banks * get_hbm_stack_num(
+                sys_info["name"], sys_info["memory_partition"]
+            )
+        elif (
+            sys_info["name"].lower() == "mi300x_a0"
+            or sys_info["name"].lower() == "mi300x_a1"
+        ):
+            totalL2Banks = sys_info.L2Banks * get_hbm_stack_num(
+                sys_info["name"], sys_info["memory_partition"]
+            )
+        return totalL2Banks
+    else:
+        print("Don't support", var)
+        sys.exit(1)
+
+
+def build_dfs(archConfigs, filter_metrics, sys_info):
     """
     - Build dataframe for each type of data source within each panel.
       Each dataframe will be used as a template to load data with each run later.
@@ -374,7 +409,12 @@ def build_dfs(archConfigs, filter_metrics):
                     # print(len(data_config["metric"]))
                     # data_config['metric'].clear()
                     for p, r in p_range.items():
-                        for i in range(r):
+                        # NB: We have to resolve placeholder range first if it
+                        #   is a build-in var. It will be too late to do it in
+                        #   eval_metric(). This is the only reason we need
+                        #   sys_info at this stage.
+                        var = calc_buildin_var(r, sys_info)
+                        for i in range(var):
                             new_key = metric.replace(p, str(i))
                             new_val = {}
                             for k, v in metric_expr.items():
@@ -394,7 +434,10 @@ def build_dfs(archConfigs, filter_metrics):
                 if type == "metric_table":
                     headers = ["Index"]
 
-                    if "style" in data_config and data_config["style"] == "simple_box":
+                    if (
+                        "cli_style" in data_config
+                        and data_config["cli_style"] == "simple_box"
+                    ):
                         headers.append("Metric")
                         for k in simple_box.keys():
                             headers.append(k)
@@ -439,8 +482,8 @@ def build_dfs(archConfigs, filter_metrics):
                             values.append(key)
 
                             if (
-                                "style" in data_config
-                                and data_config["style"] == "simple_box"
+                                "cli_style" in data_config
+                                and data_config["cli_style"] == "simple_box"
                             ):
                                 # print("~~~~~~~~~~~~~~~~~")
                                 # print(entries)
@@ -554,7 +597,12 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
 
     # confirm no illogical counter values (only consider non-roofline runs)
     roof_only_run = sys_info.ip_blocks == "roofline"
-    if not roof_only_run and (raw_pmc_df["pmc_perf"]["GRBM_GUI_ACTIVE"] == 0).any():
+    rocscope_run = sys_info.ip_blocks == "rocscope"
+    if (
+        not rocscope_run
+        and not roof_only_run
+        and (raw_pmc_df["pmc_perf"]["GRBM_GUI_ACTIVE"] == 0).any()
+    ):
         print("WARNING: Dectected GRBM_GUI_ACTIVE == 0\nHaulting execution.")
         sys.exit(1)
 
@@ -577,13 +625,16 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
     ammolite__sclk = sys_info.sclk
     ammolite__maxWavesPerCU = sys_info.maxWavesPerCU
     ammolite__hbmBW = sys_info.hbmBW
+    ammolite__totalL2Banks = calc_buildin_var("$totalL2Banks", sys_info)
+    # print(sys_info)
+    # print(soc_spec)
 
     # TODO: fix all $normUnit in Unit column or title
 
     # build and eval all derived build-in global variables
     ammolite__build_in = {}
     for key, value in build_in_vars.items():
-        # NB: assume all build in vars from pmc_perf.csv for now
+        # NB: assume all build-in vars from pmc_perf.csv for now
         s = build_eval_string(value, schema.pmc_perf_file_prefix)
         try:
             ammolite__build_in[key] = eval(compile(s, "<string>", "eval"))
@@ -730,19 +781,19 @@ def apply_filters(workload, is_gui, debug):
             kernel_top_df["S"] = ""
             for kernel_id in workload.filter_kernel_ids:
                 # print("------- ", kernel_id)
-                kernels.append(kernel_top_df.loc[kernel_id, "KernelName"])
+                kernels.append(kernel_top_df.loc[kernel_id, "Kernel_Name"])
                 kernel_top_df.loc[kernel_id, "S"] = "*"
 
             if kernels:
                 # print("fitlered df:", len(df.index))
                 ret_df = ret_df.loc[
-                    ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(kernels)
+                    ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(kernels)
                 ]
         else:
             if debug:
                 print("GUI kernel filtering")
             ret_df = ret_df.loc[
-                ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(
+                ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(
                     workload.filter_kernel_ids
                 )
             ]
@@ -791,6 +842,7 @@ def load_kernel_top(workload, dir):
             #   Another way might be doing transpose in tty like metric_table.
             #   But we need to figure out headers and comparison properly.
             file = Path.joinpath(Path(dir), df.loc[0, "from_csv_columnwise"])
+
             if file.exists():
                 tmp[id] = pd.read_csv(file).transpose()
                 # NB:
@@ -802,12 +854,13 @@ def load_kernel_top(workload, dir):
     workload.dfs.update(tmp)
 
 
-def load_table_data(workload, dir, is_gui, debug, verbose):
+def load_table_data(workload, dir, is_gui, debug, verbose, skipKernelTop=False):
     """
     Load data for all "raw_csv_table".
     Calculate mertric value for all "metric_table".
     """
-    load_kernel_top(workload, dir)
+    if not skipKernelTop:
+        load_kernel_top(workload, dir)
 
     eval_metric(
         workload.dfs,
@@ -830,3 +883,94 @@ def build_comparable_columns(time_unit):
         comparable_columns.append(h + "(" + time_unit + ")")
 
     return comparable_columns
+
+
+def correct_sys_info(df, specs_correction):
+    """
+    Correct system spec items manually
+    """
+
+    # NB: to keep the backwards compatibility, we don't touch the current
+    #   naming convention. Ideally, the header of sysinfo should use/include
+    #   the members of MachineSpecs directly.
+
+    # Sync up with the header defined in omniperf gen_sysinfo() !!
+    # header = "workload_name,"
+    # header += "command,"
+    # header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
+    # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
+    # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,compute_partition,memory_partition,"
+    # header += "ip_blocks\n"
+
+    name_map = {
+        "host_name": "hostname",
+        "CPU": "host_cpu",
+        "kernel_version": "host_kernel",
+        "host_distro": "distro",
+        # "ram": "",
+        "distro": "host_distro",
+        "rocm_version": "host_rocmver",
+        "GPU": "name",
+        "arch": "gpu_soc",
+        "L1": "L1",
+        "L2": "L2",
+        "CU": "numCU",
+        "SIMD": "numSIMD",
+        "SE": "numSE",
+        "wave_size": "waveSize",
+        "max_waves_per_cu": "maxWavesPerCU",
+        "max_waves_per_cu": "maxWorkgroupSize",
+        "max_sclk": "sclk",
+        "mclk": "mclk",
+        "cur_sclk": "cur_sclk",
+        "cur_mclk": "cur_mclk",
+        "L2Banks": "L2Banks",
+        "LDSBanks": "LDSBanks",
+        "numSQC": "numSQC",
+        "hbmBW": "hbmBW",
+        "compute_partition": "compute_partition",
+        "memory_partition": "memory_partition",
+    }
+
+    # todo: more err checking for string specs_correction
+    pairs = dict(re.findall(r"(\w+):\s*(\d+)", specs_correction))
+    for k, v in pairs.items():
+        df[name_map[k]] = v
+
+    return df
+
+
+def get_hbm_stack_num(gpu_name, memory_partition):
+    """
+    Get total HBM stack numbers based on  memory partition for MI300.
+    """
+
+    # TODO:
+    # - move this function to the proper file
+    # - better err log
+
+    if gpu_name.lower() == "mi300a_a0" or gpu_name.lower() == "mi300a_a1":
+        if memory_partition.lower() == "nps1":
+            return 6
+        elif memory_partition.lower() == "nps4":
+            return 2
+        elif memory_partition.lower() == "nps8":
+            return 1
+        else:
+            print("Invalid MI300A memory partition mode!")
+            sys.exit()
+    elif gpu_name.lower() == "mi300x_a0" or gpu_name.lower() == "mi300x_a1":
+        if memory_partition.lower() == "nps1":
+            return 8
+        elif memory_partition.lower() == "nps2":
+            return 4
+        elif memory_partition.lower() == "nps4":
+            return 2
+        elif memory_partition.lower() == "nps8":
+            return 1
+        else:
+            print("Invalid MI300X memory partition mode!")
+            sys.exit()
+    else:
+        # Fixme: add proper numbers for other archs
+        return -1

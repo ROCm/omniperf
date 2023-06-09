@@ -30,6 +30,7 @@ import os
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
+from pathlib import Path
 from omniperf_analyze.utils import schema
 
 # ------------------------------------------------------------------------------
@@ -771,18 +772,24 @@ def load_kernel_top(workload, dir):
     tmp = {}
     for id, df in workload.dfs.items():
         if "from_csv" in df.columns:
-            tmp[id] = pd.read_csv(os.path.join(dir, df.loc[0, "from_csv"]))
+            file = Path.joinpath(Path(dir), df.loc[0, "from_csv"])
+            if file.exists():
+                tmp[id] = pd.read_csv(file)
+            # else:
+            #     warning to log
         elif "from_csv_columnwise" in df.columns:
             # NB:
             #   Another way might be doing transpose in tty like metric_table.
             #   But we need to figure out headers and comparison properly.
-            tmp[id] = pd.read_csv(
-                os.path.join(dir, df.loc[0, "from_csv_columnwise"])
-            ).transpose()
-            # NB:
-            #   All transposed columns should be marked with a general header,
-            #   so tty could detect them and show them correctly in comparison.
-            tmp[id].columns = ["Info"]
+            file = Path.joinpath(Path(dir), df.loc[0, "from_csv_columnwise"])
+            if file.exists():
+                tmp[id] = pd.read_csv(file).transpose()
+                # NB:
+                #   All transposed columns should be marked with a general header,
+                #   so tty could detect them and show them correctly in comparison.
+                tmp[id].columns = ["Info"]
+            # else:
+            #     warning to log
     workload.dfs.update(tmp)
 
 

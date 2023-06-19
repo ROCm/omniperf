@@ -52,12 +52,15 @@ class ArchConfig:
     # [Index: Metric name] pairs
     metric_list: Dict[str, str] = field(default_factory=dict)
 
+    # [Metric name: Counters] pairs
+    metric_counters: Dict[str, list] = field(default_factory=dict)
+
 
 @dataclass
 class Workload:
-    sys_info: pd.DataFrame = pd.DataFrame()
-    soc_spec: pd.DataFrame = pd.DataFrame()  # TODO: might move it to ArchConfig
-    raw_pmc: pd.DataFrame = pd.DataFrame()
+    sys_info: pd.DataFrame = None
+    soc_spec: pd.DataFrame = None  # TODO: might move it to ArchConfig
+    raw_pmc: pd.DataFrame = None
     dfs: Dict[int, pd.DataFrame] = field(default_factory=dict)
     dfs_type: Dict[int, str] = field(default_factory=dict)
     filter_kernel_ids: List[int] = field(default_factory=list)

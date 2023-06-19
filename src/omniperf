@@ -38,7 +38,7 @@ from pathlib import Path as path
 
 from parser import parse
 from utils import specs
-from utils.perfagg import perfmon_filter, pmc_filter
+from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof
 from utils import remove_workload
 from utils import csv_converter  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
@@ -169,7 +169,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     header += "command,"
     header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
     header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,name,numSQC,hbmBW,"
+    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
     header += "ip_blocks\n"
     sysinfo.write(header)
 
@@ -213,11 +213,11 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     blocks = []
     hbmBW = int(mspec.cur_MCLK) / 1000 * 4096 / 8 * 2
     if mspec.GPU == "gfx906":
-        param += ["16", "mi50", str(int(mspec.CU) // 4), str(hbmBW)]
+        param += ["16", "32", "mi50", str(int(mspec.CU) // 4), str(hbmBW)]
     elif mspec.GPU == "gfx908":
-        param += ["32", "mi100", "48", str(hbmBW)]
+        param += ["32", "32", "mi100", "48", str(hbmBW)]
     elif mspec.GPU == "gfx90a":
-        param += ["32", "mi200", "56", str(hbmBW)]
+        param += ["32", "32", "mi200", "56", str(hbmBW)]
         if not skip_roof:
             blocks.append("roofline")
 
@@ -380,6 +380,9 @@ def characterize_app(args, VER):
     # Perfmon filtering
     pmc_filter(workload_dir, perfmon_dir, args.target)
 
+    # Separate pmc_perf runs
+    pmc_perf_split(workload_dir)
+
     # Set up a log file
     log = open(workload_dir + "/log.txt", "w")
     print("Log: ", workload_dir + "/log.txt\n")
@@ -388,7 +391,7 @@ def characterize_app(args, VER):
     for fname in glob.glob(workload_dir + "/perfmon/*.txt"):
         # Kernel filtering (in-place replacement)
         if not args.kernel == None:
-            run_subprocess(
+            success, output = capture_subprocess_output(
                 [
                     "sed",
                     "-i",
@@ -397,10 +400,11 @@ def characterize_app(args, VER):
                     fname,
                 ]
             )
+            log.write(output)
 
         # Dispatch filtering (inplace replacement)
         if not args.dispatch == None:
-            run_subprocess(
+            success, output = capture_subprocess_output(
                 [
                     "sed",
                     "-i",
@@ -409,14 +413,14 @@ def characterize_app(args, VER):
                     fname,
                 ]
             )
+            log.write(output)
         print(fname)
         if args.use_rocscope == True:
             run_rocscope(args, fname)
         else:
             run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
     
-    # Close log
-    log.close()
+    
 
 
 ################################################
@@ -521,6 +525,9 @@ def omniperf_profile(args, VER):
     # Perfmon filtering
     perfmon_filter(workload_dir, perfmon_dir, args)
 
+    # Separate pmc_perf runs
+    pmc_perf_split(workload_dir)
+
     # Set up a log file
     log = open(workload_dir + "/log.txt", "w")
     print("Log: ", workload_dir + "/log.txt\n")
@@ -598,7 +605,7 @@ def omniperf_profile(args, VER):
         for fname in glob.glob(workload_dir + "/perfmon/*.txt"):
             # Kernel filtering (in-place replacement)
             if not args.kernel == None:
-                run_subprocess(
+                success, output = capture_subprocess_output(
                     [
                         "sed",
                         "-i",
@@ -607,10 +614,11 @@ def omniperf_profile(args, VER):
                         fname,
                     ]
                 )
+                log.write(output)
 
             # Dispatch filtering (inplace replacement)
             if not args.dispatch == None:
-                run_subprocess(
+                success, output = capture_subprocess_output(
                     [
                         "sed",
                         "-i",
@@ -619,11 +627,16 @@ def omniperf_profile(args, VER):
                         fname,
                     ]
                 )
+                log.write(output)
             print(fname)
             if args.use_rocscope == True:
                 run_rocscope(args, fname)
             else:
                 run_prof(fname, workload_dir, perfmon_dir, args.remaining, args.target, log, args.verbose)
+
+        # Manually join each pmc_perf*.csv output
+        if args.use_rocscope == False:
+            join_prof(workload_dir, args.join_type, log, args.verbose)
 
     # Generate sysinfo
     gen_sysinfo(args.name, workload_dir, args.ipblocks, args.remaining, args.no_roof)

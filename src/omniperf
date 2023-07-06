@@ -220,6 +220,8 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
         param += ["32", "32", "mi200", "56", str(hbmBW)]
         if not skip_roof:
             blocks.append("roofline")
+    elif mspec.GPU == "gfx940":
+        param += ["16", "32", "mi300", "56", str(hbmBW)]
 
     # ip block info
     if ip_blocks == None:

@@ -89,8 +89,12 @@ def gpuinfo():
     rocminfo = run(["rocminfo"]).split("\n")
 
     for idx1, linetext in enumerate(rocminfo):
-        gpu_id = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
+        gpu_id = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9:+]+)\s*$", linetext)
         if gpu_id in gpu_list:
+            break
+        print(str(gpu_id)[:6])
+        if str(gpu_id)[:6] in gpu_list:
+            gpu_id = str(gpu_id)[:6]
             break
 
     if not gpu_id in gpu_list:

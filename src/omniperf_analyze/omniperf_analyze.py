@@ -82,13 +82,15 @@ def initialize_run(args, normalization_filter=None):
         w.avail_ips = w.sys_info["ip_blocks"].item().split("|")
         arch = w.sys_info.iloc[0]["gpu_soc"]
 
-        if arch in file_io.supported_arch.keys() and not(arch in archConfigs.keys()):
+        if arch in file_io.supported_arch.keys() and not (arch in archConfigs.keys()):
             ac = schema.ArchConfig()
             if args.list_kernels:
                 ac.panel_configs = file_io.top_stats_build_in_config
             else:
                 arch_panel_config = (
-                    args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
+                    args.config_dir
+                    if single_panel_config
+                    else args.config_dir.joinpath(arch)
                 )
                 ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
             parser.build_dfs(ac, args.filter_metrics)
@@ -99,9 +101,11 @@ def initialize_run(args, normalization_filter=None):
                     parser.build_metric_value_string(v.dfs, v.dfs_type, args.normal_unit)
             else:
                 for k, v in archConfigs.items():
-                    parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter)
-            
-        w.dfs = copy.deepcopy(archConfigs[arch].dfs)        # generate here if needed
+                    parser.build_metric_value_string(
+                        v.dfs, v.dfs_type, normalization_filter
+                    )
+
+        w.dfs = copy.deepcopy(archConfigs[arch].dfs)  # generate here if needed
         w.dfs_type = archConfigs[arch].dfs_type
         w.soc_spec = file_io.get_soc_params(soc_spec_df, arch)
         runs[d[0]] = w
@@ -111,13 +115,17 @@ def initialize_run(args, normalization_filter=None):
         if arch not in archConfigs.keys():
             ac = schema.ArchConfig()
             arch_panel_config = (
-                    args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
-                )
+                args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
+            )
             ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
             parser.build_dfs(ac, args.filter_metrics)
             archConfigs[arch] = ac
             for k, v in archConfigs.items():
-                parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter if normalization_filter else args.normal_unit)
+                parser.build_metric_value_string(
+                    v.dfs,
+                    v.dfs_type,
+                    normalization_filter if normalization_filter else args.normal_unit,
+                )
         print(
             tabulate(
                 pd.DataFrame.from_dict(
@@ -208,9 +216,13 @@ def run_cli(args, runs):
             runs[d[0]], d[0], is_gui, args.g, args.verbose
         )  # create the loaded table
     if args.list_kernels:
-        tty.show_kernels(args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output)
+        tty.show_kernels(
+            args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output
+        )
     else:
-        tty.show_all(args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output)
+        tty.show_all(
+            args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output
+        )
 
 
 def roofline_only(path_to_dir, dev_id, sort_type, mem_level, kernel_names, verbose):

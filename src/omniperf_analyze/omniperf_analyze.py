@@ -75,6 +75,36 @@ def initialize_run(args, normalization_filter=None):
             )
             sys.exit(-1)
 
+    if args.list_metrics in file_io.supported_arch.keys():
+        arch = args.list_metrics
+        if arch not in archConfigs.keys():
+            ac = schema.ArchConfig()
+            arch_panel_config = (
+                args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
+            )
+            ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
+            parser.build_dfs(ac, args.filter_metrics)
+            archConfigs[arch] = ac
+            for k, v in archConfigs.items():
+                parser.build_metric_value_string(
+                    v.dfs,
+                    v.dfs_type,
+                    normalization_filter if normalization_filter else args.normal_unit,
+                )
+        print(
+            tabulate(
+                pd.DataFrame.from_dict(
+                    archConfigs[arch].metric_list,
+                    orient="index",
+                    columns=["Metric"],
+                ),
+                headers="keys",
+                tablefmt="fancy_grid",
+            ),
+            file=output,
+        )
+        sys.exit(0)
+
     # Todo: warning single -d with multiple dirs
     for d in args.path:
         w = schema.Workload()
@@ -109,36 +139,6 @@ def initialize_run(args, normalization_filter=None):
         w.dfs_type = archConfigs[arch].dfs_type
         w.soc_spec = file_io.get_soc_params(soc_spec_df, arch)
         runs[d[0]] = w
-
-    if args.list_metrics in file_io.supported_arch.keys():
-        arch = args.list_metrics
-        if arch not in archConfigs.keys():
-            ac = schema.ArchConfig()
-            arch_panel_config = (
-                args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
-            )
-            ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
-            parser.build_dfs(ac, args.filter_metrics)
-            archConfigs[arch] = ac
-            for k, v in archConfigs.items():
-                parser.build_metric_value_string(
-                    v.dfs,
-                    v.dfs_type,
-                    normalization_filter if normalization_filter else args.normal_unit,
-                )
-        print(
-            tabulate(
-                pd.DataFrame.from_dict(
-                    archConfigs[arch].metric_list,
-                    orient="index",
-                    columns=["Metric"],
-                ),
-                headers="keys",
-                tablefmt="fancy_grid",
-            ),
-            file=output,
-        )
-        sys.exit(0)
 
     # Return rather than referencing 'runs' globally (since used outside of file scope)
     return runs

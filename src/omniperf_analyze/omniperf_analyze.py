@@ -60,46 +60,6 @@ def initialize_run(args, normalization_filter=None):
     single_panel_config = file_io.is_single_panel_config(Path(args.config_dir))
     global archConfigs
     archConfigs = {}
-    for arch in file_io.supported_arch.keys():
-        ac = schema.ArchConfig()
-        if args.list_kernels:
-            ac.panel_configs = file_io.top_stats_build_in_config
-        else:
-            arch_panel_config = (
-                args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
-            )
-            ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
-
-        # TODO: filter_metrics should/might be one per arch
-        # print(ac)
-
-        parser.build_dfs(ac, args.filter_metrics)
-
-        archConfigs[arch] = ac
-
-    if args.list_metrics in file_io.supported_arch.keys():
-        print(
-            tabulate(
-                pd.DataFrame.from_dict(
-                    archConfigs[args.list_metrics].metric_list,
-                    orient="index",
-                    columns=["Metric"],
-                ),
-                headers="keys",
-                tablefmt="fancy_grid",
-            ),
-            file=output,
-        )
-        sys.exit(0)
-
-    # Use original normalization or user input from GUI
-    if not normalization_filter:
-        for k, v in archConfigs.items():
-            parser.build_metric_value_string(v.dfs, v.dfs_type, args.normal_unit)
-    else:
-        for k, v in archConfigs.items():
-            parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter)
-
     runs = OrderedDict()
 
     # err checking for multiple runs and multiple gpu_kernel filter
@@ -121,10 +81,56 @@ def initialize_run(args, normalization_filter=None):
         w.sys_info = file_io.load_sys_info(Path(d[0], "sysinfo.csv"))
         w.avail_ips = w.sys_info["ip_blocks"].item().split("|")
         arch = w.sys_info.iloc[0]["gpu_soc"]
-        w.dfs = copy.deepcopy(archConfigs[arch].dfs)
+
+        if arch in file_io.supported_arch.keys() and not(arch in archConfigs.keys()):
+            ac = schema.ArchConfig()
+            if args.list_kernels:
+                ac.panel_configs = file_io.top_stats_build_in_config
+            else:
+                arch_panel_config = (
+                    args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
+                )
+                ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
+            parser.build_dfs(ac, args.filter_metrics)
+            archConfigs[arch] = ac
+
+            if not normalization_filter:
+                for k, v in archConfigs.items():
+                    parser.build_metric_value_string(v.dfs, v.dfs_type, args.normal_unit)
+            else:
+                for k, v in archConfigs.items():
+                    parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter)
+            
+        w.dfs = copy.deepcopy(archConfigs[arch].dfs)        # generate here if needed
         w.dfs_type = archConfigs[arch].dfs_type
         w.soc_spec = file_io.get_soc_params(soc_spec_df, arch)
         runs[d[0]] = w
+
+    if args.list_metrics in file_io.supported_arch.keys():
+        arch = args.list_metrics
+        if arch not in archConfigs.keys():
+            ac = schema.ArchConfig()
+            arch_panel_config = (
+                    args.config_dir if single_panel_config else args.config_dir.joinpath(arch)
+                )
+            ac.panel_configs = file_io.load_panel_configs(arch_panel_config)
+            parser.build_dfs(ac, args.filter_metrics)
+            archConfigs[arch] = ac
+            for k, v in archConfigs.items():
+                parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter if normalization_filter else args.normal_unit)
+        print(
+            tabulate(
+                pd.DataFrame.from_dict(
+                    archConfigs[arch].metric_list,
+                    orient="index",
+                    columns=["Metric"],
+                ),
+                headers="keys",
+                tablefmt="fancy_grid",
+            ),
+            file=output,
+        )
+        sys.exit(0)
 
     # Return rather than referencing 'runs' globally (since used outside of file scope)
     return runs
@@ -161,7 +167,7 @@ def run_gui(args, runs):
         gui.build_layout(
             app,
             runs,
-            archConfigs["gfx90a"],
+            archConfigs[runs[args.path[0][0]].sys_info.iloc[0]["gpu_soc"]],
             input_filters,
             args.decimal,
             args.time_unit,
@@ -202,9 +208,9 @@ def run_cli(args, runs):
             runs[d[0]], d[0], is_gui, args.g, args.verbose
         )  # create the loaded table
     if args.list_kernels:
-        tty.show_kernels(args, runs, archConfigs["gfx90a"], output)
+        tty.show_kernels(args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output)
     else:
-        tty.show_all(args, runs, archConfigs["gfx90a"], output)
+        tty.show_all(args, runs, archConfigs[runs[d[0]].sys_info.iloc[0]["gpu_soc"]], output)
 
 
 def roofline_only(path_to_dir, dev_id, sort_type, mem_level, kernel_names, verbose):

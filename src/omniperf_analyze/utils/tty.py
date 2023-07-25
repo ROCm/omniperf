@@ -106,6 +106,7 @@ def show_all(args, runs, archConfigs, output):
                                             float(x) if x != "" else float(0)
                                             for x in base_df[header]
                                         ]
+                                        # insert unit fix here
                                         cur_df[header] = [
                                             float(x) if x != "" else float(0)
                                             for x in cur_df[header]
@@ -141,13 +142,36 @@ def show_all(args, runs, archConfigs, output):
 
                                         df = pd.concat([df, t_df], axis=1)
                                     else:
+                                        # insert unit fix here
                                         cur_df[header] = [
                                             round(float(x), args.decimal)
                                             if x != ""
                                             else x
                                             for x in base_df[header]
                                         ]
-
+                                        if "Unit" in cur_df.columns:
+                                            for idx, row in cur_df[cur_df["Unit"] == "Gb/s"].items():
+                                                for thing in row:
+                                                    que = cur_df[cur_df["Metric"] == thing]
+                                                    if not que.empty:
+                                                        if "Value" in que:
+                                                            if que.Value[0] < 0.001:
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Kb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Value"] = 1000000* que.Value
+                                                            elif que.Value[0] < 1:
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Mb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Value"] = 1000 * que.Value
+                                                        elif "Avg" in que:
+                                                            if que.Avg[0] < 0.001:
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Kb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Avg"] = 1000000* que.Avg
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Min"] = 1000000* que.Min
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Max"] = 1000000* que.Max
+                                                            elif que.Avg[0] < 1:
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Mb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Avg"] = 1000 * que.Value
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Min"] = 1000 * que.Min
+                                                                cur_df.loc[(cur_df["Metric"] == thing), "Max"] = 1000 * que.Max
                                         df = pd.concat([df, cur_df[header]], axis=1)
 
                 if not df.empty:

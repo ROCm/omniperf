@@ -151,27 +151,27 @@ def show_all(args, runs, archConfigs, output):
                                         ]
                                         if "Unit" in cur_df.columns:
                                             for idx, row in cur_df[cur_df["Unit"] == "Gb/s"].items():
-                                                for thing in row:
-                                                    que = cur_df[cur_df["Metric"] == thing]
-                                                    if not que.empty:
-                                                        if "Value" in que:
-                                                            if que.Value[0] < 0.001:
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Kb/s"
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Value"] = 1000000* que.Value
-                                                            elif que.Value[0] < 1:
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Mb/s"
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Value"] = 1000 * que.Value
-                                                        elif "Avg" in que:
-                                                            if que.Avg[0] < 0.001:
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Kb/s"
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Avg"] = 1000000* que.Avg
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Min"] = 1000000* que.Min
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Max"] = 1000000* que.Max
-                                                            elif que.Avg[0] < 1:
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Unit"] = "Mb/s"
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Avg"] = 1000 * que.Value
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Min"] = 1000 * que.Min
-                                                                cur_df.loc[(cur_df["Metric"] == thing), "Max"] = 1000 * que.Max
+                                                for curr_metric in row:
+                                                    curr_row = cur_df[cur_df["Metric"] == curr_metric]
+                                                    if not curr_row.empty:
+                                                        if "Value" in curr_row:
+                                                            if curr_row.Value[0] < 0.001:
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Unit"] = "Kb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Value"] = 1000000* curr_row.Value
+                                                            elif curr_row.Value[0] < 1:
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Unit"] = "Mb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Value"] = 1000 * curr_row.Value
+                                                        elif "Avg" in curr_row:
+                                                            if curr_row.Avg[0] < 0.001:
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Unit"] = "Kb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Avg"] = 1000000* curr_row.Avg
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Min"] = 1000000* curr_row.Min
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Max"] = 1000000* curr_row.Max
+                                                            elif curr_row.Avg[0] < 1:
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Unit"] = "Mb/s"
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Avg"] = 1000 * curr_row.Avg
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Min"] = 1000 * curr_row.Min
+                                                                cur_df.loc[(cur_df["Metric"] == curr_metric), "Max"] = 1000 * curr_row.Max
                                         df = pd.concat([df, cur_df[header]], axis=1)
 
                 if not df.empty:

@@ -20,12 +20,12 @@ Panel Config:
           Bandwidth:
             value: AVG(((SQC_ICACHE_REQ * 100000) / (($sclk * $numSQC)
               * (EndNs - BeginNs))))
-            unit: Pct
+            unit: Pct of Peak
             tips: 
           Cache Hit:
             value: AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            unit: Pct
+            unit: Pct of Peak
             tips: 
 
     - metric_table:

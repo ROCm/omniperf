@@ -39,6 +39,7 @@ import plotly.express as px
 import colorlover
 
 from omniperf_analyze.utils import parser, file_io, schema
+from omniperf_analyze.utils.tty import smartUnits
 
 from omniperf_analyze.utils.gui_components.header import get_header
 from omniperf_analyze.utils.gui_components.roofline import get_roofline
@@ -288,87 +289,7 @@ def build_table_chart(
     display_df, table_config, original_df, display_columns, comparable_columns, decimal
 ):
     if "Unit" in display_df:
-        what = display_df["Unit"]
-        if "Gb/s" in display_df["Unit"].values:
-            for idx, row in display_df[display_df["Unit"] == "Gb/s"].items():
-                for curr_metric in row:
-                    curr_row = display_df[display_df["Metric"] == curr_metric]
-                    if not curr_row.empty:
-                        if "Value" in curr_row:
-                            if isinstance(
-                                curr_row["Value"][0],
-                                float,
-                            ):
-                                if curr_row.Value[0] < 0.001:
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Unit",
-                                    ] = "Kb/s"
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Value",
-                                    ] = (
-                                        1000000 * curr_row.Value
-                                    )
-                                elif curr_row.Value[0] < 1:
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Unit",
-                                    ] = "Mb/s"
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Value",
-                                    ] = (
-                                        1000 * curr_row.Value
-                                    )
-                        elif "Avg" in curr_row:
-                            if isinstance(curr_row["Avg"][0], float):
-                                if curr_row.Avg[0] < 0.001:
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Unit",
-                                    ] = "Kb/s"
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Avg",
-                                    ] = (
-                                        1000000 * curr_row.Avg
-                                    )
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Min",
-                                    ] = (
-                                        1000000 * curr_row.Min
-                                    )
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Max",
-                                    ] = (
-                                        1000000 * curr_row.Max
-                                    )
-                                elif curr_row.Avg[0] < 1:
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Unit",
-                                    ] = "Mb/s"
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Avg",
-                                    ] = (
-                                        1000 * curr_row.Avg
-                                    )
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Min",
-                                    ] = (
-                                        1000 * curr_row.Min
-                                    )
-                                    display_df.loc[
-                                        (display_df["Metric"] == curr_metric),
-                                        "Max",
-                                    ] = (
-                                        1000 * curr_row.Max
-                                    )
+        display_df = smartUnits(display_df)
     d_figs = []
 
     # build comlumns/header with formatting

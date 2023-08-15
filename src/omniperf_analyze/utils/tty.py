@@ -33,86 +33,86 @@ hidden_sections = [1900, 2000]
 
 
 def smartUnits(df):
-        for idx, row in df[df["Unit"] == "Gb/s"].items():
-            for curr_metric in row:
-                curr_row = df[df["Metric"] == curr_metric]
-                if not curr_row.empty:
-                    if "Value" in curr_row:
-                        if isinstance(
-                            curr_row["Value"][0],
-                            float,
-                        ):
-                            if curr_row.Value[0] < 0.001:
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Unit",
-                                ] = "Kb/s"
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Value",
-                                ] = (
-                                    1000000 * curr_row.Value
-                                )
-                            elif curr_row.Value[0] < 1:
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Unit",
-                                ] = "Mb/s"
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Value",
-                                ] = (
-                                    1000 * curr_row.Value
-                                )
-                    elif "Avg" in curr_row:
-                        if isinstance(curr_row["Avg"][0], float):
-                            if curr_row.Avg[0] < 0.001:
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Unit",
-                                ] = "Kb/s"
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Avg",
-                                ] = (
-                                    1000000 * curr_row.Avg
-                                )
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Min",
-                                ] = (
-                                    1000000 * curr_row.Min
-                                )
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Max",
-                                ] = (
-                                    1000000 * curr_row.Max
-                                )
-                            elif curr_row.Avg[0] < 1:
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Unit",
-                                ] = "Mb/s"
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Avg",
-                                ] = (
-                                    1000 * curr_row.Avg
-                                )
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Min",
-                                ] = (
-                                    1000 * curr_row.Min
-                                )
-                                df.loc[
-                                    (df["Metric"] == curr_metric),
-                                    "Max",
-                                ] = (
-                                    1000 * curr_row.Max
-                                )
-        return df
+    for idx, row in df[df["Unit"] == "Gb/s"].items():
+        for curr_metric in row:
+            curr_row = df[df["Metric"] == curr_metric]
+            if not curr_row.empty:
+                if "Value" in curr_row:
+                    if isinstance(
+                        curr_row["Value"][0],
+                        float,
+                    ):
+                        if curr_row.Value[0] < 0.001:
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Unit",
+                            ] = "Kb/s"
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Value",
+                            ] = (
+                                1000000 * curr_row.Value
+                            )
+                        elif curr_row.Value[0] < 1:
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Unit",
+                            ] = "Mb/s"
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Value",
+                            ] = (
+                                1000 * curr_row.Value
+                            )
+                elif "Avg" in curr_row:
+                    if isinstance(curr_row["Avg"][0], float):
+                        if curr_row.Avg[0] < 0.001:
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Unit",
+                            ] = "Kb/s"
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Avg",
+                            ] = (
+                                1000000 * curr_row.Avg
+                            )
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Min",
+                            ] = (
+                                1000000 * curr_row.Min
+                            )
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Max",
+                            ] = (
+                                1000000 * curr_row.Max
+                            )
+                        elif curr_row.Avg[0] < 1:
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Unit",
+                            ] = "Mb/s"
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Avg",
+                            ] = (
+                                1000 * curr_row.Avg
+                            )
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Min",
+                            ] = (
+                                1000 * curr_row.Min
+                            )
+                            df.loc[
+                                (df["Metric"] == curr_metric),
+                                "Max",
+                            ] = (
+                                1000 * curr_row.Max
+                            )
+    return df
 
 
 def string_multiple_lines(source, width, max_rows):

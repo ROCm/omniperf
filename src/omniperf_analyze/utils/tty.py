@@ -106,6 +106,7 @@ def show_all(args, runs, archConfigs, output):
                                             float(x) if x != "" else float(0)
                                             for x in base_df[header]
                                         ]
+                                        # insert unit fix here
                                         cur_df[header] = [
                                             float(x) if x != "" else float(0)
                                             for x in cur_df[header]
@@ -141,13 +142,175 @@ def show_all(args, runs, archConfigs, output):
 
                                         df = pd.concat([df, t_df], axis=1)
                                     else:
+                                        # insert unit fix here
                                         cur_df[header] = [
                                             round(float(x), args.decimal)
                                             if x != ""
                                             else x
                                             for x in base_df[header]
                                         ]
-
+                                        if "Unit" in cur_df.columns:
+                                            for idx, row in cur_df[
+                                                cur_df["Unit"] == "Gb/s"
+                                            ].items():
+                                                for curr_metric in row:
+                                                    curr_row = cur_df[
+                                                        cur_df["Metric"] == curr_metric
+                                                    ]
+                                                    if not curr_row.empty:
+                                                        if "Value" in curr_row:
+                                                            if isinstance(
+                                                                curr_row["Value"][0],
+                                                                float,
+                                                            ):
+                                                                if (
+                                                                    curr_row.Value[0]
+                                                                    < 0.001
+                                                                ):
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Unit",
+                                                                    ] = "Kb/s"
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Value",
+                                                                    ] = (
+                                                                        1000000
+                                                                        * curr_row.Value
+                                                                    )
+                                                                elif (
+                                                                    curr_row.Value[0] < 1
+                                                                ):
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Unit",
+                                                                    ] = "Mb/s"
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Value",
+                                                                    ] = (
+                                                                        1000
+                                                                        * curr_row.Value
+                                                                    )
+                                                        elif "Avg" in curr_row:
+                                                            if isinstance(
+                                                                curr_row["Avg"][0], float
+                                                            ):
+                                                                if (
+                                                                    curr_row.Avg[0]
+                                                                    < 0.001
+                                                                ):
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Unit",
+                                                                    ] = "Kb/s"
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Avg",
+                                                                    ] = (
+                                                                        1000000
+                                                                        * curr_row.Avg
+                                                                    )
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Min",
+                                                                    ] = (
+                                                                        1000000
+                                                                        * curr_row.Min
+                                                                    )
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Max",
+                                                                    ] = (
+                                                                        1000000
+                                                                        * curr_row.Max
+                                                                    )
+                                                                elif curr_row.Avg[0] < 1:
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Unit",
+                                                                    ] = "Mb/s"
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Avg",
+                                                                    ] = (
+                                                                        1000
+                                                                        * curr_row.Avg
+                                                                    )
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Min",
+                                                                    ] = (
+                                                                        1000
+                                                                        * curr_row.Min
+                                                                    )
+                                                                    cur_df.loc[
+                                                                        (
+                                                                            cur_df[
+                                                                                "Metric"
+                                                                            ]
+                                                                            == curr_metric
+                                                                        ),
+                                                                        "Max",
+                                                                    ] = (
+                                                                        1000
+                                                                        * curr_row.Max
+                                                                    )
                                         df = pd.concat([df, cur_df[header]], axis=1)
 
                 if not df.empty:

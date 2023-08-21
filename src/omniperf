@@ -270,7 +270,7 @@ def roof_setup(args, my_parser, VER):
     # Do we need a new directory for roofline?
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
-    
+
     # Does roof data exist?
     print("Checking for roofline.csv in ", args.path)
     roof_path = args.path + "/roofline.csv"
@@ -436,8 +436,8 @@ def characterize_app(args, VER):
         if args.use_rocscope == True:
             run_rocscope(args, fname)
         else:
-            run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
-    
+            run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, args.pargs, log, args.verbose)
+
     # Update timestamps
     replace_timestamps(workload_dir, log)
 
@@ -446,7 +446,7 @@ def characterize_app(args, VER):
         join_prof(workload_dir, args.join_type, log, args.verbose)
         # Demangle and overwrite original KernelNames
         csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
-        
+
     log.close()
 
 
@@ -463,7 +463,8 @@ def run_rocscope(args, fname):
         if result.returncode == 0:
             rs_cmd = [
                 result.stdout.decode("ascii").strip(),
-                "metrics",
+                "metrics"
+            ] + (args.pargs.split(" ") if args.pargs else []) + [
                 "-p",
                 args.path,
                 "-n",
@@ -483,7 +484,7 @@ def run_rocscope(args, fname):
                 sys.exit(1)
 
 
-def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
+def run_prof(fname, workload_dir, perfmon_dir, cmd, target, pargs, log_file, verbose):
     global rocprof_cmd
 
     fbase = os.path.splitext(os.path.basename(fname))[0]
@@ -494,36 +495,32 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
     # profile the app (run w/ custom config files for mi100)
     if target == "mi100":
         print("RUNNING WITH CUSTOM METRICS")
-        success, output = capture_subprocess_output(
-            [
-                rocprof_cmd,
-                "-i",
-                fname,
-                "-m",
-                perfmon_dir + "/" + "metrics.xml",
-                "--timestamp",
-                "on",
-                "-o",
-                workload_dir + "/" + fbase + ".csv",
-                '"' + cmd + '"',
-            ]
-        )
+        capture_cmd = [rocprof_cmd] + (pargs.split(" ") if pargs else []) + [
+            "-i",
+            fname,
+            "-m",
+            perfmon_dir + "/" + "metrics.xml",
+            "--timestamp",
+            "on",
+            "-o",
+            workload_dir + "/" + fbase + ".csv",
+            '"' + cmd + '"',
+        ]
+        success, output = capture_subprocess_output(capture_cmd)
     else:
-        success, output = capture_subprocess_output(
-            [
-                rocprof_cmd,
-                "-i",
-                fname,
-                "--timestamp",
-                "on",
-                "-o",
-                workload_dir + "/" + fbase + ".csv",
-                '"' + cmd + '"',
-            ]
-        )
+        capture_cmd = [rocprof_cmd] + (pargs.split(" ") if pargs else []) + [
+            "-i",
+            fname,
+            "--timestamp",
+            "on",
+            "-o",
+            workload_dir + "/" + fbase + ".csv",
+            '"' + cmd + '"',
+        ]
+        success, output = capture_subprocess_output(capture_cmd)
     # Write output to log
     log_file.write(output)
-    
+
 
 
 def omniperf_profile(args, VER):
@@ -662,12 +659,13 @@ def omniperf_profile(args, VER):
             if args.use_rocscope == True:
                 run_rocscope(args, fname)
             else:
-                run_prof(fname, workload_dir, perfmon_dir, args.remaining, args.target, log, args.verbose)
-                
+                run_prof(fname, workload_dir, perfmon_dir, args.remaining,
+                         args.target, args.pargs, log, args.verbose)
+
 
         # Update timestamps
         replace_timestamps(workload_dir, log)
-        
+
         if args.use_rocscope == False:
             # Manually join each pmc_perf*.csv output
             join_prof(workload_dir, args.join_type, log, args.verbose)

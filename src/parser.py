@@ -198,6 +198,14 @@ def parse(my_parser):
         help="\t\t\tProfile without collecting roofline data.",
     )
     profile_group.add_argument(
+        "--prof-args",
+        type=str,
+        dest="pargs",
+        required=False,
+        default=None,
+        help="\t\t\tAdditional arguments to pass to application profiler.",
+    )
+    profile_group.add_argument(
         "remaining",
         metavar="-- [ ...]",
         default=None,

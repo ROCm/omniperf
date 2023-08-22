@@ -45,6 +45,7 @@ import os.path
 from pathlib import Path
 from omniperf_analyze.utils import parser, file_io
 from omniperf_analyze.utils.gui_components.roofline import get_roofline
+from utils import csv_processor
 
 archConfigs = {}
 
@@ -195,7 +196,7 @@ def run_gui(args, runs):
         gui.build_layout(
             app,
             runs,
-            archConfigs["gfx90a"],
+            archConfigs[runs[args.path[0][0]].sys_info.iloc[0]["gpu_soc"]],
             input_filters,
             args.decimal,
             args.time_unit,
@@ -221,6 +222,9 @@ def run_cli(args, runs):
     # which archConfig passed into show_all function.
     # After decide to how to manage kernels display patterns, we can revisit it.
     for d in args.path:
+        # Demangle and overwrite original KernelNames
+        csv_processor.kernel_name_shortener(d[0], args.kernelVerbose)
+
         file_io.create_df_kernel_top_stats(
             d[0],
             runs[d[0]].filter_gpu_ids,
@@ -264,7 +268,7 @@ def roofline_only(path_to_dir, dev_id, sort_type, mem_level, kernel_names, verbo
     app_path = path_to_dir + "/pmc_perf.csv"
     roofline_exists = os.path.isfile(app_path)
     if not roofline_exists:
-        print("Error: {} does not exist")
+        print("Error: {} does not exist".format(app_path))
         sys.exit(0)
     t_df = OrderedDict()
     t_df["pmc_perf"] = pd.read_csv(app_path)

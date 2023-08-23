@@ -28,4 +28,5 @@ RUN echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.rad
 
 RUN echo "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600
 RUN apt update
-RUN apt install -y rocm-hip-sdk
+RUN apt install -y rocm-hip-sdk 
+RUN apt install -y rocm-dev

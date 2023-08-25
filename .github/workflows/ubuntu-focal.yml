@@ -24,13 +24,13 @@ jobs:
       # Cancel any previous runs
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
-      - name: Install baseline OS dependencies
+      - name: Install cmake
         uses: lukka/get-cmake@latest
+      - name: Install baseline OS dependencies
         run: |
           sudo apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
           sudo apt-get install -y git
           sudo apt-get install -y python3-pip
-          sudo apt-get install -y cmake
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Python prereqs

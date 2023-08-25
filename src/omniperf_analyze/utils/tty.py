@@ -36,120 +36,121 @@ hidden_sections = [1900, 2000]
 def smartUnits(df):
     for idx, row in df[df["Unit"] == "Gb/s"].items():
         for curr_metric in row:
-            curr_row = df[df["Metric"] == curr_metric]
-            if not curr_row.empty:
-                # fix values
-                if "Value" in curr_row:
-                    vals = curr_row["Value"].values
-                    new_units = []
-                    percent_diff = 0
+            if "Metric" in df:
+                curr_row = df[df["Metric"] == curr_metric]
+                if not curr_row.empty:
+                    # fix values
+                    if "Value" in curr_row:
+                        vals = curr_row["Value"].values
+                        new_units = []
+                        percent_diff = 0
 
-                    # if baseline
-                    if isinstance(vals[0], np.ndarray):
-                        val_1 = curr_row["Value"].values[0][0]
-                        baseline = curr_row["Value"].values[0][1].split()
-                        val_2 = float(baseline[0])
-                        percent_diff = baseline[1]
-                        vals = np.array([val_1, val_2])
+                        # if baseline
+                        if isinstance(vals[0], np.ndarray):
+                            val_1 = curr_row["Value"].values[0][0]
+                            baseline = curr_row["Value"].values[0][1].split()
+                            val_2 = float(baseline[0])
+                            percent_diff = baseline[1]
+                            vals = np.array([val_1, val_2])
 
-                    # calculate units
-                    for val in vals:
-                        if isinstance(
-                            val,
-                            float,
-                        ):
-                            if val < 0.001:
-                                new_units.append("Kb/s")
-                            elif val < 1:
-                                new_units.append("Mb/s")
-                                if len(new_units) == 2:
-                                    if new_units[0] == "Kb/s":
-                                        new_units[0] = "Mb/s"
-                            else:
-                                new_units.append("Gb/s")
-                                if len(new_units) == 2:
-                                    new_units[0] = "Gb/s"
-                    # Convert to new_units
-                    if new_units[0] == "Mb/s":
-                        vals = 1000 * vals
-                    elif new_units[0] == "Kb/s":
-                        vals = 1000000 * vals
-                    vals = vals.tolist()
-                    # if baseline
-                    if len(new_units) == 2:
-                        vals[1] = str(vals[1]) + " " + str(percent_diff)
+                        # calculate units
+                        for val in vals:
+                            if isinstance(
+                                val,
+                                float,
+                            ):
+                                if val < 0.001:
+                                    new_units.append("Kb/s")
+                                elif val < 1:
+                                    new_units.append("Mb/s")
+                                    if len(new_units) == 2:
+                                        if new_units[0] == "Kb/s":
+                                            new_units[0] = "Mb/s"
+                                else:
+                                    new_units.append("Gb/s")
+                                    if len(new_units) == 2:
+                                        new_units[0] = "Gb/s"
+                        # Convert to new_units
+                        if new_units[0] == "Mb/s":
+                            vals = 1000 * vals
+                        elif new_units[0] == "Kb/s":
+                            vals = 1000000 * vals
+                        vals = vals.tolist()
+                        # if baseline
+                        if len(new_units) == 2:
+                            vals[1] = str(vals[1]) + " " + str(percent_diff)
 
-                    df.loc[df["Metric"] == curr_metric, "Value"] = vals
-                    df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                        df.loc[df["Metric"] == curr_metric, "Value"] = vals
+                        df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
 
-                elif "Avg" in curr_row:
-                    avg_vals = curr_row["Avg"].values
-                    max_vals = curr_row["Max"].values
-                    min_vals = curr_row["Min"].values
-                    new_units = []
-                    percent_diff = 0
+                    elif "Avg" in curr_row:
+                        avg_vals = curr_row["Avg"].values
+                        max_vals = curr_row["Max"].values
+                        min_vals = curr_row["Min"].values
+                        new_units = []
+                        percent_diff = 0
 
-                    # if baseline
-                    if isinstance(avg_vals[0], np.ndarray):
-                        avg_baseline = curr_row["Avg"].values[0][1].split()
-                        avg_percent_diff = avg_baseline[1]
-                        avg_val_1 = curr_row["Avg"].values[0][0]
-                        avg_val_2 = float(avg_baseline[0])
-                        avg_vals = np.array([avg_val_1, avg_val_2])
+                        # if baseline
+                        if isinstance(avg_vals[0], np.ndarray):
+                            avg_baseline = curr_row["Avg"].values[0][1].split()
+                            avg_percent_diff = avg_baseline[1]
+                            avg_val_1 = curr_row["Avg"].values[0][0]
+                            avg_val_2 = float(avg_baseline[0])
+                            avg_vals = np.array([avg_val_1, avg_val_2])
 
-                        min_baseline = curr_row["Min"].values[0][1].split()
-                        min_percent_diff = min_baseline[1]
-                        min_val_1 = curr_row["Min"].values[0][0]
-                        min_val_2 = float(min_baseline[0])
-                        min_vals = np.array([min_val_1, min_val_2])
+                            min_baseline = curr_row["Min"].values[0][1].split()
+                            min_percent_diff = min_baseline[1]
+                            min_val_1 = curr_row["Min"].values[0][0]
+                            min_val_2 = float(min_baseline[0])
+                            min_vals = np.array([min_val_1, min_val_2])
 
-                        max_baseline = curr_row["Max"].values[0][1].split()
-                        max_percent_diff = max_baseline[1]
-                        max_val_1 = curr_row["Max"].values[0][0]
-                        max_val_2 = float(max_baseline[0])
-                        max_vals = np.array([max_val_1, max_val_2])
+                            max_baseline = curr_row["Max"].values[0][1].split()
+                            max_percent_diff = max_baseline[1]
+                            max_val_1 = curr_row["Max"].values[0][0]
+                            max_val_2 = float(max_baseline[0])
+                            max_vals = np.array([max_val_1, max_val_2])
 
-                    # calculate units
-                    for val in avg_vals:
-                        if isinstance(
-                            val,
-                            float,
-                        ):
-                            if val < 0.001:
-                                new_units.append("Kb/s")
-                            elif val < 1:
-                                new_units.append("Mb/s")
-                                if len(new_units) == 2:
-                                    if new_units[0] == "Kb/s":
-                                        new_units[0] = "Mb/s"
-                            else:
-                                new_units.append("Gb/s")
-                                if len(new_units) == 2:
-                                    new_units[0] = "Gb/s"
+                        # calculate units
+                        for val in avg_vals:
+                            if isinstance(
+                                val,
+                                float,
+                            ):
+                                if val < 0.001:
+                                    new_units.append("Kb/s")
+                                elif val < 1:
+                                    new_units.append("Mb/s")
+                                    if len(new_units) == 2:
+                                        if new_units[0] == "Kb/s":
+                                            new_units[0] = "Mb/s"
+                                else:
+                                    new_units.append("Gb/s")
+                                    if len(new_units) == 2:
+                                        new_units[0] = "Gb/s"
 
-                    # Convert to new_units
-                    if new_units[0] == "Mb/s":
-                        avg_vals = 1000 * avg_vals
-                        max_vals = 1000 * max_vals
-                        min_vals = 1000 * min_vals
-                    elif new_units[0] == "Kb/s":
-                        avg_vals = 1000000 * avg_vals
-                        max_vals = 1000000 * max_vals
-                        min_vals = 1000000 * min_vals
-                    avg_vals = avg_vals.tolist()
-                    max_vals = max_vals.tolist()
-                    min_vals = min_vals.tolist()
+                        # Convert to new_units
+                        if new_units[0] == "Mb/s":
+                            avg_vals = 1000 * avg_vals
+                            max_vals = 1000 * max_vals
+                            min_vals = 1000 * min_vals
+                        elif new_units[0] == "Kb/s":
+                            avg_vals = 1000000 * avg_vals
+                            max_vals = 1000000 * max_vals
+                            min_vals = 1000000 * min_vals
+                        avg_vals = avg_vals.tolist()
+                        max_vals = max_vals.tolist()
+                        min_vals = min_vals.tolist()
 
-                    # if baseline
-                    if len(new_units) == 2:
-                        avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
-                        max_vals[1] = str(max_vals[1]) + " " + str(max_percent_diff)
-                        min_vals[1] = str(min_vals[1]) + " " + str(min_percent_diff)
+                        # if baseline
+                        if len(new_units) == 2:
+                            avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
+                            max_vals[1] = str(max_vals[1]) + " " + str(max_percent_diff)
+                            min_vals[1] = str(min_vals[1]) + " " + str(min_percent_diff)
 
-                    df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
-                    df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
-                    df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
-                    df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                        df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
+                        df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
+                        df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
+                        df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
         return df
 
 

@@ -70,7 +70,7 @@ def smartUnits(df):
                                     new_units.append("Gb/s")
                                     if len(new_units) == 2:
                                         new_units[0] = "Gb/s"
-                        if len(new_units)>0:
+                        if len(new_units) > 0:
                             # Convert to new_units
                             if new_units[0] == "Mb/s":
                                 vals = 1000 * vals

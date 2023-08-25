@@ -26,8 +26,9 @@ jobs:
         uses: styfle/cancel-workflow-action@0.11.0
       - name: Install baseline OS dependencies
         run: |
+          sudo apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata 
           sudo apt-get install software-properties-common
-          sudo apt-get update &&  DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+          sudo apt-get update
           sudo apt purge --auto-remove cmake
           wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
           sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'

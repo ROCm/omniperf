@@ -70,18 +70,19 @@ def smartUnits(df):
                                     new_units.append("Gb/s")
                                     if len(new_units) == 2:
                                         new_units[0] = "Gb/s"
-                        # Convert to new_units
-                        if new_units[0] == "Mb/s":
-                            vals = 1000 * vals
-                        elif new_units[0] == "Kb/s":
-                            vals = 1000000 * vals
-                        vals = vals.tolist()
-                        # if baseline
-                        if len(new_units) == 2:
-                            vals[1] = str(vals[1]) + " " + str(percent_diff)
+                        if len(new_units)>0:
+                            # Convert to new_units
+                            if new_units[0] == "Mb/s":
+                                vals = 1000 * vals
+                            elif new_units[0] == "Kb/s":
+                                vals = 1000000 * vals
+                            vals = vals.tolist()
+                            # if baseline
+                            if len(new_units) == 2:
+                                vals[1] = str(vals[1]) + " " + str(percent_diff)
 
-                        df.loc[df["Metric"] == curr_metric, "Value"] = vals
-                        df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                            df.loc[df["Metric"] == curr_metric, "Value"] = vals
+                            df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
 
                     elif "Avg" in curr_row:
                         avg_vals = curr_row["Avg"].values
@@ -127,19 +128,19 @@ def smartUnits(df):
                                     new_units.append("Gb/s")
                                     if len(new_units) == 2:
                                         new_units[0] = "Gb/s"
-
-                        # Convert to new_units
-                        if new_units[0] == "Mb/s":
-                            avg_vals = 1000 * avg_vals
-                            max_vals = 1000 * max_vals
-                            min_vals = 1000 * min_vals
-                        elif new_units[0] == "Kb/s":
-                            avg_vals = 1000000 * avg_vals
-                            max_vals = 1000000 * max_vals
-                            min_vals = 1000000 * min_vals
-                        avg_vals = avg_vals.tolist()
-                        max_vals = max_vals.tolist()
-                        min_vals = min_vals.tolist()
+                        if len(new_units) > 0:
+                            # Convert to new_units
+                            if new_units[0] == "Mb/s":
+                                avg_vals = 1000 * avg_vals
+                                max_vals = 1000 * max_vals
+                                min_vals = 1000 * min_vals
+                            elif new_units[0] == "Kb/s":
+                                avg_vals = 1000000 * avg_vals
+                                max_vals = 1000000 * max_vals
+                                min_vals = 1000000 * min_vals
+                            avg_vals = avg_vals.tolist()
+                            max_vals = max_vals.tolist()
+                            min_vals = min_vals.tolist()
 
                         # if baseline
                         if len(new_units) == 2:
@@ -147,10 +148,11 @@ def smartUnits(df):
                             max_vals[1] = str(max_vals[1]) + " " + str(max_percent_diff)
                             min_vals[1] = str(min_vals[1]) + " " + str(min_percent_diff)
 
-                        df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
-                        df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
-                        df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
-                        df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                        if len(new_units) > 0:
+                            df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
+                            df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
+                            df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
+                            df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
         return df
 
 

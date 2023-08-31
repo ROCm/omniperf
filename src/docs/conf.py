@@ -53,6 +53,8 @@ extensions = [
 ]
 
 myst_heading_anchors = 2
+# enable replacement of (tm) & friends
+myst_enable_extensions = ["replacements"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -86,6 +88,10 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
+
+# options for latex output
+latex_engine = "lualatex"
+latex_show_urls = "footnote"
 
 
 # -- Options for HTML output -------------------------------------------------

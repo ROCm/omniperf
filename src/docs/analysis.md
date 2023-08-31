@@ -25,8 +25,8 @@ Run `omniperf analyze -h` for more details.
 
 ### Recommended workflow
 
-1) Do a comprehensive analysis with Omniperf CLI at the beginning.
-```shell
+1) To begin, generate a comprehensive analysis report with Omniperf CLI.
+```shell-session
 $ omniperf analyze -p workloads/vcopy/mi200/
 
 --------
@@ -108,7 +108,7 @@ Analyze
 ....
 ```
  2. Use `--list-metrics` to generate a list of availible metrics for inspection
- ```shell
+ ```shell-session
 $ omniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
 ╒═════════╤═════════════════════════════╕
 │         │ Metric                      │
@@ -171,8 +171,8 @@ $ omniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
 ├─────────┼─────────────────────────────┤
 ...
  ```
- 2. Choose your own customized subset of metrics with `-b` (a.k.a. `--metric`), or build your own config following [config_template](https://github.com/AMDResearch/omniperf/blob/main/src/omniperf_analyze/configs/panel_config_template.yaml). Below we'll inspect block 2 (a.k.a. System Speed-of-Light).
-```shell
+ 2. Choose your own customized subset of metrics with `-b` (a.k.a. `--metric`), or build your own config following [config_template](https://github.com/AMDResearch/omniperf/blob/main/src/omniperf_analyze/configs/panel_config_template.yaml). Below shows how to generate a report containing only metric 2 (a.k.a. System Speed-of-Light).
+```shell-session
 $ omniperf analyze -p workloads/vcopy/mi200/ -b 2
 --------
 Analyze
@@ -252,9 +252,9 @@ Analyze
 │ 2.1.28  │ Instr Fetch Latency       │ 21.729248046875       │ Cycles           │                    │                        │
 ╘═════════╧═══════════════════════════╧═══════════════════════╧══════════════════╧════════════════════╧════════════════════════╛
 ```
-> **Note:** Some cells may be blank indicating a missing/unavailible hardware counter or NULL value
+> **Note:** Some cells may be blank indicating a missing/unavailable hardware counter or NULL value
 
-3. Quick optimization iterations and profiling with customized metrics.
+3. Optimizatize application, iterate, and re-profile to inspect performance changes.
 4. Redo a comprehensive analysis with Omniperf CLI at any milestone or at the end.
 
 ### Demo
@@ -286,7 +286,7 @@ Analyze
 - Filter kernels
 
   First, list the top kernels in your application using `--list-kernels`.
-  ```shell
+  ```shell-session
   $ omniperf analyze -p workloads/vcopy/mi200/ --list-kernels
   
   --------
@@ -306,7 +306,7 @@ Analyze
 
   Second, select the index of the kernel you'd like to filter (i.e. __vecCopy(double*, double*, double*, int, int) [clone .kd]__ at index __0__). Then, use this index to apply the filter via `-k/--kernels`.
 
-  ```shell
+  ```shell-session
   $ omniperf -p workloads/vcopy/mi200/ -k 0
   
   --------
@@ -372,7 +372,7 @@ See [FAQ](https://amdresearch.github.io/omniperf/faq.html) for more details on S
 
 To launch the standalone GUI, include the `--gui` flag with your desired analysis command. For example:
 
-```bash
+```shell-session
 $ omniperf analyze -p workloads/vcopy/mi200/ --gui
 
 --------
@@ -497,9 +497,9 @@ Each workload is imported to a separate database with the following naming conve
 
 e.g., omniperf_asw_vcopy_mi200.
 
-Below is the sample command to import the *vcopy* profiling data.
+When using database mode, be sure to tailor the connection options to the machine hosting your [sever-side instance](./installation.md). Below is the sample command to import the *vcopy* profiling data, lets assuming our host machine is called "dummybox".
 
-```shell
+```shell-session
 $ omniperf database --help
 ROC Profiler:  /usr/bin/rocprof
 
@@ -544,8 +544,8 @@ Connection Options:
 ```
 
 **omniperf import for vcopy:**
-```shell
-$ omniperf database --import -H pavii1 -u temp -t asw -w workloads/vcopy/mi200/
+```shell-session
+$ omniperf database --import -H dummybox -u temp -t asw -w workloads/vcopy/mi200/
 ROC Profiler:  /usr/bin/rocprof
  
 --------

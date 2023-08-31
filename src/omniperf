@@ -40,9 +40,10 @@ from parser import parse
 from utils import specs
 from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof
 from utils import remove_workload
-from utils import csv_converter  # Import workload
+from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
 from omniperf_analyze.omniperf_analyze import analyze  # CLI analysis
+from common import resolve_rocprof
 
 from common import (
     OMNIPERF_HOME,
@@ -101,26 +102,6 @@ def capture_subprocess_output(subprocess_args):
     buf.close()
 
     return (success, output)
-
-def resolve_rocprof():
-    # ROCPROF INFO
-    global rocprof_cmd
-    if not "ROCPROF" in os.environ.keys():
-        rocprof_cmd = "rocprof"
-    else:
-        rocprof_cmd = os.environ["ROCPROF"]
-
-    rocprof_path = subprocess.run(
-        ["which", rocprof_cmd], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-    )
-    if rocprof_path.returncode != 0:
-        print("\nError: Unable to resolve path to %s binary" % rocprof_cmd)
-        print(
-            "Please verify installation or set ROCPROF environment variable with full path."
-        )
-        sys.exit(1)
-
-    print("ROC Profiler: ", rocprof_path.stdout.decode("utf-8"))
 
 
 def get_soc():
@@ -239,12 +220,11 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
 
 def mongo_import(args, profileAndImport):
     # Validate target directory
-    connectionInfo, Extractionlvl = csv_converter.parse(args, profileAndImport)
+    connectionInfo = csv_processor.parse(args, profileAndImport)
     # Convert and upload data
     print("-- Conversion & Upload in Progress --")
-    csv_converter.convert_folder(connectionInfo, Extractionlvl)
+    csv_processor.convert_folder(connectionInfo)
     print("-- Complete! --")
-
 
 ################################################
 # Roofline Helpers
@@ -424,7 +404,13 @@ def characterize_app(args, VER):
         else:
             run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
     
-    
+    if args.use_rocscope == False:
+        # Manually join each pmc_perf*.csv output
+        join_prof(workload_dir, args.join_type, log, args.verbose)
+        # Demangle and overwrite original KernelNames
+        csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
+        
+    log.close()
 
 
 ################################################
@@ -434,10 +420,8 @@ def characterize_app(args, VER):
 def run_rocscope(args, fname):
     # profile the app
     if args.use_rocscope == True:
-        result = subprocess.run(
-            ["which", "rocscope"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-        )
-        if result.returncode == 0:
+        result = shutil.which("rocscope")
+        if result:
             rs_cmd = [
                 result.stdout.decode("ascii").strip(),
                 "metrics",
@@ -521,6 +505,10 @@ def omniperf_profile(args, VER):
         print("IP Blocks: All")
     else:
         print("IP Blocks: ", args.ipblocks)
+    if args.kernelVerbose > 5:
+        print("KernelName verbose level: DISABLED")
+    else:
+        print("KernelName verbose level: ", str(args.kernelVerbose))
 
     # Set up directories
     workload_dir = args.path + "/" + args.name + "/" + args.target
@@ -546,10 +534,8 @@ def omniperf_profile(args, VER):
             print(e)
             sys.exit(1)
 
-        result = subprocess.run(
-            ["which", "rocscope"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-        )
-        if result.returncode == 0:
+        result = shutil.which("rocscope")
+        if result:
             rs_cmd = [
                 result.stdout.decode("ascii").strip(),
                 "top10",
@@ -580,10 +566,8 @@ def omniperf_profile(args, VER):
             print(e)
             sys.exit(1)
 
-        result = subprocess.run(
-            ["which", "rocscope"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-        )
-        if result.returncode == 0:
+        result = shutil.which("rocscope")
+        if result:
             rs_cmd = [
                 result.stdout.decode("ascii").strip(),
                 "summary",
@@ -637,10 +621,12 @@ def omniperf_profile(args, VER):
                 run_rocscope(args, fname)
             else:
                 run_prof(fname, workload_dir, perfmon_dir, args.remaining, args.target, log, args.verbose)
-
-        # Manually join each pmc_perf*.csv output
+                
         if args.use_rocscope == False:
+            # Manually join each pmc_perf*.csv output
             join_prof(workload_dir, args.join_type, log, args.verbose)
+            # Demangle and overwrite original KernelNames
+            csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
 
     # Generate sysinfo
     gen_sysinfo(args.name, workload_dir, args.ipblocks, args.remaining, args.no_roof)
@@ -714,8 +700,10 @@ def main():
     # PROFILE MODE
     ##############
     if args.mode == "profile":
+        Extractionlvl = args.kernelVerbose
         print("Resolving rocprof")
-        resolve_rocprof()
+        global rocprof_cmd
+        rocprof_cmd = resolve_rocprof()
         # Cannot access parent directories
         if ".." in str(args.path):
             throw_parse_error(
@@ -739,7 +727,7 @@ def main():
         else:
             throw_parse_error(
                 my_parser,
-                "Profiling command required. Pass this after -- at the end of your options.\n\ti.e. omniperf profile -n vcopy -- ./vcopy 1048576 256",
+                "Profiling command required. Pass application executable after -- at the end of options.\n\ti.e. omniperf profile -n vcopy -- ./vcopy 1048576 256",
             )
         # Name cannot exceed MongoDB max len
         if len(args.name) > 35:
@@ -824,6 +812,20 @@ def main():
                         my_parser,
                         "Access denied. Cannot access parent directories in path ../",
                     )
+                if args.filter_metrics and args.gui:
+                    throw_parse_error(
+                        my_parser,
+                        """
+                        omniperf analyze --path <workload_path> [analyze options]
+                        \n\n-------------------------------------------------------------------------------
+                        \nExamples:
+                        \n\tomniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
+                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
+                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
+                        \n-------------------------------------------------------------------------------\n
+                        \ntool: error: --gui cannot be used in combination with: -b/--metric
+                        """
+                    )
                 print("\n--------\nAnalyze\n--------\n")
                 # Ensure absolute path
                 for dir in args.path:
@@ -845,15 +847,15 @@ def main():
                 throw_parse_error(
                     my_parser,
                     """
-                                        omniperf analyze --path <workload_path> [analyze options]
-                                        \n\n-------------------------------------------------------------------------------
-                                        \nExamples:
-                                        \n\tomniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
-                                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
-                                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
-                                        \n-------------------------------------------------------------------------------\n
-                                        \ntool: error: the following arguments are required: -p/--path
-                                        """,
+                    omniperf analyze --path <workload_path> [analyze options]
+                    \n\n-------------------------------------------------------------------------------
+                    \nExamples:
+                    \n\tomniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
+                    \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
+                    \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
+                    \n-------------------------------------------------------------------------------\n
+                    \ntool: error: the following arguments are required: -p/--path
+                    """,
                 )
 
     sys.exit(0)  # Indicate successful on exit

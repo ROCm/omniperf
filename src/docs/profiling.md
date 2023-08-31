@@ -19,7 +19,7 @@ the MI200 platform.
 
 ## Workload Compilation
 **vcopy compilation:**
-```shell
+```shell-session
 $ hipcc vcopy.cpp -o vcopy
 $ ls
 vcopy   vcopy.cpp
@@ -40,7 +40,7 @@ Releasing CPU memory
 The *omniperf* script, availible through the [Omniperf](https://github.com/AMDResearch/omniperf) repository, is used to aquire all necessary perfmon data through analysis of compute workloads.
 
 **omniperf help:**
-```shell
+```shell-session
 $ omniperf profile --help
 ROC Profiler:  /usr/bin/rocprof
 
@@ -56,7 +56,7 @@ Examples:
 
         omniperf profile -n vcopy_all -- ./vcopy 1048576 256
 
-        omniperf profile -n vcopy_SPI_TD -b SQ TCC -- ./vcopy 1048576 256
+        omniperf profile -n vcopy_SPI_TCC -b SQ TCC -- ./vcopy 1048576 256
 
         omniperf profile -n vcopy_kernel -k vecCopy -- ./vcopy 1048576 256
 
@@ -111,7 +111,7 @@ Standalone Roofline Options:
 The following sample command profiles the *vcopy* workload.
 
 **vcopy profiling:**
-```shell
+```shell-session
 $ omniperf profile --name vcopy -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
@@ -206,7 +206,10 @@ Peak MFMA IOPs (I8), GPU ID: 1, workgroupSize:256, workgroups:16384, experiments
 ```
 You'll notice two stages in *default* Omniperf profiling. The first stage collects all the counters needed for Omniperf analysis (omitting any filters you've provided). The second stage collects data for the roofline analysis (this stage can be disabled using `--no-roof`)
 
-At the end of the profiling, all resulting csv files should be located in the SOC specific target directory, e.g., mi200.
+At the end of the profiling, all resulting csv files should be located in a SOC specific target directory, e.g.:
+  - "mi200" for the AMD Instinct (tm) MI-200 family of accelerators
+  - "mi100" for the AMD Instinct (tm) MI-100 family of accelerators
+etc.  The SOC names are generated as a part of Omniperf, and do not necessarily distinguish between different accelerators in the same family (e.g., an AMD Instinct (tm) MI-210 vs an MI-250)
 
 > Note: Additionally, you'll notice a few extra files. An SoC parameters file, *sysinfo.csv*, is created to reflect the target device settings. All profiling output is stored in *log.txt*. Roofline specific benchmark results are stored in *roofline.csv*.
 
@@ -229,20 +232,28 @@ drwxrwxr-x 2 colramos colramos  4096 Apr 11 16:42 perfmon
 ```
 
 ### Filtering
-To reduce profiling time and the counters collected one may use profiling filters.
+To reduce profiling time and the counters collected one may use profiling filters. Profiling filters and their functionality depend on the underlying profiler being used. While Omniperf is profiler agnostic, we've provided a detailed description of profiling filters available when using Omniperf with [rocProfiler](https://rocm.docs.amd.com/projects/rocprofiler/en/latest/rocprof.html) below.
+
+
 
 Filtering Options:
 
-- The `-k` \<kernel> flag allows for kernel filtering, which is compatible with the current rocprof utility.
+- The `-k` \<kernel> flag allows for kernel filtering. Useage is equivalent with the current rocprof utility ([see details below](#kernel-filtering)).
 
-- The `-d` \<dispatch> flag allows for dispatch ID filtering,  which is compatible with the current rocprof utility. 
+- The `-d` \<dispatch> flag allows for dispatch ID filtering. Useage is equivalent with the current rocprof utility ([see details below](#dispatch-filtering)).
 
 - The `-b` \<ipblocks> allows system profiling on one or more selected IP blocks to speed up the profiling process. One can gradually incorporate more IP blocks, without overwriting performance data acquired on other IP blocks.
+
+```{note}
+Be cautious while combining different profiling filters in the same call. Conflicting filters may result in error.
+
+i.e. filtering dispatch X, but dispatch X does not match your kernel name filter
+```
 
 #### IP Block Filtering
 One can profile a selected IP Block to speed up the profiling process. All profiling results are accumulated in the same target directory, without overwriting those for other IP blocks, hence enabling the incremental profiling and analysis.
 
-The following example only profiles SQ and TCC, skipping all other IP Blocks.
+The following example only gathers hardware counters for SQ and TCC, skipping all other IP Blocks:
 ```shell
 $ omniperf profile --name vcopy -b SQ TCC -- ./sample/vcopy 1048576 256
 Resolving rocprof
@@ -280,7 +291,9 @@ Log:  /home/colramos/GitHub/omniperf-pub/workloads/vcopy/mi200/log.txt
 ```
 
 #### Kernel Filtering
-The following example demonstrates profiling on selected kernels:
+Kernel filtering is based on the name of the kernel(s) you'd like to isolate. Use a kernel name substring list to isolate desired kernels.
+
+The following example demonstrates profiling isolating the kernel matching substring "vecCopy":
 ```shell
 $ omniperf profile --name vcopy -k vecCopy -- ./vcopy 1048576 256
 Resolving rocprof
@@ -315,8 +328,10 @@ ROCProfiler: input from "/tmp/rpl_data_230411_170300_29696/input0.xml"
 ```
 
 #### Dispatch Filtering
-The following example demonstrates profiling on selected dispatches:
-```shell
+Dispatch filtering is based on the *global* dispatch index of kernels in a run. 
+
+The following example profiles only the 0th dispatched kernel in execution of the application:
+```shell-session
 $ omniperf profile --name vcopy -d 0 -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
@@ -367,7 +382,7 @@ Standalone Roofline Options:
 
 #### Roofline Only
 The following example demonstrates profiling roofline data only:
-```shell
+```shell-session
 $ omniperf profile --name vcopy --roof-only -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
@@ -391,7 +406,8 @@ Checking for pmc_perf.csv in  /home/colramos/GitHub/omniperf-pub/workloads/mix/m
 Empirical Roofline PDFs saved!
 ```
 An inspection of our workload output folder shows .pdf plots were generated successfully
-```shell
+```shell-session
+$ ls workloads/vcopy/mi200/
 total 176
 drwxrwxr-x 3 colramos colramos  4096 Apr 11 17:18 .
 drwxrwxr-x 3 colramos colramos  4096 Apr 11 17:15 ..

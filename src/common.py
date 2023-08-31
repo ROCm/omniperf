@@ -37,6 +37,31 @@ SOC_LIST = ["mi50", "mi100", "mi200", "vega10"]
 DISTRO_MAP = {"platform:el8": "rhel8", "15.3": "sle15sp3", "20.04": "ubuntu20_04"}
 
 
+def resolve_rocprof(returnPath=False):
+    # ROCPROF INFO
+    if not "ROCPROF" in os.environ.keys():
+        rocprof_cmd = "rocprof"
+    else:
+        rocprof_cmd = os.environ["ROCPROF"]
+
+    rocprof_path = shutil.which(rocprof_cmd)
+
+    if not rocprof_path:
+        print("\nError: Unable to resolve path to %s binary" % rocprof_cmd)
+        print(
+            "Please verify installation or set ROCPROF environment variable with full path."
+        )
+        sys.exit(1)
+    else:
+        # Resolve any sym links in file path
+        rocprof_path = os.path.realpath(rocprof_path.rstrip("\n"))
+        print("ROC Profiler: ", rocprof_path)
+        if returnPath:
+            return rocprof_path
+        else:
+            return rocprof_cmd
+
+
 def getVersion():
     # symantic version info
     version = os.path.join(OMNIPERF_HOME.parent, "VERSION")

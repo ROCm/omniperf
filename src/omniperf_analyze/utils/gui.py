@@ -154,17 +154,17 @@ def build_bar_chart(display_df, table_config, norm_filt):
 
     # Insr Mix bar chart
     if table_config["id"] in barchart_elements["instr_mix"]:
-        display_df["Count"] = [
-            x.astype(int) if x != "" else int(0) for x in display_df["Count"]
+        display_df["Avg"] = [
+            x.astype(int) if x != "" else int(0) for x in display_df["Avg"]
         ]
         df_unit = display_df["Unit"][0]
         d_figs.append(
             px.bar(
                 display_df,
-                x="Count",
+                x="Avg",
                 y="Metric",
-                color="Count",
-                labels={"Count": "# of {}".format(df_unit.lower())},
+                color="Avg",
+                labels={"Avg": "# of {}".format(df_unit.lower())},
                 height=400,
                 orientation="h",
             )
@@ -365,7 +365,33 @@ def build_table_chart(
         if IS_DARK
         else {},
         style_data_conditional=[
-            {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"}
+            {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"},
+            {
+                "if": {"column_id": "PoP", "filter_query": "{PoP} > 50"},
+                "backgroundColor": "#ffa90a",
+                "color": "white",
+            },
+            {
+                "if": {"column_id": "PoP", "filter_query": "{PoP} > 80"},
+                "backgroundColor": "#ff120a",
+                "color": "white",
+            },
+            {
+                "if": {
+                    "column_id": "Avg",
+                    "filter_query": "{Unit} = Pct && {Avg} > 50",
+                },
+                "backgroundColor": "#ffa90a",
+                "color": "white",
+            },
+            {
+                "if": {
+                    "column_id": "Avg",
+                    "filter_query": "{Unit} = Pct && {Avg} > 80",
+                },
+                "backgroundColor": "#ff120a",
+                "color": "white",
+            },
         ]
         if IS_DARK
         else [],

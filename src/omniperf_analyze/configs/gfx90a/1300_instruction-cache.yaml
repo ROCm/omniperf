@@ -14,64 +14,66 @@ Panel Config:
         header:
           metric: Metric
           value: Value
+          unit: Unit
           tips: Tips
+        cli_style:
+          type: simple_bar
+          range_color: [1, 100]
+          label_txt: (%)
+          xrange: [0, 110]
         metric:
           Bandwidth:
             value: AVG(((SQC_ICACHE_REQ * 100000) / (($sclk * $numSQC)
               * (EndNs - BeginNs))))
-            tips:
+            unit: Pct of Peak
+            tips: 
           Cache Hit:
-            value:
-              AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+            value: AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            tips:
-        comparable: false # for now
-        style: simple_bar
+            unit: Pct of Peak
+            tips: 
 
     - metric_table:
         id: 1302
         title: Instruction Cache Accesses
         header:
           metric: Metric
-          mean: Mean
+          avg: Avg
           min: Min
           max: Max
           unit: Unit
           tips: Tips
         metric:
           Req:
-            mean: AVG((SQC_ICACHE_REQ / $denom))
+            avg: AVG((SQC_ICACHE_REQ / $denom))
             min: MIN((SQC_ICACHE_REQ / $denom))
             max: MAX((SQC_ICACHE_REQ / $denom))
             unit: (Req  + $normUnit)
-            tips:
+            tips: 
           Hits:
-            mean: AVG((SQC_ICACHE_HITS / $denom))
+            avg: AVG((SQC_ICACHE_HITS / $denom))
             min: MIN((SQC_ICACHE_HITS / $denom))
             max: MAX((SQC_ICACHE_HITS / $denom))
             unit: (Hits  + $normUnit)
-            tips:
+            tips: 
           Misses - Non Duplicated:
-            mean: AVG((SQC_ICACHE_MISSES / $denom))
+            avg: AVG((SQC_ICACHE_MISSES / $denom))
             min: MIN((SQC_ICACHE_MISSES / $denom))
             max: MAX((SQC_ICACHE_MISSES / $denom))
             unit: (Misses  + $normUnit)
-            tips:
+            tips: 
           Misses - Duplicated:
-            mean: AVG((SQC_ICACHE_MISSES_DUPLICATE / $denom))
+            avg: AVG((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             min: MIN((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             max: MAX((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             unit: (Misses  + $normUnit)
-            tips:
+            tips: 
           Cache Hit:
-            mean:
-              AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+            avg: AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            min:
-              MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            min: MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
-            max:
-              MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            max: MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
             unit: pct
-            tips:
+            tips: 

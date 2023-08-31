@@ -225,8 +225,7 @@ Panel Config:
             value:
               ROUND((AVG(((SQ_ACCUM_PREV_HIRES / SQC_ICACHE_REQ) if (SQC_ICACHE_REQ !=
               0) else None)) * 100), 0)
-            coll_level: SQ_IFETCH_LEVEL
-            tips: ???
+            tips: # ??? coll_level: SQ_IFETCH_LEVEL
           IL1_L2 Rd:
             #alias: il1_l2_req_
             value: ROUND(AVG((SQC_TC_INST_REQ / $denom)), 0)
@@ -311,4 +310,4 @@ Panel Config:
             tips:
 
         comparable: false # for now
-        style: mem_chart
+        cli_style: mem_chart

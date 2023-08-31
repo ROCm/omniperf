@@ -135,6 +135,8 @@ def get_soc():
         target = "mi200"
     elif mspec.GPU == "gfx900":
         target = "vega10"
+    elif mspec.GPU == "gfx940":
+        target = "mi300"
     else:
         print("\nInvalid SoC")
         sys.exit(0)
@@ -477,7 +479,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 "-m",
                 perfmon_dir + "/" + "metrics.xml",
                 "-o",
-                workload_dir + "/" + fbase + ".csv",
+                workload_dir + "/" + fbase,
                 '"' + cmd + '"',
             ]
         )
@@ -490,12 +492,12 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 "-d",
                 workload_dir + "/" + "out",
                 "-o",
-                fbase + ".csv",
+                fbase,
                 cmd,
             ]
         )
     # Copy over results 
-    shutil.copyfile(workload_dir + "/" + "out" + "/" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
+    shutil.copyfile(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
     # Remove temp directory
     shutil.rmtree(workload_dir + "/" + "out")
     # Write output to log
@@ -721,8 +723,7 @@ def main():
             )
 
         # Must have a valid soc in profile mode 
-        #ROCM SMI ISNT AVAILIBLE args.target = get_soc()
-        args.target = "mi300"
+        args.target = get_soc()
 
         # Verify correct command formatting
         args.remaining = args.remaining[1:]

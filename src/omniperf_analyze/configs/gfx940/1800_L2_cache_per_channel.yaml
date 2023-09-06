@@ -26,145 +26,81 @@ Panel Config:
               TCC_HIT[5])) + (100 * TCC_HIT[6])) + (100 * TCC_HIT[7])) + (100 * TCC_HIT[8]))
               + (100 * TCC_HIT[9])) + (100 * TCC_HIT[10])) + (100 * TCC_HIT[11])) + (100
               * TCC_HIT[12])) + (100 * TCC_HIT[13])) + (100 * TCC_HIT[14])) + (100 * TCC_HIT[15]))
-              + (100 * TCC_HIT[16])) + (100 * TCC_HIT[17])) + (100 * TCC_HIT[18])) + (100
-              * TCC_HIT[19])) + (100 * TCC_HIT[20])) + (100 * TCC_HIT[21])) + (100 * TCC_HIT[22]))
-              + (100 * TCC_HIT[23])) + (100 * TCC_HIT[24])) + (100 * TCC_HIT[25])) + (100
-              * TCC_HIT[26])) + (100 * TCC_HIT[27])) + (100 * TCC_HIT[28])) + (100 * TCC_HIT[29]))
-              + (100 * TCC_HIT[30])) + (100 * TCC_HIT[31])) / ((((((((((((((((((((((((((((((((TCC_MISS[0]
+              / ((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
+              + TCC_HIT[15]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[29] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31])) != 0) else None))
+              + TCC_HIT[15])) != 0) else None))
             std dev: STD(((((((((((((((((((((((((((((((((((100 * TCC_HIT[0]) + (100 * TCC_HIT[1]))
               + (100 * TCC_HIT[2])) + (100 * TCC_HIT[3])) + (100 * TCC_HIT[4])) + (100 *
               TCC_HIT[5])) + (100 * TCC_HIT[6])) + (100 * TCC_HIT[7])) + (100 * TCC_HIT[8]))
               + (100 * TCC_HIT[9])) + (100 * TCC_HIT[10])) + (100 * TCC_HIT[11])) + (100
               * TCC_HIT[12])) + (100 * TCC_HIT[13])) + (100 * TCC_HIT[14])) + (100 * TCC_HIT[15]))
-              + (100 * TCC_HIT[16])) + (100 * TCC_HIT[17])) + (100 * TCC_HIT[18])) + (100
-              * TCC_HIT[19])) + (100 * TCC_HIT[20])) + (100 * TCC_HIT[21])) + (100 * TCC_HIT[22]))
-              + (100 * TCC_HIT[23])) + (100 * TCC_HIT[24])) + (100 * TCC_HIT[25])) + (100
-              * TCC_HIT[26])) + (100 * TCC_HIT[27])) + (100 * TCC_HIT[28])) + (100 * TCC_HIT[29]))
-              + (100 * TCC_HIT[30])) + (100 * TCC_HIT[31])) / ((((((((((((((((((((((((((((((((TCC_MISS[0]
+              / ((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
+              + TCC_HIT[15]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31])) != 0) else None))
+              + TCC_HIT[15])) != 0) else None))
             min: MIN(((((((((((((((((((((((((((((((((((100 * TCC_HIT[0]) + (100 * TCC_HIT[1]))
               + (100 * TCC_HIT[2])) + (100 * TCC_HIT[3])) + (100 * TCC_HIT[4])) + (100 *
               TCC_HIT[5])) + (100 * TCC_HIT[6])) + (100 * TCC_HIT[7])) + (100 * TCC_HIT[8]))
               + (100 * TCC_HIT[9])) + (100 * TCC_HIT[10])) + (100 * TCC_HIT[11])) + (100
               * TCC_HIT[12])) + (100 * TCC_HIT[13])) + (100 * TCC_HIT[14])) + (100 * TCC_HIT[15]))
-              + (100 * TCC_HIT[16])) + (100 * TCC_HIT[17])) + (100 * TCC_HIT[18])) + (100
-              * TCC_HIT[19])) + (100 * TCC_HIT[20])) + (100 * TCC_HIT[21])) + (100 * TCC_HIT[22]))
-              + (100 * TCC_HIT[23])) + (100 * TCC_HIT[24])) + (100 * TCC_HIT[25])) + (100
-              * TCC_HIT[26])) + (100 * TCC_HIT[27])) + (100 * TCC_HIT[28])) + (100 * TCC_HIT[29]))
-              + (100 * TCC_HIT[30])) + (100 * TCC_HIT[31])) / ((((((((((((((((((((((((((((((((TCC_MISS[0]
+              / ((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
+              + TCC_HIT[15]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31])) != 0) else None))
+              + TCC_HIT[15])) != 0) else None))
             max: MAX(((((((((((((((((((((((((((((((((((100 * TCC_HIT[0]) + (100 * TCC_HIT[1]))
               + (100 * TCC_HIT[2])) + (100 * TCC_HIT[3])) + (100 * TCC_HIT[4])) + (100 *
               TCC_HIT[5])) + (100 * TCC_HIT[6])) + (100 * TCC_HIT[7])) + (100 * TCC_HIT[8]))
               + (100 * TCC_HIT[9])) + (100 * TCC_HIT[10])) + (100 * TCC_HIT[11])) + (100
               * TCC_HIT[12])) + (100 * TCC_HIT[13])) + (100 * TCC_HIT[14])) + (100 * TCC_HIT[15]))
-              + (100 * TCC_HIT[16])) + (100 * TCC_HIT[17])) + (100 * TCC_HIT[18])) + (100
-              * TCC_HIT[19])) + (100 * TCC_HIT[20])) + (100 * TCC_HIT[21])) + (100 * TCC_HIT[22]))
-              + (100 * TCC_HIT[23])) + (100 * TCC_HIT[24])) + (100 * TCC_HIT[25])) + (100
-              * TCC_HIT[26])) + (100 * TCC_HIT[27])) + (100 * TCC_HIT[28])) + (100 * TCC_HIT[29]))
-              + (100 * TCC_HIT[30])) + (100 * TCC_HIT[31])) / ((((((((((((((((((((((((((((((((TCC_MISS[0]
+              / ((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
+              + TCC_HIT[15]))) if (((((((((((((((((((((((((((((((((TCC_MISS[0]
               + TCC_HIT[0]) + (TCC_MISS[1] + TCC_HIT[1])) + (TCC_MISS[2] + TCC_HIT[2]))
               + (TCC_MISS[3] + TCC_HIT[3])) + (TCC_MISS[4] + TCC_HIT[4])) + (TCC_MISS[5]
               + TCC_HIT[5])) + (TCC_MISS[6] + TCC_HIT[6])) + (TCC_MISS[7] + TCC_HIT[7]))
               + (TCC_MISS[8] + TCC_HIT[8])) + (TCC_MISS[9] + TCC_HIT[9])) + (TCC_MISS[10]
               + TCC_HIT[10])) + (TCC_MISS[11] + TCC_HIT[11])) + (TCC_MISS[12] + TCC_HIT[12]))
               + (TCC_MISS[13] + TCC_HIT[13])) + (TCC_MISS[14] + TCC_HIT[14])) + (TCC_MISS[15]
-              + TCC_HIT[15])) + (TCC_MISS[16] + TCC_HIT[16])) + (TCC_MISS[17] + TCC_HIT[17]))
-              + (TCC_MISS[18] + TCC_HIT[18])) + (TCC_MISS[19] + TCC_HIT[19])) + (TCC_MISS[20]
-              + TCC_HIT[20])) + (TCC_MISS[21] + TCC_HIT[21])) + (TCC_MISS[22] + TCC_HIT[22]))
-              + (TCC_MISS[23] + TCC_HIT[23])) + (TCC_MISS[24] + TCC_HIT[24])) + (TCC_MISS[25]
-              + TCC_HIT[25])) + (TCC_MISS[26] + TCC_HIT[26])) + (TCC_MISS[27] + TCC_HIT[27]))
-              + (TCC_MISS[28] + TCC_HIT[28])) + (TCC_MISS[28] + TCC_HIT[29])) + (TCC_MISS[30]
-              + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31])) != 0) else None))
+              + TCC_HIT[15])) != 0) else None))
             units: pct
             tips: 
           Req:
@@ -172,38 +108,22 @@ Panel Config:
               + TO_INT(TCC_REQ[2])) + TO_INT(TCC_REQ[3])) + TO_INT(TCC_REQ[4])) + TO_INT(TCC_REQ[5]))
               + TO_INT(TCC_REQ[6])) + TO_INT(TCC_REQ[7])) + TO_INT(TCC_REQ[8])) + TO_INT(TCC_REQ[9]))
               + TO_INT(TCC_REQ[10])) + TO_INT(TCC_REQ[11])) + TO_INT(TCC_REQ[12])) + TO_INT(TCC_REQ[13]))
-              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) + TO_INT(TCC_REQ[16])) + TO_INT(TCC_REQ[17]))
-              + TO_INT(TCC_REQ[18])) + TO_INT(TCC_REQ[19])) + TO_INT(TCC_REQ[20])) + TO_INT(TCC_REQ[21]))
-              + TO_INT(TCC_REQ[22])) + TO_INT(TCC_REQ[23])) + TO_INT(TCC_REQ[24])) + TO_INT(TCC_REQ[25]))
-              + TO_INT(TCC_REQ[26])) + TO_INT(TCC_REQ[27])) + TO_INT(TCC_REQ[28])) + TO_INT(TCC_REQ[29]))
-              + TO_INT(TCC_REQ[30])) + TO_INT(TCC_REQ[31])) / 32) / $denom))
+              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_REQ[0]) + TO_INT(TCC_REQ[1]))
               + TO_INT(TCC_REQ[2])) + TO_INT(TCC_REQ[3])) + TO_INT(TCC_REQ[4])) + TO_INT(TCC_REQ[5]))
               + TO_INT(TCC_REQ[6])) + TO_INT(TCC_REQ[7])) + TO_INT(TCC_REQ[8])) + TO_INT(TCC_REQ[9]))
               + TO_INT(TCC_REQ[10])) + TO_INT(TCC_REQ[11])) + TO_INT(TCC_REQ[12])) + TO_INT(TCC_REQ[13]))
-              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) + TO_INT(TCC_REQ[16])) + TO_INT(TCC_REQ[17]))
-              + TO_INT(TCC_REQ[18])) + TO_INT(TCC_REQ[19])) + TO_INT(TCC_REQ[20])) + TO_INT(TCC_REQ[21]))
-              + TO_INT(TCC_REQ[22])) + TO_INT(TCC_REQ[23])) + TO_INT(TCC_REQ[24])) + TO_INT(TCC_REQ[25]))
-              + TO_INT(TCC_REQ[26])) + TO_INT(TCC_REQ[27])) + TO_INT(TCC_REQ[28])) + TO_INT(TCC_REQ[29]))
-              + TO_INT(TCC_REQ[30])) + TO_INT(TCC_REQ[31])) / 32) / $denom))
+              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_REQ[0]) + TO_INT(TCC_REQ[1]))
               + TO_INT(TCC_REQ[2])) + TO_INT(TCC_REQ[3])) + TO_INT(TCC_REQ[4])) + TO_INT(TCC_REQ[5]))
               + TO_INT(TCC_REQ[6])) + TO_INT(TCC_REQ[7])) + TO_INT(TCC_REQ[8])) + TO_INT(TCC_REQ[9]))
               + TO_INT(TCC_REQ[10])) + TO_INT(TCC_REQ[11])) + TO_INT(TCC_REQ[12])) + TO_INT(TCC_REQ[13]))
-              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) + TO_INT(TCC_REQ[16])) + TO_INT(TCC_REQ[17]))
-              + TO_INT(TCC_REQ[18])) + TO_INT(TCC_REQ[19])) + TO_INT(TCC_REQ[20])) + TO_INT(TCC_REQ[21]))
-              + TO_INT(TCC_REQ[22])) + TO_INT(TCC_REQ[23])) + TO_INT(TCC_REQ[24])) + TO_INT(TCC_REQ[25]))
-              + TO_INT(TCC_REQ[26])) + TO_INT(TCC_REQ[27])) + TO_INT(TCC_REQ[28])) + TO_INT(TCC_REQ[29]))
-              + TO_INT(TCC_REQ[30])) + TO_INT(TCC_REQ[31])) / 32) / $denom))
+              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_REQ[0]) + TO_INT(TCC_REQ[1]))
               + TO_INT(TCC_REQ[2])) + TO_INT(TCC_REQ[3])) + TO_INT(TCC_REQ[4])) + TO_INT(TCC_REQ[5]))
               + TO_INT(TCC_REQ[6])) + TO_INT(TCC_REQ[7])) + TO_INT(TCC_REQ[8])) + TO_INT(TCC_REQ[9]))
               + TO_INT(TCC_REQ[10])) + TO_INT(TCC_REQ[11])) + TO_INT(TCC_REQ[12])) + TO_INT(TCC_REQ[13]))
-              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) + TO_INT(TCC_REQ[16])) + TO_INT(TCC_REQ[17]))
-              + TO_INT(TCC_REQ[18])) + TO_INT(TCC_REQ[19])) + TO_INT(TCC_REQ[20])) + TO_INT(TCC_REQ[21]))
-              + TO_INT(TCC_REQ[22])) + TO_INT(TCC_REQ[23])) + TO_INT(TCC_REQ[24])) + TO_INT(TCC_REQ[25]))
-              + TO_INT(TCC_REQ[26])) + TO_INT(TCC_REQ[27])) + TO_INT(TCC_REQ[28])) + TO_INT(TCC_REQ[29]))
-              + TO_INT(TCC_REQ[30])) + TO_INT(TCC_REQ[31])) / 32) / $denom))
+              + TO_INT(TCC_REQ[14])) + TO_INT(TCC_REQ[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L1 - L2 Read Req:
@@ -211,42 +131,22 @@ Panel Config:
               + TO_INT(TCC_READ[2])) + TO_INT(TCC_READ[3])) + TO_INT(TCC_READ[4])) + TO_INT(TCC_READ[5]))
               + TO_INT(TCC_READ[6])) + TO_INT(TCC_READ[7])) + TO_INT(TCC_READ[8])) + TO_INT(TCC_READ[9]))
               + TO_INT(TCC_READ[10])) + TO_INT(TCC_READ[11])) + TO_INT(TCC_READ[12])) +
-              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) + TO_INT(TCC_READ[16]))
-              + TO_INT(TCC_READ[17])) + TO_INT(TCC_READ[18])) + TO_INT(TCC_READ[19])) +
-              TO_INT(TCC_READ[20])) + TO_INT(TCC_READ[21])) + TO_INT(TCC_READ[22])) + TO_INT(TCC_READ[23]))
-              + TO_INT(TCC_READ[24])) + TO_INT(TCC_READ[25])) + TO_INT(TCC_READ[26])) +
-              TO_INT(TCC_READ[27])) + TO_INT(TCC_READ[28])) + TO_INT(TCC_READ[29])) + TO_INT(TCC_READ[30]))
-              + TO_INT(TCC_READ[31])) / 32) / $denom))
+              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_READ[0]) + TO_INT(TCC_READ[1]))
               + TO_INT(TCC_READ[2])) + TO_INT(TCC_READ[3])) + TO_INT(TCC_READ[4])) + TO_INT(TCC_READ[5]))
               + TO_INT(TCC_READ[6])) + TO_INT(TCC_READ[7])) + TO_INT(TCC_READ[8])) + TO_INT(TCC_READ[9]))
               + TO_INT(TCC_READ[10])) + TO_INT(TCC_READ[11])) + TO_INT(TCC_READ[12])) +
-              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) + TO_INT(TCC_READ[16]))
-              + TO_INT(TCC_READ[17])) + TO_INT(TCC_READ[18])) + TO_INT(TCC_READ[19])) +
-              TO_INT(TCC_READ[20])) + TO_INT(TCC_READ[21])) + TO_INT(TCC_READ[22])) + TO_INT(TCC_READ[23]))
-              + TO_INT(TCC_READ[24])) + TO_INT(TCC_READ[25])) + TO_INT(TCC_READ[26])) +
-              TO_INT(TCC_READ[27])) + TO_INT(TCC_READ[28])) + TO_INT(TCC_READ[29])) + TO_INT(TCC_READ[30]))
-              + TO_INT(TCC_READ[31])) / 32) / $denom))
+              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_READ[0]) + TO_INT(TCC_READ[1]))
               + TO_INT(TCC_READ[2])) + TO_INT(TCC_READ[3])) + TO_INT(TCC_READ[4])) + TO_INT(TCC_READ[5]))
               + TO_INT(TCC_READ[6])) + TO_INT(TCC_READ[7])) + TO_INT(TCC_READ[8])) + TO_INT(TCC_READ[9]))
               + TO_INT(TCC_READ[10])) + TO_INT(TCC_READ[11])) + TO_INT(TCC_READ[12])) +
-              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) + TO_INT(TCC_READ[16]))
-              + TO_INT(TCC_READ[17])) + TO_INT(TCC_READ[18])) + TO_INT(TCC_READ[19])) +
-              TO_INT(TCC_READ[20])) + TO_INT(TCC_READ[21])) + TO_INT(TCC_READ[22])) + TO_INT(TCC_READ[23]))
-              + TO_INT(TCC_READ[24])) + TO_INT(TCC_READ[25])) + TO_INT(TCC_READ[26])) +
-              TO_INT(TCC_READ[27])) + TO_INT(TCC_READ[28])) + TO_INT(TCC_READ[29])) + TO_INT(TCC_READ[30]))
-              + TO_INT(TCC_READ[31])) / 32) / $denom))
+              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_READ[0]) + TO_INT(TCC_READ[1]))
               + TO_INT(TCC_READ[2])) + TO_INT(TCC_READ[3])) + TO_INT(TCC_READ[4])) + TO_INT(TCC_READ[5]))
               + TO_INT(TCC_READ[6])) + TO_INT(TCC_READ[7])) + TO_INT(TCC_READ[8])) + TO_INT(TCC_READ[9]))
               + TO_INT(TCC_READ[10])) + TO_INT(TCC_READ[11])) + TO_INT(TCC_READ[12])) +
-              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) + TO_INT(TCC_READ[16]))
-              + TO_INT(TCC_READ[17])) + TO_INT(TCC_READ[18])) + TO_INT(TCC_READ[19])) +
-              TO_INT(TCC_READ[20])) + TO_INT(TCC_READ[21])) + TO_INT(TCC_READ[22])) + TO_INT(TCC_READ[23]))
-              + TO_INT(TCC_READ[24])) + TO_INT(TCC_READ[25])) + TO_INT(TCC_READ[26])) +
-              TO_INT(TCC_READ[27])) + TO_INT(TCC_READ[28])) + TO_INT(TCC_READ[29])) + TO_INT(TCC_READ[30]))
-              + TO_INT(TCC_READ[31])) / 32) / $denom))
+              TO_INT(TCC_READ[13])) + TO_INT(TCC_READ[14])) + TO_INT(TCC_READ[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L1 - L2 Write Req:
@@ -255,45 +155,25 @@ Panel Config:
               TO_INT(TCC_WRITE[5])) + TO_INT(TCC_WRITE[6])) + TO_INT(TCC_WRITE[7])) + TO_INT(TCC_WRITE[8]))
               + TO_INT(TCC_WRITE[9])) + TO_INT(TCC_WRITE[10])) + TO_INT(TCC_WRITE[11]))
               + TO_INT(TCC_WRITE[12])) + TO_INT(TCC_WRITE[13])) + TO_INT(TCC_WRITE[14]))
-              + TO_INT(TCC_WRITE[15])) + TO_INT(TCC_WRITE[16])) + TO_INT(TCC_WRITE[17]))
-              + TO_INT(TCC_WRITE[18])) + TO_INT(TCC_WRITE[19])) + TO_INT(TCC_WRITE[20]))
-              + TO_INT(TCC_WRITE[21])) + TO_INT(TCC_WRITE[22])) + TO_INT(TCC_WRITE[23]))
-              + TO_INT(TCC_WRITE[24])) + TO_INT(TCC_WRITE[25])) + TO_INT(TCC_WRITE[26]))
-              + TO_INT(TCC_WRITE[27])) + TO_INT(TCC_WRITE[28])) + TO_INT(TCC_WRITE[29]))
-              + TO_INT(TCC_WRITE[30])) + TO_INT(TCC_WRITE[31])) / 32) / $denom))
+              + TO_INT(TCC_WRITE[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_WRITE[0]) + TO_INT(TCC_WRITE[1]))
               + TO_INT(TCC_WRITE[2])) + TO_INT(TCC_WRITE[3])) + TO_INT(TCC_WRITE[4])) +
               TO_INT(TCC_WRITE[5])) + TO_INT(TCC_WRITE[6])) + TO_INT(TCC_WRITE[7])) + TO_INT(TCC_WRITE[8]))
               + TO_INT(TCC_WRITE[9])) + TO_INT(TCC_WRITE[10])) + TO_INT(TCC_WRITE[11]))
               + TO_INT(TCC_WRITE[12])) + TO_INT(TCC_WRITE[13])) + TO_INT(TCC_WRITE[14]))
-              + TO_INT(TCC_WRITE[15])) + TO_INT(TCC_WRITE[16])) + TO_INT(TCC_WRITE[17]))
-              + TO_INT(TCC_WRITE[18])) + TO_INT(TCC_WRITE[19])) + TO_INT(TCC_WRITE[20]))
-              + TO_INT(TCC_WRITE[21])) + TO_INT(TCC_WRITE[22])) + TO_INT(TCC_WRITE[23]))
-              + TO_INT(TCC_WRITE[24])) + TO_INT(TCC_WRITE[25])) + TO_INT(TCC_WRITE[26]))
-              + TO_INT(TCC_WRITE[27])) + TO_INT(TCC_WRITE[28])) + TO_INT(TCC_WRITE[29]))
-              + TO_INT(TCC_WRITE[30])) + TO_INT(TCC_WRITE[31])) / 32) / $denom))
+              + TO_INT(TCC_WRITE[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_WRITE[0]) + TO_INT(TCC_WRITE[1]))
               + TO_INT(TCC_WRITE[2])) + TO_INT(TCC_WRITE[3])) + TO_INT(TCC_WRITE[4])) +
               TO_INT(TCC_WRITE[5])) + TO_INT(TCC_WRITE[6])) + TO_INT(TCC_WRITE[7])) + TO_INT(TCC_WRITE[8]))
               + TO_INT(TCC_WRITE[9])) + TO_INT(TCC_WRITE[10])) + TO_INT(TCC_WRITE[11]))
               + TO_INT(TCC_WRITE[12])) + TO_INT(TCC_WRITE[13])) + TO_INT(TCC_WRITE[14]))
-              + TO_INT(TCC_WRITE[15])) + TO_INT(TCC_WRITE[16])) + TO_INT(TCC_WRITE[17]))
-              + TO_INT(TCC_WRITE[18])) + TO_INT(TCC_WRITE[19])) + TO_INT(TCC_WRITE[20]))
-              + TO_INT(TCC_WRITE[21])) + TO_INT(TCC_WRITE[22])) + TO_INT(TCC_WRITE[23]))
-              + TO_INT(TCC_WRITE[24])) + TO_INT(TCC_WRITE[25])) + TO_INT(TCC_WRITE[26]))
-              + TO_INT(TCC_WRITE[27])) + TO_INT(TCC_WRITE[28])) + TO_INT(TCC_WRITE[29]))
-              + TO_INT(TCC_WRITE[30])) + TO_INT(TCC_WRITE[31])) / 32) / $denom))
+              + TO_INT(TCC_WRITE[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_WRITE[0]) + TO_INT(TCC_WRITE[1]))
               + TO_INT(TCC_WRITE[2])) + TO_INT(TCC_WRITE[3])) + TO_INT(TCC_WRITE[4])) +
               TO_INT(TCC_WRITE[5])) + TO_INT(TCC_WRITE[6])) + TO_INT(TCC_WRITE[7])) + TO_INT(TCC_WRITE[8]))
               + TO_INT(TCC_WRITE[9])) + TO_INT(TCC_WRITE[10])) + TO_INT(TCC_WRITE[11]))
               + TO_INT(TCC_WRITE[12])) + TO_INT(TCC_WRITE[13])) + TO_INT(TCC_WRITE[14]))
-              + TO_INT(TCC_WRITE[15])) + TO_INT(TCC_WRITE[16])) + TO_INT(TCC_WRITE[17]))
-              + TO_INT(TCC_WRITE[18])) + TO_INT(TCC_WRITE[19])) + TO_INT(TCC_WRITE[20]))
-              + TO_INT(TCC_WRITE[21])) + TO_INT(TCC_WRITE[22])) + TO_INT(TCC_WRITE[23]))
-              + TO_INT(TCC_WRITE[24])) + TO_INT(TCC_WRITE[25])) + TO_INT(TCC_WRITE[26]))
-              + TO_INT(TCC_WRITE[27])) + TO_INT(TCC_WRITE[28])) + TO_INT(TCC_WRITE[29]))
-              + TO_INT(TCC_WRITE[30])) + TO_INT(TCC_WRITE[31])) / 32) / $denom))
+              + TO_INT(TCC_WRITE[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L1 - L2 Atomic Req:
@@ -302,49 +182,25 @@ Panel Config:
               + TO_INT(TCC_ATOMIC[5])) + TO_INT(TCC_ATOMIC[6])) + TO_INT(TCC_ATOMIC[7]))
               + TO_INT(TCC_ATOMIC[8])) + TO_INT(TCC_ATOMIC[9])) + TO_INT(TCC_ATOMIC[10]))
               + TO_INT(TCC_ATOMIC[11])) + TO_INT(TCC_ATOMIC[12])) + TO_INT(TCC_ATOMIC[13]))
-              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) + TO_INT(TCC_ATOMIC[16]))
-              + TO_INT(TCC_ATOMIC[17])) + TO_INT(TCC_ATOMIC[18])) + TO_INT(TCC_ATOMIC[19]))
-              + TO_INT(TCC_ATOMIC[20])) + TO_INT(TCC_ATOMIC[21])) + TO_INT(TCC_ATOMIC[22]))
-              + TO_INT(TCC_ATOMIC[23])) + TO_INT(TCC_ATOMIC[24])) + TO_INT(TCC_ATOMIC[25]))
-              + TO_INT(TCC_ATOMIC[26])) + TO_INT(TCC_ATOMIC[27])) + TO_INT(TCC_ATOMIC[28]))
-              + TO_INT(TCC_ATOMIC[29])) + TO_INT(TCC_ATOMIC[30])) + TO_INT(TCC_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_ATOMIC[0]) + TO_INT(TCC_ATOMIC[1]))
               + TO_INT(TCC_ATOMIC[2])) + TO_INT(TCC_ATOMIC[3])) + TO_INT(TCC_ATOMIC[4]))
               + TO_INT(TCC_ATOMIC[5])) + TO_INT(TCC_ATOMIC[6])) + TO_INT(TCC_ATOMIC[7]))
               + TO_INT(TCC_ATOMIC[8])) + TO_INT(TCC_ATOMIC[9])) + TO_INT(TCC_ATOMIC[10]))
               + TO_INT(TCC_ATOMIC[11])) + TO_INT(TCC_ATOMIC[12])) + TO_INT(TCC_ATOMIC[13]))
-              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) + TO_INT(TCC_ATOMIC[16]))
-              + TO_INT(TCC_ATOMIC[17])) + TO_INT(TCC_ATOMIC[18])) + TO_INT(TCC_ATOMIC[19]))
-              + TO_INT(TCC_ATOMIC[20])) + TO_INT(TCC_ATOMIC[21])) + TO_INT(TCC_ATOMIC[22]))
-              + TO_INT(TCC_ATOMIC[23])) + TO_INT(TCC_ATOMIC[24])) + TO_INT(TCC_ATOMIC[25]))
-              + TO_INT(TCC_ATOMIC[26])) + TO_INT(TCC_ATOMIC[27])) + TO_INT(TCC_ATOMIC[28]))
-              + TO_INT(TCC_ATOMIC[29])) + TO_INT(TCC_ATOMIC[30])) + TO_INT(TCC_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_ATOMIC[0]) + TO_INT(TCC_ATOMIC[1]))
               + TO_INT(TCC_ATOMIC[2])) + TO_INT(TCC_ATOMIC[3])) + TO_INT(TCC_ATOMIC[4]))
               + TO_INT(TCC_ATOMIC[5])) + TO_INT(TCC_ATOMIC[6])) + TO_INT(TCC_ATOMIC[7]))
               + TO_INT(TCC_ATOMIC[8])) + TO_INT(TCC_ATOMIC[9])) + TO_INT(TCC_ATOMIC[10]))
               + TO_INT(TCC_ATOMIC[11])) + TO_INT(TCC_ATOMIC[12])) + TO_INT(TCC_ATOMIC[13]))
-              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) + TO_INT(TCC_ATOMIC[16]))
-              + TO_INT(TCC_ATOMIC[17])) + TO_INT(TCC_ATOMIC[18])) + TO_INT(TCC_ATOMIC[19]))
-              + TO_INT(TCC_ATOMIC[20])) + TO_INT(TCC_ATOMIC[21])) + TO_INT(TCC_ATOMIC[22]))
-              + TO_INT(TCC_ATOMIC[23])) + TO_INT(TCC_ATOMIC[24])) + TO_INT(TCC_ATOMIC[25]))
-              + TO_INT(TCC_ATOMIC[26])) + TO_INT(TCC_ATOMIC[27])) + TO_INT(TCC_ATOMIC[28]))
-              + TO_INT(TCC_ATOMIC[29])) + TO_INT(TCC_ATOMIC[30])) + TO_INT(TCC_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_ATOMIC[0]) + TO_INT(TCC_ATOMIC[1]))
               + TO_INT(TCC_ATOMIC[2])) + TO_INT(TCC_ATOMIC[3])) + TO_INT(TCC_ATOMIC[4]))
               + TO_INT(TCC_ATOMIC[5])) + TO_INT(TCC_ATOMIC[6])) + TO_INT(TCC_ATOMIC[7]))
               + TO_INT(TCC_ATOMIC[8])) + TO_INT(TCC_ATOMIC[9])) + TO_INT(TCC_ATOMIC[10]))
               + TO_INT(TCC_ATOMIC[11])) + TO_INT(TCC_ATOMIC[12])) + TO_INT(TCC_ATOMIC[13]))
-              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) + TO_INT(TCC_ATOMIC[16]))
-              + TO_INT(TCC_ATOMIC[17])) + TO_INT(TCC_ATOMIC[18])) + TO_INT(TCC_ATOMIC[19]))
-              + TO_INT(TCC_ATOMIC[20])) + TO_INT(TCC_ATOMIC[21])) + TO_INT(TCC_ATOMIC[22]))
-              + TO_INT(TCC_ATOMIC[23])) + TO_INT(TCC_ATOMIC[24])) + TO_INT(TCC_ATOMIC[25]))
-              + TO_INT(TCC_ATOMIC[26])) + TO_INT(TCC_ATOMIC[27])) + TO_INT(TCC_ATOMIC[28]))
-              + TO_INT(TCC_ATOMIC[29])) + TO_INT(TCC_ATOMIC[30])) + TO_INT(TCC_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_ATOMIC[14])) + TO_INT(TCC_ATOMIC[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L2 - EA Read Req:
@@ -353,49 +209,25 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ[5])) + TO_INT(TCC_EA_RDREQ[6])) + TO_INT(TCC_EA_RDREQ[7]))
               + TO_INT(TCC_EA_RDREQ[8])) + TO_INT(TCC_EA_RDREQ[9])) + TO_INT(TCC_EA_RDREQ[10]))
               + TO_INT(TCC_EA_RDREQ[11])) + TO_INT(TCC_EA_RDREQ[12])) + TO_INT(TCC_EA_RDREQ[13]))
-              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) + TO_INT(TCC_EA_RDREQ[16]))
-              + TO_INT(TCC_EA_RDREQ[17])) + TO_INT(TCC_EA_RDREQ[18])) + TO_INT(TCC_EA_RDREQ[19]))
-              + TO_INT(TCC_EA_RDREQ[20])) + TO_INT(TCC_EA_RDREQ[21])) + TO_INT(TCC_EA_RDREQ[22]))
-              + TO_INT(TCC_EA_RDREQ[23])) + TO_INT(TCC_EA_RDREQ[24])) + TO_INT(TCC_EA_RDREQ[25]))
-              + TO_INT(TCC_EA_RDREQ[26])) + TO_INT(TCC_EA_RDREQ[27])) + TO_INT(TCC_EA_RDREQ[28]))
-              + TO_INT(TCC_EA_RDREQ[29])) + TO_INT(TCC_EA_RDREQ[30])) + TO_INT(TCC_EA_RDREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ[0]) + TO_INT(TCC_EA_RDREQ[1]))
               + TO_INT(TCC_EA_RDREQ[2])) + TO_INT(TCC_EA_RDREQ[3])) + TO_INT(TCC_EA_RDREQ[4]))
               + TO_INT(TCC_EA_RDREQ[5])) + TO_INT(TCC_EA_RDREQ[6])) + TO_INT(TCC_EA_RDREQ[7]))
               + TO_INT(TCC_EA_RDREQ[8])) + TO_INT(TCC_EA_RDREQ[9])) + TO_INT(TCC_EA_RDREQ[10]))
               + TO_INT(TCC_EA_RDREQ[11])) + TO_INT(TCC_EA_RDREQ[12])) + TO_INT(TCC_EA_RDREQ[13]))
-              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) + TO_INT(TCC_EA_RDREQ[16]))
-              + TO_INT(TCC_EA_RDREQ[17])) + TO_INT(TCC_EA_RDREQ[18])) + TO_INT(TCC_EA_RDREQ[19]))
-              + TO_INT(TCC_EA_RDREQ[20])) + TO_INT(TCC_EA_RDREQ[21])) + TO_INT(TCC_EA_RDREQ[22]))
-              + TO_INT(TCC_EA_RDREQ[23])) + TO_INT(TCC_EA_RDREQ[24])) + TO_INT(TCC_EA_RDREQ[25]))
-              + TO_INT(TCC_EA_RDREQ[26])) + TO_INT(TCC_EA_RDREQ[27])) + TO_INT(TCC_EA_RDREQ[28]))
-              + TO_INT(TCC_EA_RDREQ[29])) + TO_INT(TCC_EA_RDREQ[30])) + TO_INT(TCC_EA_RDREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ[0]) + TO_INT(TCC_EA_RDREQ[1]))
               + TO_INT(TCC_EA_RDREQ[2])) + TO_INT(TCC_EA_RDREQ[3])) + TO_INT(TCC_EA_RDREQ[4]))
               + TO_INT(TCC_EA_RDREQ[5])) + TO_INT(TCC_EA_RDREQ[6])) + TO_INT(TCC_EA_RDREQ[7]))
               + TO_INT(TCC_EA_RDREQ[8])) + TO_INT(TCC_EA_RDREQ[9])) + TO_INT(TCC_EA_RDREQ[10]))
               + TO_INT(TCC_EA_RDREQ[11])) + TO_INT(TCC_EA_RDREQ[12])) + TO_INT(TCC_EA_RDREQ[13]))
-              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) + TO_INT(TCC_EA_RDREQ[16]))
-              + TO_INT(TCC_EA_RDREQ[17])) + TO_INT(TCC_EA_RDREQ[18])) + TO_INT(TCC_EA_RDREQ[19]))
-              + TO_INT(TCC_EA_RDREQ[20])) + TO_INT(TCC_EA_RDREQ[21])) + TO_INT(TCC_EA_RDREQ[22]))
-              + TO_INT(TCC_EA_RDREQ[23])) + TO_INT(TCC_EA_RDREQ[24])) + TO_INT(TCC_EA_RDREQ[25]))
-              + TO_INT(TCC_EA_RDREQ[26])) + TO_INT(TCC_EA_RDREQ[27])) + TO_INT(TCC_EA_RDREQ[28]))
-              + TO_INT(TCC_EA_RDREQ[29])) + TO_INT(TCC_EA_RDREQ[30])) + TO_INT(TCC_EA_RDREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ[0]) + TO_INT(TCC_EA_RDREQ[1]))
               + TO_INT(TCC_EA_RDREQ[2])) + TO_INT(TCC_EA_RDREQ[3])) + TO_INT(TCC_EA_RDREQ[4]))
               + TO_INT(TCC_EA_RDREQ[5])) + TO_INT(TCC_EA_RDREQ[6])) + TO_INT(TCC_EA_RDREQ[7]))
               + TO_INT(TCC_EA_RDREQ[8])) + TO_INT(TCC_EA_RDREQ[9])) + TO_INT(TCC_EA_RDREQ[10]))
               + TO_INT(TCC_EA_RDREQ[11])) + TO_INT(TCC_EA_RDREQ[12])) + TO_INT(TCC_EA_RDREQ[13]))
-              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) + TO_INT(TCC_EA_RDREQ[16]))
-              + TO_INT(TCC_EA_RDREQ[17])) + TO_INT(TCC_EA_RDREQ[18])) + TO_INT(TCC_EA_RDREQ[19]))
-              + TO_INT(TCC_EA_RDREQ[20])) + TO_INT(TCC_EA_RDREQ[21])) + TO_INT(TCC_EA_RDREQ[22]))
-              + TO_INT(TCC_EA_RDREQ[23])) + TO_INT(TCC_EA_RDREQ[24])) + TO_INT(TCC_EA_RDREQ[25]))
-              + TO_INT(TCC_EA_RDREQ[26])) + TO_INT(TCC_EA_RDREQ[27])) + TO_INT(TCC_EA_RDREQ[28]))
-              + TO_INT(TCC_EA_RDREQ[29])) + TO_INT(TCC_EA_RDREQ[30])) + TO_INT(TCC_EA_RDREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ[14])) + TO_INT(TCC_EA_RDREQ[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L2 - EA Write Req:
@@ -404,49 +236,25 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ[5])) + TO_INT(TCC_EA_WRREQ[6])) + TO_INT(TCC_EA_WRREQ[7]))
               + TO_INT(TCC_EA_WRREQ[8])) + TO_INT(TCC_EA_WRREQ[9])) + TO_INT(TCC_EA_WRREQ[10]))
               + TO_INT(TCC_EA_WRREQ[11])) + TO_INT(TCC_EA_WRREQ[12])) + TO_INT(TCC_EA_WRREQ[13]))
-              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) + TO_INT(TCC_EA_WRREQ[16]))
-              + TO_INT(TCC_EA_WRREQ[17])) + TO_INT(TCC_EA_WRREQ[18])) + TO_INT(TCC_EA_WRREQ[19]))
-              + TO_INT(TCC_EA_WRREQ[20])) + TO_INT(TCC_EA_WRREQ[21])) + TO_INT(TCC_EA_WRREQ[22]))
-              + TO_INT(TCC_EA_WRREQ[23])) + TO_INT(TCC_EA_WRREQ[24])) + TO_INT(TCC_EA_WRREQ[25]))
-              + TO_INT(TCC_EA_WRREQ[26])) + TO_INT(TCC_EA_WRREQ[27])) + TO_INT(TCC_EA_WRREQ[28]))
-              + TO_INT(TCC_EA_WRREQ[29])) + TO_INT(TCC_EA_WRREQ[30])) + TO_INT(TCC_EA_WRREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ[0]) + TO_INT(TCC_EA_WRREQ[1]))
               + TO_INT(TCC_EA_WRREQ[2])) + TO_INT(TCC_EA_WRREQ[3])) + TO_INT(TCC_EA_WRREQ[4]))
               + TO_INT(TCC_EA_WRREQ[5])) + TO_INT(TCC_EA_WRREQ[6])) + TO_INT(TCC_EA_WRREQ[7]))
               + TO_INT(TCC_EA_WRREQ[8])) + TO_INT(TCC_EA_WRREQ[9])) + TO_INT(TCC_EA_WRREQ[10]))
               + TO_INT(TCC_EA_WRREQ[11])) + TO_INT(TCC_EA_WRREQ[12])) + TO_INT(TCC_EA_WRREQ[13]))
-              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) + TO_INT(TCC_EA_WRREQ[16]))
-              + TO_INT(TCC_EA_WRREQ[17])) + TO_INT(TCC_EA_WRREQ[18])) + TO_INT(TCC_EA_WRREQ[19]))
-              + TO_INT(TCC_EA_WRREQ[20])) + TO_INT(TCC_EA_WRREQ[21])) + TO_INT(TCC_EA_WRREQ[22]))
-              + TO_INT(TCC_EA_WRREQ[23])) + TO_INT(TCC_EA_WRREQ[24])) + TO_INT(TCC_EA_WRREQ[25]))
-              + TO_INT(TCC_EA_WRREQ[26])) + TO_INT(TCC_EA_WRREQ[27])) + TO_INT(TCC_EA_WRREQ[28]))
-              + TO_INT(TCC_EA_WRREQ[29])) + TO_INT(TCC_EA_WRREQ[30])) + TO_INT(TCC_EA_WRREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ[0]) + TO_INT(TCC_EA_WRREQ[1]))
               + TO_INT(TCC_EA_WRREQ[2])) + TO_INT(TCC_EA_WRREQ[3])) + TO_INT(TCC_EA_WRREQ[4]))
               + TO_INT(TCC_EA_WRREQ[5])) + TO_INT(TCC_EA_WRREQ[6])) + TO_INT(TCC_EA_WRREQ[7]))
               + TO_INT(TCC_EA_WRREQ[8])) + TO_INT(TCC_EA_WRREQ[9])) + TO_INT(TCC_EA_WRREQ[10]))
               + TO_INT(TCC_EA_WRREQ[11])) + TO_INT(TCC_EA_WRREQ[12])) + TO_INT(TCC_EA_WRREQ[13]))
-              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) + TO_INT(TCC_EA_WRREQ[16]))
-              + TO_INT(TCC_EA_WRREQ[17])) + TO_INT(TCC_EA_WRREQ[18])) + TO_INT(TCC_EA_WRREQ[19]))
-              + TO_INT(TCC_EA_WRREQ[20])) + TO_INT(TCC_EA_WRREQ[21])) + TO_INT(TCC_EA_WRREQ[22]))
-              + TO_INT(TCC_EA_WRREQ[23])) + TO_INT(TCC_EA_WRREQ[24])) + TO_INT(TCC_EA_WRREQ[25]))
-              + TO_INT(TCC_EA_WRREQ[26])) + TO_INT(TCC_EA_WRREQ[27])) + TO_INT(TCC_EA_WRREQ[28]))
-              + TO_INT(TCC_EA_WRREQ[29])) + TO_INT(TCC_EA_WRREQ[30])) + TO_INT(TCC_EA_WRREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ[0]) + TO_INT(TCC_EA_WRREQ[1]))
               + TO_INT(TCC_EA_WRREQ[2])) + TO_INT(TCC_EA_WRREQ[3])) + TO_INT(TCC_EA_WRREQ[4]))
               + TO_INT(TCC_EA_WRREQ[5])) + TO_INT(TCC_EA_WRREQ[6])) + TO_INT(TCC_EA_WRREQ[7]))
               + TO_INT(TCC_EA_WRREQ[8])) + TO_INT(TCC_EA_WRREQ[9])) + TO_INT(TCC_EA_WRREQ[10]))
               + TO_INT(TCC_EA_WRREQ[11])) + TO_INT(TCC_EA_WRREQ[12])) + TO_INT(TCC_EA_WRREQ[13]))
-              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) + TO_INT(TCC_EA_WRREQ[16]))
-              + TO_INT(TCC_EA_WRREQ[17])) + TO_INT(TCC_EA_WRREQ[18])) + TO_INT(TCC_EA_WRREQ[19]))
-              + TO_INT(TCC_EA_WRREQ[20])) + TO_INT(TCC_EA_WRREQ[21])) + TO_INT(TCC_EA_WRREQ[22]))
-              + TO_INT(TCC_EA_WRREQ[23])) + TO_INT(TCC_EA_WRREQ[24])) + TO_INT(TCC_EA_WRREQ[25]))
-              + TO_INT(TCC_EA_WRREQ[26])) + TO_INT(TCC_EA_WRREQ[27])) + TO_INT(TCC_EA_WRREQ[28]))
-              + TO_INT(TCC_EA_WRREQ[29])) + TO_INT(TCC_EA_WRREQ[30])) + TO_INT(TCC_EA_WRREQ[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ[14])) + TO_INT(TCC_EA_WRREQ[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L2 - EA Atomic Req:
@@ -455,49 +263,25 @@ Panel Config:
               + TO_INT(TCC_EA_ATOMIC[5])) + TO_INT(TCC_EA_ATOMIC[6])) + TO_INT(TCC_EA_ATOMIC[7]))
               + TO_INT(TCC_EA_ATOMIC[8])) + TO_INT(TCC_EA_ATOMIC[9])) + TO_INT(TCC_EA_ATOMIC[10]))
               + TO_INT(TCC_EA_ATOMIC[11])) + TO_INT(TCC_EA_ATOMIC[12])) + TO_INT(TCC_EA_ATOMIC[13]))
-              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) + TO_INT(TCC_EA_ATOMIC[16]))
-              + TO_INT(TCC_EA_ATOMIC[17])) + TO_INT(TCC_EA_ATOMIC[18])) + TO_INT(TCC_EA_ATOMIC[19]))
-              + TO_INT(TCC_EA_ATOMIC[20])) + TO_INT(TCC_EA_ATOMIC[21])) + TO_INT(TCC_EA_ATOMIC[22]))
-              + TO_INT(TCC_EA_ATOMIC[23])) + TO_INT(TCC_EA_ATOMIC[24])) + TO_INT(TCC_EA_ATOMIC[25]))
-              + TO_INT(TCC_EA_ATOMIC[26])) + TO_INT(TCC_EA_ATOMIC[27])) + TO_INT(TCC_EA_ATOMIC[28]))
-              + TO_INT(TCC_EA_ATOMIC[29])) + TO_INT(TCC_EA_ATOMIC[30])) + TO_INT(TCC_EA_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_ATOMIC[0]) + TO_INT(TCC_EA_ATOMIC[1]))
               + TO_INT(TCC_EA_ATOMIC[2])) + TO_INT(TCC_EA_ATOMIC[3])) + TO_INT(TCC_EA_ATOMIC[4]))
               + TO_INT(TCC_EA_ATOMIC[5])) + TO_INT(TCC_EA_ATOMIC[6])) + TO_INT(TCC_EA_ATOMIC[7]))
               + TO_INT(TCC_EA_ATOMIC[8])) + TO_INT(TCC_EA_ATOMIC[9])) + TO_INT(TCC_EA_ATOMIC[10]))
               + TO_INT(TCC_EA_ATOMIC[11])) + TO_INT(TCC_EA_ATOMIC[12])) + TO_INT(TCC_EA_ATOMIC[13]))
-              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) + TO_INT(TCC_EA_ATOMIC[16]))
-              + TO_INT(TCC_EA_ATOMIC[17])) + TO_INT(TCC_EA_ATOMIC[18])) + TO_INT(TCC_EA_ATOMIC[19]))
-              + TO_INT(TCC_EA_ATOMIC[20])) + TO_INT(TCC_EA_ATOMIC[21])) + TO_INT(TCC_EA_ATOMIC[22]))
-              + TO_INT(TCC_EA_ATOMIC[23])) + TO_INT(TCC_EA_ATOMIC[24])) + TO_INT(TCC_EA_ATOMIC[25]))
-              + TO_INT(TCC_EA_ATOMIC[26])) + TO_INT(TCC_EA_ATOMIC[27])) + TO_INT(TCC_EA_ATOMIC[28]))
-              + TO_INT(TCC_EA_ATOMIC[29])) + TO_INT(TCC_EA_ATOMIC[30])) + TO_INT(TCC_EA_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_ATOMIC[0]) + TO_INT(TCC_EA_ATOMIC[1]))
               + TO_INT(TCC_EA_ATOMIC[2])) + TO_INT(TCC_EA_ATOMIC[3])) + TO_INT(TCC_EA_ATOMIC[4]))
               + TO_INT(TCC_EA_ATOMIC[5])) + TO_INT(TCC_EA_ATOMIC[6])) + TO_INT(TCC_EA_ATOMIC[7]))
               + TO_INT(TCC_EA_ATOMIC[8])) + TO_INT(TCC_EA_ATOMIC[9])) + TO_INT(TCC_EA_ATOMIC[10]))
               + TO_INT(TCC_EA_ATOMIC[11])) + TO_INT(TCC_EA_ATOMIC[12])) + TO_INT(TCC_EA_ATOMIC[13]))
-              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) + TO_INT(TCC_EA_ATOMIC[16]))
-              + TO_INT(TCC_EA_ATOMIC[17])) + TO_INT(TCC_EA_ATOMIC[18])) + TO_INT(TCC_EA_ATOMIC[19]))
-              + TO_INT(TCC_EA_ATOMIC[20])) + TO_INT(TCC_EA_ATOMIC[21])) + TO_INT(TCC_EA_ATOMIC[22]))
-              + TO_INT(TCC_EA_ATOMIC[23])) + TO_INT(TCC_EA_ATOMIC[24])) + TO_INT(TCC_EA_ATOMIC[25]))
-              + TO_INT(TCC_EA_ATOMIC[26])) + TO_INT(TCC_EA_ATOMIC[27])) + TO_INT(TCC_EA_ATOMIC[28]))
-              + TO_INT(TCC_EA_ATOMIC[29])) + TO_INT(TCC_EA_ATOMIC[30])) + TO_INT(TCC_EA_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_ATOMIC[0]) + TO_INT(TCC_EA_ATOMIC[1]))
               + TO_INT(TCC_EA_ATOMIC[2])) + TO_INT(TCC_EA_ATOMIC[3])) + TO_INT(TCC_EA_ATOMIC[4]))
               + TO_INT(TCC_EA_ATOMIC[5])) + TO_INT(TCC_EA_ATOMIC[6])) + TO_INT(TCC_EA_ATOMIC[7]))
               + TO_INT(TCC_EA_ATOMIC[8])) + TO_INT(TCC_EA_ATOMIC[9])) + TO_INT(TCC_EA_ATOMIC[10]))
               + TO_INT(TCC_EA_ATOMIC[11])) + TO_INT(TCC_EA_ATOMIC[12])) + TO_INT(TCC_EA_ATOMIC[13]))
-              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) + TO_INT(TCC_EA_ATOMIC[16]))
-              + TO_INT(TCC_EA_ATOMIC[17])) + TO_INT(TCC_EA_ATOMIC[18])) + TO_INT(TCC_EA_ATOMIC[19]))
-              + TO_INT(TCC_EA_ATOMIC[20])) + TO_INT(TCC_EA_ATOMIC[21])) + TO_INT(TCC_EA_ATOMIC[22]))
-              + TO_INT(TCC_EA_ATOMIC[23])) + TO_INT(TCC_EA_ATOMIC[24])) + TO_INT(TCC_EA_ATOMIC[25]))
-              + TO_INT(TCC_EA_ATOMIC[26])) + TO_INT(TCC_EA_ATOMIC[27])) + TO_INT(TCC_EA_ATOMIC[28]))
-              + TO_INT(TCC_EA_ATOMIC[29])) + TO_INT(TCC_EA_ATOMIC[30])) + TO_INT(TCC_EA_ATOMIC[31]))
-              / 32) / $denom))
+              + TO_INT(TCC_EA_ATOMIC[14])) + TO_INT(TCC_EA_ATOMIC[15])) / 16) / $denom))
             units: ( + $normUnit)
             tips: 
           L2 - EA Read Lat:
@@ -506,113 +290,61 @@ Panel Config:
               + TCC_EA_RDREQ_LEVEL[5]) + TCC_EA_RDREQ_LEVEL[6]) + TCC_EA_RDREQ_LEVEL[7])
               + TCC_EA_RDREQ_LEVEL[8]) + TCC_EA_RDREQ_LEVEL[9]) + TCC_EA_RDREQ_LEVEL[10])
               + TCC_EA_RDREQ_LEVEL[11]) + TCC_EA_RDREQ_LEVEL[12]) + TCC_EA_RDREQ_LEVEL[13])
-              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15]) + TCC_EA_RDREQ_LEVEL[16])
-              + TCC_EA_RDREQ_LEVEL[17]) + TCC_EA_RDREQ_LEVEL[18]) + TCC_EA_RDREQ_LEVEL[19])
-              + TCC_EA_RDREQ_LEVEL[20]) + TCC_EA_RDREQ_LEVEL[21]) + TCC_EA_RDREQ_LEVEL[22])
-              + TCC_EA_RDREQ_LEVEL[23]) + TCC_EA_RDREQ_LEVEL[24]) + TCC_EA_RDREQ_LEVEL[25])
-              + TCC_EA_RDREQ_LEVEL[26]) + TCC_EA_RDREQ_LEVEL[27]) + TCC_EA_RDREQ_LEVEL[28])
-              + TCC_EA_RDREQ_LEVEL[29]) + TCC_EA_RDREQ_LEVEL[30]) + TCC_EA_RDREQ_LEVEL[31])
+              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] + TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2])
               + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4]) + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6])
               + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8]) + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10])
               + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12]) + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14])
-              + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16]) + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18])
-              + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20]) + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22])
-              + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24]) + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26])
-              + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28]) + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30])
-              + TCC_EA_RDREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
+              + TCC_EA_RDREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
               TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2]) + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4])
               + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6]) + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8])
               + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10]) + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12])
-              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16])
-              + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18]) + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20])
-              + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22]) + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24])
-              + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26]) + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28])
-              + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30]) + TCC_EA_RDREQ[31]) != 0) else None))
+              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) != 0) else None))
             std dev: STD((((((((((((((((((((((((((((((((((TCC_EA_RDREQ_LEVEL[0] + TCC_EA_RDREQ_LEVEL[1])
               + TCC_EA_RDREQ_LEVEL[2]) + TCC_EA_RDREQ_LEVEL[3]) + TCC_EA_RDREQ_LEVEL[4])
               + TCC_EA_RDREQ_LEVEL[5]) + TCC_EA_RDREQ_LEVEL[6]) + TCC_EA_RDREQ_LEVEL[7])
               + TCC_EA_RDREQ_LEVEL[8]) + TCC_EA_RDREQ_LEVEL[9]) + TCC_EA_RDREQ_LEVEL[10])
               + TCC_EA_RDREQ_LEVEL[11]) + TCC_EA_RDREQ_LEVEL[12]) + TCC_EA_RDREQ_LEVEL[13])
-              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15]) + TCC_EA_RDREQ_LEVEL[16])
-              + TCC_EA_RDREQ_LEVEL[17]) + TCC_EA_RDREQ_LEVEL[18]) + TCC_EA_RDREQ_LEVEL[19])
-              + TCC_EA_RDREQ_LEVEL[20]) + TCC_EA_RDREQ_LEVEL[21]) + TCC_EA_RDREQ_LEVEL[22])
-              + TCC_EA_RDREQ_LEVEL[23]) + TCC_EA_RDREQ_LEVEL[24]) + TCC_EA_RDREQ_LEVEL[25])
-              + TCC_EA_RDREQ_LEVEL[26]) + TCC_EA_RDREQ_LEVEL[27]) + TCC_EA_RDREQ_LEVEL[28])
-              + TCC_EA_RDREQ_LEVEL[29]) + TCC_EA_RDREQ_LEVEL[30]) + TCC_EA_RDREQ_LEVEL[31])
+              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] + TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2])
               + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4]) + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6])
               + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8]) + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10])
               + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12]) + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14])
-              + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16]) + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18])
-              + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20]) + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22])
-              + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24]) + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26])
-              + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28]) + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30])
-              + TCC_EA_RDREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
+              + TCC_EA_RDREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
               TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2]) + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4])
               + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6]) + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8])
               + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10]) + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12])
-              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16])
-              + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18]) + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20])
-              + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22]) + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24])
-              + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26]) + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28])
-              + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30]) + TCC_EA_RDREQ[31]) != 0) else None))
+              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) != 0) else None))
             min: MIN((((((((((((((((((((((((((((((((((TCC_EA_RDREQ_LEVEL[0] + TCC_EA_RDREQ_LEVEL[1])
               + TCC_EA_RDREQ_LEVEL[2]) + TCC_EA_RDREQ_LEVEL[3]) + TCC_EA_RDREQ_LEVEL[4])
               + TCC_EA_RDREQ_LEVEL[5]) + TCC_EA_RDREQ_LEVEL[6]) + TCC_EA_RDREQ_LEVEL[7])
               + TCC_EA_RDREQ_LEVEL[8]) + TCC_EA_RDREQ_LEVEL[9]) + TCC_EA_RDREQ_LEVEL[10])
               + TCC_EA_RDREQ_LEVEL[11]) + TCC_EA_RDREQ_LEVEL[12]) + TCC_EA_RDREQ_LEVEL[13])
-              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15]) + TCC_EA_RDREQ_LEVEL[16])
-              + TCC_EA_RDREQ_LEVEL[17]) + TCC_EA_RDREQ_LEVEL[18]) + TCC_EA_RDREQ_LEVEL[19])
-              + TCC_EA_RDREQ_LEVEL[20]) + TCC_EA_RDREQ_LEVEL[21]) + TCC_EA_RDREQ_LEVEL[22])
-              + TCC_EA_RDREQ_LEVEL[23]) + TCC_EA_RDREQ_LEVEL[24]) + TCC_EA_RDREQ_LEVEL[25])
-              + TCC_EA_RDREQ_LEVEL[26]) + TCC_EA_RDREQ_LEVEL[27]) + TCC_EA_RDREQ_LEVEL[28])
-              + TCC_EA_RDREQ_LEVEL[29]) + TCC_EA_RDREQ_LEVEL[30]) + TCC_EA_RDREQ_LEVEL[31])
+              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] + TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2])
               + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4]) + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6])
               + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8]) + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10])
               + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12]) + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14])
-              + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16]) + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18])
-              + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20]) + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22])
-              + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24]) + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26])
-              + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28]) + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30])
-              + TCC_EA_RDREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
+              + TCC_EA_RDREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
               TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2]) + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4])
               + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6]) + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8])
               + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10]) + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12])
-              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16])
-              + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18]) + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20])
-              + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22]) + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24])
-              + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26]) + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28])
-              + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30]) + TCC_EA_RDREQ[31]) != 0) else None))
+              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) != 0) else None))
             max: MAX((((((((((((((((((((((((((((((((((TCC_EA_RDREQ_LEVEL[0] + TCC_EA_RDREQ_LEVEL[1])
               + TCC_EA_RDREQ_LEVEL[2]) + TCC_EA_RDREQ_LEVEL[3]) + TCC_EA_RDREQ_LEVEL[4])
               + TCC_EA_RDREQ_LEVEL[5]) + TCC_EA_RDREQ_LEVEL[6]) + TCC_EA_RDREQ_LEVEL[7])
               + TCC_EA_RDREQ_LEVEL[8]) + TCC_EA_RDREQ_LEVEL[9]) + TCC_EA_RDREQ_LEVEL[10])
               + TCC_EA_RDREQ_LEVEL[11]) + TCC_EA_RDREQ_LEVEL[12]) + TCC_EA_RDREQ_LEVEL[13])
-              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15]) + TCC_EA_RDREQ_LEVEL[16])
-              + TCC_EA_RDREQ_LEVEL[17]) + TCC_EA_RDREQ_LEVEL[18]) + TCC_EA_RDREQ_LEVEL[19])
-              + TCC_EA_RDREQ_LEVEL[20]) + TCC_EA_RDREQ_LEVEL[21]) + TCC_EA_RDREQ_LEVEL[22])
-              + TCC_EA_RDREQ_LEVEL[23]) + TCC_EA_RDREQ_LEVEL[24]) + TCC_EA_RDREQ_LEVEL[25])
-              + TCC_EA_RDREQ_LEVEL[26]) + TCC_EA_RDREQ_LEVEL[27]) + TCC_EA_RDREQ_LEVEL[28])
-              + TCC_EA_RDREQ_LEVEL[29]) + TCC_EA_RDREQ_LEVEL[30]) + TCC_EA_RDREQ_LEVEL[31])
+              + TCC_EA_RDREQ_LEVEL[14]) + TCC_EA_RDREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] + TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2])
               + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4]) + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6])
               + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8]) + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10])
               + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12]) + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14])
-              + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16]) + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18])
-              + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20]) + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22])
-              + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24]) + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26])
-              + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28]) + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30])
-              + TCC_EA_RDREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
+              + TCC_EA_RDREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_RDREQ[0] +
               TCC_EA_RDREQ[1]) + TCC_EA_RDREQ[2]) + TCC_EA_RDREQ[3]) + TCC_EA_RDREQ[4])
               + TCC_EA_RDREQ[5]) + TCC_EA_RDREQ[6]) + TCC_EA_RDREQ[7]) + TCC_EA_RDREQ[8])
               + TCC_EA_RDREQ[9]) + TCC_EA_RDREQ[10]) + TCC_EA_RDREQ[11]) + TCC_EA_RDREQ[12])
-              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) + TCC_EA_RDREQ[16])
-              + TCC_EA_RDREQ[17]) + TCC_EA_RDREQ[18]) + TCC_EA_RDREQ[19]) + TCC_EA_RDREQ[20])
-              + TCC_EA_RDREQ[21]) + TCC_EA_RDREQ[22]) + TCC_EA_RDREQ[23]) + TCC_EA_RDREQ[24])
-              + TCC_EA_RDREQ[25]) + TCC_EA_RDREQ[26]) + TCC_EA_RDREQ[27]) + TCC_EA_RDREQ[28])
-              + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30]) + TCC_EA_RDREQ[31]) != 0) else None))
+              + TCC_EA_RDREQ[13]) + TCC_EA_RDREQ[14]) + TCC_EA_RDREQ[15]) != 0) else None))
             units: Cycles
             tips: 
           L2 - EA Write Lat:
@@ -621,113 +353,61 @@ Panel Config:
               + TCC_EA_WRREQ_LEVEL[5]) + TCC_EA_WRREQ_LEVEL[6]) + TCC_EA_WRREQ_LEVEL[7])
               + TCC_EA_WRREQ_LEVEL[8]) + TCC_EA_WRREQ_LEVEL[9]) + TCC_EA_WRREQ_LEVEL[10])
               + TCC_EA_WRREQ_LEVEL[11]) + TCC_EA_WRREQ_LEVEL[12]) + TCC_EA_WRREQ_LEVEL[13])
-              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15]) + TCC_EA_WRREQ_LEVEL[16])
-              + TCC_EA_WRREQ_LEVEL[17]) + TCC_EA_WRREQ_LEVEL[18]) + TCC_EA_WRREQ_LEVEL[19])
-              + TCC_EA_WRREQ_LEVEL[20]) + TCC_EA_WRREQ_LEVEL[21]) + TCC_EA_WRREQ_LEVEL[22])
-              + TCC_EA_WRREQ_LEVEL[23]) + TCC_EA_WRREQ_LEVEL[24]) + TCC_EA_WRREQ_LEVEL[25])
-              + TCC_EA_WRREQ_LEVEL[26]) + TCC_EA_WRREQ_LEVEL[27]) + TCC_EA_WRREQ_LEVEL[28])
-              + TCC_EA_WRREQ_LEVEL[29]) + TCC_EA_WRREQ_LEVEL[30]) + TCC_EA_WRREQ_LEVEL[31])
+              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] + TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2])
               + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4]) + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6])
               + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8]) + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10])
               + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12]) + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14])
-              + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16]) + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18])
-              + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20]) + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22])
-              + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24]) + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26])
-              + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28]) + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30])
-              + TCC_EA_WRREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
+              + TCC_EA_WRREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
               TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2]) + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4])
               + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6]) + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8])
               + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10]) + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12])
-              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16])
-              + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18]) + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20])
-              + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22]) + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24])
-              + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26]) + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28])
-              + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30]) + TCC_EA_WRREQ[31]) != 0) else None))
+              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) != 0) else None))
             std dev: STD((((((((((((((((((((((((((((((((((TCC_EA_WRREQ_LEVEL[0] + TCC_EA_WRREQ_LEVEL[1])
               + TCC_EA_WRREQ_LEVEL[2]) + TCC_EA_WRREQ_LEVEL[3]) + TCC_EA_WRREQ_LEVEL[4])
               + TCC_EA_WRREQ_LEVEL[5]) + TCC_EA_WRREQ_LEVEL[6]) + TCC_EA_WRREQ_LEVEL[7])
               + TCC_EA_WRREQ_LEVEL[8]) + TCC_EA_WRREQ_LEVEL[9]) + TCC_EA_WRREQ_LEVEL[10])
               + TCC_EA_WRREQ_LEVEL[11]) + TCC_EA_WRREQ_LEVEL[12]) + TCC_EA_WRREQ_LEVEL[13])
-              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15]) + TCC_EA_WRREQ_LEVEL[16])
-              + TCC_EA_WRREQ_LEVEL[17]) + TCC_EA_WRREQ_LEVEL[18]) + TCC_EA_WRREQ_LEVEL[19])
-              + TCC_EA_WRREQ_LEVEL[20]) + TCC_EA_WRREQ_LEVEL[21]) + TCC_EA_WRREQ_LEVEL[22])
-              + TCC_EA_WRREQ_LEVEL[23]) + TCC_EA_WRREQ_LEVEL[24]) + TCC_EA_WRREQ_LEVEL[25])
-              + TCC_EA_WRREQ_LEVEL[26]) + TCC_EA_WRREQ_LEVEL[27]) + TCC_EA_WRREQ_LEVEL[28])
-              + TCC_EA_WRREQ_LEVEL[29]) + TCC_EA_WRREQ_LEVEL[30]) + TCC_EA_WRREQ_LEVEL[31])
+              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] + TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2])
               + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4]) + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6])
               + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8]) + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10])
               + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12]) + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14])
-              + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16]) + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18])
-              + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20]) + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22])
-              + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24]) + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26])
-              + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28]) + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30])
-              + TCC_EA_WRREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
+              + TCC_EA_WRREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
               TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2]) + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4])
               + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6]) + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8])
               + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10]) + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12])
-              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16])
-              + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18]) + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20])
-              + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22]) + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24])
-              + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26]) + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28])
-              + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30]) + TCC_EA_WRREQ[31]) != 0) else None))
+              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) != 0) else None))
             min: MIN((((((((((((((((((((((((((((((((((TCC_EA_WRREQ_LEVEL[0] + TCC_EA_WRREQ_LEVEL[1])
               + TCC_EA_WRREQ_LEVEL[2]) + TCC_EA_WRREQ_LEVEL[3]) + TCC_EA_WRREQ_LEVEL[4])
               + TCC_EA_WRREQ_LEVEL[5]) + TCC_EA_WRREQ_LEVEL[6]) + TCC_EA_WRREQ_LEVEL[7])
               + TCC_EA_WRREQ_LEVEL[8]) + TCC_EA_WRREQ_LEVEL[9]) + TCC_EA_WRREQ_LEVEL[10])
               + TCC_EA_WRREQ_LEVEL[11]) + TCC_EA_WRREQ_LEVEL[12]) + TCC_EA_WRREQ_LEVEL[13])
-              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15]) + TCC_EA_WRREQ_LEVEL[16])
-              + TCC_EA_WRREQ_LEVEL[17]) + TCC_EA_WRREQ_LEVEL[18]) + TCC_EA_WRREQ_LEVEL[19])
-              + TCC_EA_WRREQ_LEVEL[20]) + TCC_EA_WRREQ_LEVEL[21]) + TCC_EA_WRREQ_LEVEL[22])
-              + TCC_EA_WRREQ_LEVEL[23]) + TCC_EA_WRREQ_LEVEL[24]) + TCC_EA_WRREQ_LEVEL[25])
-              + TCC_EA_WRREQ_LEVEL[26]) + TCC_EA_WRREQ_LEVEL[27]) + TCC_EA_WRREQ_LEVEL[28])
-              + TCC_EA_WRREQ_LEVEL[29]) + TCC_EA_WRREQ_LEVEL[30]) + TCC_EA_WRREQ_LEVEL[31])
+              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] + TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2])
               + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4]) + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6])
               + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8]) + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10])
               + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12]) + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14])
-              + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16]) + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18])
-              + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20]) + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22])
-              + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24]) + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26])
-              + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28]) + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30])
-              + TCC_EA_WRREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
+              + TCC_EA_WRREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
               TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2]) + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4])
               + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6]) + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8])
               + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10]) + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12])
-              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16])
-              + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18]) + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20])
-              + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22]) + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24])
-              + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26]) + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28])
-              + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30]) + TCC_EA_WRREQ[31]) != 0) else None))
+              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) != 0) else None))
             max: MAX((((((((((((((((((((((((((((((((((TCC_EA_WRREQ_LEVEL[0] + TCC_EA_WRREQ_LEVEL[1])
               + TCC_EA_WRREQ_LEVEL[2]) + TCC_EA_WRREQ_LEVEL[3]) + TCC_EA_WRREQ_LEVEL[4])
               + TCC_EA_WRREQ_LEVEL[5]) + TCC_EA_WRREQ_LEVEL[6]) + TCC_EA_WRREQ_LEVEL[7])
               + TCC_EA_WRREQ_LEVEL[8]) + TCC_EA_WRREQ_LEVEL[9]) + TCC_EA_WRREQ_LEVEL[10])
               + TCC_EA_WRREQ_LEVEL[11]) + TCC_EA_WRREQ_LEVEL[12]) + TCC_EA_WRREQ_LEVEL[13])
-              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15]) + TCC_EA_WRREQ_LEVEL[16])
-              + TCC_EA_WRREQ_LEVEL[17]) + TCC_EA_WRREQ_LEVEL[18]) + TCC_EA_WRREQ_LEVEL[19])
-              + TCC_EA_WRREQ_LEVEL[20]) + TCC_EA_WRREQ_LEVEL[21]) + TCC_EA_WRREQ_LEVEL[22])
-              + TCC_EA_WRREQ_LEVEL[23]) + TCC_EA_WRREQ_LEVEL[24]) + TCC_EA_WRREQ_LEVEL[25])
-              + TCC_EA_WRREQ_LEVEL[26]) + TCC_EA_WRREQ_LEVEL[27]) + TCC_EA_WRREQ_LEVEL[28])
-              + TCC_EA_WRREQ_LEVEL[29]) + TCC_EA_WRREQ_LEVEL[30]) + TCC_EA_WRREQ_LEVEL[31])
+              + TCC_EA_WRREQ_LEVEL[14]) + TCC_EA_WRREQ_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] + TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2])
               + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4]) + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6])
               + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8]) + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10])
               + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12]) + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14])
-              + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16]) + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18])
-              + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20]) + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22])
-              + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24]) + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26])
-              + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28]) + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30])
-              + TCC_EA_WRREQ[31])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
+              + TCC_EA_WRREQ[15])) if ((((((((((((((((((((((((((((((((TCC_EA_WRREQ[0] +
               TCC_EA_WRREQ[1]) + TCC_EA_WRREQ[2]) + TCC_EA_WRREQ[3]) + TCC_EA_WRREQ[4])
               + TCC_EA_WRREQ[5]) + TCC_EA_WRREQ[6]) + TCC_EA_WRREQ[7]) + TCC_EA_WRREQ[8])
               + TCC_EA_WRREQ[9]) + TCC_EA_WRREQ[10]) + TCC_EA_WRREQ[11]) + TCC_EA_WRREQ[12])
-              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) + TCC_EA_WRREQ[16])
-              + TCC_EA_WRREQ[17]) + TCC_EA_WRREQ[18]) + TCC_EA_WRREQ[19]) + TCC_EA_WRREQ[20])
-              + TCC_EA_WRREQ[21]) + TCC_EA_WRREQ[22]) + TCC_EA_WRREQ[23]) + TCC_EA_WRREQ[24])
-              + TCC_EA_WRREQ[25]) + TCC_EA_WRREQ[26]) + TCC_EA_WRREQ[27]) + TCC_EA_WRREQ[28])
-              + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30]) + TCC_EA_WRREQ[31]) != 0) else None))
+              + TCC_EA_WRREQ[13]) + TCC_EA_WRREQ[14]) + TCC_EA_WRREQ[15]) != 0) else None))
             units: Cycles
             tips: 
           L2 - EA Atomic Lat:
@@ -736,116 +416,64 @@ Panel Config:
               + TCC_EA_ATOMIC_LEVEL[5]) + TCC_EA_ATOMIC_LEVEL[6]) + TCC_EA_ATOMIC_LEVEL[7])
               + TCC_EA_ATOMIC_LEVEL[8]) + TCC_EA_ATOMIC_LEVEL[9]) + TCC_EA_ATOMIC_LEVEL[10])
               + TCC_EA_ATOMIC_LEVEL[11]) + TCC_EA_ATOMIC_LEVEL[12]) + TCC_EA_ATOMIC_LEVEL[13])
-              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15]) + TCC_EA_ATOMIC_LEVEL[16])
-              + TCC_EA_ATOMIC_LEVEL[17]) + TCC_EA_ATOMIC_LEVEL[18]) + TCC_EA_ATOMIC_LEVEL[19])
-              + TCC_EA_ATOMIC_LEVEL[20]) + TCC_EA_ATOMIC_LEVEL[21]) + TCC_EA_ATOMIC_LEVEL[22])
-              + TCC_EA_ATOMIC_LEVEL[23]) + TCC_EA_ATOMIC_LEVEL[24]) + TCC_EA_ATOMIC_LEVEL[25])
-              + TCC_EA_ATOMIC_LEVEL[26]) + TCC_EA_ATOMIC_LEVEL[27]) + TCC_EA_ATOMIC_LEVEL[28])
-              + TCC_EA_ATOMIC_LEVEL[29]) + TCC_EA_ATOMIC_LEVEL[30]) + TCC_EA_ATOMIC_LEVEL[31])
+              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0] + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2])
               + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4]) + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6])
               + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8]) + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10])
               + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12]) + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14])
-              + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16]) + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18])
-              + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20]) + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22])
-              + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24]) + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26])
-              + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28]) + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30])
-              + TCC_EA_ATOMIC[31])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
+              + TCC_EA_ATOMIC[15])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
               + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2]) + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4])
               + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6]) + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8])
               + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10]) + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12])
-              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16])
-              + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18]) + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20])
-              + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22]) + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24])
-              + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26]) + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28])
-              + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30]) + TCC_EA_ATOMIC[31]) != 0) else
+              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) != 0) else
               None))
             std dev: STD((((((((((((((((((((((((((((((((((TCC_EA_ATOMIC_LEVEL[0] + TCC_EA_ATOMIC_LEVEL[1])
               + TCC_EA_ATOMIC_LEVEL[2]) + TCC_EA_ATOMIC_LEVEL[3]) + TCC_EA_ATOMIC_LEVEL[4])
               + TCC_EA_ATOMIC_LEVEL[5]) + TCC_EA_ATOMIC_LEVEL[6]) + TCC_EA_ATOMIC_LEVEL[7])
               + TCC_EA_ATOMIC_LEVEL[8]) + TCC_EA_ATOMIC_LEVEL[9]) + TCC_EA_ATOMIC_LEVEL[10])
               + TCC_EA_ATOMIC_LEVEL[11]) + TCC_EA_ATOMIC_LEVEL[12]) + TCC_EA_ATOMIC_LEVEL[13])
-              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15]) + TCC_EA_ATOMIC_LEVEL[16])
-              + TCC_EA_ATOMIC_LEVEL[17]) + TCC_EA_ATOMIC_LEVEL[18]) + TCC_EA_ATOMIC_LEVEL[19])
-              + TCC_EA_ATOMIC_LEVEL[20]) + TCC_EA_ATOMIC_LEVEL[21]) + TCC_EA_ATOMIC_LEVEL[22])
-              + TCC_EA_ATOMIC_LEVEL[23]) + TCC_EA_ATOMIC_LEVEL[24]) + TCC_EA_ATOMIC_LEVEL[25])
-              + TCC_EA_ATOMIC_LEVEL[26]) + TCC_EA_ATOMIC_LEVEL[27]) + TCC_EA_ATOMIC_LEVEL[28])
-              + TCC_EA_ATOMIC_LEVEL[29]) + TCC_EA_ATOMIC_LEVEL[30]) + TCC_EA_ATOMIC_LEVEL[31])
+              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0] + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2])
               + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4]) + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6])
               + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8]) + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10])
               + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12]) + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14])
-              + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16]) + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18])
-              + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20]) + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22])
-              + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24]) + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26])
-              + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28]) + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30])
-              + TCC_EA_ATOMIC[31])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
+              + TCC_EA_ATOMIC[15])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
               + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2]) + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4])
               + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6]) + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8])
               + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10]) + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12])
-              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16])
-              + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18]) + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20])
-              + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22]) + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24])
-              + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26]) + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28])
-              + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30]) + TCC_EA_ATOMIC[31]) != 0) else
+              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) != 0) else
               None))
             min: MIN((((((((((((((((((((((((((((((((((TCC_EA_ATOMIC_LEVEL[0] + TCC_EA_ATOMIC_LEVEL[1])
               + TCC_EA_ATOMIC_LEVEL[2]) + TCC_EA_ATOMIC_LEVEL[3]) + TCC_EA_ATOMIC_LEVEL[4])
               + TCC_EA_ATOMIC_LEVEL[5]) + TCC_EA_ATOMIC_LEVEL[6]) + TCC_EA_ATOMIC_LEVEL[7])
               + TCC_EA_ATOMIC_LEVEL[8]) + TCC_EA_ATOMIC_LEVEL[9]) + TCC_EA_ATOMIC_LEVEL[10])
               + TCC_EA_ATOMIC_LEVEL[11]) + TCC_EA_ATOMIC_LEVEL[12]) + TCC_EA_ATOMIC_LEVEL[13])
-              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15]) + TCC_EA_ATOMIC_LEVEL[16])
-              + TCC_EA_ATOMIC_LEVEL[17]) + TCC_EA_ATOMIC_LEVEL[18]) + TCC_EA_ATOMIC_LEVEL[19])
-              + TCC_EA_ATOMIC_LEVEL[20]) + TCC_EA_ATOMIC_LEVEL[21]) + TCC_EA_ATOMIC_LEVEL[22])
-              + TCC_EA_ATOMIC_LEVEL[23]) + TCC_EA_ATOMIC_LEVEL[24]) + TCC_EA_ATOMIC_LEVEL[25])
-              + TCC_EA_ATOMIC_LEVEL[26]) + TCC_EA_ATOMIC_LEVEL[27]) + TCC_EA_ATOMIC_LEVEL[28])
-              + TCC_EA_ATOMIC_LEVEL[29]) + TCC_EA_ATOMIC_LEVEL[30]) + TCC_EA_ATOMIC_LEVEL[31])
+              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0] + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2])
               + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4]) + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6])
               + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8]) + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10])
               + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12]) + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14])
-              + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16]) + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18])
-              + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20]) + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22])
-              + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24]) + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26])
-              + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28]) + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30])
-              + TCC_EA_ATOMIC[31])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
+              + TCC_EA_ATOMIC[15])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
               + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2]) + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4])
               + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6]) + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8])
               + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10]) + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12])
-              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16])
-              + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18]) + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20])
-              + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22]) + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24])
-              + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26]) + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28])
-              + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30]) + TCC_EA_ATOMIC[31]) != 0) else
+              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) != 0) else
               None))
             max: MAX((((((((((((((((((((((((((((((((((TCC_EA_ATOMIC_LEVEL[0] + TCC_EA_ATOMIC_LEVEL[1])
               + TCC_EA_ATOMIC_LEVEL[2]) + TCC_EA_ATOMIC_LEVEL[3]) + TCC_EA_ATOMIC_LEVEL[4])
               + TCC_EA_ATOMIC_LEVEL[5]) + TCC_EA_ATOMIC_LEVEL[6]) + TCC_EA_ATOMIC_LEVEL[7])
               + TCC_EA_ATOMIC_LEVEL[8]) + TCC_EA_ATOMIC_LEVEL[9]) + TCC_EA_ATOMIC_LEVEL[10])
               + TCC_EA_ATOMIC_LEVEL[11]) + TCC_EA_ATOMIC_LEVEL[12]) + TCC_EA_ATOMIC_LEVEL[13])
-              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15]) + TCC_EA_ATOMIC_LEVEL[16])
-              + TCC_EA_ATOMIC_LEVEL[17]) + TCC_EA_ATOMIC_LEVEL[18]) + TCC_EA_ATOMIC_LEVEL[19])
-              + TCC_EA_ATOMIC_LEVEL[20]) + TCC_EA_ATOMIC_LEVEL[21]) + TCC_EA_ATOMIC_LEVEL[22])
-              + TCC_EA_ATOMIC_LEVEL[23]) + TCC_EA_ATOMIC_LEVEL[24]) + TCC_EA_ATOMIC_LEVEL[25])
-              + TCC_EA_ATOMIC_LEVEL[26]) + TCC_EA_ATOMIC_LEVEL[27]) + TCC_EA_ATOMIC_LEVEL[28])
-              + TCC_EA_ATOMIC_LEVEL[29]) + TCC_EA_ATOMIC_LEVEL[30]) + TCC_EA_ATOMIC_LEVEL[31])
+              + TCC_EA_ATOMIC_LEVEL[14]) + TCC_EA_ATOMIC_LEVEL[15])
               / (((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0] + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2])
               + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4]) + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6])
               + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8]) + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10])
               + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12]) + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14])
-              + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16]) + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18])
-              + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20]) + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22])
-              + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24]) + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26])
-              + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28]) + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30])
-              + TCC_EA_ATOMIC[31])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
+              + TCC_EA_ATOMIC[15])) if ((((((((((((((((((((((((((((((((TCC_EA_ATOMIC[0]
               + TCC_EA_ATOMIC[1]) + TCC_EA_ATOMIC[2]) + TCC_EA_ATOMIC[3]) + TCC_EA_ATOMIC[4])
               + TCC_EA_ATOMIC[5]) + TCC_EA_ATOMIC[6]) + TCC_EA_ATOMIC[7]) + TCC_EA_ATOMIC[8])
               + TCC_EA_ATOMIC[9]) + TCC_EA_ATOMIC[10]) + TCC_EA_ATOMIC[11]) + TCC_EA_ATOMIC[12])
-              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) + TCC_EA_ATOMIC[16])
-              + TCC_EA_ATOMIC[17]) + TCC_EA_ATOMIC[18]) + TCC_EA_ATOMIC[19]) + TCC_EA_ATOMIC[20])
-              + TCC_EA_ATOMIC[21]) + TCC_EA_ATOMIC[22]) + TCC_EA_ATOMIC[23]) + TCC_EA_ATOMIC[24])
-              + TCC_EA_ATOMIC[25]) + TCC_EA_ATOMIC[26]) + TCC_EA_ATOMIC[27]) + TCC_EA_ATOMIC[28])
-              + TCC_EA_ATOMIC[29]) + TCC_EA_ATOMIC[30]) + TCC_EA_ATOMIC[31]) != 0) else
+              + TCC_EA_ATOMIC[13]) + TCC_EA_ATOMIC[14]) + TCC_EA_ATOMIC[15]) != 0) else
               None))
             units: Cycles
             tips: 
@@ -858,15 +486,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[4]))
@@ -875,15 +495,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[4]))
@@ -892,15 +504,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[4]))
@@ -909,15 +513,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Read Stall (GMI):
@@ -929,15 +525,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[4]))
@@ -946,15 +534,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[4]))
@@ -963,15 +543,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[4]))
@@ -980,15 +552,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Read Stall (DRAM):
@@ -1000,15 +564,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[4]))
@@ -1017,15 +573,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[4]))
@@ -1034,15 +582,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[4]))
@@ -1051,15 +591,7 @@ Panel Config:
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Write Stall (IO):
@@ -1071,15 +603,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[4]))
@@ -1088,15 +612,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[4]))
@@ -1105,15 +621,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[4]))
@@ -1122,15 +630,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Write Stall (GMI):
@@ -1142,15 +642,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[4]))
@@ -1159,15 +651,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[4]))
@@ -1176,15 +660,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[4]))
@@ -1193,15 +669,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Write Stall (DRAM):
@@ -1213,15 +681,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[4]))
@@ -1230,15 +690,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[4]))
@@ -1247,15 +699,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[0])
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[1])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[2]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[3])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[4]))
@@ -1264,15 +708,7 @@ Panel Config:
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[9])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[10]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[11])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[12]))
               + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[13])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[14]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[16]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[17])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[18]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[19])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[20]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[21])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[22]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[23])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[24]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[25])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[26]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[27])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[28]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[29])) + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[30]))
-              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips: 
           L2 - EA Write Starve:
@@ -1284,15 +720,7 @@ Panel Config:
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[9])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[10]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[11])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[12]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[13])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[14]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[16]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[17])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[18]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[19])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[20]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[21])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[22]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[23])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[24]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[25])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[26]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[27])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[28]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[29])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[30]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) / 16) / $denom))
             std dev: STD((((((((((((((((((((((((((((((((((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[0])
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[1])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[2]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[3])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[4]))
@@ -1301,15 +729,7 @@ Panel Config:
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[9])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[10]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[11])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[12]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[13])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[14]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[16]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[17])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[18]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[19])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[20]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[21])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[22]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[23])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[24]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[25])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[26]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[27])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[28]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[29])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[30]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) / 16) / $denom))
             min: MIN((((((((((((((((((((((((((((((((((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[0])
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[1])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[2]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[3])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[4]))
@@ -1318,15 +738,7 @@ Panel Config:
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[9])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[10]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[11])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[12]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[13])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[14]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[16]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[17])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[18]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[19])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[20]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[21])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[22]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[23])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[24]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[25])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[26]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[27])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[28]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[29])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[30]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) / 16) / $denom))
             max: MAX((((((((((((((((((((((((((((((((((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[0])
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[1])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[2]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[3])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[4]))
@@ -1335,15 +747,7 @@ Panel Config:
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[9])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[10]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[11])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[12]))
               + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[13])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[14]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[16]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[17])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[18]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[19])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[20]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[21])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[22]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[23])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[24]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[25])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[26]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[27])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[28]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[29])) + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[30]))
-              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[31])) / 32) / $denom))
+              + TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[15])) / 16) / $denom))
             units: (Cycles  + $normUnit)
             tips:
     - metric_table:
@@ -1783,386 +1187,322 @@ Panel Config:
           tips: Tips
         metric:     
           '16':
-            hit rate: AVG((((100 * TCC_HIT[16]) / (TCC_HIT[16] + TCC_MISS[16])) if ((TCC_HIT[16]
-              + TCC_MISS[16]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[16]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[16]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[16]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[16]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[16]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[16]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[16]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[16] / TCC_EA0_RDREQ[16]) if (TCC_EA0_RDREQ[16]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[16] / TCC_EA0_WRREQ[16]) if (TCC_EA0_WRREQ[16]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[16] / TCC_EA0_ATOMIC[16]) if
-              (TCC_EA0_ATOMIC[16] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[16]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[16]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[16]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[16]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[16]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[16]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[16]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '17':
-            hit rate: AVG((((100 * TCC_HIT[17]) / (TCC_HIT[17] + TCC_MISS[17])) if ((TCC_HIT[17]
-              + TCC_MISS[17]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[17]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[17]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[17]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[17]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[17]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[17]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[17]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[17] / TCC_EA0_RDREQ[17]) if (TCC_EA0_RDREQ[17]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[17] / TCC_EA0_WRREQ[17]) if (TCC_EA0_WRREQ[17]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[17] / TCC_EA0_ATOMIC[17]) if
-              (TCC_EA0_ATOMIC[17] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[17]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[17]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[17]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[17]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[17]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[17]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[17]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '18':
-            hit rate: AVG((((100 * TCC_HIT[18]) / (TCC_HIT[18] + TCC_MISS[18])) if ((TCC_HIT[18]
-              + TCC_MISS[18]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[18]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[18]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[18]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[18]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[18]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[18]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[18]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[18] / TCC_EA0_RDREQ[18]) if (TCC_EA0_RDREQ[18]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[18] / TCC_EA0_WRREQ[18]) if (TCC_EA0_WRREQ[18]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[18] / TCC_EA0_ATOMIC[18]) if
-              (TCC_EA0_ATOMIC[18] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[18]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[18]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[18]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[18]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[18]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[18]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[18]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '19':
-            hit rate: AVG((((100 * TCC_HIT[19]) / (TCC_HIT[19] + TCC_MISS[19])) if ((TCC_HIT[19]
-              + TCC_MISS[19]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[19]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[19]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[19]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[19]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[19]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[19]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[19]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[19] / TCC_EA0_RDREQ[19]) if (TCC_EA0_RDREQ[19]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[19] / TCC_EA0_WRREQ[19]) if (TCC_EA0_WRREQ[19]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[19] / TCC_EA0_ATOMIC[19]) if
-              (TCC_EA0_ATOMIC[19] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[19]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[19]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[19]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[19]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[19]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[19]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[19]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '20':
-            hit rate: AVG((((100 * TCC_HIT[20]) / (TCC_HIT[20] + TCC_MISS[20])) if ((TCC_HIT[20]
-              + TCC_MISS[20]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[20]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[20]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[20]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[20]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[20]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[20]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[20]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[20] / TCC_EA0_RDREQ[20]) if (TCC_EA0_RDREQ[20]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[20] / TCC_EA0_WRREQ[20]) if (TCC_EA0_WRREQ[20]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[20] / TCC_EA0_ATOMIC[20]) if
-              (TCC_EA0_ATOMIC[20] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[20]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[20]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[20]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[20]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[20]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[20]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[20]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '21':
-            hit rate: AVG((((100 * TCC_HIT[21]) / (TCC_HIT[21] + TCC_MISS[21])) if ((TCC_HIT[21]
-              + TCC_MISS[21]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[21]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[21]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[21]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[21]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[21]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[21]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[21]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[21] / TCC_EA0_RDREQ[21]) if (TCC_EA0_RDREQ[21]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[21] / TCC_EA0_WRREQ[21]) if (TCC_EA0_WRREQ[21]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[21] / TCC_EA0_ATOMIC[21]) if
-              (TCC_EA0_ATOMIC[21] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[21]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[21]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[21]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[21]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[21]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[21]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[21]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '22':
-            hit rate: AVG((((100 * TCC_HIT[22]) / (TCC_HIT[22] + TCC_MISS[22])) if ((TCC_HIT[22]
-              + TCC_MISS[22]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[22]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[22]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[22]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[22]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[22]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[22]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[22]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[22] / TCC_EA0_RDREQ[22]) if (TCC_EA0_RDREQ[22]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[22] / TCC_EA0_WRREQ[22]) if (TCC_EA0_WRREQ[22]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[22] / TCC_EA0_ATOMIC[22]) if
-              (TCC_EA0_ATOMIC[22] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[22]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[22]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[22]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[22]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[22]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[22]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[22]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '23':
-            hit rate: AVG((((100 * TCC_HIT[23]) / (TCC_HIT[23] + TCC_MISS[23])) if ((TCC_HIT[23]
-              + TCC_MISS[23]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[23]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[23]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[23]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[23]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[23]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[23]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[23]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[23] / TCC_EA0_RDREQ[23]) if (TCC_EA0_RDREQ[23]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[23] / TCC_EA0_WRREQ[23]) if (TCC_EA0_WRREQ[23]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[23] / TCC_EA0_ATOMIC[23]) if
-              (TCC_EA0_ATOMIC[23] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[23]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[23]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[23]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[23]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[23]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[23]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[23]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '24':
-            hit rate: AVG((((100 * TCC_HIT[24]) / (TCC_HIT[24] + TCC_MISS[24])) if ((TCC_HIT[24]
-              + TCC_MISS[24]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[24]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[24]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[24]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[24]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[24]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[24]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[24]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[24] / TCC_EA0_RDREQ[24]) if (TCC_EA0_RDREQ[24]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[24] / TCC_EA0_WRREQ[24]) if (TCC_EA0_WRREQ[24]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[24] / TCC_EA0_ATOMIC[24]) if
-              (TCC_EA0_ATOMIC[24] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[24]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[24]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[24]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[24]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[24]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[24]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[24]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '25':
-            hit rate: AVG((((100 * TCC_HIT[25]) / (TCC_HIT[25] + TCC_MISS[25])) if ((TCC_HIT[25]
-              + TCC_MISS[25]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[25]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[25]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[25]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[25]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[25]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[25]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[25]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[25] / TCC_EA0_RDREQ[25]) if (TCC_EA0_RDREQ[25]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[25] / TCC_EA0_WRREQ[25]) if (TCC_EA0_WRREQ[25]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[25] / TCC_EA0_ATOMIC[25]) if
-              (TCC_EA0_ATOMIC[25] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[25]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[25]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[25]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[25]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[25]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[25]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[25]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '26':
-            hit rate: AVG((((100 * TCC_HIT[26]) / (TCC_HIT[26] + TCC_MISS[26])) if ((TCC_HIT[26]
-              + TCC_MISS[26]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[26]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[26]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[26]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[26]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[26]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[26]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[26]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[26] / TCC_EA0_RDREQ[26]) if (TCC_EA0_RDREQ[26]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[26] / TCC_EA0_WRREQ[26]) if (TCC_EA0_WRREQ[26]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[26] / TCC_EA0_ATOMIC[26]) if
-              (TCC_EA0_ATOMIC[26] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[26]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[26]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[26]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[26]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[26]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[26]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[26]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '27':
-            hit rate: AVG((((100 * TCC_HIT[27]) / (TCC_HIT[27] + TCC_MISS[27])) if ((TCC_HIT[27]
-              + TCC_MISS[27]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[27]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[27]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[27]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[27]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[27]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[27]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[27]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[27] / TCC_EA0_RDREQ[27]) if (TCC_EA0_RDREQ[27]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[27] / TCC_EA0_WRREQ[27]) if (TCC_EA0_WRREQ[27]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[27] / TCC_EA0_ATOMIC[27]) if
-              (TCC_EA0_ATOMIC[27] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[27]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[27]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[27]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[27]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[27]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[27]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[27]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '28':
-            hit rate: AVG((((100 * TCC_HIT[28]) / (TCC_HIT[28] + TCC_MISS[28])) if ((TCC_HIT[28]
-              + TCC_MISS[28]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[28]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[28]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[28]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[28]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[28]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[28]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[28]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[28] / TCC_EA0_RDREQ[28]) if (TCC_EA0_RDREQ[28]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[28] / TCC_EA0_WRREQ[28]) if (TCC_EA0_WRREQ[28]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[28] / TCC_EA0_ATOMIC[28]) if
-              (TCC_EA0_ATOMIC[28] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[28]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[28]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[28]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[28]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[28]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[28]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[28]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '29':
-            hit rate: AVG((((100 * TCC_HIT[29]) / (TCC_HIT[29] + TCC_MISS[29])) if ((TCC_HIT[29]
-              + TCC_MISS[29]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[29]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[29]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[29]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[29]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[29]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[29]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[29]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[29] / TCC_EA0_RDREQ[29]) if (TCC_EA0_RDREQ[29]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[29] / TCC_EA0_WRREQ[29]) if (TCC_EA0_WRREQ[29]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[29] / TCC_EA0_ATOMIC[29]) if
-              (TCC_EA0_ATOMIC[29] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[29]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[29]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[29]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[29]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[29]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[29]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[29]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '30':
-            hit rate: AVG((((100 * TCC_HIT[30]) / (TCC_HIT[30] + TCC_MISS[30])) if ((TCC_HIT[30]
-              + TCC_MISS[30]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[30]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[30]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[30]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[30]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[30]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[30]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[30]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[30] / TCC_EA0_RDREQ[30]) if (TCC_EA0_RDREQ[30]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[30] / TCC_EA0_WRREQ[30]) if (TCC_EA0_WRREQ[30]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[30] / TCC_EA0_ATOMIC[30]) if
-              (TCC_EA0_ATOMIC[30] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[30]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[30]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[30]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[30]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[30]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[30]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[30]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 
           '31':
-            hit rate: AVG((((100 * TCC_HIT[31]) / (TCC_HIT[31] + TCC_MISS[31])) if ((TCC_HIT[31]
-              + TCC_MISS[31]) != 0) else None))
-            req: AVG((TO_INT(TCC_REQ[31]) / $denom))
-            read req: AVG((TO_INT(TCC_READ[31]) / $denom))
-            write req: AVG((TO_INT(TCC_WRITE[31]) / $denom))
-            atomic req: AVG((TO_INT(TCC_ATOMIC[31]) / $denom))
-            ea read req: AVG((TO_INT(TCC_EA0_RDREQ[31]) / $denom))
-            ea write req: AVG((TO_INT(TCC_EA0_WRREQ[31]) / $denom))
-            ea atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[31]) / $denom))
-            ea read lat - cycles: AVG(((TCC_EA0_RDREQ_LEVEL[31] / TCC_EA0_RDREQ[31]) if (TCC_EA0_RDREQ[31]
-              != 0) else None))
-            ea write lat - cycles: AVG(((TCC_EA0_WRREQ_LEVEL[31] / TCC_EA0_WRREQ[31]) if (TCC_EA0_WRREQ[31]
-              != 0) else None))
-            ea atomic lat - cycles: AVG(((TCC_EA0_ATOMIC_LEVEL[31] / TCC_EA0_ATOMIC[31]) if
-              (TCC_EA0_ATOMIC[31] != 0) else None))
-            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[31]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[31]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[31]) / $denom))
-            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[31]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[31]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[31]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[31]) / $denom))
+            hit rate: None # No HW module
+            req: None # No HW module
+            read req: None # No HW module
+            write req: None # No HW module
+            atomic req: None # No HW module
+            ea read req: None # No HW module
+            ea write req: None # No HW module
+            ea atomic req: None # No HW module
+            ea read lat - cycles: None # No HW module
+            ea write lat - cycles: None # No HW module
+            ea atomic lat - cycles: None # No HW module
+            ea read stall - io: None # No HW module
+            ea read stall - gmi: None # No HW module
+            ea read stall - dram: None # No HW module
+            ea write stall - io: None # No HW module
+            ea write stall - gmi: None # No HW module
+            ea write stall - dram: None # No HW module
+            ea write stall - starve: None # No HW module
             tips: 

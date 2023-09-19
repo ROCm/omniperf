@@ -44,7 +44,12 @@ top_stats_build_in_config = {
     }
 }
 
-supported_arch = {"gfx906": "mi50", "gfx908": "mi100", "gfx90a": "mi200", "gfx940": "mi300"}
+supported_arch = {
+    "gfx906": "mi50",
+    "gfx908": "mi100",
+    "gfx90a": "mi200",
+    "gfx940": "mi300",
+}
 # TODO:
 # it should be:
 # supported_arch = {"gfx906": ["mi50", "mi60"],

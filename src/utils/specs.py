@@ -222,6 +222,30 @@ def get_machine_specs(devicenum):
     ) = gpuinfo()
     rocm_smi = run(["rocm-smi"])
 
+    # # Clean rocm_smi
+    # rocm_smi_raw = run(["rocm-smi"]).splitlines()
+    # rocm_smi = []
+    # for row in rocm_smi_raw:
+    #     splt = row.split()
+    #     if row and not row.startswith("=") and splt[0].find("[") == -1:
+    #         # note this will also create an entry for header
+    #         rocm_smi.append(splt)
+
+    # rocm_smi[0].remove("(DieEdge)") # remove superfluous headers
+
+    # smi_dict = {}
+    # for header_idx in range(0, len(rocm_smi[0])):
+    #     header = rocm_smi[0][header_idx]
+    #     smi_dict[header] = []
+    #     # Loop over each gpu enty
+    #     for row in range(1, len(rocm_smi)):
+    #         # verify it has all expected fields
+    #         if(len(rocm_smi[0]) != len(rocm_smi[row])):
+    #             sys.exit(1)
+    #         # push into dict if starts w a num
+    #         if search(r"([0-9]+)", rocm_smi[row][0]):
+    #             smi_dict[header].append(rocm_smi[row][header_idx])
+
     device = rf"^\s*{devicenum}(.*)"
 
     hostname = socket.gethostname()
@@ -240,6 +264,8 @@ def get_machine_specs(devicenum):
         cur_sclk = ""
 
     cur_mclk = search(r"([0-9]+)", freq[3])
+    # at the moment mclk reporting is unstable in mi300
+    # i.e., it won't always be in rocm-smi
     if cur_mclk is None:
         cur_mclk = ""
 

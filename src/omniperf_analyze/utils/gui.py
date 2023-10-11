@@ -477,7 +477,6 @@ def build_layout(
             base_data[base_run].filter_gpu_ids,
             base_data[base_run].filter_dispatch_ids,
             time_unit,
-            base_data[base_run].filter_top_n,
         )
         is_gui = True
         # Only display basic metrics if no filters are applied
@@ -510,7 +509,7 @@ def build_layout(
             div_children.append(
                 get_roofline(
                     path_to_dir,
-                    parser.apply_filters(base_data[base_run], is_gui, debug),
+                    parser.apply_filters(base_data[base_run], path_to_dir, is_gui, debug),
                     verbose,
                 )
             )
@@ -537,6 +536,15 @@ def build_layout(
                         # The sys info table need to add index back
                         if t_type == "raw_csv_table" and "Info" in original_df.keys():
                             original_df.reset_index(inplace=True)
+
+                        # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
+                        if (
+                            t_type == "raw_csv_table"
+                            and table_config["source"] == "pmc_kernel_top.csv"
+                        ):
+                            original_df = original_df.head(
+                                base_data[base_run].filter_top_n
+                            )
 
                         display_columns = original_df.columns.values.tolist().copy()
                         # Remove hidden columns. Better way to do it?

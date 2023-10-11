@@ -178,7 +178,6 @@ def run_gui(args, runs):
             runs[args.path[0][0]].filter_gpu_ids,
             runs[args.path[0][0]].filter_dispatch_ids,
             args.time_unit,
-            args.max_kernel_num,
         )
         runs[args.path[0][0]].raw_pmc = file_io.create_df_pmc(
             args.path[0][0], args.verbose
@@ -230,7 +229,6 @@ def run_cli(args, runs):
             runs[d[0]].filter_gpu_ids,
             runs[d[0]].filter_dispatch_ids,
             args.time_unit,
-            args.max_kernel_num,
         )
         runs[d[0]].raw_pmc = file_io.create_df_pmc(
             d[0], args.verbose
@@ -299,14 +297,6 @@ def analyze(args):
     # Filtering
     if args.gpu_kernel:
         for d, gk in zip(args.path, args.gpu_kernel):
-            for k_idx in gk:
-                if int(k_idx) >= 10:
-                    print(
-                        "{} is an invalid kernel filter. Must be between 0-9.".format(
-                            k_idx
-                        )
-                    )
-                    sys.exit(2)
             runs[d[0]].filter_kernel_ids = gk
     if args.gpu_id:
         if len(args.gpu_id) == 1 and len(args.path) != 1:

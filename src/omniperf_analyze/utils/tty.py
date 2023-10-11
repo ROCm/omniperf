@@ -172,6 +172,12 @@ def show_all(args, runs, archConfigs, output):
                                 p.joinpath(table_id_str.replace(" ", "_") + ".csv"),
                                 index=False,
                             )
+                    # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
+                    if (
+                        type == "raw_csv_table"
+                        and table_config["source"] == "pmc_kernel_top.csv"
+                    ):
+                        df = df.head(args.max_kernel_num)
 
                     # NB:
                     # "columnwise: True" is a special attr of a table/df

@@ -263,7 +263,7 @@ def get_machine_specs(devicenum):
     if cur_sclk is None:
         cur_sclk = ""
 
-    cur_mclk = search(r"([0-9]+)", freq[3])
+    cur_mclk = "1300" #search(r"([0-9]+)", freq[3])
     # at the moment mclk reporting is unstable in mi300
     # i.e., it won't always be in rocm-smi
     if cur_mclk is None:

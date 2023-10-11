@@ -20,7 +20,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-##############################################################################
+##############################################################################el
 
 import ast
 import sys
@@ -30,7 +30,6 @@ import os
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
-from pathlib import Path
 from omniperf_analyze.utils import schema
 
 # ------------------------------------------------------------------------------
@@ -94,7 +93,6 @@ supported_call = {
     "TO_INT": "to_int",
     # Support the below with 2 inputs
     "ROUND": "to_round",
-    "QUANTILE": "to_quantile",
     "MOD": "to_mod",
     # Concat operation from the memory chart "active cus"
     "CONCAT": "to_concat",
@@ -165,13 +163,6 @@ def to_round(a, b):
         return a.round(b)
     else:
         return round(a, b)
-
-
-def to_quantile(a, b):
-    if isinstance(a, pd.core.series.Series):
-        return a.quantile(b)
-    else:
-        raise Exception("to_quantile: unsupported type.")
 
 
 def to_mod(a, b):
@@ -409,90 +400,35 @@ def build_dfs(archConfigs, filter_metrics):
     #         if not metric in avail_ip_blocks:
     #             print("{} is not a valid metric to filter".format(metric))
     #             exit(1)
-
-    simple_box = {
-        "Min": ["MIN(", ")"],
-        "Q1": ["QUANTILE(", ", 0.25)"],
-        "Median": ["MEDIAN(", ")"],
-        "Q3": ["QUANTILE(", ", 0.75)"],
-        "Max": ["MAX(", ")"],
-    }
-
     d = {}
     metric_list = {}
     dfs_type = {}
-
-    # resolve placeholders before any other operations
+    metric_counters = {}
     for panel_id, panel in archConfigs.panel_configs.items():
         panel_idx = str(panel_id // 100)
         for data_source in panel["data source"]:
-            for type, data_config in data_source.items():
-                if (
-                    type == "metric_table"
-                    and "metric" in data_config
-                    and "placeholder_range" in data_config["metric"]
-                ):
-                    # print(data_config["metric"])
-                    new_metrics = {}
-                    # NB: support single placeholder for now!!
-                    p_range = data_config["metric"].pop("placeholder_range")
-                    metric, metric_expr = data_config["metric"].popitem()
-                    # print(len(data_config["metric"]))
-                    # data_config['metric'].clear()
-                    for p, r in p_range.items():
-                        for i in range(r):
-                            new_key = metric.replace(p, str(i))
-                            new_val = {}
-                            for k, v in metric_expr.items():
-                                new_val[k] = metric_expr[k].replace(p, str(i))
-                            # print(new_val)
-                            new_metrics[new_key] = new_val
-
-                    # print(p_range)
-                    # print(new_metrics)
-                    data_config["metric"] = new_metrics
-                    # print(data_config)
-                    # print(data_config["metric"])
-
-    for panel_id, panel in archConfigs.panel_configs.items():
-        for data_source in panel["data source"]:
-            for type, data_config in data_source.items():
+            for type, data_cofig in data_source.items():
                 if type == "metric_table":
-                    metric_list[panel_idx] = panel["title"]
-                    table_idx = panel_idx + "." + str(data_config["id"] % 100)
-                    metric_list[table_idx] = data_config["title"]
+                    if "title" in panel:
+                        metric_list[panel_idx] = panel["title"]
+                    table_idx = panel_idx + "." + str(data_cofig["id"] % 100)
+                    if "title" in data_cofig:
+                        metric_list[table_idx] = data_cofig["title"]
 
                     headers = ["Index"]
-
-                    if "style" in data_config and data_config["style"] == "simple_box":
-                        headers.append("Metric")
-                        for k in simple_box.keys():
-                            headers.append(k)
-
-                        for key, tile in data_config["header"].items():
-                            if key != "metric" and key != "tips" and key != "expr":
-                                headers.append(tile)
-                    else:
-                        for key, tile in data_config["header"].items():
-                            if key != "tips":
-                                headers.append(tile)
-
-                    # always need one?
+                    for key, tile in data_cofig["header"].items():
+                        if key != "tips":
+                            headers.append(tile)
                     headers.append("coll_level")
 
-                    if "tips" in data_config["header"].keys():
-                        headers.append(data_config["header"]["tips"])
+                    if "tips" in data_cofig["header"].keys():
+                        headers.append(data_cofig["header"]["tips"])
 
                     df = pd.DataFrame(columns=headers)
 
                     i = 0
-                    for key, entries in data_config["metric"].items():
-                        data_source_idx = (
-                            str(data_config["id"] // 100)
-                            + "."
-                            + str(data_config["id"] % 100)
-                        )
-                        metric_idx = data_source_idx + "." + str(i)
+                    for key, entries in data_cofig["metric"].items():
+                        metric_idx = table_idx + "." + str(i)
                         values = []
                         eqn_content = []
 
@@ -508,30 +444,10 @@ def build_dfs(archConfigs, filter_metrics):
                         ):
                             values.append(metric_idx)
                             values.append(key)
-
-                            if (
-                                "style" in data_config
-                                and data_config["style"] == "simple_box"
-                            ):
-                                # print("~~~~~~~~~~~~~~~~~")
-                                # print(entries)
-                                # print("~~~~~~~~~~~~~~~~~")
-                                for k, v in entries.items():
-                                    if k == "expr":
-                                        for bk, bv in simple_box.items():
-                                            values.append(bv[0] + v + bv[1])
-                                    else:
-                                        if (
-                                            k != "tips"
-                                            and k != "coll_level"
-                                            and k != "alias"
-                                        ):
-                                            values.append(v)
-
-                            else:
-                                for k, v in entries.items():
-                                    if k != "tips" and k != "coll_level" and k != "alias":
-                                        values.append(v)
+                            for k, v in entries.items():
+                                if k != "tips" and k != "coll_level" and k != "alias":
+                                    values.append(v)
+                                    eqn_content.append(v)
 
                             if "alias" in entries.keys():
                                 values.append(entries["alias"])
@@ -544,9 +460,7 @@ def build_dfs(archConfigs, filter_metrics):
                             if "tips" in entries.keys():
                                 values.append(entries["tips"])
 
-                            # print(headers, values)
                             # print(key, entries)
-
                             df_new_row = pd.DataFrame([values], columns=headers)
                             df = pd.concat([df, df_new_row])
 
@@ -572,22 +486,22 @@ def build_dfs(archConfigs, filter_metrics):
                     # df.set_index('Metric', inplace=True)
                     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
                 elif type == "raw_csv_table":
-                    data_source_idx = str(data_config["id"] // 100)
+                    data_source_idx = str(data_cofig["id"] // 100)
                     if (
                         (not filter_metrics)
                         or (data_source_idx == "0")  # no filter
                         or (data_source_idx in filter_metrics)
                     ):
                         if (
-                            "columnwise" in data_config
-                            and data_config["columnwise"] == True
+                            "columnwise" in data_cofig
+                            and data_cofig["columnwise"] == True
                         ):
                             df = pd.DataFrame(
-                                [data_config["source"]], columns=["from_csv_columnwise"]
+                                [data_cofig["source"]], columns=["from_csv_columnwise"]
                             )
                         else:
                             df = pd.DataFrame(
-                                [data_config["source"]], columns=["from_csv"]
+                                [data_cofig["source"]], columns=["from_csv"]
                             )
                         metric_list[data_source_idx] = panel["title"]
                     else:
@@ -595,8 +509,8 @@ def build_dfs(archConfigs, filter_metrics):
                 else:
                     df = pd.DataFrame()
 
-                d[data_config["id"]] = df
-                dfs_type[data_config["id"]] = type
+                d[data_cofig["id"]] = df
+                dfs_type[data_cofig["id"]] = type
 
     setattr(archConfigs, "dfs", d)
     setattr(archConfigs, "metric_list", metric_list)
@@ -785,7 +699,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
             # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
 
 
-def apply_filters(workload, dir, is_gui, debug):
+def apply_filters(workload, is_gui, debug):
     """
     Apply user's filters to the raw_pmc df.
     """
@@ -814,17 +728,6 @@ def apply_filters(workload, dir, is_gui, debug):
         if not is_gui:
             if debug:
                 print("CLI kernel filtering")
-
-            # Verify valid kernel filter
-            kernels_df = pd.read_csv(os.path.join(dir, "pmc_kernel_top.csv"))
-            for kernel_id in workload.filter_kernel_ids:
-                if kernel_id > len(kernels_df["Kernel_Name"]):
-                    print(
-                        "{} is an invalid kernel id. Please enter an id between 0-{}".format(
-                            kernel_id, len(kernels_df["Kernel_Name"])
-                        )
-                    )
-                    sys.exit(1)
             kernels = []
             # NB: mark selected kernels with "*"
             #    Todo: fix it for unaligned comparison
@@ -832,19 +735,19 @@ def apply_filters(workload, dir, is_gui, debug):
             kernel_top_df["S"] = ""
             for kernel_id in workload.filter_kernel_ids:
                 # print("------- ", kernel_id)
-                kernels.append(kernel_top_df.loc[kernel_id, "Kernel_Name"])
+                kernels.append(kernel_top_df.loc[kernel_id, "KernelName"])
                 kernel_top_df.loc[kernel_id, "S"] = "*"
 
             if kernels:
                 # print("fitlered df:", len(df.index))
                 ret_df = ret_df.loc[
-                    ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(kernels)
+                    ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(kernels)
                 ]
         else:
             if debug:
                 print("GUI kernel filtering")
             ret_df = ret_df.loc[
-                ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(
+                ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(
                     workload.filter_kernel_ids
                 )
             ]
@@ -862,8 +765,11 @@ def apply_filters(workload, dir, is_gui, debug):
                 ret_df[schema.pmc_perf_file_prefix]["Index"] > int(m.group(1))
             ]
         else:
-            dispatches = [int(x) for x in workload.filter_dispatch_ids]
-            ret_df = ret_df.loc[dispatches]
+            ret_df = ret_df.loc[
+                ret_df[schema.pmc_perf_file_prefix]["Index"]
+                .astype(str)
+                .isin(workload.filter_dispatch_ids)
+            ]
     if debug:
         print("~" * 40, "\nraw pmc df info:\n")
         print(workload.raw_pmc.info())
@@ -880,24 +786,18 @@ def load_kernel_top(workload, dir):
     tmp = {}
     for id, df in workload.dfs.items():
         if "from_csv" in df.columns:
-            file = Path.joinpath(Path(dir), df.loc[0, "from_csv"])
-            if file.exists():
-                tmp[id] = pd.read_csv(file)
-            # else:
-            #     warning to log
+            tmp[id] = pd.read_csv(os.path.join(dir, df.loc[0, "from_csv"]))
         elif "from_csv_columnwise" in df.columns:
             # NB:
             #   Another way might be doing transpose in tty like metric_table.
             #   But we need to figure out headers and comparison properly.
-            file = Path.joinpath(Path(dir), df.loc[0, "from_csv_columnwise"])
-            if file.exists():
-                tmp[id] = pd.read_csv(file).transpose()
-                # NB:
-                #   All transposed columns should be marked with a general header,
-                #   so tty could detect them and show them correctly in comparison.
-                tmp[id].columns = ["Info"]
-            # else:
-            #     warning to log
+            tmp[id] = pd.read_csv(
+                os.path.join(dir, df.loc[0, "from_csv_columnwise"])
+            ).transpose()
+            # NB:
+            #   All transposed columns should be marked with a general header,
+            #   so tty could detect them and show them correctly in comparison.
+            tmp[id].columns = ["Info"]
     workload.dfs.update(tmp)
 
 
@@ -914,7 +814,7 @@ def load_table_data(workload, dir, is_gui, debug, verbose, skipKernelTop=False):
         workload.dfs_type,
         workload.sys_info.iloc[0],
         workload.soc_spec,
-        apply_filters(workload, dir, is_gui, debug),
+        apply_filters(workload, is_gui, debug),
         debug,
     )
 
@@ -930,56 +830,3 @@ def build_comparable_columns(time_unit):
         comparable_columns.append(h + "(" + time_unit + ")")
 
     return comparable_columns
-
-
-def correct_sys_info(df, specs_correction):
-    """
-    Correct system spec items manually
-    """
-
-    # NB: to keep the backwards compatibility, we don't touch the current
-    #   naming convention. Ideally, the header of sysinfo should use/include
-    #   the members of MachineSpecs directly.
-
-    # Sync up with the header defined in omniperf gen_sysinfo() !!
-    # header = "workload_name,"
-    # header += "command,"
-    # header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
-    # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
-    # header += "ip_blocks\n"
-
-    name_map = {
-        "host_name": "hostname",
-        "CPU": "host_cpu",
-        "kernel_version": "host_kernel",
-        "host_distro": "distro",
-        # "ram": "",
-        "distro": "host_distro",
-        "rocm_version": "host_rocmver",
-        "GPU": "name",
-        "arch": "gpu_soc",
-        "L1": "L1",
-        "L2": "L2",
-        "CU": "numCU",
-        "SIMD": "numSIMD",
-        "SE": "numSE",
-        "wave_size": "waveSize",
-        "max_waves_per_cu": "maxWavesPerCU",
-        "max_waves_per_cu": "maxWorkgroupSize",
-        "max_sclk": "sclk",
-        "mclk": "mclk",
-        "cur_sclk": "cur_sclk",
-        "cur_mclk": "cur_mclk",
-        "L2Banks": "L2Banks",
-        "LDSBanks": "LDSBanks",
-        "numSQC": "numSQC",
-        "hbmBW": "hbmBW",
-    }
-
-    # todo: more err checking for string specs_correction
-    pairs = dict(re.findall(r"(\w+):\s*(\d+)", specs_correction))
-    for k, v in pairs.items():
-        df[name_map[k]] = v
-
-    return df

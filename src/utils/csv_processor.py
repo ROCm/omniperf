@@ -131,6 +131,8 @@ def kernel_name_shortener(workload_dir, level):
         rocprof_path = resolve_rocprof(returnPath)
         # Given expected rocprof dir format (ie '/opt/rocm-x.x.x/bin/rocprof') navigate to llvm in parent
         rocm_dir = os.path.abspath(os.path.join(rocprof_path, os.pardir, os.pardir))
+        # TODO: Unfix rocm_dir
+        rocm_dir = os.path.abspath("/opt/rocm")
         llvm_filt = os.path.join(rocm_dir, "llvm", "bin", "llvm-cxxfilt")
         if not os.path.isfile(llvm_filt):
             print(

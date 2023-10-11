@@ -34,65 +34,53 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
-gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940", "gfx942", "gfx941"} #NB: gfx942 is reported as gfx941 inside docker
+gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940"}
 
 
 @dataclass
 class MachineSpecs:
     hostname: str
-    CPU: str
-    kernel_version: str
+    cpu: str
+    kernel: str
     ram: str
     distro: str
-    rocm_version: str
+    rocmversion: str
     GPU: str
-    arch: str
     L1: str
     L2: str
+    SCLK: str
     CU: str
     SIMD: str
     SE: str
     wave_size: str
-    workgroup_max_size: str
-    max_sclk: str
-    cur_sclk: str
-    cur_mclk: str
-    max_waves_per_cu: str
-    L2Banks: str
-    LDSBanks: str
-    numSQC: str
-    numXCC: str
-    hbmBW: str
+    workgroup_size: str
+    cur_SCLK: str
+    cur_MCLK: str
+    wave_occu: str
 
     def __str__(self):
         return dedent(
             f"""\
         Host info:
-            hostname:           {self.hostname}
-            cpu info:           {self.CPU}
-            ram:                {self.ram}
-            distro:             {self.distro}
-            kernel version:     {self.kernel_version}
-            rocm version:       {self.rocm_version}
+            hostname:       {self.hostname}
+            cpu info:       {self.cpu}
+            ram:            {self.ram}
+            distro:         {self.distro}
+            kernel version: {self.kernel}
+            rocm version:   {self.rocmversion}
         Device info:
             GPU:                {self.GPU}
-            arch:               {self.arch}
-            L1:                 {self.L1} KB
-            L2:                 {self.L2} KB
-            Max SCLK:           {self.max_sclk} MHz
-            Current SCLK:       {self.cur_sclk} MHz
-            Current MCLK:       {self.cur_mclk} MHz
+            L1:                 {self.L1}
+            L2:                 {self.L2}
+            Max SCLK:           {self.SCLK}MHz
+            Current SCLK:       {self.cur_SCLK}MHz
+            Current MCLK:       {self.cur_MCLK}MHz
             CU:                 {self.CU}
             SIMD:               {self.SIMD}
             SE:                 {self.SE}
             Wave Size:          {self.wave_size}
-            Workgroup Max Size: {self.workgroup_max_size}
-            Max Wave Per CU:    {self.max_waves_per_cu}
-            L2 Banks:           {self.L2Banks}
-            LDS Banks:          {self.LDSBanks}
-            Num SQC:            {self.numSQC}
-            Num XCC:            {self.numXCC}
-            HBM BW:             {self.hbmBW} MB/s
+            Workgroup Max Size: {self.workgroup_size}
+            Max Wave Occupancy Per CU: {self.wave_occu}
         """
         )
 
@@ -125,7 +113,7 @@ def gpuinfo():
 
         key = search(r"^\s*Max Clock Freq\. \(MHz\):\s+([0-9]+)", linetext)
         if key != None:
-            max_sclk = key
+            sclk = key
             continue
 
         key = search(r"^\s*Compute Unit:\s+ ([a-zA-Z0-9]+)\s*", linetext)
@@ -155,55 +143,10 @@ def gpuinfo():
 
         key = search(r"^\s*Max Waves Per CU:\s+ ([a-zA-Z0-9]+)\s*", linetext)
         if key != None:
-            max_waves_per_cu = key
+            wave_occu = key
             break
 
-    gpu_name = ""
-    L2Banks = ""
-    LDSBanks = "32"
-    numSQC = ""
-    numXCC = ""
-
-    if gpu_id == "gfx906":
-        gpu_name = "mi50"
-        L2Banks = "16"
-        numSQC = str(int(num_CU) // 4)
-    elif gpu_id == "gfx908":
-        gpu_name = "mi100"
-        L2Banks = "32"
-        numSQC = "48"
-    elif gpu_id == "gfx90a":
-        L2Banks = "32"
-        gpu_name = "mi200"
-        numSQC = "56"
-    elif gpu_id == "gfx940":
-        gpu_name = "mi300"
-        L2Banks = "16"
-        numSQC = "56"
-        numXCC = "6"
-    elif gpu_id == "gfx942" or gpu_id == "gfx941":
-        gpu_name = "mi300"
-        L2Banks = "16"
-        numSQC = "56"
-        numXCC = "8"
-
-    return (
-        gpu_name,
-        gpu_id,
-        L1,
-        L2,
-        max_sclk,
-        num_CU,
-        num_SIMD,
-        num_SE,
-        wave_size,
-        grp_size,
-        max_waves_per_cu,
-        L2Banks,
-        LDSBanks,
-        numSQC,
-        numXCC,
-    )
+    return gpu_id, L1, L2, sclk, num_CU, num_SIMD, num_SE, wave_size, grp_size, wave_occu
 
 
 def run(cmd):
@@ -266,23 +209,17 @@ def get_machine_specs(devicenum):
             sys.exit(1)
 
     (
-        gpu_name,
         gpu_id,
         L1,
         L2,
-        max_sclk,
+        sclk,
         num_CU,
         num_SIMD,
         num_SE,
         wave_size,
         grp_size,
-        max_waves_per_cu,
-        L2Banks,
-        LDSBanks,
-        numSQC,
-        numXCC,
+        wave_occu,
     ) = gpuinfo()
-
     rocm_smi = run(["rocm-smi"])
 
     # # Clean rocm_smi
@@ -312,39 +249,37 @@ def get_machine_specs(devicenum):
     device = rf"^\s*{devicenum}(.*)"
 
     hostname = socket.gethostname()
-    CPU = search(r"^model name\s*: (.*?)$", cpuinfo)
-    kernel_version = search(r"version (\S*)", version)
+    cpu = search(r"^model name\s*: (.*?)$", cpuinfo)
+    kernel = search(r"version (\S*)", version)
     ram = search(r"MemTotal:\s*(\S*)", meminfo)
     distro = search(r'PRETTY_NAME="(.*?)"', os_release)
     if distro is None:
         distro = ""
 
-    rocm_version = rocm_ver.strip()
+    rocmversion = rocm_ver.strip()
 
     freq = search(device, rocm_smi).split()
     cur_sclk = search(r"([0-9]+)", freq[2])
     if cur_sclk is None:
         cur_sclk = ""
 
-    cur_mclk = search(r"([0-9]+)", freq[3])
+    cur_mclk = "1300" #search(r"([0-9]+)", freq[3])
+    # at the moment mclk reporting is unstable in mi300
+    # i.e., it won't always be in rocm-smi
     if cur_mclk is None:
-        cur_mclk = 0
-
-    # FIXME with spec
-    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
+        cur_mclk = ""
 
     return MachineSpecs(
         hostname,
-        CPU,
-        kernel_version,
+        cpu,
+        kernel,
         ram,
         distro,
-        rocm_version,
-        gpu_name,
+        rocmversion,
         gpu_id,
         L1,
         L2,
-        max_sclk,
+        sclk,
         num_CU,
         num_SIMD,
         num_SE,
@@ -352,12 +287,7 @@ def get_machine_specs(devicenum):
         grp_size,
         cur_sclk,
         cur_mclk,
-        max_waves_per_cu,
-        L2Banks,
-        LDSBanks,
-        numSQC,
-        numXCC,
-        hbmBW,
+        wave_occu,
     )
 
 

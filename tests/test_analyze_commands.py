@@ -78,7 +78,8 @@ def test_filter_metrics_mi100():
                 "--path",
                 "tests/workloads/mixbench/mi100",
                 "-b",
-                "SQ", "LDS",
+                "SQ",
+                "LDS",
             ],
         ):
             omniperf.main()
@@ -95,7 +96,8 @@ def test_filter_metrics_inv_mi100():
                 "--path",
                 "tests/workloads/mixbench/mi100",
                 "-b",
-                "Crash", "Test",
+                "Crash",
+                "Test",
             ],
         ):
             omniperf.main()
@@ -423,7 +425,8 @@ def test_filter_metrics_mi200():
                 "--path",
                 "tests/workloads/mixbench/mi200",
                 "-b",
-                "SQ", "LDS",
+                "SQ",
+                "LDS",
             ],
         ):
             omniperf.main()
@@ -440,7 +443,8 @@ def test_filter_metrics_inv_mi200():
                 "--path",
                 "tests/workloads/mixbench/mi200",
                 "-b",
-                "Crash", "Test",
+                "Crash",
+                "Test",
             ],
         ):
             omniperf.main()

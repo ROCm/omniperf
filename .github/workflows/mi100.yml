@@ -29,8 +29,8 @@ jobs:
           cd build
           ml cmake
           cmake ..
-      - name: Install pytest
-        run: pip3 install pytest
+      - name: Install Python testing collateral
+        run: pip3 install pytest pytest-cov mock
       - name: Run profile mode
         run: |
           cd build

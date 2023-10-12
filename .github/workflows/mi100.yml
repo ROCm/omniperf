@@ -29,6 +29,8 @@ jobs:
           cd build
           ml cmake
           cmake ..
+      - name: Install pytest
+        run: pip3 install pytest
       - name: Run profile mode
         run: |
           cd build

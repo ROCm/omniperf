@@ -1,0 +1,41 @@
+name: mi100
+
+on:
+  push:
+    branches:
+      - 'ci_test'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:            
+
+permissions: read-all
+
+
+jobs:
+  build:
+    runs-on: [mi100, rhel9]
+    env:
+       TEST_DIR: ${RUNNER_TEMP}/omniperf
+       PYTHONPATH: /share/sw/omniperf/python-libs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_PAT }}
+      - name: Configure
+        run: |
+          mkdir build
+          cd build
+          ml cmake
+          cmake ..
+      - name: Run profile mode
+        run: |
+          cd build
+          ml cmake	  
+          ctest --verbose -R test_profiler_execution
+##       - name: Publish Test Report
+##         uses: mikepenz/action-junit-report@v3
+##         if: success() || failure() # always run even if the previous step fails
+##         with:
+##           report_paths: '**/tests/report*.xml'

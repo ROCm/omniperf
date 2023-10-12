@@ -78,7 +78,7 @@ def test_filter_metrics_mi100():
                 "--path",
                 "tests/workloads/mixbench/mi100",
                 "-b",
-                "SQ, LDS",
+                "SQ", "LDS",
             ],
         ):
             omniperf.main()
@@ -95,7 +95,7 @@ def test_filter_metrics_inv_mi100():
                 "--path",
                 "tests/workloads/mixbench/mi100",
                 "-b",
-                "Crash, Test",
+                "Crash", "Test",
             ],
         ):
             omniperf.main()
@@ -129,7 +129,7 @@ def test_filter_gpu_inv_mi100():
                 "--path",
                 "tests/workloads/mixbench/mi100",
                 "-k",
-                "99",
+                "200",
             ],
         ):
             omniperf.main()
@@ -150,7 +150,7 @@ def test_filter_dispatch_ids_mi100():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
 
 def test_filter_dispatch_ids_inv_mi100():
@@ -423,7 +423,7 @@ def test_filter_metrics_mi200():
                 "--path",
                 "tests/workloads/mixbench/mi200",
                 "-b",
-                "SQ, LDS",
+                "SQ", "LDS",
             ],
         ):
             omniperf.main()
@@ -440,7 +440,7 @@ def test_filter_metrics_inv_mi200():
                 "--path",
                 "tests/workloads/mixbench/mi200",
                 "-b",
-                "Crash, Test",
+                "Crash", "Test",
             ],
         ):
             omniperf.main()
@@ -474,11 +474,11 @@ def test_filter_gpu_inv_mi200():
                 "--path",
                 "tests/workloads/mixbench/mi200",
                 "-k",
-                "99",
+                "200",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_filter_dispatch_ids_mi200():
@@ -512,7 +512,7 @@ def test_filter_dispatch_ids_inv_mi200():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_filter_gpu_ids_mi200():

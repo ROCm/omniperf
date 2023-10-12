@@ -37,7 +37,7 @@ jobs:
       - name: Run analyze mode
         run: |
           cd build
-	  ml cmake
+          ml cmake
           ctest --verbose -R test_analyze_commands	  
 ##       - name: Publish Test Report
 ##         uses: mikepenz/action-junit-report@v3

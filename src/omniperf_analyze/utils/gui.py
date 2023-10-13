@@ -365,7 +365,33 @@ def build_table_chart(
         if IS_DARK
         else {},
         style_data_conditional=[
-            {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"}
+            {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"},
+            {
+                "if": {"column_id": "PoP", "filter_query": "{PoP} > 50"},
+                "backgroundColor": "#ffa90a",
+                "color": "white",
+            },
+            {
+                "if": {"column_id": "PoP", "filter_query": "{PoP} > 80"},
+                "backgroundColor": "#ff120a",
+                "color": "white",
+            },
+            {
+                "if": {
+                    "column_id": "Avg",
+                    "filter_query": "{Unit} = Pct && {Avg} > 50",
+                },
+                "backgroundColor": "#ffa90a",
+                "color": "white",
+            },
+            {
+                "if": {
+                    "column_id": "Avg",
+                    "filter_query": "{Unit} = Pct && {Avg} > 80",
+                },
+                "backgroundColor": "#ff120a",
+                "color": "white",
+            },
         ]
         if IS_DARK
         else [],
@@ -440,7 +466,7 @@ def build_layout(
             print("disp-filter is ", disp_filt)
             print("kernel-filter is ", kernel_filter)
             print("gpu-filter is ", gcd_filter)
-            print("top-n kernel filter is ", top_n_filter, "\n")
+            print("top-n kernel filter is ", top_n_filt, "\n")
         base_data[base_run].filter_kernel_ids = kernel_filter
         base_data[base_run].filter_gpu_ids = gcd_filter
         base_data[base_run].filter_dispatch_ids = disp_filt
@@ -451,7 +477,6 @@ def build_layout(
             base_data[base_run].filter_gpu_ids,
             base_data[base_run].filter_dispatch_ids,
             time_unit,
-            base_data[base_run].filter_top_n,
         )
         is_gui = True
         # Only display basic metrics if no filters are applied
@@ -484,7 +509,7 @@ def build_layout(
             div_children.append(
                 get_roofline(
                     path_to_dir,
-                    parser.apply_filters(base_data[base_run], is_gui, debug),
+                    parser.apply_filters(base_data[base_run], path_to_dir, is_gui, debug),
                     verbose,
                 )
             )
@@ -511,6 +536,15 @@ def build_layout(
                         # The sys info table need to add index back
                         if t_type == "raw_csv_table" and "Info" in original_df.keys():
                             original_df.reset_index(inplace=True)
+
+                        # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
+                        if (
+                            t_type == "raw_csv_table"
+                            and table_config["source"] == "pmc_kernel_top.csv"
+                        ):
+                            original_df = original_df.head(
+                                base_data[base_run].filter_top_n
+                            )
 
                         display_columns = original_df.columns.values.tolist().copy()
                         # Remove hidden columns. Better way to do it?

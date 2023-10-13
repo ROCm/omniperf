@@ -459,7 +459,7 @@ def parse(my_parser):
         metavar="",
         type=int,
         default=10,
-        help="\t\tSpecify the maximum number of kernels shown (DEFAULT: 10)",
+        help='\t\tSpecify the maximum number of kernels shown in "Top Stats" table (DEFAULT: 10)',
     )
     analyze_group.add_argument(
         "--config-dir",

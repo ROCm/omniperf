@@ -64,24 +64,17 @@ def capture_subprocess_output(subprocess_args, new_env=None):
     # Start subprocess
     # bufsize = 1 means output is line buffered
     # universal_newlines = True is required for line buffering
-    process = (
-        subprocess.Popen(subprocess_args,
-            bufsize=1,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            universal_newlines=True
-            )
-            if new_env == None
-            else subprocess.Popen(
-                subprocess_args,
-                bufsize=1,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                universal_newlines=True,
-                env=new_env,
-            )
-    )
-            
+    process = subprocess.Popen(subprocess_args,
+                               bufsize=1,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT,
+                               universal_newlines=True) if new_env  == None else subprocess.Popen(subprocess_args,
+                               bufsize=1,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT,
+                               universal_newlines=True,
+                               env = new_env)
+
     # Create callback function for process output
     buf = io.StringIO()
     def handle_output(stream, mask):
@@ -120,19 +113,15 @@ def get_soc():
     mspec = specs.get_machine_specs(0)
 
     target = ""
-    if mspec.arch == "gfx906":
+    if mspec.GPU == "gfx906":
         target = "mi50"
-    elif mspec.arch == "gfx908":
+    elif mspec.GPU == "gfx908":
         target = "mi100"
-    elif mspec.arch == "gfx90a":
+    elif mspec.GPU == "gfx90a":
         target = "mi200"
-    elif mspec.arch == "gfx900":
+    elif mspec.GPU == "gfx900":
         target = "vega10"
-    elif mspec.arch == "gfx940":
-        target = "mi300"
-    elif mspec.arch == "gfx942":
-        target = "mi300"
-    elif mspec.arch == "gfx941": #NB: gfx942 is reported as gfx941 inside docker
+    elif mspec.GPU == "gfx940":
         target = "mi300"
     else:
         print("\nInvalid SoC")
@@ -183,51 +172,54 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     param += ['"' + app_cmd + '"']
     param += [
         mspec.hostname,
-        mspec.CPU,
+        mspec.cpu,
         mspec.distro,
-        mspec.kernel_version,
-        mspec.rocm_version,
+        mspec.kernel,
+        mspec.rocmversion,
         timestamp,
     ]
 
     # GPU info
     param += [
-        mspec.arch,
+        mspec.GPU,
         mspec.SE,
         mspec.CU,
         mspec.SIMD,
         mspec.wave_size,
-        mspec.max_waves_per_cu,
-        mspec.workgroup_max_size,
+        mspec.wave_occu,
+        mspec.workgroup_size,
     ]
     param += [
         mspec.L1,
         mspec.L2,
-        mspec.cur_mclk,
-        mspec.cur_mclk,
-        mspec.cur_sclk,
-        mspec.cur_mclk,
-        mspec.L2Banks,
-        mspec.LDSBanks,
-        mspec.GPU,
-        mspec.numSQC,
-        mspec.hbmBW,
+        mspec.SCLK,
+        mspec.cur_MCLK,
+        mspec.cur_SCLK,
+        mspec.cur_MCLK,
     ]
 
     blocks = []
+    hbmBW = int(mspec.cur_MCLK) / 1000 * 4096 / 8 * 2
+    if mspec.GPU == "gfx906":
+        param += ["16", "32", "mi50", str(int(mspec.CU) // 4), str(hbmBW)]
+    elif mspec.GPU == "gfx908":
+        param += ["32", "32", "mi100", "48", str(hbmBW)]
+    elif mspec.GPU == "gfx90a":
+        param += ["32", "32", "mi200", "56", str(hbmBW)]
+        if not skip_roof:
+            blocks.append("roofline")
+    elif mspec.GPU == "gfx940":
+        param += ["16", "32", "mi300", "56", str(hbmBW)]
+
     # ip block info
     if ip_blocks == None:
         t = ["SQ", "LDS", "SQC", "TA", "TD", "TCP", "TCC", "SPI", "CPC", "CPF"]
         blocks += t
     else:
         blocks += ip_blocks
-
-    if mspec.GPU == "gfx90a" and (not skip_roof):
-        blocks.append("roofline")
-    
     param.append("|".join(blocks))
 
-    sysinfo.write(",".join(map(str, param)))
+    sysinfo.write(",".join(param))
     sysinfo.close()
 
 
@@ -289,7 +281,7 @@ def roof_setup(args, my_parser, VER):
 
 def detect_roofline():
     mspec = specs.get_machine_specs(0)
-    rocm_ver = mspec.rocm_version[:1]
+    rocm_ver = mspec.rocmversion[:1]
 
     os_release = path("/etc/os-release").read_text()
     ubuntu_distro = specs.search(r'VERSION_ID="(.*?)"', os_release)
@@ -417,7 +409,6 @@ def characterize_app(args, VER):
         else:
             run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
     
-
     if args.use_rocscope == False:
         # Manually join each pmc_perf*.csv output
         join_prof(workload_dir, args.join_type, log, args.verbose)
@@ -481,11 +472,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 '"' + cmd + '"',
             ]
         )
-    elif (target == "mi300") and (
-        os.path.basename(fname) == "pmc_perf_15.txt"
-        or os.path.basename(fname) == "pmc_perf_16.txt"
-    ):
-        # FIXME: remove all hack code specific to pmc_perf_*.txt and MI300A
+    if (target == "mi300") and (os.path.basename(fname) == "pmc_perf_15.txt" or os.path.basename(fname) == "pmc_perf_16.txt" ):
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -502,9 +489,8 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
             new_env
         )
         if success:
-            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
-            mspec = specs.get_machine_specs(0)
-            df = flatten_tcc_info_across_xccs(f, int(mspec.numXCC), 16)
+            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
+            df = flatten_tcc_info_across_xccs(f, 6, 16)
             df.to_csv(f, index=False)
     else:
         success, output = capture_subprocess_output(
@@ -550,10 +536,7 @@ def omniperf_profile(args, VER):
         print("KernelName verbose level: ", str(args.kernelVerbose))
 
     # Set up directories
-    if args.path == os.getcwd() + "/workloads":
-        workload_dir = args.path + "/" + args.name + "/" + args.target
-    else:
-        workload_dir = args.path
+    workload_dir = args.path + "/" + args.name + "/" + args.target
     perfmon_dir = str(OMNIPERF_HOME) + "/perfmon_pub"
 
     # Perfmon filtering
@@ -733,10 +716,6 @@ def main():
     vData = getVersion()
     VER = vData["version"]
 
-    if args.specs:
-        print(specs.get_machine_specs(0))
-        sys.exit(0) # Indicate successful on exit
-    
     if args.mode == None:
         throw_parse_error(
             my_parser,

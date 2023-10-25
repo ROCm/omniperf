@@ -141,7 +141,7 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
 
     # TODO: check for any mismatch in joins
     duplicate_cols = {
-        "GPU": [col for col in df.columns if "GPU" in col],
+        "GPU_ID": [col for col in df.columns if "GPU_ID" in col],
         "GRD": [col for col in df.columns if "GRD" in col],
         "WGR": [col for col in df.columns if "WGR" in col],
         "LDS": [col for col in df.columns if "LDS" in col],
@@ -188,8 +188,10 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
                     "WGR_",
                     "LDS_",
                     "SCR_",
-                    "ACCUM_VGPR_",
-                    "Arch_VGPR_" "SGPR_",
+                    "vgpr_",
+                    "Arch_VGPR_",
+                    "ACCUM_VGPR",
+                    "SGPR_",
                     "Dispatch_ID_",
                     # un-mergable, remove all
                     "Queue_ID",
@@ -568,22 +570,22 @@ def pmc_filter(workload_dir, perfmon_dir, soc):
 
 
 def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
-    """
+    '''
     Flatten TCC per channel counters across all XCCs.
     NB: This func highly depends on the default behavior of rocprofv2 on MI300,
-        which might be broken anytime in the future!
-    """
+        which might be broken anytime in the future!  
+    '''
     df_orig = pd.read_csv(file)
     # display(df_orig.info)
 
-    ### prepare column headers
+    ### prepare column headers 
     tcc_cols_orig = []
     non_tcc_cols_orig = []
     for c in df_orig.columns.to_list():
         if "TCC" in c:
             tcc_cols_orig.append(c)
         else:
-            non_tcc_cols_orig.append(c)
+            non_tcc_cols_orig.append(c)    
     # print(tcc_cols_orig)
 
     cols = non_tcc_cols_orig
@@ -594,8 +596,8 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
     for col in tcc_cols_orig:
         for i in range(0, xcc_num):
             # filter the channel index only
-            p = re.compile(r"(\d+)")
-            # pick up the 1st element only
+            p = re.compile(r'(\d+)')
+            # pick up the 1st element only 
             r = lambda match: str(int(float(match.group(0))) + i * tcc_channel_per_xcc)
             tcc_cols_in_group[i].append(re.sub(pattern=p, repl=r, string=col))
 
@@ -605,10 +607,11 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
     # print(cols)
     df = pd.DataFrame(columns=cols)
 
-    ### Rearrange data with extended column names
+    ### Rearrange data with extended column names  
 
     # print(len(df_orig.index))
     for idx in range(0, len(df_orig.index), xcc_num):
+
         # assume the front none TCC columns are the same for all XCCs
         df_non_tcc = df_orig.iloc[idx].filter(regex=r"^(?!.*TCC).*$")
         # display(df_non_tcc)
@@ -616,13 +619,13 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
 
         # extract all tcc from one dispatch
         # NB: assuming default contiguous order might not be safe!
-        df_tcc_all = df_orig.iloc[idx : (idx + xcc_num)].filter(regex="TCC")
-        # display(df_tcc_all)
+        df_tcc_all = df_orig.iloc[idx:(idx+xcc_num)].filter(regex='TCC')
+        # display(df_tcc_all) 
 
         for idx, row in df_tcc_all.iterrows():
             flatten_list += row.tolist()
         # print(len(df.index), len(flatten_list), len(df.columns), flatten_list)
-        # NB: It is not the best perf to append a row once a time
+        # NB: It is not the best perf to append a row once a time 
         df.loc[len(df.index)] = flatten_list
 
     return df

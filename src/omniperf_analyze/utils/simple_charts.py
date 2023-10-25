@@ -43,12 +43,10 @@ def simple_bar(df, title=None):
     # TODO: handle None properly
 
     if "Metric" in df.columns and "Value" in df.columns:
-        metric_dict = (
-            pd.DataFrame([df["Metric"], df["Value"]])
-            .transpose()
-            .set_index("Metric")
-            .to_dict()["Value"]
-        )
+        metric_dict = (pd.DataFrame([df["Metric"], df["Value"]]).replace('',0)
+                        .transpose()
+                        .set_index("Metric")
+                        .to_dict()["Value"])
     else:
         raise NameError("simple_bar: No Metric or Value in df columns!")
 
@@ -73,7 +71,7 @@ def simple_multiple_bar(df, title=None):
     # TODO: handle Nan and None properly
 
     plt.clear_figure()
-    t_df = df.fillna(0)
+    t_df = df.fillna(0).replace('',0)
     sub_labels = t_df.transpose().to_dict("split")["index"]
     sub_labels.pop(0)
     data = t_df.transpose().to_dict("split")["data"]
@@ -128,7 +126,7 @@ def simple_box(df, orientation="v", title=None):
     # show unit if provided
 
     labels_length = 0
-    t_df = df.fillna(0)
+    t_df = df.fillna(0).replace('',0)
     for index, row in t_df.iterrows():
         labels.append(row["Metric"])
         labels_length += len(row["Metric"]) + 10

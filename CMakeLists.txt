@@ -179,7 +179,7 @@ option(ENABLE_COVERAGE "Enable code coverage" OFF)
 set(COV_OPTION "")
 if(${ENABLE_COVERAGE})
     message(STATUS "Enabling code coverage mode")
-    set(COV_OPTION "--cov=src")
+    set(COV_OPTION "--cov=src --junitxml=tests/test-results.xml --cov-append")
 endif()
 
 add_test(

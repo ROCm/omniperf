@@ -38,7 +38,13 @@ from pathlib import Path as path
 
 from parser import parse
 from utils import specs
-from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof, flatten_tcc_info_across_xccs
+from utils.perfagg import (
+    perfmon_filter,
+    pmc_filter,
+    pmc_perf_split,
+    join_prof,
+    flatten_tcc_info_across_xccs,
+)
 from utils import remove_workload
 from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
@@ -54,29 +60,40 @@ from common import (
 
 from common import getVersion
 
+
 ################################################
 # Helper Functions
 ################################################
 def run_subprocess(cmd):
     subprocess.run(cmd, check=True)
 
+
 def capture_subprocess_output(subprocess_args, new_env=None):
     # Start subprocess
     # bufsize = 1 means output is line buffered
     # universal_newlines = True is required for line buffering
-    process = subprocess.Popen(subprocess_args,
-                               bufsize=1,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
-                               universal_newlines=True) if new_env  == None else subprocess.Popen(subprocess_args,
-                               bufsize=1,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
-                               universal_newlines=True,
-                               env = new_env)
+    process = (
+        subprocess.Popen(
+            subprocess_args,
+            bufsize=1,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+        )
+        if new_env == None
+        else subprocess.Popen(
+            subprocess_args,
+            bufsize=1,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+            env=new_env,
+        )
+    )
 
     # Create callback function for process output
     buf = io.StringIO()
+
     def handle_output(stream, mask):
         # Because the process' output is line buffered, there's only ever one
         # line to read when this function is called
@@ -100,7 +117,7 @@ def capture_subprocess_output(subprocess_args, new_env=None):
     return_code = process.wait()
     selector.close()
 
-    success = (return_code == 0)
+    success = return_code == 0
 
     # Store buffered output
     output = buf.getvalue()
@@ -146,6 +163,7 @@ def isWorkloadEmpty(my_parser, path):
         throw_parse_error(
             my_parser, "Profling Error: Cannot find pmc_perf.csv in {}".format(path)
         )
+
 
 def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # Record system information
@@ -231,6 +249,7 @@ def mongo_import(args, profileAndImport):
     csv_processor.convert_folder(connectionInfo)
     print("-- Complete! --")
 
+
 ################################################
 # Roofline Helpers
 ################################################
@@ -241,7 +260,7 @@ def roof_setup(args, my_parser, VER):
     # Do we need a new directory for roofline?
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
-    
+
     # Does roof data exist?
     print("Checking for roofline.csv in ", args.path)
     roof_path = args.path + "/roofline.csv"
@@ -301,8 +320,9 @@ def detect_roofline():
         # Must be a valid RHEL machine
         distro = rhel_distro
     elif (
-        (type(sles_distro) == str and len(sles_distro) >= 3) and # confirm string and len
-        sles_distro[:2] == "15" and int(sles_distro[3]) >= 3 # SLES15 and SP >= 3
+        (type(sles_distro) == str and len(sles_distro) >= 3)
+        and sles_distro[:2] == "15"  # confirm string and len
+        and int(sles_distro[3]) >= 3  # SLES15 and SP >= 3
     ):
         # Must be a valid SLES machine
         # Use SP3 binary for all forward compatible service pack versions
@@ -407,20 +427,23 @@ def characterize_app(args, VER):
         if args.use_rocscope == True:
             run_rocscope(args, fname)
         else:
-            run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
-    
+            run_prof(
+                fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose
+            )
+
     if args.use_rocscope == False:
         # Manually join each pmc_perf*.csv output
         join_prof(workload_dir, args.join_type, log, args.verbose)
         # Demangle and overwrite original KernelNames
         csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
-        
+
     log.close()
 
 
 ################################################
 # Profiling Helpers
 ################################################
+
 
 def run_rocscope(args, fname):
     # profile the app
@@ -472,7 +495,11 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 '"' + cmd + '"',
             ]
         )
-    if (target == "mi300") and (os.path.basename(fname) == "pmc_perf_15.txt" or os.path.basename(fname) == "pmc_perf_16.txt" ):
+    if (target == "mi300") and (
+        os.path.basename(fname) == "pmc_perf_15.txt"
+        or os.path.basename(fname) == "pmc_perf_16.txt"
+    ):
+        # FIXME: remove all hack code specific to pmc_perf_*.txt and MI300A
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -486,10 +513,10 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 fbase,
                 cmd,
             ],
-            new_env
+            new_env,
         )
         if success:
-            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
+            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             df = flatten_tcc_info_across_xccs(f, 6, 16)
             df.to_csv(f, index=False)
     else:
@@ -505,13 +532,16 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 cmd,
             ]
         )
-    # Copy over results 
-    shutil.copyfile(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
+    # Copy over results
+    shutil.copyfile(
+        workload_dir + "/out/pmc_1/results_" + fbase + ".csv",
+        workload_dir + "/" + fbase + ".csv",
+    )
     # Remove temp directory
     shutil.rmtree(workload_dir + "/" + "out")
     # Write output to log
     log_file.write(output)
-    
+
 
 def omniperf_profile(args, VER):
     # Verify valid name
@@ -645,8 +675,16 @@ def omniperf_profile(args, VER):
             if args.use_rocscope == True:
                 run_rocscope(args, fname)
             else:
-                run_prof(fname, workload_dir, perfmon_dir, args.remaining, args.target, log, args.verbose)
-                
+                run_prof(
+                    fname,
+                    workload_dir,
+                    perfmon_dir,
+                    args.remaining,
+                    args.target,
+                    log,
+                    args.verbose,
+                )
+
         if args.use_rocscope == False:
             # Manually join each pmc_perf*.csv output
             join_prof(workload_dir, args.join_type, log, args.verbose)
@@ -735,7 +773,7 @@ def main():
                 my_parser, "Access denied. Cannot access parent directories in path ../"
             )
 
-        # Must have a valid soc in profile mode 
+        # Must have a valid soc in profile mode
         args.target = get_soc()
 
         # Verify correct command formatting
@@ -763,7 +801,14 @@ def main():
             # Setup prerequisits for roofline
             roof_setup(args, my_parser, VER)
             # Generate roofline
-            roofline_only(args.path, args.device, args.sort, args.mem_level, args.kernel_names, args.verbose)
+            roofline_only(
+                args.path,
+                args.device,
+                args.sort,
+                args.mem_level,
+                args.kernel_names,
+                args.verbose,
+            )
 
         # Profile only
         else:
@@ -849,7 +894,7 @@ def main():
                         \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
                         \n-------------------------------------------------------------------------------\n
                         \ntool: error: --gui cannot be used in combination with: -b/--metric
-                        """
+                        """,
                     )
                 print("\n--------\nAnalyze\n--------\n")
                 # Ensure absolute path

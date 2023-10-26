@@ -270,43 +270,43 @@ Panel Config:
           # Fabric Block
           Fabric_L2 Rd:
             #alias: l2_fabric_rd_
-            value: ROUND(AVG((TCC_EA_RDREQ_sum / $denom)), 0)
+            value: ROUND(AVG((TCC_EA0_RDREQ_sum / $denom)), 0)
             tips:
           Fabric_L2 Wr:
             #alias: l2_fabric_wr_
-            value: ROUND(AVG((TCC_EA_WRREQ_sum / $denom)), 0)
+            value: ROUND(AVG((TCC_EA0_WRREQ_sum / $denom)), 0)
             tips:
           Fabric_L2 Atomic:
             #alias: l2_fabric_atom_
-            value: ROUND(AVG((TCC_EA_ATOMIC_sum / $denom)), 0)
+            value: ROUND(AVG((TCC_EA0_ATOMIC_sum / $denom)), 0)
             tips:
 
           Fabric Rd Lat:
             #alias: fabric_rd_lat_
             value:
-              ROUND(AVG(((TCC_EA_RDREQ_LEVEL_sum / TCC_EA_RDREQ_sum) if (TCC_EA_RDREQ_sum
+              ROUND(AVG(((TCC_EA0_RDREQ_LEVEL_sum / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum
               != 0) else  0)), 0)
             tips:
           Fabric Wr Lat:
             #alias: fabric_wr_lat_
             value:
-              ROUND(AVG(((TCC_EA_WRREQ_LEVEL_sum / TCC_EA_WRREQ_sum) if (TCC_EA_WRREQ_sum
+              ROUND(AVG(((TCC_EA0_WRREQ_LEVEL_sum / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum
               != 0) else  0)), 0)
             tips:
           Fabric Atomic Lat:
             #alias: fabric_atom_lat_
             value:
-              ROUND(AVG(((TCC_EA_ATOMIC_LEVEL_sum / TCC_EA_ATOMIC_sum) if (TCC_EA_ATOMIC_sum
+              ROUND(AVG(((TCC_EA0_ATOMIC_LEVEL_sum / TCC_EA0_ATOMIC_sum) if (TCC_EA0_ATOMIC_sum
               != 0) else  0)), 0)
             tips:
 
           HBM Rd:
             #alias: hbm_rd_
-            value: ROUND(AVG((TCC_EA_RDREQ_DRAM_sum / $denom)), 0)
+            value: ROUND(AVG((TCC_EA0_RDREQ_DRAM_sum / $denom)), 0)
             tips:
           HBM Wr:
             #alias: hbm_wr_
-            value: ROUND(AVG((TCC_EA_WRREQ_DRAM_sum / $denom)), 0)
+            value: ROUND(AVG((TCC_EA0_WRREQ_DRAM_sum / $denom)), 0)
             tips:
 
         comparable: false # for now

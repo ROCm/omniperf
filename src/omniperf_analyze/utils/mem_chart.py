@@ -668,6 +668,11 @@ class MemChart:
             self.x_min + 2.0, self.y_max - 2.0, "(Normalization: " + normal_unit + ")"
         )
 
+        # Fixme: this is temp solution to filter out non-numeric string
+        for k, v in metric_dict.items():
+            print(k, type(v))
+            metric_dict[k] = -1 if type(v) == str else v
+
         # Typically, the drawing order would be: left->right, top->down
 
         # ----------------------------------------

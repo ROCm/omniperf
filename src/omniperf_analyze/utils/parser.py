@@ -735,19 +735,19 @@ def apply_filters(workload, is_gui, debug):
             kernel_top_df["S"] = ""
             for kernel_id in workload.filter_kernel_ids:
                 # print("------- ", kernel_id)
-                kernels.append(kernel_top_df.loc[kernel_id, "KernelName"])
+                kernels.append(kernel_top_df.loc[kernel_id, "Kernel_Name"])
                 kernel_top_df.loc[kernel_id, "S"] = "*"
 
             if kernels:
                 # print("fitlered df:", len(df.index))
                 ret_df = ret_df.loc[
-                    ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(kernels)
+                    ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(kernels)
                 ]
         else:
             if debug:
                 print("GUI kernel filtering")
             ret_df = ret_df.loc[
-                ret_df[schema.pmc_perf_file_prefix]["KernelName"].isin(
+                ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(
                     workload.filter_kernel_ids
                 )
             ]

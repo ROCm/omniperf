@@ -48,7 +48,7 @@ jobs:
         with:
           report_paths: '**/tests/test-results.xml'
       - name: Pytest coverage comment
-       uses: MishaKav/pytest-coverage-comment@v1.1.48
-       with:
-         pytest-coverage-path: '**/tests/coverage.xml'
-         junitxml-path: '**/tests/test-results.xml'
+        uses: MishaKav/pytest-coverage-comment@v1.1.48
+        with:
+          pytest-coverage-path: '**/tests/coverage.xml'
+          junitxml-path: '**/tests/test-results.xml'

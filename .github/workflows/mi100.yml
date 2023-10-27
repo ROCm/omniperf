@@ -47,8 +47,14 @@ jobs:
         if: success() || failure() # always run even if the previous step fails
         with:
           report_paths: '**/tests/test-results.xml'
-      - name: Pytest coverage comment
-        uses: MishaKav/pytest-coverage-comment@v1.1.48
+      - name: Archive coverage results
+        uses: actions/upload-artifact@v3
         with:
-          pytest-coverage-path: 'tests/coverage.xml'
-          junitxml-path: 'tests/test-results.xml'
+          name: coverage
+          path: tests/coverage-html
+	  retention-days: 3
+##       - name: Pytest coverage comment
+##         uses: MishaKav/pytest-coverage-comment@v1.1.48
+##         with:
+##           pytest-coverage-path: 'tests/coverage.xml'
+##           junitxml-path: 'tests/test-results.xml'

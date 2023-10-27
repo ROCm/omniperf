@@ -178,8 +178,8 @@ enable_testing()
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 set(COV_OPTION "")
 if(${ENABLE_COVERAGE})
-    set(COV_OPTION "--cov=src" "--junitxml=tests/test-results.xml" "--cov-append"
-                   "--cov-report=xml:tests/coverage.xml")
+    set(COV_OPTION "--cov=src" "--junitxml=tests/test-results.xml" "--cov-append" "--cov-report=term-missing"
+                   "--cov-report=html:tests/coverage-html")
 endif()
 message(STATUS "Code coverage: ${ENABLE_COVERAGE}")
 

@@ -52,7 +52,7 @@ jobs:
         with:
           name: coverage
           path: tests/coverage-html
-	  retention-days: 3
+          retention-days: 3
 ##       - name: Pytest coverage comment
 ##         uses: MishaKav/pytest-coverage-comment@v1.1.48
 ##         with:

@@ -47,6 +47,11 @@ jobs:
         if: success() || failure() # always run even if the previous step fails
         with:
           report_paths: '**/tests/test-results.xml'
+      - name: Another coverage option
+         uses: orgoro/coverage@v3.1
+         with:
+             coverageFile: tests/coverage.xml
+             token: ${{ secrets.GITHUB_TOKEN }}	  
       - name: Archive coverage results
         uses: actions/upload-artifact@v3
         with:

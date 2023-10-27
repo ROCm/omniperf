@@ -178,9 +178,9 @@ enable_testing()
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 set(COV_OPTION "")
 if(${ENABLE_COVERAGE})
-    message(STATUS "Enabling code coverage mode")
-    set(COV_OPTION "--cov=src --junitxml=tests/test-results.xml --cov-append")
+    set(COV_OPTION "--cov=src" "--junitxml=tests/test-results.xml" "--cov-append")
 endif()
+message(STATUS "Code coverage: ${ENABLE_COVERAGE}")
 
 add_test(
     NAME test_analyze_commands

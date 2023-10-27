@@ -5,11 +5,12 @@ on:
     branches:
       - 'ci'
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows manual execution
   workflow_dispatch:            
 
-permissions: read-all
-
+permissions:
+  contents: read
+  checks: write
 
 jobs:
   build:

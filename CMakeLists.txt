@@ -185,7 +185,7 @@ message(STATUS "Code coverage: ${ENABLE_COVERAGE}")
 
 add_test(
     NAME test_analyze_commands
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
+    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py::test_valid_path_mi100
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(

@@ -130,15 +130,15 @@ def get_soc():
     mspec = specs.get_machine_specs(0)
 
     target = ""
-    if mspec.GPU == "gfx906":
+    if mspec.arch == "gfx906":
         target = "mi50"
-    elif mspec.GPU == "gfx908":
+    elif mspec.arch == "gfx908":
         target = "mi100"
-    elif mspec.GPU == "gfx90a":
+    elif mspec.arch == "gfx90a":
         target = "mi200"
-    elif mspec.GPU == "gfx900":
+    elif mspec.arch == "gfx900":
         target = "vega10"
-    elif mspec.GPU == "gfx940":
+    elif mspec.arch == "gfx940":
         target = "mi300"
     else:
         print("\nInvalid SoC")
@@ -516,6 +516,13 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
             df = flatten_tcc_info_across_xccs(f, 6, 16)
             df.to_csv(f, index=False)
     else:
+        # print("rocprof cmd: ", rocprof_cmd,"-i",
+        #         fname,
+        #         "-d",
+        #         workload_dir + "/" + "out",
+        #         "-o",
+        #         fbase,
+        #         cmd)
         success, output = capture_subprocess_output(
             [
                 rocprof_cmd,

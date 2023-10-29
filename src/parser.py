@@ -50,9 +50,7 @@ def parse(my_parser):
     my_parser._positionals.title = "Modes"
     my_parser._optionals.title = "Help"
     general_group.add_argument("-v", "--version", action="version", version=versionString)
-    general_group.add_argument(
-        "-s", "--specs", help="check system spec", action="store_true"
-    )
+    general_group.add_argument("-s", "--specs", help="check system spec", action="store_true")
 
     subparsers = my_parser.add_subparsers(
         dest="mode", help="Select mode of interaction with the target application:"
@@ -90,6 +88,7 @@ def parse(my_parser):
     general_group.add_argument(
         "-V", "--verbose", help="Increase output verbosity", action="count", default=0
     )
+
     profile_group.add_argument(
         "-n",
         "--name",
@@ -462,7 +461,7 @@ def parse(my_parser):
         metavar="",
         type=int,
         default=10,
-        help='\t\tSpecify the maximum number of kernels shown in "Top Stats" table (DEFAULT: 10)',
+        help="\t\tSpecify the maximum number of kernels shown (DEFAULT: 10)",
     )
     analyze_group.add_argument(
         "--config-dir",
@@ -529,11 +528,4 @@ def parse(my_parser):
         help="\t\tSpecify Kernel Name verbose level 1-5. Lower the level, shorter the kernel name. (DEFAULT: 5) (DISABLE: 5)",
         default=5,
         type=int,
-    )
-    analyze_group.add_argument(
-        "--specs-correction",
-        type=str,
-        dest="specs_correction",
-        metavar="",
-        help="\t\tSpecify the specs to correct.",
     )

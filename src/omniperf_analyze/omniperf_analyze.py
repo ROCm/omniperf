@@ -26,7 +26,7 @@
 
 """
     Quick run:
-        analyze.py -d 1st_run_dir -d 2nd_run_dir -b 2
+        omniperf_analyze.py -p 1st_run_dir -p 2nd_run_dir -b 2
 
     Common abbreviations in the code:
         df - pandas.dataframe
@@ -243,6 +243,12 @@ def run_cli(args, runs):
         parser.load_table_data(
             runs[d[0]], d[0], is_gui, args.g, args.verbose
         )  # create the loaded table
+
+        # NB: For display and debug only. Hack code is good enough without
+        #     looping the whole dfs list.
+        if args.specs_correction:
+            runs[d[0]].dfs[101] = runs[d[0]].sys_info.transpose()
+
     # TODO: In show_* functions always assume newest architecture. This way newest configs/figures are loaded
     if args.list_kernels:
         tty.show_kernels(

@@ -131,7 +131,7 @@ def load_options(args, normalization_filter):
 ################################################
 def initialize_run(args, normalization_filter=None):
     from collections import OrderedDict
-    from omniperf_analyze.utils import schema
+    from omniperf_analyze.utils import schema, parser
 
     # Fixme: cur_root.parent.joinpath('soc_params')
     soc_params_dir = os.path.join(os.path.dirname(__file__), "..", "soc_params")
@@ -143,6 +143,8 @@ def initialize_run(args, normalization_filter=None):
     # Load required configs
     for d in args.path:
         sys_info = file_io.load_sys_info(Path(d[0], "sysinfo.csv"))
+        if args.specs_correction:
+            sys_info = parser.correct_sys_info(sys_info, args.specs_correction)
         arch = sys_info.iloc[0]["gpu_soc"]
         generate_config(arch, args.config_dir, args.list_kernels, args.filter_metrics)
 
@@ -154,6 +156,8 @@ def initialize_run(args, normalization_filter=None):
     for d in args.path:
         w = schema.Workload()
         w.sys_info = file_io.load_sys_info(Path(d[0], "sysinfo.csv"))
+        if args.specs_correction:
+            w.sys_info = parser.correct_sys_info(w.sys_info, args.specs_correction)
         w.avail_ips = w.sys_info["ip_blocks"].item().split("|")
         arch = w.sys_info.iloc[0]["gpu_soc"]
         w.dfs = copy.deepcopy(archConfigs[arch].dfs)

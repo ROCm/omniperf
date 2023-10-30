@@ -90,7 +90,7 @@ class MachineSpecs:
             L2Banks:            {self.L2Banks}
             LDSBanks:           {self.LDSBanks}
             numSQC:             {self.numSQC}
-            hbmBW:              {self.hbmBW}
+            hbmBW:              {self.hbmBW} MB/s
         """
         )
 

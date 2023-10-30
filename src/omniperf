@@ -218,7 +218,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
         mspec.LDSBanks,
         mspec.GPU,
         mspec.numSQC,
-        mspec.hbmBW
+        mspec.hbmBW,
     ]
 
     blocks = []

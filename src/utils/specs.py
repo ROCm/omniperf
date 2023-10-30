@@ -157,28 +157,43 @@ def gpuinfo():
             break
 
     gpu_name = ""
-    L2Banks= ""
-    LDSBanks= "32"
-    numSQC= ""
+    L2Banks = ""
+    LDSBanks = "32"
+    numSQC = ""
 
     if gpu_id == "gfx906":
         gpu_name = "mi50"
-        L2Banks= "16"
+        L2Banks = "16"
         numSQC = str(int(num_CU) // 4)
     elif gpu_id == "gfx908":
         gpu_name = "mi100"
-        L2Banks= "32"
+        L2Banks = "32"
         numSQC = "48"
     elif gpu_id == "gfx90a":
-        L2Banks= "32"
+        L2Banks = "32"
         gpu_name = "mi200"
         numSQC = "56"
     elif gpu_id == "gfx940":
         gpu_name = "mi300"
-        L2Banks= "16"
+        L2Banks = "16"
         numSQC = "56"
 
-    return gpu_name, gpu_id, L1, L2, max_sclk, num_CU, num_SIMD, num_SE, wave_size, grp_size, max_waves_per_cu, L2Banks, LDSBanks, numSQC
+    return (
+        gpu_name,
+        gpu_id,
+        L1,
+        L2,
+        max_sclk,
+        num_CU,
+        num_SIMD,
+        num_SE,
+        wave_size,
+        grp_size,
+        max_waves_per_cu,
+        L2Banks,
+        LDSBanks,
+        numSQC,
+    )
 
 
 def run(cmd):
@@ -330,8 +345,9 @@ def get_machine_specs(devicenum):
         L2Banks,
         LDSBanks,
         numSQC,
-        hbmBW
+        hbmBW,
     )
+
 
 if __name__ == "__main__":
     print(get_machine_specs(0))

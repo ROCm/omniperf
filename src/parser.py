@@ -529,3 +529,10 @@ def parse(my_parser):
         default=5,
         type=int,
     )
+    analyze_group.add_argument(
+        "--specs-correction",
+        type=str,
+        dest="specs_correction",
+        metavar="",
+        help="\t\tSpecify the specs to correct.",
+    )

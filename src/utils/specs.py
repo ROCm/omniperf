@@ -300,14 +300,12 @@ def get_machine_specs(devicenum):
     if cur_sclk is None:
         cur_sclk = ""
 
-    cur_mclk = "1300"  # search(r"([0-9]+)", freq[3])
-    # at the moment mclk reporting is unstable in mi300
-    # i.e., it won't always be in rocm-smi
-
-    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
-
+    cur_mclk = search(r"([0-9]+)", freq[3])
     if cur_mclk is None:
-        cur_mclk = ""
+        cur_mclk = 0
+
+    # FIXME with spec
+    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
 
     return MachineSpecs(
         hostname,

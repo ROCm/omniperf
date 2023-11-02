@@ -50,13 +50,13 @@ jobs:
         if: '!cancelled()'
         run:
           junitparser merge tests/test-results-*.xml tests/test-results-aggregated.xml
-      - name: Pytest coverage comment
-        if: '!cancelled()'
-        uses: MishaKav/pytest-coverage-comment@v1.1.48
-        with:
-          pytest-xml-coverage-path: 'tests/coverage.xml'
-          junitxml-path: 'tests/test-results-aggregated.xml'
-          coverage-path-prefix: src/
+###       - name: Pytest coverage comment
+###         if: '!cancelled()'
+###         uses: MishaKav/pytest-coverage-comment@v1.1.48
+###         with:
+###           pytest-xml-coverage-path: 'tests/coverage.xml'
+###           junitxml-path: 'tests/test-results-aggregated.xml'
+###           coverage-path-prefix: src/
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4
         if: success() || failure() # always run even if the previous step fails

@@ -62,4 +62,4 @@ jobs:
         if: success() || failure() # always run even if the previous step fails
         with:
           report_paths: '**/tests/test-results-*.xml'
-	  detailed_summary: true
+          detailed_summary: true

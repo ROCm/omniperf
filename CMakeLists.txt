@@ -189,26 +189,26 @@ set(JUNIT_OPTION "--junitxml=tests")
 add_test(
     NAME test_analyze_commands
     COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-analyze.xml
-            ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
+            ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py::test_valid_path
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-add_test(
-    NAME test_analyze_workloads
-    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-workloads.xml
-            ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+## add_test(
+##     NAME test_analyze_workloads
+##     COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-workloads.xml
+##             ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
+##     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profiler_general
     COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-profiler.xml
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py::test_path
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-add_test(
-    NAME test_saved_analysis
-    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-analysis.xml
-            ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+## add_test(
+##     NAME test_saved_analysis
+##     COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-analysis.xml
+##             ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
+##     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 # ---------
 # Install

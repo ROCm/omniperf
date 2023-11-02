@@ -172,53 +172,43 @@ if(${GIT_CLONE})
                    ${PROJECT_SOURCE_DIR}/VERSION.sha @ONLY)
 endif()
 
-# Setup testing collateral
+# ---------
+# Test
+# ---------
 enable_testing()
 
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 set(COV_OPTION "")
 if(${ENABLE_COVERAGE})
-    set(COV_OPTION "--cov=src" "--junitxml=tests/test-results.xml" "--cov-append"
-                   "--cov-report=term-missing" "--cov-report=xml:tests/coverage.xml")
+    set(COV_OPTION "--cov=src" "--cov-append" "--cov-report=term-missing"
+                   "--cov-report=xml:tests/coverage.xml")
 endif()
 message(STATUS "Code coverage: ${ENABLE_COVERAGE}")
+set(JUNIT_OPTION "--junitxml=tests")
 
 add_test(
     NAME test_analyze_commands
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
+    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-analyze.xml
+            ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_analyze_workloads
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
+    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-workloads.xml
+            ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profiler_general
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-profiler.xml
+            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_saved_analysis
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
+    COMMAND pytest ${COV_OPTION} ${JUNIT_OPTION}/test-results-analysis.xml
+            ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-
-# if(EXISTS ${PROJECT_SOURCE_DIR}/src/mibench/roofline/roofline.cpp) message(STATUS
-# "Enabling optional roofline binaries..") foreach(ROCM_VERSION ${ROCM_VERSIONS})
-# externalproject_add( roofline-rocm-${ROCM_VERSION} PREFIX
-# ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline SOURCE_DIR
-# ${PROJECT_SOURCE_DIR}/src/mibench/roofline BINARY_DIR
-# ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline/build BUILD_BYPRODUCTS
-# <BINARY_DIR>/roofline CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-# HIP_PATH=/opt/rocm-${ROCM_VERSION} ${CMAKE_COMMAND}
-# -DCMAKE_CXX_COMPILER=/opt/rocm-${ROCM_VERSION}/hip/bin/hipcc
-# -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -B <BINARY_DIR> <SOURCE_DIR> BUILD_COMMAND
-# ${CMAKE_COMMAND} --build <BINARY_DIR> --target all INSTALL_COMMAND "") #
-# add_dependencies(roofline-rocm-${ROCM_VERSION} run-pyinstaller) string(REGEX REPLACE
-# "([0-9]+)\.([0-9]+)\.([0-9]+)(.*)" "\\1.\\2" ROCM_BASIC_VERSION "${ROCM_VERSION}")
-# install( PROGRAMS ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline/build/roofline
-# DESTINATION ${CMAKE_INSTALL_BINDIR}/utils RENAME roofline-${ROCM_BASIC_VERSION})
-# endforeach() else() message(STATUS "Optional roofline package not found") endif()
 
 # ---------
 # Install

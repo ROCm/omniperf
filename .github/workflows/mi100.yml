@@ -32,7 +32,7 @@ jobs:
           ml cmake
           cmake -DENABLE_COVERAGE=ON ..
       - name: Install Python testing collateral
-        run: pip3 install pytest pytest-cov mock
+        run: pip3 install pytest pytest-cov mock junitparser
       - name: Create HIP binary (vcopy)
         run: hipcc -o tests/vcopy ./sample/vcopy.cpp
       - name: Run [profile] mode
@@ -46,10 +46,14 @@ jobs:
           cd build
           ml cmake
           srun -N 1 -J omniperf -p ci -t 00:55:00 ctest --verbose -R test_analyze_commands
+      - name: Aggregate Junit results
+        if: '!cancelled()'
+        run:
+          junitparser merge tests/test-results-*.xml tests/test-results-aggregated.xml
       - name: Pytest coverage comment
         if: '!cancelled()'
         uses: MishaKav/pytest-coverage-comment@v1.1.48
         with:
           pytest-xml-coverage-path: 'tests/coverage.xml'
-          junitxml-path: 'tests/test-results.xml'
+          junitxml-path: 'tests/test-results-aggregated.xml'
           coverage-path-prefix: src/

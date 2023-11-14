@@ -26,7 +26,7 @@
 
 """
     Quick run:
-        analyze.py -d 1st_run_dir -d 2nd_run_dir -b 2
+        omniperf_analyze.py -p 1st_run_dir -p 2nd_run_dir -b 2
 
     Common abbreviations in the code:
         df - pandas.dataframe
@@ -131,7 +131,7 @@ def load_options(args, normalization_filter):
 ################################################
 def initialize_run(args, normalization_filter=None):
     from collections import OrderedDict
-    from omniperf_analyze.utils import schema
+    from omniperf_analyze.utils import schema, parser
 
     # Fixme: cur_root.parent.joinpath('soc_params')
     soc_params_dir = os.path.join(os.path.dirname(__file__), "..", "soc_params")
@@ -143,6 +143,8 @@ def initialize_run(args, normalization_filter=None):
     # Load required configs
     for d in args.path:
         sys_info = file_io.load_sys_info(Path(d[0], "sysinfo.csv"))
+        if args.specs_correction:
+            sys_info = parser.correct_sys_info(sys_info, args.specs_correction)
         arch = sys_info.iloc[0]["gpu_soc"]
         generate_config(arch, args.config_dir, args.list_kernels, args.filter_metrics)
 
@@ -154,6 +156,8 @@ def initialize_run(args, normalization_filter=None):
     for d in args.path:
         w = schema.Workload()
         w.sys_info = file_io.load_sys_info(Path(d[0], "sysinfo.csv"))
+        if args.specs_correction:
+            w.sys_info = parser.correct_sys_info(w.sys_info, args.specs_correction)
         w.avail_ips = w.sys_info["ip_blocks"].item().split("|")
         arch = w.sys_info.iloc[0]["gpu_soc"]
         w.dfs = copy.deepcopy(archConfigs[arch].dfs)
@@ -237,6 +241,12 @@ def run_cli(args, runs):
         parser.load_table_data(
             runs[d[0]], d[0], is_gui, args.g, args.verbose
         )  # create the loaded table
+
+        # NB: For display and debug only. Hack code is good enough without
+        #     looping the whole dfs list.
+        if args.specs_correction:
+            runs[d[0]].dfs[101] = runs[d[0]].sys_info.transpose()
+
     # TODO: In show_* functions always assume newest architecture. This way newest configs/figures are loaded
     if args.list_kernels:
         tty.show_kernels(

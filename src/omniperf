@@ -38,7 +38,7 @@ from pathlib import Path as path
 
 from parser import parse
 from utils import specs
-from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof, flatten_tcc_info_accross_xccs
+from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof, flatten_tcc_info_across_xccs
 from utils import remove_workload
 from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
@@ -500,7 +500,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             mspec = specs.get_machine_specs(0)
-            df = flatten_tcc_info_accros_xccs(f, mspec.numXCC, 16)
+            df = flatten_tcc_info_across_xccs(f, mspec.numXCC, 16)
             df.to_csv(f, index=False)
     else:
         success, output = capture_subprocess_output(

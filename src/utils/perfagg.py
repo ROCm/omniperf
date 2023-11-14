@@ -567,7 +567,7 @@ def pmc_filter(workload_dir, perfmon_dir, soc):
     pmc_list = perfmon_coalesce(pmc_files_list, soc, workload_dir)
     perfmon_emit(pmc_list, soc, workload_dir)
 
-def flatten_tcc_info_accross_xccs(file, xcc_num, tcc_channel_per_xcc):
+def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
     """
     Flatten TCC per channel counters across all XCCs.
     NB: This func highly depends on the default behavior of rocprofv2 on MI300,

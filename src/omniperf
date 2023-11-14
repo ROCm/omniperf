@@ -38,7 +38,7 @@ from pathlib import Path as path
 
 from parser import parse
 from utils import specs
-from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof
+from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof, flatten_tcc_info_accross_xccs
 from utils import remove_workload
 from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
@@ -60,7 +60,7 @@ from common import getVersion
 def run_subprocess(cmd):
     subprocess.run(cmd, check=True)
 
-def capture_subprocess_output(subprocess_args):
+def capture_subprocess_output(subprocess_args, new_env=None):
     # Start subprocess
     # bufsize = 1 means output is line buffered
     # universal_newlines = True is required for line buffering
@@ -477,6 +477,31 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 '"' + cmd + '"',
             ]
         )
+    elif (target == "mi300") and (
+        os.path.basename(fname) == "pmc_perf_15.txt"
+        or os.path.basename(fname) == "pmc_perf_16.txt"
+    ):
+        # FIXME: remove all hack code specific to pmc_perf_*.txt and MI300A
+        new_env = os.environ.copy()
+        new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
+        success, output = capture_subprocess_output(
+            [
+                rocprof_cmd,
+                "-i",
+                fname,
+                "-d",
+                workload_dir + "/" + "out",
+                "-o",
+                fbase,
+                cmd,
+            ],
+            new_env
+        )
+        if success:
+            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
+            mspec = specs.get_machine_specs(0)
+            df = flatten_tcc_info_accros_xccs(f, mspec.numXCC, 16)
+            df.to_csv(f, index=False)
     else:
         success, output = capture_subprocess_output(
             [

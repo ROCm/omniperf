@@ -566,3 +566,63 @@ def pmc_filter(workload_dir, perfmon_dir, soc):
     # Coalesce and writeback workload specific perfmon
     pmc_list = perfmon_coalesce(pmc_files_list, soc, workload_dir)
     perfmon_emit(pmc_list, soc, workload_dir)
+
+def flatten_tcc_info_accross_xccs(file, xcc_num, tcc_channel_per_xcc):
+    """
+    Flatten TCC per channel counters across all XCCs.
+    NB: This func highly depends on the default behavior of rocprofv2 on MI300,
+        which might be broken anytime in the future!
+    """
+    df_orig = pd.read_csv(file)
+    # display(df_orig.info)
+
+    ### prepare column headers
+    tcc_cols_orig = []
+    non_tcc_cols_orig = []
+    for c in df_orig.columns.to_list():
+        if "TCC" in c:
+            tcc_cols_orig.append(c)
+        else:
+            non_tcc_cols_orig.append(c)
+    # print(tcc_cols_orig)
+
+    cols = non_tcc_cols_orig
+    tcc_cols_in_group = {}
+    for i in range(0, xcc_num):
+        tcc_cols_in_group[i] = []
+
+    for col in tcc_cols_orig:
+        for i in range(0, xcc_num):
+            # filter the channel index only
+            p = re.compile(r"(\d+)")
+            # pick up the 1st element only
+            r = lambda match: str(int(float(match.group(0))) + i * tcc_channel_per_xcc)
+            tcc_cols_in_group[i].append(re.sub(pattern=p, repl=r, string=col))
+
+    for i in range(0, xcc_num):
+        # print(tcc_cols_in_group[i])
+        cols += tcc_cols_in_group[i]
+    # print(cols)
+    df = pd.DataFrame(columns=cols)
+
+    ### Rearrange data with extended column names
+
+    # print(len(df_orig.index))
+    for idx in range(0, len(df_orig.index), xcc_num):
+        # assume the front none TCC columns are the same for all XCCs
+        df_non_tcc = df_orig.iloc[idx].filter(regex=r"^(?!.*TCC).*$")
+        # display(df_non_tcc)
+        flatten_list = df_non_tcc.tolist()
+
+        # extract all tcc from one dispatch
+        # NB: assuming default contiguous order might not be safe!
+        df_tcc_all = df_orig.iloc[idx : (idx + xcc_num)].filter(regex="TCC")
+        # display(df_tcc_all)
+
+        for idx, row in df_tcc_all.iterrows():
+            flatten_list += row.tolist()
+        # print(len(df.index), len(flatten_list), len(df.columns), flatten_list)
+        # NB: It is not the best perf to append a row once a time
+        df.loc[len(df.index)] = flatten_list
+
+    return df

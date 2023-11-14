@@ -34,7 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
-gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940"}
+gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940", "gfx942"}
 
 
 @dataclass
@@ -61,6 +61,7 @@ class MachineSpecs:
     L2Banks: str
     LDSBanks: str
     numSQC: str
+    numXCC: str
     hbmBW: str
 
     def __str__(self):
@@ -90,6 +91,7 @@ class MachineSpecs:
             L2 Banks:           {self.L2Banks}
             LDS Banks:          {self.LDSBanks}
             Num SQC:            {self.numSQC}
+            Num XCC:            {self.numXCC}
             HBM BW:             {self.hbmBW} MB/s
         """
         )
@@ -160,6 +162,7 @@ def gpuinfo():
     L2Banks = ""
     LDSBanks = "32"
     numSQC = ""
+    numXCC = ""
 
     if gpu_id == "gfx906":
         gpu_name = "mi50"
@@ -177,9 +180,15 @@ def gpuinfo():
         gpu_name = "mi300"
         L2Banks = "16"
         numSQC = "56"
+        numXCC = "6"
+    elif gpu_id == "gfx942":
+        gpu_name = "mi300"
+        L2Banks = "16"
+        numSQC = "56"
+        numXCC = "8"
 
     
-    return (gpu_name, gpu_id, L1, L2, max_sclk, num_CU, num_SIMD, num_SE, wave_size, grp_size, max_waves_per_cu, L2Banks, LDSBanks, numSQC)
+    return (gpu_name, gpu_id, L1, L2, max_sclk, num_CU, num_SIMD, num_SE, wave_size, grp_size, max_waves_per_cu, L2Banks, LDSBanks, numSQC, numXCC)
 
 
 def run(cmd):
@@ -255,7 +264,8 @@ def get_machine_specs(devicenum):
         max_waves_per_cu,
         L2Banks,
         LDSBanks,
-        numSQC
+        numSQC,
+        numXCC,
     ) = gpuinfo()
 
     rocm_smi = run(["rocm-smi"])
@@ -307,6 +317,7 @@ def get_machine_specs(devicenum):
 
     # FIXME with spec
     hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
+    print("hbmBW", hbmBW)
 
     return MachineSpecs(
         hostname,
@@ -331,6 +342,7 @@ def get_machine_specs(devicenum):
         L2Banks,
         LDSBanks,
         numSQC,
+        numXCC,
         hbmBW,
     )
 

@@ -697,7 +697,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
             # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
 
 
-def apply_filters(workload, is_gui, debug):
+def apply_filters(workload, dir, is_gui, debug):
     """
     Apply user's filters to the raw_pmc df.
     """
@@ -726,6 +726,17 @@ def apply_filters(workload, is_gui, debug):
         if not is_gui:
             if debug:
                 print("CLI kernel filtering")
+
+            # Verify valid kernel filter
+            kernels_df = pd.read_csv(os.path.join(dir, "pmc_kernel_top.csv"))
+            for kernel_id in workload.filter_kernel_ids:
+                if kernel_id > len(kernels_df["KernelName"]):
+                    print(
+                        "{} is an invalid kernel id. Please enter an id between 0-{}".format(
+                            kernel_id, len(kernels_df["KernelName"])
+                        )
+                    )
+                    sys.exit(1)
             kernels = []
             # NB: mark selected kernels with "*"
             #    Todo: fix it for unaligned comparison
@@ -763,11 +774,8 @@ def apply_filters(workload, is_gui, debug):
                 ret_df[schema.pmc_perf_file_prefix]["Index"] > int(m.group(1))
             ]
         else:
-            ret_df = ret_df.loc[
-                ret_df[schema.pmc_perf_file_prefix]["Index"]
-                .astype(str)
-                .isin(workload.filter_dispatch_ids)
-            ]
+            dispatches = [int(x) for x in workload.filter_dispatch_ids]
+            ret_df = ret_df.loc[dispatches]
     if debug:
         print("~" * 40, "\nraw pmc df info:\n")
         print(workload.raw_pmc.info())
@@ -812,7 +820,7 @@ def load_table_data(workload, dir, is_gui, debug, verbose, skipKernelTop=False):
         workload.dfs_type,
         workload.sys_info.iloc[0],
         workload.soc_spec,
-        apply_filters(workload, is_gui, debug),
+        apply_filters(workload, dir, is_gui, debug),
         debug,
     )
 

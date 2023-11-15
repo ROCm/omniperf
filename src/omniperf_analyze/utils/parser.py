@@ -407,25 +407,25 @@ def build_dfs(archConfigs, filter_metrics):
     for panel_id, panel in archConfigs.panel_configs.items():
         panel_idx = str(panel_id // 100)
         for data_source in panel["data source"]:
-            for type, data_cofig in data_source.items():
+            for type, data_config in data_source.items():
                 if type == "metric_table":
                     metric_list[panel_idx] = panel["title"]
-                    table_idx = panel_idx + "." + str(data_cofig["id"] % 100)
-                    metric_list[table_idx] = data_cofig["title"]
+                    table_idx = panel_idx + "." + str(data_config["id"] % 100)
+                    metric_list[table_idx] = data_config["title"]
 
                     headers = ["Index"]
-                    for key, tile in data_cofig["header"].items():
+                    for key, tile in data_config["header"].items():
                         if key != "tips":
                             headers.append(tile)
                     headers.append("coll_level")
 
-                    if "tips" in data_cofig["header"].keys():
-                        headers.append(data_cofig["header"]["tips"])
+                    if "tips" in data_config["header"].keys():
+                        headers.append(data_config["header"]["tips"])
 
                     df = pd.DataFrame(columns=headers)
 
                     i = 0
-                    for key, entries in data_cofig["metric"].items():
+                    for key, entries in data_config["metric"].items():
                         metric_idx = table_idx + "." + str(i)
                         values = []
                         eqn_content = []
@@ -484,22 +484,22 @@ def build_dfs(archConfigs, filter_metrics):
                     # df.set_index('Metric', inplace=True)
                     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
                 elif type == "raw_csv_table":
-                    data_source_idx = str(data_cofig["id"] // 100)
+                    data_source_idx = str(data_config["id"] // 100)
                     if (
                         (not filter_metrics)
                         or (data_source_idx == "0")  # no filter
                         or (data_source_idx in filter_metrics)
                     ):
                         if (
-                            "columnwise" in data_cofig
-                            and data_cofig["columnwise"] == True
+                            "columnwise" in data_config
+                            and data_config["columnwise"] == True
                         ):
                             df = pd.DataFrame(
-                                [data_cofig["source"]], columns=["from_csv_columnwise"]
+                                [data_config["source"]], columns=["from_csv_columnwise"]
                             )
                         else:
                             df = pd.DataFrame(
-                                [data_cofig["source"]], columns=["from_csv"]
+                                [data_config["source"]], columns=["from_csv"]
                             )
                         metric_list[data_source_idx] = panel["title"]
                     else:
@@ -507,8 +507,8 @@ def build_dfs(archConfigs, filter_metrics):
                 else:
                     df = pd.DataFrame()
 
-                d[data_cofig["id"]] = df
-                dfs_type[data_cofig["id"]] = type
+                d[data_config["id"]] = df
+                dfs_type[data_config["id"]] = type
 
     setattr(archConfigs, "dfs", d)
     setattr(archConfigs, "metric_list", metric_list)
@@ -853,6 +853,7 @@ def correct_sys_info(df, specs_correction):
     # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
     # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
     # header += "ip_blocks\n"
+    
     name_map = {
         "host_name": "hostname",
         "CPU": "host_cpu",

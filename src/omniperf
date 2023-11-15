@@ -130,6 +130,8 @@ def get_soc():
         target = "vega10"
     elif mspec.arch == "gfx940":
         target = "mi300"
+    elif mspec.arch == "gfx942":
+        target = "mi300"
     else:
         print("\nInvalid SoC")
         sys.exit(0)

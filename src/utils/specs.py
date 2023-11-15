@@ -317,7 +317,6 @@ def get_machine_specs(devicenum):
 
     # FIXME with spec
     hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
-    print("hbmBW", hbmBW)
 
     return MachineSpecs(
         hostname,

@@ -502,7 +502,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             mspec = specs.get_machine_specs(0)
-            df = flatten_tcc_info_across_xccs(f, mspec.numXCC, 16)
+            df = flatten_tcc_info_across_xccs(f, int(mspec.numXCC), 16)
             df.to_csv(f, index=False)
     else:
         success, output = capture_subprocess_output(

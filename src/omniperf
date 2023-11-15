@@ -225,7 +225,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     
     param.append("|".join(blocks))
 
-    sysinfo.write(",".join(param))
+    sysinfo.write(",".join(map(str, param)))
     sysinfo.close()
 
 

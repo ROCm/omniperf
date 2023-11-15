@@ -187,8 +187,23 @@ def gpuinfo():
         numSQC = "56"
         numXCC = "8"
 
-    
-    return (gpu_name, gpu_id, L1, L2, max_sclk, num_CU, num_SIMD, num_SE, wave_size, grp_size, max_waves_per_cu, L2Banks, LDSBanks, numSQC, numXCC)
+    return (
+        gpu_name,
+        gpu_id,
+        L1,
+        L2,
+        max_sclk,
+        num_CU,
+        num_SIMD,
+        num_SE,
+        wave_size,
+        grp_size,
+        max_waves_per_cu,
+        L2Banks,
+        LDSBanks,
+        numSQC,
+        numXCC,
+    )
 
 
 def run(cmd):

@@ -837,6 +837,7 @@ def build_comparable_columns(time_unit):
 
     return comparable_columns
 
+
 def correct_sys_info(df, specs_correction):
     """
     Correct system spec items manually
@@ -853,7 +854,7 @@ def correct_sys_info(df, specs_correction):
     # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
     # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
     # header += "ip_blocks\n"
-    
+
     name_map = {
         "host_name": "hostname",
         "CPU": "host_cpu",

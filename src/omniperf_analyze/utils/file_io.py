@@ -49,7 +49,7 @@ supported_arch = {
     "gfx908": "mi100",
     "gfx90a": "mi200",
     "gfx940": "mi300",
-    "gfx942": "mi300"
+    "gfx942": "mi300",
 }
 # TODO:
 # it should be:

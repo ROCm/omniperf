@@ -189,8 +189,7 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
                     "LDS_",
                     "SCR_",
                     "ACCUM_VGPR_",
-                    "Arch_VGPR_"
-                    "SGPR_",
+                    "Arch_VGPR_" "SGPR_",
                     "Dispatch_ID_",
                     # un-mergable, remove all
                     "Queue_ID",
@@ -566,6 +565,7 @@ def pmc_filter(workload_dir, perfmon_dir, soc):
     # Coalesce and writeback workload specific perfmon
     pmc_list = perfmon_coalesce(pmc_files_list, soc, workload_dir)
     perfmon_emit(pmc_list, soc, workload_dir)
+
 
 def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
     """

@@ -83,7 +83,7 @@ def show_all(args, runs, archConfigs, output):
                                 and header == "Kernel_Name"
                             ):
                                 # NB: the width of kernel name might depend on the header of the table.
-                                adjusted_name = base_df["Kerne_Name"].apply(
+                                adjusted_name = base_df["Kernel_Name"].apply(
                                     lambda x: string_multiple_lines(x, 40, 3)
                                 )
                                 df = pd.concat([df, adjusted_name], axis=1)

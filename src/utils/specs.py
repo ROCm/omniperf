@@ -357,7 +357,7 @@ def get_machine_specs(devicenum):
         LDSBanks,
         numSQC,
         numXCC,
-        hbmBW,
+        str(hbmBW),
     )
 
 

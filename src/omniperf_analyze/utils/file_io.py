@@ -50,6 +50,7 @@ supported_arch = {
     "gfx90a": "mi200",
     "gfx940": "mi300",
     "gfx942": "mi300",
+    "gfx941": "mi300", #NB: gfx942 is reported as gfx941 inside docker
 }
 # TODO:
 # it should be:

@@ -34,7 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
-gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940", "gfx942"}
+gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940", "gfx942", "gfx941"} #NB: gfx942 is reported as gfx941 inside docker
 
 
 @dataclass
@@ -181,7 +181,7 @@ def gpuinfo():
         L2Banks = "16"
         numSQC = "56"
         numXCC = "6"
-    elif gpu_id == "gfx942":
+    elif gpu_id == "gfx942" or gpu_id == "gfx941":
         gpu_name = "mi300"
         L2Banks = "16"
         numSQC = "56"

@@ -132,6 +132,8 @@ def get_soc():
         target = "mi300"
     elif mspec.arch == "gfx942":
         target = "mi300"
+    elif mspec.arch == "gfx941": #NB: gfx942 is reported as gfx941 inside docker
+        target = "mi300"
     else:
         print("\nInvalid SoC")
         sys.exit(0)

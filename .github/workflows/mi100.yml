@@ -27,8 +27,8 @@ jobs:
           token: ${{ secrets.GH_PAT }}
       - name: Install Python collateral (build and test)
         run: |
-	   pip3 install -t ${PYTHONPATH} requirements.txt
-	   pip3 install -t ${PYTHONPATH} requirements-test.txt
+           pip3 install -t ${PYTHONPATH} requirements.txt
+           pip3 install -t ${PYTHONPATH} requirements-test.txt
       - name: Configure
         run: |
           mkdir build

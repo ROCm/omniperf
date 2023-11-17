@@ -17,14 +17,15 @@ jobs:
   build:
     runs-on: [mi100, rhel9]
     env:
-       TEST_DIR: ${RUNNER_TEMP}/omniperf
-       PYTHONPATH: ${RUNNER_TEMP}/python-libs
+       PYTHONPATH: "$GITHUB_WORKSPACE/python-libs"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
           token: ${{ secrets.GH_PAT }}
+      - name: pythonpath
+        run: echo ${PYTHONPATH}
       - name: Install Python collateral (build and test)
         run: |
            pip3 install -t ${PYTHONPATH} -r requirements.txt

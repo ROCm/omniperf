@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: [mi100, rhel9]
     env:
-       PYTHONPATH: "$GITHUB_WORKSPACE/python-libs"
+       PYTHONPATH: ${{ github.workspace }}/python-libs
     steps:
       - name: Checkout
         uses: actions/checkout@v3

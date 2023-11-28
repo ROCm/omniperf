@@ -107,7 +107,7 @@ def gpuinfo():
             break
 
     if not gpu_id in gpu_list:
-        return None, None, None, None, None, None, None, None, None, None
+        return None, None, None, None, None, None, None, None, None, None, None, None, None, None
 
     L1, L2 = "", ""
     for idx2, linetext in enumerate(rocminfo[idx1 + 1 :]):

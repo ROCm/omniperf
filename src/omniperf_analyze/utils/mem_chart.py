@@ -666,7 +666,7 @@ class MemChart:
 
         # Fixme: this is temp solution to filter out non-numeric string
         for k, v in metric_dict.items():
-            print(k, type(v))
+            # print(k, type(v))
             metric_dict[k] = -1 if type(v) == str else v
 
         # Typically, the drawing order would be: left->right, top->down

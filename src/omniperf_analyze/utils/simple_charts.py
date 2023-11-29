@@ -47,7 +47,7 @@ def simple_bar(df, title=None):
         metric_dict = (
             pd.DataFrame([df["Metric"], df["Value"]])
             .replace("", 0)
-            .replace(float("inf"), -1) # It should not happen
+            .replace(float("inf"), -1)  # It should not happen
             .replace(float("-inf"), -1)
             .transpose()
             .set_index("Metric")
@@ -77,7 +77,9 @@ def simple_multiple_bar(df, title=None):
     # TODO: handle Nan and None properly
 
     plt.clear_figure()
-    t_df = df.fillna(0).replace("", 0).replace(float("inf"), -1).replace(float("-inf"), -1)
+    t_df = (
+        df.fillna(0).replace("", 0).replace(float("inf"), -1).replace(float("-inf"), -1)
+    )
     sub_labels = t_df.transpose().to_dict("split")["index"]
     sub_labels.pop(0)
     data = t_df.transpose().to_dict("split")["data"]
@@ -132,7 +134,9 @@ def simple_box(df, orientation="v", title=None):
     # show unit if provided
 
     labels_length = 0
-    t_df = df.fillna(0).replace("", 0).replace(float("inf"), -1).replace(float("-inf"), -1)
+    t_df = (
+        df.fillna(0).replace("", 0).replace(float("inf"), -1).replace(float("-inf"), -1)
+    )
     for index, row in t_df.iterrows():
         labels.append(row["Metric"])
         labels_length += len(row["Metric"]) + 10

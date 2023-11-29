@@ -34,9 +34,6 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
-gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940"}
-
-
 @dataclass
 class MachineSpecs:
     hostname: str
@@ -96,6 +93,13 @@ class MachineSpecs:
 
 
 def gpuinfo():
+
+    # Local var only for rocminfo searching
+    gpu_list = {"gfx906", "gfx908", "gfx90a",
+                "gfx940", "gfx941", "gfx942"}
+    
+    # Fixme: find better way to differentiate cards, GPU vs APU, etc.
+
     rocminfo = run(["rocminfo"]).split("\n")
 
     for idx1, linetext in enumerate(rocminfo):
@@ -174,7 +178,19 @@ def gpuinfo():
         gpu_name = "mi200"
         numSQC = "56"
     elif gpu_id == "gfx940":
-        gpu_name = "mi300"
+        gpu_name = "mi300A_A0"
+        L2Banks = "16"
+        numSQC = "56"
+    elif gpu_id == "gfx941":
+        gpu_name = "mi300X_A0"
+        L2Banks = "16"
+        numSQC = "56"
+    elif (gpu_id == "gfx942") and ("MI300A" in rocminfo):
+        gpu_name = "mi300A_A1"
+        L2Banks = "16"
+        numSQC = "56"
+    elif (gpu_id == "gfx942") and ("MI300A" not in rocminfo):
+        gpu_name = "mi300X_A1"
         L2Banks = "16"
         numSQC = "56"
 

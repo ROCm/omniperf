@@ -46,13 +46,22 @@ top_stats_build_in_config = {
 
 # List all supported archs and cards
 supported_devices = {
-    "gfx906": ["mi50", "mi60"],
+    "gfx906": ["mi50"],
     "gfx908": ["mi100"],
-    "gfx90a": ["mi210", "mi250", "mi250x"],
-    "gfx940": ["mi300A_A0"],
-    "gfx941": ["mi300X_A0"],
-    "gfx942": ["mi300A_A1", "mi300X_A1"],
+    "gfx90a": ["mi200"],
+    "gfx940": ["mi300"],
+    "gfx941": ["mi300"],
+    "gfx942": ["mi300"],
 }
+
+# supported_devices = {
+#     "gfx906": ["mi50", "mi60"],
+#     "gfx908": ["mi100"],
+#     "gfx90a": ["mi210", "mi250", "mi250x"],
+#     "gfx940": ["mi300A_A0"],
+#     "gfx941": ["mi300X_A0"],
+#     "gfx942": ["mi300A_A1", "mi300X_A1"],
+# }
 
 time_units = {"s": 10**9, "ms": 10**6, "us": 10**3, "ns": 1}
 

@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
+
 @dataclass
 class MachineSpecs:
     hostname: str
@@ -93,11 +94,9 @@ class MachineSpecs:
 
 
 def gpuinfo():
-
     # Local var only for rocminfo searching
-    gpu_list = {"gfx906", "gfx908", "gfx90a",
-                "gfx940", "gfx941", "gfx942"}
-    
+    gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx940", "gfx941", "gfx942"}
+
     # Fixme: find better way to differentiate cards, GPU vs APU, etc.
 
     rocminfo = run(["rocminfo"]).split("\n")
@@ -111,7 +110,22 @@ def gpuinfo():
             break
 
     if not gpu_id in gpu_list:
-        return None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
     L1, L2 = "", ""
     for idx2, linetext in enumerate(rocminfo[idx1 + 1 :]):
@@ -336,7 +350,7 @@ def get_machine_specs(devicenum):
         cur_mclk = 0
 
     # FIXME with spec
-    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
+    hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
 
     return MachineSpecs(
         hostname,

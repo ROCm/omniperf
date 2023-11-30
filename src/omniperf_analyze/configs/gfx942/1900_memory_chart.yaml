@@ -145,8 +145,8 @@ Panel Config:
             tips:
           VL1 Lat:
             value:
-              ROUND(AVG(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
-              != 0) else None)), 0)
+              # ROUND(AVG(((TCP_TCP_LATENCY_sum / TCP_TA_TCP_STATE_READ_sum) if (TCP_TA_TCP_STATE_READ_sum
+              # != 0) else None)), 0)
             alias: vl1_lat_
             tips:
           VL1_L2 Rd:
@@ -189,7 +189,8 @@ Panel Config:
             alias: l2_rd_lat_
             tips:
           L2 Wr Lat:
-            # value: ROUND(AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum +
+            value:
+            # ROUND(AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum +
             #   TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
             #   != 0) else None)), 0)
             alias: l2_wr_lat_

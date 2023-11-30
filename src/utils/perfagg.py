@@ -125,9 +125,9 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
             key = _df.groupby("Kernel_Name").cumcount()
             _df["key"] = _df.Kernel_Name + " - " + key.astype(str)
         elif join_type == "grid":
-            key = _df.groupby(["Kernel_Name", "GRD"]).cumcount()
+            key = _df.groupby(["Kernel_Name", "Grid_Size"]).cumcount()
             _df["key"] = (
-                _df.Kernel_Name + " - " + _df.GRD.astype(str) + " - " + key.astype(str)
+                _df.Kernel_Name + " - " + _df.Grid_Size.astype(str) + " - " + key.astype(str)
             )
         else:
             print("ERROR: Unrecognized --join-type")
@@ -142,10 +142,10 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
     # TODO: check for any mismatch in joins
     duplicate_cols = {
         "GPU_ID": [col for col in df.columns if "GPU_ID" in col],
-        "GRD": [col for col in df.columns if "GRD" in col],
-        "WGR": [col for col in df.columns if "WGR" in col],
-        "LDS": [col for col in df.columns if "LDS" in col],
-        "SCR": [col for col in df.columns if "SCR" in col],
+        "Grid_Size": [col for col in df.columns if "Grid_Size" in col],
+        "Workgroup_Size": [col for col in df.columns if "Workgroup_Size" in col],
+        "LDS_Per_Workgroup": [col for col in df.columns if "LDS_Per_Workgroup" in col],
+        "Scratch_Per_Workitem": [col for col in df.columns if "Scratch_Per_Workitem" in col],
         "SGPR": [col for col in df.columns if "SGPR" in col],
     }
     # Check for vgpr counter in ROCm < 5.3
@@ -154,7 +154,7 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
     # Check for vgpr counter in ROCm >= 5.3
     else:
         duplicate_cols["Arch_VGPR"] = [col for col in df.columns if "Arch_VGPR" in col]
-        duplicate_cols["ACCUM_VGPR"] = [col for col in df.columns if "ACCUM_VGPR" in col]
+        duplicate_cols["Accum_VGPR"] = [col for col in df.columns if "Accum_VGPR" in col]
     for key, cols in duplicate_cols.items():
         _df = df[cols]
         if not test_df_column_equality(_df):
@@ -184,13 +184,13 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
                 for check in [
                     # removed merged counters, keep original
                     "GPU_ID_",
-                    "GRD_",
-                    "WGR_",
-                    "LDS_",
-                    "SCR_",
+                    "Grid_Size_",
+                    "Workgroup_Size_",
+                    "LDS_Per_Workgroup_",
+                    "Scratch_Per_Workitem_",
                     "vgpr_",
                     "Arch_VGPR_",
-                    "ACCUM_VGPR",
+                    "Accum_VGPR_",
                     "SGPR_",
                     "Dispatch_ID_",
                     # un-mergable, remove all

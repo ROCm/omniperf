@@ -853,7 +853,7 @@ def correct_sys_info(df, specs_correction):
     # header += "command,"
     # header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
     # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
+    # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,compute_partition,memory_partition,"
     # header += "ip_blocks\n"
 
     name_map = {
@@ -882,6 +882,8 @@ def correct_sys_info(df, specs_correction):
         "LDSBanks": "LDSBanks",
         "numSQC": "numSQC",
         "hbmBW": "hbmBW",
+        "compute_partition": "compute_partition",
+        "memory_partition": "memory_partition",
     }
 
     # todo: more err checking for string specs_correction

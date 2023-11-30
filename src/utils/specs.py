@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
+
 @dataclass
 class MachineSpecs:
     hostname: str
@@ -59,6 +60,8 @@ class MachineSpecs:
     LDSBanks: str
     numSQC: str
     hbmBW: str
+    compute_partition: str
+    memory_partition: str
 
     def __str__(self):
         return dedent(
@@ -88,16 +91,16 @@ class MachineSpecs:
             LDSBanks:           {self.LDSBanks}
             numSQC:             {self.numSQC}
             hbmBW:              {self.hbmBW} MB/s
+            compute_partition:  {self.compute_partition}
+            memory_partition:   {self.memory_partition}
         """
         )
 
 
 def gpuinfo():
-
     # Local var only for rocminfo searching
-    gpu_list = {"gfx906", "gfx908", "gfx90a",
-                "gfx940", "gfx941", "gfx942"}
-    
+    gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx940", "gfx941", "gfx942"}
+
     # Fixme: find better way to differentiate cards, GPU vs APU, etc.
 
     rocminfo = run(["rocminfo"]).split("\n")
@@ -111,7 +114,24 @@ def gpuinfo():
             break
 
     if not gpu_id in gpu_list:
-        return None, None, None, None, None, None, None, None, None, None
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
     L1, L2 = "", ""
     for idx2, linetext in enumerate(rocminfo[idx1 + 1 :]):
@@ -194,6 +214,8 @@ def gpuinfo():
         L2Banks = "16"
         numSQC = "56"
 
+    compute_partition = ''
+    memory_partition = ''
     return (
         gpu_name,
         gpu_id,
@@ -209,6 +231,8 @@ def gpuinfo():
         L2Banks,
         LDSBanks,
         numSQC,
+        compute_partition,
+        memory_partition
     )
 
 
@@ -286,6 +310,8 @@ def get_machine_specs(devicenum):
         L2Banks,
         LDSBanks,
         numSQC,
+        compute_partition,
+        memory_partition
     ) = gpuinfo()
 
     rocm_smi = run(["rocm-smi"])
@@ -336,7 +362,7 @@ def get_machine_specs(devicenum):
         cur_mclk = 0
 
     # FIXME with spec
-    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
+    hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
 
     return MachineSpecs(
         hostname,
@@ -362,6 +388,8 @@ def get_machine_specs(devicenum):
         LDSBanks,
         numSQC,
         hbmBW,
+        compute_partition,
+        memory_partition
     )
 
 

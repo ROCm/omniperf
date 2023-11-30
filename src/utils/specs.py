@@ -60,6 +60,8 @@ class MachineSpecs:
     LDSBanks: str
     numSQC: str
     hbmBW: str
+    compute_partition: str
+    memory_partition: str
 
     def __str__(self):
         return dedent(
@@ -89,6 +91,8 @@ class MachineSpecs:
             LDSBanks:           {self.LDSBanks}
             numSQC:             {self.numSQC}
             hbmBW:              {self.hbmBW} MB/s
+            compute_partition:  {self.compute_partition}
+            memory_partition:   {self.memory_partition}
         """
         )
 
@@ -111,6 +115,8 @@ def gpuinfo():
 
     if not gpu_id in gpu_list:
         return (
+            None,
+            None,
             None,
             None,
             None,
@@ -208,6 +214,8 @@ def gpuinfo():
         L2Banks = "16"
         numSQC = "56"
 
+    compute_partition = ''
+    memory_partition = ''
     return (
         gpu_name,
         gpu_id,
@@ -223,6 +231,8 @@ def gpuinfo():
         L2Banks,
         LDSBanks,
         numSQC,
+        compute_partition,
+        memory_partition
     )
 
 
@@ -300,6 +310,8 @@ def get_machine_specs(devicenum):
         L2Banks,
         LDSBanks,
         numSQC,
+        compute_partition,
+        memory_partition
     ) = gpuinfo()
 
     rocm_smi = run(["rocm-smi"])
@@ -376,6 +388,8 @@ def get_machine_specs(devicenum):
         LDSBanks,
         numSQC,
         hbmBW,
+        compute_partition,
+        memory_partition
     )
 
 

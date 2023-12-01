@@ -214,8 +214,8 @@ def gpuinfo():
         L2Banks = "16"
         numSQC = "56"
 
-    compute_partition = ''
-    memory_partition = ''
+    compute_partition = ""
+    memory_partition = ""
     return (
         gpu_name,
         gpu_id,
@@ -232,7 +232,7 @@ def gpuinfo():
         LDSBanks,
         numSQC,
         compute_partition,
-        memory_partition
+        memory_partition,
     )
 
 
@@ -311,7 +311,7 @@ def get_machine_specs(devicenum):
         LDSBanks,
         numSQC,
         compute_partition,
-        memory_partition
+        memory_partition,
     ) = gpuinfo()
 
     rocm_smi = run(["rocm-smi"])
@@ -364,6 +364,11 @@ def get_machine_specs(devicenum):
     # FIXME with spec
     hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
 
+    compute_partition = search(
+        r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
+    )
+    memory_partition = search(r"NPS Mode:\s*(\w+)", run(["rocm-smi", "--shownpsmode"]))
+
     return MachineSpecs(
         hostname,
         CPU,
@@ -389,7 +394,7 @@ def get_machine_specs(devicenum):
         numSQC,
         hbmBW,
         compute_partition,
-        memory_partition
+        memory_partition,
     )
 
 

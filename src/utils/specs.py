@@ -106,14 +106,14 @@ def gpuinfo():
     rocminfo = run(["rocminfo"]).split("\n")
 
     for idx1, linetext in enumerate(rocminfo):
-        gpu_id = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
-        if gpu_id in gpu_list:
+        gpu_arch = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
+        if gpu_arch in gpu_list:
             break
-        if str(gpu_id) in gpu_list:
-            gpu_id = str(gpu_id)
+        if str(gpu_arch) in gpu_list:
+            gpu_arch = str(gpu_arch)
             break
 
-    if not gpu_id in gpu_list:
+    if not gpu_arch in gpu_list:
         return (
             None,
             None,
@@ -185,40 +185,52 @@ def gpuinfo():
     LDSBanks = "32"
     numSQC = ""
 
-    if gpu_id == "gfx906":
-        gpu_name = "mi50"
+    # supported_devices = {
+    #     "gfx906": ["MI50", "MI60"],
+    #     "gfx908": ["MI100"],
+    #     "gfx90a": ["MI210", "MI250", "MI250X"],
+    #     "gfx940": ["MI300A_A0"],
+    #     "gfx941": ["MI300X_A0"],
+    #     "gfx942": ["MI300A_A1", "MI300X_A1"],
+    # }
+
+    if gpu_arch == "gfx906":
+        gpu_name = "MI50"
         L2Banks = "16"
         numSQC = str(int(num_CU) // 4)
-    elif gpu_id == "gfx908":
-        gpu_name = "mi100"
+    elif gpu_arch == "gfx908":
+        gpu_name = "MI100"
         L2Banks = "32"
         numSQC = "48"
-    elif gpu_id == "gfx90a":
+    elif gpu_arch == "gfx90a":
         L2Banks = "32"
-        gpu_name = "mi200"
+        gpu_name = "MI200"
         numSQC = "56"
-    elif gpu_id == "gfx940":
-        gpu_name = "mi300A_A0"
+    elif gpu_arch == "gfx940":
+        gpu_name = "MI300A_A0"
         L2Banks = "16"
         numSQC = "56"
-    elif gpu_id == "gfx941":
-        gpu_name = "mi300X_A0"
+    elif gpu_arch == "gfx941":
+        gpu_name = "MI300X_A0"
         L2Banks = "16"
         numSQC = "56"
-    elif (gpu_id == "gfx942") and ("MI300A" in rocminfo):
-        gpu_name = "mi300A_A1"
+    elif (gpu_arch == "gfx942") and ("MI300A" in rocminfo):
+        gpu_name = "MI300A_A1"
         L2Banks = "16"
         numSQC = "56"
-    elif (gpu_id == "gfx942") and ("MI300A" not in rocminfo):
-        gpu_name = "mi300X_A1"
+    elif (gpu_arch == "gfx942") and ("MI300A" not in rocminfo):
+        gpu_name = "MI300X_A1"
         L2Banks = "16"
         numSQC = "56"
+    else:
+        print("\nInvalid SoC")
+        sys.exit(0)
 
     compute_partition = ""
     memory_partition = ""
     return (
         gpu_name,
-        gpu_id,
+        gpu_arch,
         L1,
         L2,
         max_sclk,
@@ -297,7 +309,7 @@ def get_machine_specs(devicenum):
 
     (
         gpu_name,
-        gpu_id,
+        gpu_arch,
         L1,
         L2,
         max_sclk,
@@ -367,7 +379,12 @@ def get_machine_specs(devicenum):
     compute_partition = search(
         r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
     )
-    memory_partition = search(r"NPS Mode:\s*(\w+)", run(["rocm-smi", "--shownpsmode"]))
+    if compute_partition == None:
+        compute_partition = "NA"
+
+    memory_partition = search(r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"]))
+    if memory_partition == None:
+        memory_partition = "NA"
 
     return MachineSpecs(
         hostname,
@@ -377,7 +394,7 @@ def get_machine_specs(devicenum):
         distro,
         rocm_version,
         gpu_name,
-        gpu_id,
+        gpu_arch,
         L1,
         L2,
         max_sclk,

@@ -55,12 +55,12 @@ supported_devices = {
 }
 
 # supported_devices = {
-#     "gfx906": ["mi50", "mi60"],
-#     "gfx908": ["mi100"],
-#     "gfx90a": ["mi210", "mi250", "mi250x"],
-#     "gfx940": ["mi300A_A0"],
-#     "gfx941": ["mi300X_A0"],
-#     "gfx942": ["mi300A_A1", "mi300X_A1"],
+#     "gfx906": ["MI50", "MI60"],
+#     "gfx908": ["MI100"],
+#     "gfx90a": ["MI210", "MI250", "MI250X"],
+#     "gfx940": ["MI300A_A0"],
+#     "gfx941": ["MI300X_A0"],
+#     "gfx942": ["MI300A_A1", "MI300X_A1"],
 # }
 
 time_units = {"s": 10**9, "ms": 10**6, "us": 10**3, "ns": 1}

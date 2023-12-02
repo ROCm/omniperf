@@ -512,7 +512,11 @@ def perfmon_emit(pmc_list, soc, workload_dir=None):
 
 def perfmon_filter(workload_dir, perfmon_dir, args):
     workload_perfmon_dir = workload_dir + "/perfmon"
-    soc = args.target
+
+    #Fixme: handle target card name properly
+    card = args.target.lower()
+    soc = card[:3]
+    soc += "0" if card[2] == "5" else "00"
 
     # Initialize directories
     # TODO: Modify this so that data is appended to previous?

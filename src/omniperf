@@ -127,27 +127,10 @@ def capture_subprocess_output(subprocess_args, new_env=None):
 
 
 def get_soc():
+    #Fixme: specify device id
     mspec = specs.get_machine_specs(0)
 
-    target = ""
-    if mspec.arch == "gfx906":
-        target = "mi50"
-    elif mspec.arch == "gfx908":
-        target = "mi100"
-    elif mspec.arch == "gfx90a":
-        target = "mi200"
-    elif mspec.arch == "gfx900":
-        target = "vega10"
-    elif mspec.arch == "gfx940":
-        target = "mi300"
-    elif mspec.arch == "gfx941":
-        target = "mi300"
-    elif mspec.arch == "gfx942":
-        target = "mi300"
-    else:
-        print("\nInvalid SoC")
-        sys.exit(0)
-    return target
+    return mspec.GPU
 
 
 def throw_parse_error(my_parser, message):
@@ -257,7 +240,7 @@ def mongo_import(args, profileAndImport):
 ################################################
 def roof_setup(args, my_parser, VER):
     if args.path == os.getcwd() + "/workloads":
-        args.path += "/" + args.name + "/" + args.target
+        args.path += "/" + args.name + "/" + args.target.lower()
 
     # Do we need a new directory for roofline?
     if not os.path.isdir(args.path):
@@ -268,7 +251,7 @@ def roof_setup(args, my_parser, VER):
     roof_path = args.path + "/roofline.csv"
     roofline_exists = os.path.isfile(roof_path)
     if not roofline_exists:
-        if get_soc() != "mi200":
+        if get_soc().lower() != "mi200":
             throw_parse_error(
                 my_parser, "Invalid SoC.\nRoofline only availible on MI200."
             )
@@ -287,7 +270,7 @@ def roof_setup(args, my_parser, VER):
     app_path = args.path + "/pmc_perf.csv"
     app_exists = os.path.isfile(app_path)
     if not app_exists:
-        if get_soc() != "mi200":
+        if get_soc().lower() != "mi200":
             throw_parse_error(
                 my_parser, "Invalid SoC.\nRoofline only availible on MI200."
             )
@@ -389,7 +372,7 @@ def characterize_app(args, VER):
     workload_dir = args.path
 
     # Perfmon filtering
-    pmc_filter(workload_dir, perfmon_dir, args.target)
+    pmc_filter(workload_dir, perfmon_dir, args.target.lower())
 
     # Separate pmc_perf runs
     pmc_perf_split(workload_dir)
@@ -483,7 +466,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         print("pmc file:", os.path.basename(fname))
 
     # profile the app (run w/ custom config files for mi100)
-    if target == "mi100":
+    if target.lower() == "mi100":
         print("RUNNING WITH CUSTOM METRICS")
         success, output = capture_subprocess_output(
             [
@@ -497,11 +480,11 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 '"' + cmd + '"',
             ]
         )
-    if (target == "mi300") and (
+    elif (target.lower() == "mi300a_a0" or target.lower() == "mi300a_a1") and (
         os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
     ):
-        # FIXME: remove all hack code specific to pmc_perf_*.txt and MI300A
+        # FIXME: remove all hack code specific to pmc_perf_*.txt and SPX mode
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -520,6 +503,31 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             df = flatten_tcc_info_across_xccs(f, 6, 16)
+            df.to_csv(f, index=False)
+
+    elif (target.lower() == "mi300x_a0" or target.lower() == "mi300x_a1") and (
+        os.path.basename(fname) == "pmc_perf_15.txt"
+        or os.path.basename(fname) == "pmc_perf_16.txt"
+    ):
+        # FIXME: remove all hack code specific to pmc_perf_*.txt and SPX mode
+        new_env = os.environ.copy()
+        new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
+        success, output = capture_subprocess_output(
+            [
+                rocprof_cmd,
+                "-i",
+                fname,
+                "-d",
+                workload_dir + "/" + "out",
+                "-o",
+                fbase,
+                cmd,
+            ],
+            new_env,
+        )
+        if success:
+            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
+            df = flatten_tcc_info_across_xccs(f, 8, 16)
             df.to_csv(f, index=False)
     else:
         # print("rocprof cmd: ", rocprof_cmd,"-i",

@@ -34,7 +34,7 @@ class gfx90a_soc (OmniSoC_Base):
         super().__init__(args)
         soc = "gfx90a"
         self.set_soc(soc)
-        if self.get_args().roof_only:
+        if hasattr(self.get_args(), 'roof_only') and self.get_args().roof_only:
             self.set_perfmon_dir(os.path.join(str(config.omniperf_home), "perfmon_configs", "roofline"))
         else:
             self.set_perfmon_dir(os.path.join(str(config.omniperf_home), "perfmon_configs", soc)) 
@@ -55,9 +55,24 @@ class gfx90a_soc (OmniSoC_Base):
                 "TCC_channels": 32
             }
         )
+        self.set_soc_param(
+            {
+                "numSE": 8,
+                "numCU": 110,
+                "numSIMD": 440,
+                "numWavesPerCU": 32,
+                "numSQC": 56,
+                "L2Banks": 32,
+                "LDSBanks": 32,
+                "Freq": 1700,
+                "mclk": 1600
+            }
+        )
         self.roofline_obj = Roofline(args)
 
-    # Required methods to be implemented by child classes
+    #-----------------------
+    # Required child methods
+    #-----------------------
     @demarcate
     def profiling_setup(self):
         """Perform any SoC-specific setup prior to profiling.
@@ -86,4 +101,5 @@ class gfx90a_soc (OmniSoC_Base):
         """Perform any SoC-specific setup prior to analysis.
         """
         super().analysis_setup()
+
 

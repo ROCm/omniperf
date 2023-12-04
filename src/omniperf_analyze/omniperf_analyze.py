@@ -53,7 +53,7 @@ archConfigs = {}
 ################################################
 # Helper Functions
 ################################################
-def generate_config(arch, config_dir, list_kernels, filter_metrics):
+def generate_config(arch, config_dir, list_kernels, filter_metrics, sys_info):
     from omniperf_analyze.utils import schema
 
     single_panel_config = file_io.is_single_panel_config(Path(config_dir))
@@ -71,7 +71,7 @@ def generate_config(arch, config_dir, list_kernels, filter_metrics):
     # TODO: filter_metrics should/might be one per arch
     # print(ac)
 
-    parser.build_dfs(ac, filter_metrics)
+    parser.build_dfs(ac, filter_metrics, sys_info)
 
     archConfigs[arch] = ac
 
@@ -146,7 +146,13 @@ def initialize_run(args, normalization_filter=None):
         if args.specs_correction:
             sys_info = parser.correct_sys_info(sys_info, args.specs_correction)
         arch = sys_info.iloc[0]["gpu_soc"]
-        generate_config(arch, args.config_dir, args.list_kernels, args.filter_metrics)
+        generate_config(
+            arch,
+            args.config_dir,
+            args.list_kernels,
+            args.filter_metrics,
+            sys_info.iloc[0],
+        )
 
     load_options(args, normalization_filter)
 

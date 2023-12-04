@@ -330,7 +330,33 @@ def update_normUnit_string(equation, unit):
     ).capitalize()
 
 
-def build_dfs(archConfigs, filter_metrics):
+def calc_buildin_var(var, sys_info):
+    """
+    Calculate build-in variable based on sys_info:
+    """
+    if isinstance(var, int):
+        return var
+    elif isinstance(var, str) and var.startswith("$totalL2Banks"):
+        # Fixme: support all supported partitioning mode
+        # Fixme: "name" is a bad name!
+        totalL2Banks = sys_info.L2Banks
+        if (
+            sys_info["name"].lower() == "mi300a_a0"
+            or sys_info["name"].lower() == "mi300a_a1"
+        ):
+            totalL2Banks = sys_info.L2Banks * 6  # NPS1 and SPX mode only for now
+        elif (
+            sys_info["name"].lower() == "mi300x_a0"
+            or sys_info["name"].lower() == "mi300x_a1"
+        ):
+            totalL2Banks = sys_info.L2Banks * 8  # NPS1 and SPX mode only for now
+        return totalL2Banks
+    else:
+        print("Don't support", var)
+        sys.exit(1)
+
+
+def build_dfs(archConfigs, filter_metrics, sys_info):
     """
     - Build dataframe for each type of data source within each panel.
       Each dataframe will be used as a template to load data with each run later.
@@ -374,7 +400,12 @@ def build_dfs(archConfigs, filter_metrics):
                     # print(len(data_config["metric"]))
                     # data_config['metric'].clear()
                     for p, r in p_range.items():
-                        for i in range(r):
+                        # NB: We have to resolve placeholder range first if it
+                        #   is a build-in var. It will be too late to do it in
+                        #   eval_metric(). This is the only reason we need
+                        #   sys_info at this stage.
+                        var = calc_buildin_var(r, sys_info)
+                        for i in range(var):
                             new_key = metric.replace(p, str(i))
                             new_val = {}
                             for k, v in metric_expr.items():
@@ -582,13 +613,16 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
     ammolite__sclk = sys_info.sclk
     ammolite__maxWavesPerCU = sys_info.maxWavesPerCU
     ammolite__hbmBW = sys_info.hbmBW
+    ammolite__totalL2Banks = calc_buildin_var("$totalL2Banks", sys_info)
+    # print(sys_info)
+    # print(soc_spec)
 
     # TODO: fix all $normUnit in Unit column or title
 
     # build and eval all derived build-in global variables
     ammolite__build_in = {}
     for key, value in build_in_vars.items():
-        # NB: assume all build in vars from pmc_perf.csv for now
+        # NB: assume all build-in vars from pmc_perf.csv for now
         s = build_eval_string(value, schema.pmc_perf_file_prefix)
         try:
             ammolite__build_in[key] = eval(compile(s, "<string>", "eval"))

@@ -96,7 +96,7 @@ perfmon_config = {
         "SPI": 2,
         "GRBM": 2,
         "GDS": 4,
-        "TCC_channels": 32,
+        "TCC_channels": 16,
     },
 }
 

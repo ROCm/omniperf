@@ -30,7 +30,7 @@ import pandas as pd
 
 prog = "omniperf"
 
-# Per IP block max number of simulutaneous counters
+# Per IP block max number of simultaneous counters
 # GFX IP Blocks
 perfmon_config = {
     "vega10": {
@@ -127,7 +127,11 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
         elif join_type == "grid":
             key = _df.groupby(["Kernel_Name", "Grid_Size"]).cumcount()
             _df["key"] = (
-                _df.Kernel_Name + " - " + _df.Grid_Size.astype(str) + " - " + key.astype(str)
+                _df.Kernel_Name
+                + " - "
+                + _df.Grid_Size.astype(str)
+                + " - "
+                + key.astype(str)
             )
         else:
             print("ERROR: Unrecognized --join-type")
@@ -145,7 +149,9 @@ def join_prof(workload_dir, join_type, log_file, verbose, out=None):
         "Grid_Size": [col for col in df.columns if "Grid_Size" in col],
         "Workgroup_Size": [col for col in df.columns if "Workgroup_Size" in col],
         "LDS_Per_Workgroup": [col for col in df.columns if "LDS_Per_Workgroup" in col],
-        "Scratch_Per_Workitem": [col for col in df.columns if "Scratch_Per_Workitem" in col],
+        "Scratch_Per_Workitem": [
+            col for col in df.columns if "Scratch_Per_Workitem" in col
+        ],
         "SGPR": [col for col in df.columns if "SGPR" in col],
     }
     # Check for vgpr counter in ROCm < 5.3
@@ -434,7 +440,6 @@ def perfmon_coalesce(pmc_files_list, soc, workload_dir):
     # sort the per channel counter, so that same counter in all channels can be aligned
     for ch in range(perfmon_config[soc]["TCC_channels"]):
         pmc_list["TCC2"][str(ch)].sort()
-
     return pmc_list
 
 
@@ -456,8 +461,8 @@ def perfmon_emit(pmc_list, soc, workload_dir=None):
         / perfmon_config[soc]["TCC"]
     )
 
-    # Total number iterations to write pmc: counters line
-    niter = max(math.ceil(max(pmc_cnt)), math.ceil(tcc_cnt) + math.ceil(max(tcc2_cnt)))
+    # Total number iterations to write pmc: counters line, except TCC2
+    niter = max(math.ceil(max(pmc_cnt)), math.ceil(tcc_cnt))
 
     # Emit PMC counters into pmc config file
     if workload_dir:
@@ -483,16 +488,31 @@ def perfmon_emit(pmc_list, soc, workload_dir=None):
         N = perfmon_config[soc]["TCC"]
         tcc_counters = pmc_list["TCC"][iter * N : iter * N + N]
 
-        if not tcc_counters:
-            # TCC per-channel counters
-            for ch in range(perfmon_config[soc]["TCC_channels"]):
-                tcc_counters += pmc_list["TCC2"][str(ch)][
-                    tcc2_index * N : tcc2_index * N + N
-                ]
-
-            tcc2_index += 1
-
         # TCC aggregated counters
+        line = line + " " + " ".join(tcc_counters)
+        if workload_dir:
+            fd.write(line + "\n")
+        else:
+            b = line.split()
+            b.remove("pmc:")
+            batches.append(b)
+
+    # TCC2, handle TCC per channel counters separately
+    tcc2_index = 0
+    niter = math.ceil(max(tcc2_cnt))
+    for iter in range(niter):
+        # Prefix
+        line = "pmc: "
+
+        N = perfmon_config[soc]["TCC"]
+        # TCC per-channel counters
+        tcc_counters = []
+
+        for ch in range(perfmon_config[soc]["TCC_channels"]):
+            tcc_counters += pmc_list["TCC2"][str(ch)][tcc2_index * N : tcc2_index * N + N]
+
+        tcc2_index += 1
+
         line = line + " " + " ".join(tcc_counters)
         if workload_dir:
             fd.write(line + "\n")
@@ -513,7 +533,7 @@ def perfmon_emit(pmc_list, soc, workload_dir=None):
 def perfmon_filter(workload_dir, perfmon_dir, args):
     workload_perfmon_dir = workload_dir + "/perfmon"
 
-    #Fixme: handle target card name properly
+    # Fixme: handle target card name properly
     card = args.target.lower()
     soc = card[:3]
     soc += "0" if card[2] == "5" else "00"

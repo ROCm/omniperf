@@ -102,8 +102,8 @@ def gpuinfo():
     gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx940", "gfx941", "gfx942"}
 
     # Fixme: find better way to differentiate cards, GPU vs APU, etc.
-
-    rocminfo = run(["rocminfo"]).split("\n")
+    rocminfo_full = run(["rocminfo"])
+    rocminfo = rocminfo_full.split("\n")
 
     for idx1, linetext in enumerate(rocminfo):
         gpu_arch = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
@@ -214,11 +214,11 @@ def gpuinfo():
         gpu_name = "MI300X_A0"
         L2Banks = "16"
         numSQC = "56"
-    elif (gpu_arch == "gfx942") and ("MI300A" in rocminfo):
+    elif (gpu_arch == "gfx942") and ("MI300A" in rocminfo_full):
         gpu_name = "MI300A_A1"
         L2Banks = "16"
         numSQC = "56"
-    elif (gpu_arch == "gfx942") and ("MI300A" not in rocminfo):
+    elif (gpu_arch == "gfx942") and ("MI300A" not in rocminfo_full):
         gpu_name = "MI300X_A1"
         L2Banks = "16"
         numSQC = "56"
@@ -382,7 +382,9 @@ def get_machine_specs(devicenum):
     if compute_partition == None:
         compute_partition = "NA"
 
-    memory_partition = search(r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"]))
+    memory_partition = search(
+        r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"])
+    )
     if memory_partition == None:
         memory_partition = "NA"
 

@@ -271,7 +271,7 @@ Panel Config:
         style: simple_multiple_bar
 
     - metric_table:
-        id: 1810
+        id: 1811
         title: L2 Tag Stall (%)
         header:
           metric: Metric
@@ -284,7 +284,7 @@ Panel Config:
         style: simple_box
 
     - metric_table:
-        id: 1811
+        id: 1812
         title: L2 Bubble
         header:
           metric: Metric
@@ -294,5 +294,5 @@ Panel Config:
             expr: TCC_BUBBLE[::_1]
           placeholder_range:
             "::_1": $totalL2Banks
-          tips: Number of 128-byte read requests sent to EA
+          # tips: Number of 128-byte read requests sent to EA
         style: simple_box

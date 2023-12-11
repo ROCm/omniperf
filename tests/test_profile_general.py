@@ -297,8 +297,8 @@ def log_metric(test_name, thresholds, args=[] ):
 def test_path():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    # with pytest.raises(SystemExit) as e:
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -313,6 +313,8 @@ def test_path():
             + app_1,
         ):
             omniperf.main()
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -343,7 +345,8 @@ def test_path():
 def test_kernel():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -361,7 +364,8 @@ def test_kernel():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -388,7 +392,8 @@ def test_kernel():
 def test_kernel_summaries():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -406,7 +411,8 @@ def test_kernel_summaries():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -433,7 +439,8 @@ def test_kernel_summaries():
 def test_ipblocks_SQ():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -451,7 +458,8 @@ def test_ipblocks_SQ():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -520,7 +528,8 @@ def test_ipblocks_SQ():
 def test_ipblocks_SQC():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -538,7 +547,8 @@ def test_ipblocks_SQC():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -574,7 +584,8 @@ def test_ipblocks_SQC():
 def test_ipblocks_TA():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -592,7 +603,8 @@ def test_ipblocks_TA():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -634,7 +646,8 @@ def test_ipblocks_TA():
 def test_ipblocks_TD():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -652,7 +665,8 @@ def test_ipblocks_TD():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -698,7 +712,8 @@ def test_ipblocks_TD():
 def test_ipblocks_TCP():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -716,7 +731,8 @@ def test_ipblocks_TCP():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -759,7 +775,8 @@ def test_ipblocks_TCP():
 def test_ipblocks_TCC():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -777,7 +794,8 @@ def test_ipblocks_TCC():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -821,7 +839,8 @@ def test_ipblocks_TCC():
 def test_ipblocks_SPI():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -839,7 +858,8 @@ def test_ipblocks_SPI():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -881,7 +901,8 @@ def test_ipblocks_SPI():
 def test_ipblocks_CPC():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -899,7 +920,8 @@ def test_ipblocks_CPC():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -936,7 +958,8 @@ def test_ipblocks_CPC():
 def test_ipblocks_CPF():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -954,7 +977,8 @@ def test_ipblocks_CPF():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -989,7 +1013,8 @@ def test_ipblocks_CPF():
 def test_ipblocks_SQ_CPC():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1008,7 +1033,8 @@ def test_ipblocks_SQ_CPC():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1078,7 +1104,8 @@ def test_ipblocks_SQ_CPC():
 def test_ipblocks_SQ_TA():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1097,7 +1124,8 @@ def test_ipblocks_SQ_TA():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1166,7 +1194,8 @@ def test_ipblocks_SQ_TA():
 def test_ipblocks_SQ_SPI():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1185,7 +1214,8 @@ def test_ipblocks_SQ_SPI():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1254,7 +1284,8 @@ def test_ipblocks_SQ_SPI():
 def test_ipblocks_SQ_SQC_TCP_CPC():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1275,7 +1306,8 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1345,7 +1377,8 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
 def test_ipblocks_SQ_SPI_TA_TCC_CPF():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1367,7 +1400,8 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1438,7 +1472,8 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
 def test_dispatch_0():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1456,7 +1491,8 @@ def test_dispatch_0():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1483,7 +1519,8 @@ def test_dispatch_0():
 def test_dispatch_0_1():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1501,7 +1538,8 @@ def test_dispatch_0_1():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1528,7 +1566,8 @@ def test_dispatch_0_1():
 def test_dispatch_2():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1546,7 +1585,8 @@ def test_dispatch_2():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1573,7 +1613,8 @@ def test_dispatch_2():
 def test_kernel_verbose_0():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1591,7 +1632,8 @@ def test_kernel_verbose_0():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1618,7 +1660,8 @@ def test_kernel_verbose_0():
 def test_kernel_verbose_1():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1636,7 +1679,8 @@ def test_kernel_verbose_1():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1663,7 +1707,8 @@ def test_kernel_verbose_1():
 def test_kernel_verbose_2():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1681,7 +1726,8 @@ def test_kernel_verbose_2():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1708,7 +1754,8 @@ def test_kernel_verbose_2():
 def test_kernel_verbose_3():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1726,7 +1773,8 @@ def test_kernel_verbose_3():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1753,7 +1801,8 @@ def test_kernel_verbose_3():
 def test_kernel_verbose_4():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1771,7 +1820,8 @@ def test_kernel_verbose_4():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1798,7 +1848,8 @@ def test_kernel_verbose_4():
 def test_kernel_verbose_5():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1816,7 +1867,8 @@ def test_kernel_verbose_5():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1843,7 +1895,8 @@ def test_kernel_verbose_5():
 def test_join_type_grid():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1861,7 +1914,8 @@ def test_join_type_grid():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1888,7 +1942,8 @@ def test_join_type_grid():
 def test_join_type_kernel():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1906,7 +1961,8 @@ def test_join_type_kernel():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1933,7 +1989,8 @@ def test_join_type_kernel():
 def test_device_0():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1951,7 +2008,8 @@ def test_device_0():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -1981,7 +2039,8 @@ def test_device_0():
 def test_no_roof():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -1998,7 +2057,8 @@ def test_no_roof():
         ):
             omniperf.main()
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2051,7 +2111,8 @@ def test_no_roof():
 def test_sort_dispatches():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2072,11 +2133,12 @@ def test_sort_dispatches():
 
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2105,7 +2167,8 @@ def test_sort_dispatches():
 def test_sort_kernels():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2125,11 +2188,12 @@ def test_sort_kernels():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2158,7 +2222,8 @@ def test_sort_kernels():
 def test_mem_levels_HBM():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2179,11 +2244,12 @@ def test_mem_levels_HBM():
 
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2212,7 +2278,8 @@ def test_mem_levels_HBM():
 def test_mem_levels_L2():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2233,11 +2300,12 @@ def test_mem_levels_L2():
 
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2266,7 +2334,8 @@ def test_mem_levels_L2():
 def test_mem_levels_vL1D():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2286,11 +2355,12 @@ def test_mem_levels_vL1D():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2319,7 +2389,8 @@ def test_mem_levels_vL1D():
 def test_mem_levels_LDS():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2339,11 +2410,12 @@ def test_mem_levels_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2372,7 +2444,8 @@ def test_mem_levels_LDS():
 def test_mem_levels_HBM_LDS():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2393,11 +2466,12 @@ def test_mem_levels_HBM_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2426,7 +2500,8 @@ def test_mem_levels_HBM_LDS():
 def test_mem_levels_vL1D_LDS():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2447,11 +2522,12 @@ def test_mem_levels_vL1D_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
 
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2480,7 +2556,8 @@ def test_mem_levels_vL1D_LDS():
 def test_mem_levels_L2_vL1D_LDS():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2502,10 +2579,11 @@ def test_mem_levels_L2_vL1D_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        
+        assert e.value.code == 2
         # Do not continue testing
         return
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 
@@ -2534,7 +2612,8 @@ def test_mem_levels_L2_vL1D_LDS():
 def test_kernel_names():
     if os.path.exists(workload_1):
         shutil.rmtree(workload_1)
-    with patch(
+    with pytest.raises(SystemExit) as e:
+        with patch(
             "sys.argv",
             [
                 "omniperf",
@@ -2554,9 +2633,11 @@ def test_kernel_names():
 
     if soc == "mi100":
         # assert that it did not run
+        assert e.value.code == 2
         # Do not continue testing
         return
-    
+    # assert successful run
+    assert e.value.code == 0
 
     files_in_workload = os.listdir(workload_1)
 

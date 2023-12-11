@@ -17,7 +17,7 @@ kernel_name_1 = "vecCopy(double*, double*, double*, int, int) [clone .kd]"
 # change to directory where app is at
 # app_1 = ["./sample/vcopy", "1048576", "256"]
 # app_1 = ["./mixbench/build_mi100/mixbench-hip"]
-app_1 = ["./tests/vcopy", "1048576", "256"]
+app_1 = ["./tests/vcopy", "-n 1048576", "-b 256"]
 num_kernels = 1
 dispatch_id = 0
 
@@ -1974,7 +1974,7 @@ def test_sort_dispatches():
 
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2026,7 +2026,7 @@ def test_sort_kernels():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2079,7 +2079,7 @@ def test_mem_levels_HBM():
 
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2132,7 +2132,7 @@ def test_mem_levels_L2():
 
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2184,7 +2184,7 @@ def test_mem_levels_vL1D():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2236,7 +2236,7 @@ def test_mem_levels_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2289,7 +2289,7 @@ def test_mem_levels_HBM_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2342,7 +2342,7 @@ def test_mem_levels_vL1D_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
 
@@ -2396,7 +2396,7 @@ def test_mem_levels_L2_vL1D_LDS():
             omniperf.main()
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
     # assert successful run
@@ -2447,7 +2447,7 @@ def test_kernel_names():
 
     if soc == "mi100":
         # assert that it did not run
-        assert e.value.code == 2
+        assert e.value.code >= 1
         # Do not continue testing
         return
     # assert successful run

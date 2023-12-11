@@ -133,7 +133,9 @@ def to_avg(a):
 
 
 def to_median(a):
-    if isinstance(a, pd.core.series.Series):
+    if a is None:
+        return None
+    elif isinstance(a, pd.core.series.Series):
         return a.median()
     else:
         raise Exception("to_median: unsupported type.")
@@ -168,8 +170,11 @@ def to_round(a, b):
 
 
 def to_quantile(a, b):
-    if isinstance(a, pd.core.series.Series):
+    if a is None:
+        return None
+    elif isinstance(a, pd.core.series.Series):
         return a.quantile(b)
+    
     else:
         raise Exception("to_quantile: unsupported type.")
 

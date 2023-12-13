@@ -22,7 +22,6 @@
 # SOFTWARE.
 ##############################################################################el
 
-from selectors import EpollSelector
 import sys
 import copy
 import os.path

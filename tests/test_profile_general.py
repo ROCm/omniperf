@@ -187,6 +187,11 @@ soc = gpu_soc()
 Baseline_dir = os.path.realpath("Baseline_vcopy_" + soc)
 if os.path.exists(Baseline_dir):
     shutil.rmtree(Baseline_dir)
+subprocess.run(
+    ["hipcc", "sample/vcopy.cpp", "-o", "sample/vcopy"],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+)
 with pytest.raises(SystemExit) as e:
     with patch(
         "sys.argv",

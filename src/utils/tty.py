@@ -167,7 +167,7 @@ def show_all(args, runs, archConfigs, output):
                                                     )
                                                 )
                                                 print(df)
-                                                # sys.exit(1)
+
                                     else:
                                         cur_df_copy = copy.deepcopy(cur_df)
                                         cur_df_copy[header] = [

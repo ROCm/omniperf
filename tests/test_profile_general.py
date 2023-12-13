@@ -16,6 +16,7 @@ kernel_name_1 = "vecCopy(double*, double*, double*, int, int) [clone .kd]"
 
 app_1 = ["./sample/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
 num_kernels = 3
+
 dispatch_id = 0
 
 ALL_CSVS = [
@@ -89,6 +90,7 @@ ROOF_ONLY_FILES = [
 # logging function for threshold outliers set to false
 COUNTER_LOGGING = False
 METRIC_LOGGING = True
+
 
 
 def metric_compare(test_name, errors_pd, baseline_df, run_df, threshold=5):
@@ -208,6 +210,7 @@ with pytest.raises(SystemExit) as e:
         + app_1,
     ):
         omniperf.main()
+
 
 
 def logger(file_dict, test_name):
@@ -386,7 +389,7 @@ def log_metric(test_name, thresholds, args=[]):
             new_error_log.to_csv(Baseline_dir + "/metric_error_log.csv")
         else:
             error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
-
+ 
 
 def test_path():
     if os.path.exists(workload_1):
@@ -435,9 +438,6 @@ def test_path():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_kernel():
     if os.path.exists(workload_1):
@@ -485,9 +485,6 @@ def test_kernel():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_kernel_summaries():
     if os.path.exists(workload_1):
@@ -534,10 +531,6 @@ def test_kernel_summaries():
     
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_ipblocks_SQ():
     if os.path.exists(workload_1):
@@ -627,9 +620,6 @@ def test_ipblocks_SQ():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_ipblocks_SQC():
     if os.path.exists(workload_1):
@@ -686,8 +676,6 @@ def test_ipblocks_SQC():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TA():
@@ -750,9 +738,6 @@ def test_ipblocks_TA():
     
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TD():
@@ -820,8 +805,6 @@ def test_ipblocks_TD():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TCP():
@@ -886,8 +869,7 @@ def test_ipblocks_TCP():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_ipblocks_TCC():
@@ -953,8 +935,6 @@ def test_ipblocks_TCC():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SPI():
@@ -1018,8 +998,6 @@ def test_ipblocks_SPI():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_CPC():
@@ -1078,9 +1056,6 @@ def test_ipblocks_CPC():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_ipblocks_CPF():
     if os.path.exists(workload_1):
@@ -1136,8 +1111,6 @@ def test_ipblocks_CPF():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_CPC():
@@ -1230,8 +1203,6 @@ def test_ipblocks_SQ_CPC():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_TA():
@@ -1323,8 +1294,6 @@ def test_ipblocks_SQ_TA():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SPI():
@@ -1416,8 +1385,6 @@ def test_ipblocks_SQ_SPI():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SQC_TCP_CPC():
@@ -1512,8 +1479,6 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SPI_TA_TCC_CPF():
@@ -1610,9 +1575,6 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_dispatch_0():
     if os.path.exists(workload_1):
@@ -1660,8 +1622,7 @@ def test_dispatch_0():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_dispatch_0_1():
@@ -1698,6 +1659,7 @@ def test_dispatch_0_1():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file and not "roofline" in file:
                 assert len(file_dict[file].index) == 2
+
     if soc == "mi200":
         print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
@@ -1710,8 +1672,7 @@ def test_dispatch_0_1():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_dispatch_2():
@@ -1760,8 +1721,7 @@ def test_dispatch_2():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_kernel_verbose_0():
@@ -1810,8 +1770,7 @@ def test_kernel_verbose_0():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_kernel_verbose_1():
@@ -1860,8 +1819,7 @@ def test_kernel_verbose_1():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_kernel_verbose_2():
@@ -1910,9 +1868,6 @@ def test_kernel_verbose_2():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
 
 def test_kernel_verbose_3():
     if os.path.exists(workload_1):
@@ -1959,9 +1914,6 @@ def test_kernel_verbose_3():
     
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_4():
@@ -2010,8 +1962,7 @@ def test_kernel_verbose_4():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_kernel_verbose_5():
@@ -2060,8 +2011,7 @@ def test_kernel_verbose_5():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_join_type_grid():
@@ -2110,8 +2060,6 @@ def test_join_type_grid():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_join_type_kernel():
@@ -2160,8 +2108,7 @@ def test_join_type_kernel():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_device_0():
@@ -2213,8 +2160,7 @@ def test_device_0():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_no_roof():
@@ -2288,8 +2234,7 @@ def test_no_roof():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_sort_dispatches():
@@ -2347,8 +2292,7 @@ def test_sort_dispatches():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_sort_kernels():
@@ -2405,8 +2349,7 @@ def test_sort_kernels():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_mem_levels_HBM():
@@ -2464,8 +2407,7 @@ def test_mem_levels_HBM():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_mem_levels_L2():
@@ -2523,8 +2465,7 @@ def test_mem_levels_L2():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_mem_levels_vL1D():
@@ -2581,8 +2522,7 @@ def test_mem_levels_vL1D():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+
 
 
 def test_mem_levels_LDS():
@@ -2639,8 +2579,6 @@ def test_mem_levels_LDS():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_HBM_LDS():
@@ -2698,8 +2636,6 @@ def test_mem_levels_HBM_LDS():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_vL1D_LDS():
@@ -2757,8 +2693,6 @@ def test_mem_levels_vL1D_LDS():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_L2_vL1D_LDS():
@@ -2816,8 +2750,6 @@ def test_mem_levels_L2_vL1D_LDS():
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
 
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_names():
@@ -2883,3 +2815,4 @@ def test_kernel_names():
 
     if METRIC_LOGGING:
         log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
+

@@ -13,11 +13,7 @@ import sys
 omniperf = SourceFileLoader("omniperf", "src/omniperf").load_module()
 workload_1 = os.path.realpath("workload")
 kernel_name_1 = "vecCopy(double*, double*, double*, int, int) [clone .kd]"
-## kernel_name_1 = "void benchmark_func<__half2, 256, 8u, 11u>(__half2, __half2*) "
 
-# change to directory where app is at
-# app_1 = ["./sample/vcopy", "1048576", "256"]
-# app_1 = ["./mixbench/build_mi100/mixbench-hip"]
 app_1 = ["./sample/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
 num_kernels = 3
 dispatch_id = 0
@@ -89,11 +85,6 @@ ROOF_ONLY_FILES = [
     "sysinfo.csv",
     "timestamps.csv",
 ]
-
-
-# change to directory where baseline is at
-# Baseline_dir = os.path.realpath("Baseline_vcopy_mi100")
-Baseline_dir = os.path.realpath("Baseline_mixbench")
 
 # logging function for threshold outliers set to false
 COUNTER_LOGGING = False
@@ -192,6 +183,27 @@ def gpu_soc():
 
 soc = gpu_soc()
 
+# change to directory where baseline is at
+Baseline_dir = os.path.realpath("Baseline_vcopy_" + soc)
+if os.path.exists(Baseline_dir):
+    shutil.rmtree(Baseline_dir)
+with pytest.raises(SystemExit) as e:
+    with patch(
+        "sys.argv",
+        [
+            "omniperf",
+            "profile",
+            "-n",
+            "app_1",
+            "-VVV",
+            "--path",
+            Baseline_dir,
+            "--",
+        ]
+        + app_1,
+    ):
+        omniperf.main()
+
 
 def logger(file_dict, test_name):
     for file in file_dict.keys():
@@ -226,73 +238,83 @@ def logger(file_dict, test_name):
                         Baseline_dir + "/" + file.split(".")[0] + "_error_log.csv"
                     )
 
-def log_metric(test_name, thresholds, args=[] ):
+
+def log_metric(test_name, thresholds, args=[]):
     t = subprocess.Popen(
-            [
-                sys.executable, "src/omniperf",
-                "analyze",
-                "--path",
-                Baseline_dir,
-                ]+args+[
-                "--path",
-                workload_1,
-                "--report-diff",
-                "5"
-            ],
-            stdout=subprocess.PIPE,
-        )
+        [
+            sys.executable,
+            "src/omniperf",
+            "analyze",
+            "--path",
+            Baseline_dir,
+        ]
+        + args
+        + ["--path", workload_1, "--report-diff", "5"],
+        stdout=subprocess.PIPE,
+    )
     captured_output = t.communicate(timeout=1300)[0].decode("utf-8")
-    print("captured_output",captured_output)
-    if ("DEBUG ERROR" in captured_output):
-            error_df=pd.DataFrame()
-            output_metric_errors=re.findall(r"(\')([0-9.]*)(\')", captured_output)
-            naughty_metrics = [ x[1] for x in output_metric_errors]
-            print("naughty metrics:", naughty_metrics)
-            for metric in naughty_metrics:
-                metric_info = re.findall(r"(^"+ metric +r" *)(([()0-9A-Za-z-]+)|([()0-9A-Za-z-]+ [()0-9A-Za-z-]+)+)([ 0-9.]*)\(([-0-9.]*)%\) *([-0-9.e]*) *([-0-9.e]*) *([-0-9.e]*)", captured_output, flags=re.MULTILINE)
-                if len(metric_info):
-                    metric_info=metric_info[0]
-                    if metric_info[-4] != "-100.0":
-                        print("metric info:", metric_info)
-                        table_idx = metric_info[1].split('.')[0]
-                        relative_diff = metric_info[-4]
-                        absolute_diff = metric_info[-3]
-                        relative_threshold = thresholds["default"]["relative"]
-                        absolute_threshold = thresholds["default"]["absolute"]
-                        
-                        if table_idx in thresholds:
-                            relative_threshold = thresholds[table_idx]["relative"]
-                            absolute_threshold = thresholds[table_idx]["absolute"]
-                            
-                        if relative_diff > relative_threshold or absolute_diff > absolute_threshold:
-                        
-                            new_error = pd.DataFrame.from_dict({"index": [metric_info[0].split()[0]],
-                                                            "metric": [table_idx],
-                                                            "Percent Difference": [relative_diff],
-                                                            "Absolute Difference":[absolute_diff],
-                                                            "Baseline":[metric_info[-2]],
-                                                            "Current":[metric_info[-1]]
-                                                            })
-                            error_df= pd.concat([error_df, new_error])
-                
-            error_df["test_name"] = test_name
-            if os.path.exists(Baseline_dir + "/metric_error_log.csv"):
-                error_log = pd.read_csv(
-                                Baseline_dir + "/metric_error_log.csv",
-                                index_col=0,
-                            )
-                new_error_log = pd.concat([error_log, error_df])
-                new_error_log = new_error_log.reindex(
-                                sorted(new_error_log.columns), axis=1
-                            )
-                new_error_log = new_error_log.sort_values(
-                                by=["metric", "test_name"]
-                            )
-                new_error_log.to_csv(
-                                Baseline_dir + "/metric_error_log.csv"
-                            )
-            else:
-                error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
+    print("captured_output", captured_output)
+    if "DEBUG ERROR" in captured_output:
+        error_df = pd.DataFrame()
+        output_metric_errors = re.findall(r"(\')([0-9.]*)(\')", captured_output)
+        naughty_metrics = [x[1] for x in output_metric_errors]
+        print("naughty metrics:", naughty_metrics)
+        for metric in naughty_metrics:
+            metric_info = re.findall(
+                r"(^"
+                + metric
+                + r" *)([()0-9A-Za-z-]+ ?)*(?: *)([0-9.-]*)(?: *)([0-9.-]*)(?: *)\(([-0-9.]*)%\)(?: *)([-0-9.e]*)",
+                captured_output,
+                flags=re.MULTILINE,
+            )
+            if len(metric_info):
+                metric_info = metric_info[0]
+                if metric_info[-4] != "-100.0":
+                    print("metric info:", metric_info)
+                    print(
+                        re.findall(
+                            r"^" + metric + r".*", captured_output, flags=re.MULTILINE
+                        )
+                    )
+                    table_idx = metric_info[1].split(".")[0]
+                    relative_diff = float(metric_info[-2])
+                    absolute_diff = float(metric_info[-1])
+                    relative_threshold = thresholds["default"]["relative"]
+                    absolute_threshold = thresholds["default"]["absolute"]
+
+                    if table_idx in thresholds:
+                        relative_threshold = thresholds[table_idx]["relative"]
+                        absolute_threshold = thresholds[table_idx]["absolute"]
+
+                    if (
+                        relative_diff > relative_threshold
+                        or absolute_diff > absolute_threshold
+                    ):
+                        new_error = pd.DataFrame.from_dict(
+                            {
+                                "index": [metric_info[0].split()[0]],
+                                "metric": [table_idx],
+                                "Percent Difference": [relative_diff],
+                                "Absolute Difference": [absolute_diff],
+                                "Baseline": [metric_info[-2]],
+                                "Current": [metric_info[-1]],
+                            }
+                        )
+                        error_df = pd.concat([error_df, new_error])
+
+        error_df["test_name"] = test_name
+        if os.path.exists(Baseline_dir + "/metric_error_log.csv"):
+            error_log = pd.read_csv(
+                Baseline_dir + "/metric_error_log.csv",
+                index_col=0,
+            )
+            new_error_log = pd.concat([error_log, error_df])
+            new_error_log = new_error_log.reindex(sorted(new_error_log.columns), axis=1)
+            new_error_log = new_error_log.sort_values(by=["metric", "test_name"])
+            new_error_log.to_csv(Baseline_dir + "/metric_error_log.csv")
+        else:
+            error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
+
 
 def test_path():
     if os.path.exists(workload_1):
@@ -337,9 +359,9 @@ def test_path():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-        
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel():
@@ -384,9 +406,9 @@ def test_kernel():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_summaries():
@@ -431,9 +453,9 @@ def test_kernel_summaries():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ():
@@ -520,9 +542,9 @@ def test_ipblocks_SQ():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQC():
@@ -576,9 +598,9 @@ def test_ipblocks_SQC():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TA():
@@ -638,9 +660,9 @@ def test_ipblocks_TA():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TD():
@@ -704,9 +726,9 @@ def test_ipblocks_TD():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TCP():
@@ -767,9 +789,9 @@ def test_ipblocks_TCP():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_TCC():
@@ -831,9 +853,9 @@ def test_ipblocks_TCC():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SPI():
@@ -893,9 +915,9 @@ def test_ipblocks_SPI():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_CPC():
@@ -950,9 +972,9 @@ def test_ipblocks_CPC():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_CPF():
@@ -1005,9 +1027,9 @@ def test_ipblocks_CPF():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_CPC():
@@ -1096,9 +1118,9 @@ def test_ipblocks_SQ_CPC():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_TA():
@@ -1186,9 +1208,9 @@ def test_ipblocks_SQ_TA():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SPI():
@@ -1276,9 +1298,9 @@ def test_ipblocks_SQ_SPI():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SQC_TCP_CPC():
@@ -1369,9 +1391,9 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_ipblocks_SQ_SPI_TA_TCC_CPF():
@@ -1464,9 +1486,9 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_dispatch_0():
@@ -1511,9 +1533,9 @@ def test_dispatch_0():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_dispatch_0_1():
@@ -1549,7 +1571,7 @@ def test_dispatch_0_1():
         if file.endswith(".csv"):
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file and not "roofline" in file:
-                assert len(file_dict[file].index) == num_kernels
+                assert len(file_dict[file].index) == 2
     if soc == "mi200":
         print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
@@ -1558,9 +1580,9 @@ def test_dispatch_0_1():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_dispatch_2():
@@ -1605,9 +1627,9 @@ def test_dispatch_2():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_0():
@@ -1652,9 +1674,9 @@ def test_kernel_verbose_0():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_1():
@@ -1699,9 +1721,9 @@ def test_kernel_verbose_1():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_2():
@@ -1746,9 +1768,9 @@ def test_kernel_verbose_2():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_3():
@@ -1793,9 +1815,9 @@ def test_kernel_verbose_3():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_4():
@@ -1840,9 +1862,9 @@ def test_kernel_verbose_4():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_verbose_5():
@@ -1887,9 +1909,9 @@ def test_kernel_verbose_5():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_join_type_grid():
@@ -1934,9 +1956,9 @@ def test_join_type_grid():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_join_type_kernel():
@@ -1981,9 +2003,9 @@ def test_join_type_kernel():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_device_0():
@@ -2031,9 +2053,9 @@ def test_device_0():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_no_roof():
@@ -2103,9 +2125,9 @@ def test_no_roof():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_sort_dispatches():
@@ -2159,9 +2181,9 @@ def test_sort_dispatches():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_sort_kernels():
@@ -2214,9 +2236,9 @@ def test_sort_kernels():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_HBM():
@@ -2270,9 +2292,9 @@ def test_mem_levels_HBM():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_L2():
@@ -2326,9 +2348,9 @@ def test_mem_levels_L2():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_vL1D():
@@ -2381,9 +2403,9 @@ def test_mem_levels_vL1D():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_LDS():
@@ -2436,9 +2458,9 @@ def test_mem_levels_LDS():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_HBM_LDS():
@@ -2492,9 +2514,9 @@ def test_mem_levels_HBM_LDS():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_vL1D_LDS():
@@ -2548,9 +2570,9 @@ def test_mem_levels_vL1D_LDS():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_mem_levels_L2_vL1D_LDS():
@@ -2604,9 +2626,9 @@ def test_mem_levels_L2_vL1D_LDS():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
 
 
 def test_kernel_names():
@@ -2669,6 +2691,6 @@ def test_kernel_names():
 
     if COUNTER_LOGGING:
         logger(file_dict, inspect.stack()[0][3])
-    
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})

@@ -163,6 +163,17 @@ class webui_analysis(OmniAnalyze_Base):
             )
             has_roofline = os.path.isfile(os.path.join(self.dest_dir, "roofline.csv"))
             if has_roofline and hasattr(self.get_socs()[self.arch], "roofline_obj"):
+                # update roofline for visualization in GUI
+                self.get_socs()[self.arch].analysis_setup(
+                    roofline_parameters={
+                        'path_to_dir': self.dest_dir,
+                        'device_id': 0,
+                        'sort_type': 'kernels',
+                        'mem_level': 'ALL',
+                        'include_kernel_names': False,
+                        'is_standalone': False
+                    }
+                )
                 roof_obj = self.get_socs()[self.arch].roofline_obj
                 div_children.append(
                     roof_obj.empirical_roofline(
@@ -290,17 +301,7 @@ class webui_analysis(OmniAnalyze_Base):
             "normalization": args.normal_unit,
             "top_n": args.max_kernel_num,
         }
-        # update roofline for visualization in GUI
-        self.get_socs()[self.arch].analysis_setup(
-            roofline_parameters={
-                'path_to_dir': self.dest_dir,
-                'device_id': 0,
-                'sort_type': 'kernels',
-                'mem_level': 'ALL',
-                'include_kernel_names': False,
-                'is_standalone': False
-            }
-        )
+        
         self.build_layout(
             input_filters,
             self._arch_configs[self.arch],

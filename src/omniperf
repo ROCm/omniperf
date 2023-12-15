@@ -177,7 +177,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     param += ['"' + app_cmd + '"']
     param += [
         mspec.hostname,
-        mspec.cpu,
+        mspec.CPU,
         mspec.distro,
         mspec.kernel_version,
         mspec.rocm_version,
@@ -245,7 +245,6 @@ def roof_setup(args, my_parser, VER):
     # Do we need a new directory for roofline?
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
-
     # Does roof data exist?
     print("Checking for roofline.csv in ", args.path)
     roof_path = args.path + "/roofline.csv"
@@ -421,7 +420,6 @@ def characterize_app(args, VER):
         join_prof(workload_dir, args.join_type, log, args.verbose)
         # Demangle and overwrite original KernelNames
         csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
-
     log.close()
 
 
@@ -777,7 +775,7 @@ def main():
 
     if args.specs:
         print(specs.get_machine_specs(0))
-        exit()
+        sys.exit(0)  # Indicate successful on exit
 
     if args.mode == None:
         throw_parse_error(

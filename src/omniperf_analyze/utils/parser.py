@@ -174,7 +174,7 @@ def to_quantile(a, b):
         return None
     elif isinstance(a, pd.core.series.Series):
         return a.quantile(b)
-    
+
     else:
         raise Exception("to_quantile: unsupported type.")
 
@@ -430,7 +430,10 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                 if type == "metric_table":
                     headers = ["Index"]
 
-                    if "style" in data_config and data_config["style"] == "simple_box":
+                    if (
+                        "cli_style" in data_config
+                        and data_config["cli_style"] == "simple_box"
+                    ):
                         headers.append("Metric")
                         for k in simple_box.keys():
                             headers.append(k)
@@ -475,8 +478,8 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                             values.append(key)
 
                             if (
-                                "style" in data_config
-                                and data_config["style"] == "simple_box"
+                                "cli_style" in data_config
+                                and data_config["cli_style"] == "simple_box"
                             ):
                                 # print("~~~~~~~~~~~~~~~~~")
                                 # print(entries)

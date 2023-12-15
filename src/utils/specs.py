@@ -39,12 +39,14 @@ from textwrap import dedent
 class MachineSpecs:
     hostname: str
     CPU: str
+    sbios: str
     kernel_version: str
     ram: str
     distro: str
     rocm_version: str
     GPU: str
     arch: str
+    vbios: str
     L1: str
     L2: str
     CU: str
@@ -69,6 +71,7 @@ class MachineSpecs:
         Host info:
             hostname:           {self.hostname}
             CPU:                {self.CPU}
+            sbios:              {self.sbios}
             ram:                {self.ram}
             distro:             {self.distro}
             kernel_version:     {self.kernel_version}
@@ -76,6 +79,7 @@ class MachineSpecs:
         Device info:
             GPU:                {self.GPU}
             arch:               {self.arch}
+            vbios:              {self.vbios}
             L1:                 {self.L1} KB
             L2:                 {self.L2} KB
             max_sclk:           {self.max_sclk} MHz
@@ -355,6 +359,10 @@ def get_machine_specs(devicenum):
     device = rf"^\s*{devicenum}(.*)"
 
     hostname = socket.gethostname()
+    sbios = (
+        path("/sys/class/dmi/id/bios_vendor").read_text().strip()
+        + path("/sys/class/dmi/id/bios_version").read_text().strip()
+    )
     CPU = search(r"^model name\s*: (.*?)$", cpuinfo)
     kernel_version = search(r"version (\S*)", version)
     ram = search(r"MemTotal:\s*(\S*)", meminfo)
@@ -372,6 +380,9 @@ def get_machine_specs(devicenum):
     cur_mclk = search(r"([0-9]+)", freq[3])
     if cur_mclk is None:
         cur_mclk = 0
+
+    # FIXME with device
+    vbios = search(r"VBIOS version: (.*?)$", run(["rocm-smi", "-v"]))
 
     # FIXME with spec
     hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
@@ -391,12 +402,14 @@ def get_machine_specs(devicenum):
     return MachineSpecs(
         hostname,
         CPU,
+        sbios,
         kernel_version,
         ram,
         distro,
         rocm_version,
         gpu_name,
         gpu_arch,
+        vbios,
         L1,
         L2,
         num_CU,

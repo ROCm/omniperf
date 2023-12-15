@@ -160,8 +160,8 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # write header
     header = "workload_name,"
     header += "command,"
-    header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
-    header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
+    header += "host_name,host_cpu,sbios,host_distro,host_kernel,host_rocmver,date,"
+    header += "gpu_soc,vbios,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
     header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,compute_partition,memory_partition,"
     header += "ip_blocks\n"
     sysinfo.write(header)
@@ -178,6 +178,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     param += [
         mspec.hostname,
         mspec.CPU,
+        mspec.sbios,
         mspec.distro,
         mspec.kernel_version,
         mspec.rocm_version,
@@ -187,6 +188,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # GPU info
     param += [
         mspec.arch,
+        msepc.vbios,
         mspec.SE,
         mspec.CU,
         mspec.SIMD,

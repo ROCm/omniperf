@@ -188,7 +188,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # GPU info
     param += [
         mspec.arch,
-        msepc.vbios,
+        mspec.vbios,
         mspec.SE,
         mspec.CU,
         mspec.SIMD,

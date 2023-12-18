@@ -33,7 +33,7 @@ class cli_analysis(OmniAnalyze_Base):
     # Required child methods
     #-----------------------
     @demarcate
-    def pre_processing(self):
+    def pre_processing(self, omni_soc):
         """Perform any pre-processing steps prior to analysis.
         """
         super().pre_processing()

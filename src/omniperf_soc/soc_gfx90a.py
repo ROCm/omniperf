@@ -105,3 +105,4 @@ class gfx90a_soc (OmniSoC_Base):
             self.roofline_obj = Roofline(self.get_args(), roofline_parameters)
 
 
+

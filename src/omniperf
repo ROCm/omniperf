@@ -43,12 +43,13 @@ from utils.perfagg import (
     pmc_filter,
     pmc_perf_split,
     join_prof,
-    flatten_tcc_info_across_xccs,
+    flatten_tcc_info_across_hbm_stacks,
 )
 from utils import remove_workload
 from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
 from omniperf_analyze.omniperf_analyze import analyze  # CLI analysis
+from omniperf_analyze.utils.parser import get_hbm_stack_num
 from common import resolve_rocprof
 
 from common import (
@@ -460,6 +461,9 @@ def run_rocscope(args, fname):
 def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
     global rocprof_cmd
 
+    # Fixme: allow to specify device_id or pass sysinfo in
+    m_specs = specs.get_machine_specs(0)
+
     fbase = os.path.splitext(os.path.basename(fname))[0]
 
     if verbose:
@@ -486,7 +490,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         or os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
     ):
-        # FIXME: remove all hack code specific to pmc_perf_*.txt and SPX mode
+        # FIXME: remove all hack code specific to pmc_perf_*.txt
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -504,7 +508,8 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         )
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
-            df = flatten_tcc_info_across_xccs(f, 6, 16)
+            hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
+            df = flatten_tcc_info_across_hbm_stacks(f, hbm_stack_num, m_specs.L2Banks)
             df.to_csv(f, index=False)
 
     elif (target.lower() == "mi300x_a0" or target.lower() == "mi300x_a1") and (
@@ -513,7 +518,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         or os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
     ):
-        # FIXME: remove all hack code specific to pmc_perf_*.txt and SPX mode
+        # FIXME: remove all hack code specific to pmc_perf_*.txt
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -531,7 +536,8 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         )
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
-            df = flatten_tcc_info_across_xccs(f, 8, 16)
+            hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
+            df = flatten_tcc_info_across_hbm_stacks(f, hbm_stack_num, m_specs.L2Banks)
             df.to_csv(f, index=False)
     else:
         # print("rocprof cmd: ", rocprof_cmd,"-i",

@@ -349,12 +349,16 @@ def calc_buildin_var(var, sys_info):
             sys_info["name"].lower() == "mi300a_a0"
             or sys_info["name"].lower() == "mi300a_a1"
         ):
-            totalL2Banks = sys_info.L2Banks * 6  # NPS1 and SPX mode only for now
+            totalL2Banks = sys_info.L2Banks * get_hbm_stack_num(
+                sys_info["name"], sys_info["memory_partition"]
+            )
         elif (
             sys_info["name"].lower() == "mi300x_a0"
             or sys_info["name"].lower() == "mi300x_a1"
         ):
-            totalL2Banks = sys_info.L2Banks * 8  # NPS1 and SPX mode only for now
+            totalL2Banks = sys_info.L2Banks * get_hbm_stack_num(
+                sys_info["name"], sys_info["memory_partition"]
+            )
         return totalL2Banks
     else:
         print("Don't support", var)
@@ -934,3 +938,39 @@ def correct_sys_info(df, specs_correction):
         df[name_map[k]] = v
 
     return df
+
+
+def get_hbm_stack_num(gpu_name, memory_partition):
+    """
+    Get total HBM stack numbers based on  memory partition for MI300.
+    """
+
+    # TODO:
+    # - move this function to the proper file
+    # - better err log
+
+    if gpu_name.lower() == "mi300a_a0" or gpu_name.lower() == "mi300a_a1":
+        if memory_partition.lower() == "nps1":
+            return 6
+        elif memory_partition.lower() == "nps4":
+            return 2
+        elif memory_partition.lower() == "nps8":
+            return 1
+        else:
+            print("Invalid MI300A memory partition mode!")
+            sys.exit()
+    elif gpu_name.lower() == "mi300x_a0" or gpu_name.lower() == "mi300x_a1":
+        if memory_partition.lower() == "nps1":
+            return 8
+        elif memory_partition.lower() == "nps2":
+            return 4
+        elif memory_partition.lower() == "nps4":
+            return 2
+        elif memory_partition.lower() == "nps8":
+            return 1
+        else:
+            print("Invalid MI300X memory partition mode!")
+            sys.exit()
+    else:
+        # Fixme: add proper numbers for other archs
+        return -1

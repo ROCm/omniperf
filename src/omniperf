@@ -509,7 +509,9 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
-            df = flatten_tcc_info_across_hbm_stacks(f, hbm_stack_num, m_specs.L2Banks)
+            df = flatten_tcc_info_across_hbm_stacks(
+                f, hbm_stack_num, int(m_specs.L2Banks)
+            )
             df.to_csv(f, index=False)
 
     elif (target.lower() == "mi300x_a0" or target.lower() == "mi300x_a1") and (
@@ -537,7 +539,9 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
             hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
-            df = flatten_tcc_info_across_hbm_stacks(f, hbm_stack_num, m_specs.L2Banks)
+            df = flatten_tcc_info_across_hbm_stacks(
+                f, hbm_stack_num, int(m_specs.L2Banks)
+            )
             df.to_csv(f, index=False)
     else:
         # print("rocprof cmd: ", rocprof_cmd,"-i",

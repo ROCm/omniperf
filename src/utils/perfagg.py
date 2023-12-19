@@ -593,9 +593,9 @@ def pmc_filter(workload_dir, perfmon_dir, soc):
     perfmon_emit(pmc_list, soc, workload_dir)
 
 
-def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
+def flatten_tcc_info_across_hbm_stacks(file, stack_num, tcc_channel_per_stack):
     """
-    Flatten TCC per channel counters across all XCCs.
+    Flatten TCC per channel counters across all HBM stacks in used.
     NB: This func highly depends on the default behavior of rocprofv2 on MI300,
         which might be broken anytime in the future!
     """
@@ -614,18 +614,18 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
 
     cols = non_tcc_cols_orig
     tcc_cols_in_group = {}
-    for i in range(0, xcc_num):
+    for i in range(0, stack_num):
         tcc_cols_in_group[i] = []
 
     for col in tcc_cols_orig:
-        for i in range(0, xcc_num):
+        for i in range(0, stack_num):
             # filter the channel index only
             p = re.compile(r"(\d+)")
             # pick up the 1st element only
-            r = lambda match: str(int(float(match.group(0))) + i * tcc_channel_per_xcc)
+            r = lambda match: str(int(float(match.group(0))) + i * tcc_channel_per_stack)
             tcc_cols_in_group[i].append(re.sub(pattern=p, repl=r, string=col))
 
-    for i in range(0, xcc_num):
+    for i in range(0, stack_num):
         # print(tcc_cols_in_group[i])
         cols += tcc_cols_in_group[i]
     # print(cols)
@@ -634,7 +634,7 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
     ### Rearrange data with extended column names
 
     # print(len(df_orig.index))
-    for idx in range(0, len(df_orig.index), xcc_num):
+    for idx in range(0, len(df_orig.index), stack_num):
         # assume the front none TCC columns are the same for all XCCs
         df_non_tcc = df_orig.iloc[idx].filter(regex=r"^(?!.*TCC).*$")
         # display(df_non_tcc)
@@ -642,7 +642,7 @@ def flatten_tcc_info_across_xccs(file, xcc_num, tcc_channel_per_xcc):
 
         # extract all tcc from one dispatch
         # NB: assuming default contiguous order might not be safe!
-        df_tcc_all = df_orig.iloc[idx : (idx + xcc_num)].filter(regex="TCC")
+        df_tcc_all = df_orig.iloc[idx : (idx + stack_num)].filter(regex="TCC")
         # display(df_tcc_all)
 
         for idx, row in df_tcc_all.iterrows():

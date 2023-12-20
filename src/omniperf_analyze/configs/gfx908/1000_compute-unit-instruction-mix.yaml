@@ -232,3 +232,39 @@ Panel Config:
           MFMA-F64:
             count: None # No HW module
             tips:
+
+    - metric_table:
+        id: 1104
+        title: Memory Latencies
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          VMEM Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            tips: SQ_INSTS_LEVEL_VMEM
+          SMEM Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            tips: SQ_INSTS_LEVEL_SMEM
+          Instr Fetch Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            tips: SQ_IFETCH_LEVEL
+          LDS Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            tips: SQ_INST_LEVEL_LDS

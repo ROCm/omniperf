@@ -200,3 +200,52 @@ Panel Config:
               + (SQ_INSTS_VALU_FMA_F64 * 2))) + (512 * SQ_INSTS_VALU_MFMA_MOPS_F64)) / $denom))
             unit: (OPs  + $normUnit)
             tips: 
+
+    - metric_table:
+        id: 1104
+        title: Memory Latencies
+        header:
+          metric: Metric
+          avg: Avg
+          min: Min
+          max: Max
+          unit: Unit
+          tips: Tips
+        metric:
+          VMEM Latency:
+            avg: AVG(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_VMEM) if (SQ_INSTS_VMEM != 0)
+              else None))
+            min: MIN(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_VMEM) if (SQ_INSTS_VMEM != 0)
+              else None))
+            max: MAX(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_VMEM) if (SQ_INSTS_VMEM != 0)
+              else None))
+            unit: Cycles
+            tips: SQ_INSTS_LEVEL_VMEM
+          SMEM Latency:
+            avg: AVG(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_SMEM) if (SQ_INSTS_SMEM != 0)
+              else None))
+            min: MIN(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_SMEM) if (SQ_INSTS_SMEM != 0)
+              else None))
+            max: MAX(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_SMEM) if (SQ_INSTS_SMEM != 0)
+              else None))
+            unit: Cycles
+            tips: SQ_INSTS_LEVEL_SMEM
+          Instr Fetch Latency:
+            avg: AVG(((SQ_ACCUM_PREV_HIRES / SQ_IFETCH) if (SQ_IFETCH != 0)
+              else None))
+            min: MIN(((SQ_ACCUM_PREV_HIRES / SQ_IFETCH) if (SQ_IFETCH != 0)
+              else None))
+            max: MAX(((SQ_ACCUM_PREV_HIRES / SQ_IFETCH) if (SQ_IFETCH != 0)
+              else None))
+            unit: Cycles
+            tips: SQ_IFETCH_LEVEL
+          LDS Latency:
+            avg: AVG(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0)
+              else None))
+            min: MIN(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0)
+              else None))
+            max: MAX(((SQ_ACCUM_PREV_HIRES / SQ_INSTS_LDS) if (SQ_INSTS_LDS != 0)
+              else None))
+            unit: Cycles
+            tips: SQ_INST_LEVEL_LDS
+          

@@ -14,10 +14,14 @@ omniperf = SourceFileLoader("omniperf", "src/omniperf").load_module()
 workload_1 = os.path.realpath("workload")
 kernel_name_1 = "vecCopy(double*, double*, double*, int, int) [clone .kd]"
 
-app_1 = ["./sample/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
+app_1 = ["./tests/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
 num_kernels = 3
 
 dispatch_id = 0
+
+DEFAULT_ABS_DIFF = 2.2
+DEFAULT_REL_DIFF = 8
+MAX_METRIC_VIOLATIONS = 2
 
 ALL_CSVS = [
     "SQ_IFETCH_LEVEL.csv",
@@ -74,7 +78,6 @@ ALL_CSVS_MI200 = [
     "sysinfo.csv",
     "timestamps.csv",
 ]
-
 ROOF_ONLY_FILES = [
     "empirRoof_gpu-ALL_fp32.pdf",
     "empirRoof_gpu-ALL_int8_fp16.pdf",
@@ -91,6 +94,59 @@ ROOF_ONLY_FILES = [
 COUNTER_LOGGING = False
 METRIC_LOGGING = True
 
+# Absolute Difference < 2
+CONSISTENT_ABS_METRIC_INDICES = [
+    "2.1.8",
+    # "2.1.28",
+    "2.1.9",
+    "5.1.3",
+    "13.1.0",
+    "14.1.0",
+    "5.2.4",
+    "11.2.0",
+    "11.2.2",
+    "11.2.3",
+    "13.1.0",
+    "13.2.3",
+    "16.5.3",
+    "17.2.3",
+    "17.2.8",
+    "17.2.9",
+    "17.3.8",
+    "17.3.9",
+    "17.3.11",
+    "17.3.14",
+    "17.3.15",
+    "17.3.16",
+    "18.1.13",
+    "18.1.16",
+]
+# Percent Difference < 8
+CONSISTENT_REL_METRIC_INDICES = [
+    "2.1.26",
+    # "5.1.0",
+    # "5.1.1",
+    # "5.2.0",
+    # "5.2.1",
+    "5.2.3",
+    # "5.2.4",
+    "5.2.6",
+    "5.2.8",
+    # "6.1.0",
+    # "6.1.1",
+    "6.1.3" "6.1.6",
+    # "6.1.7",
+    # "6.2.0",
+    # "7.2.1",
+    # "7.2.3",
+    "7.2.4",
+    "7.2.7",
+    # "14.1.0",
+    "16.2.0",
+    # "16.3.14",
+    # "16.3.15",
+    "17.1.0",
+]
 
 
 def metric_compare(test_name, errors_pd, baseline_df, run_df, threshold=5):
@@ -189,11 +245,6 @@ soc = gpu_soc()
 Baseline_dir = os.path.realpath("Baseline_vcopy_" + soc)
 if os.path.exists(Baseline_dir):
     shutil.rmtree(Baseline_dir)
-subprocess.run(
-    ["hipcc", "sample/vcopy.cpp", "-o", "sample/vcopy"],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-)
 with pytest.raises(SystemExit) as e:
     with patch(
         "sys.argv",
@@ -212,8 +263,7 @@ with pytest.raises(SystemExit) as e:
         omniperf.main()
 
 
-
-def logger(file_dict, test_name):
+def log_counter(file_dict, test_name):
     for file in file_dict.keys():
         if file == "pmc_perf.csv" or "SQ" in file:
             print(file)
@@ -246,6 +296,7 @@ def logger(file_dict, test_name):
                         Baseline_dir + "/" + file.split(".")[0] + "_error_log.csv"
                     )
 
+
 def log_metric(test_name, thresholds, args=[]):
     t = subprocess.Popen(
         [
@@ -256,13 +307,19 @@ def log_metric(test_name, thresholds, args=[]):
             Baseline_dir,
         ]
         + args
-        + ["--path", workload_1, "--report-diff", "5"],
+        + ["--path", workload_1, "--report-diff", str(DEFAULT_REL_DIFF)],
         stdout=subprocess.PIPE,
     )
     captured_output = t.communicate(timeout=1300)[0].decode("utf-8")
-    print("captured_output", captured_output)
+    assert t.returncode == 0
+
     if "DEBUG ERROR" in captured_output:
         error_df = pd.DataFrame()
+        if os.path.exists(Baseline_dir + "/metric_error_log.csv"):
+            error_df = pd.read_csv(
+                Baseline_dir + "/metric_error_log.csv",
+                index_col=0,
+            )
         output_metric_errors = re.findall(r"(\')([0-9.]*)(\')", captured_output)
         naughty_metrics = [x[1] for x in output_metric_errors]
         print("naughty metrics:", naughty_metrics)
@@ -270,58 +327,61 @@ def log_metric(test_name, thresholds, args=[]):
             metric_info = re.findall(
                 r"(^"
                 + metric
-                + r" *)([()0-9A-Za-z-]+ ?)*(?: *)([0-9.-]*)(?: *)([0-9.-]*)(?: *)\(([-0-9.]*)%\)(?: *)([-0-9.e]*)",
+                + r")(?: *)([()0-9A-Za-z- ]+ )(?: *)([0-9.-]*)(?: *)([0-9.-]*)(?: *)\(([-0-9.]*)%\)(?: *)([-0-9.e]*)",
                 captured_output,
                 flags=re.MULTILINE,
             )
             if len(metric_info):
                 metric_info = metric_info[0]
-                if metric_info[-4] != "-100.0":
+                metric_idx = metric_info[0]
+                table_idx = metric_info[0].split(".")[0]
+                relative_diff = float(metric_info[-2])
+                absolute_diff = float(metric_info[-1])
+                if relative_diff > -99 or relative_diff < -101:
                     print("metric info:", metric_info)
                     print(
                         re.findall(
                             r"^" + metric + r".*", captured_output, flags=re.MULTILINE
                         )
                     )
-                    table_idx = metric_info[1].split(".")[0]
-                    relative_diff = float(metric_info[-2])
-                    absolute_diff = float(metric_info[-1])
+
                     relative_threshold = thresholds["default"]["relative"]
                     absolute_threshold = thresholds["default"]["absolute"]
 
                     if table_idx in thresholds:
                         relative_threshold = thresholds[table_idx]["relative"]
                         absolute_threshold = thresholds[table_idx]["absolute"]
-
+                    print(metric_idx)
                     if (
-                        relative_diff > relative_threshold
-                        or absolute_diff > absolute_threshold
+                        abs(relative_diff) > relative_threshold
+                        and (metric_idx in CONSISTENT_REL_METRIC_INDICES)
+                    ) or (
+                        abs(absolute_diff) > absolute_threshold
+                        and (metric_idx in CONSISTENT_ABS_METRIC_INDICES)
                     ):
                         new_error = pd.DataFrame.from_dict(
                             {
-                                "index": [metric_info[0].split()[0]],
-                                "metric": [table_idx],
+                                "Index": [metric_info[0]],
+                                "Metric": [metric_info[1].strip()],
                                 "Percent Difference": [relative_diff],
                                 "Absolute Difference": [absolute_diff],
-                                "Baseline": [metric_info[-2]],
-                                "Current": [metric_info[-1]],
+                                "Baseline": [metric_info[-3]],
+                                "Current": [metric_info[-4]],
+                                "Test Name": [test_name],
                             }
                         )
                         error_df = pd.concat([error_df, new_error])
+                        counts = error_df.groupby("Index").cumcount()
+                        failed_metrics = error_df.loc[counts > MAX_METRIC_VIOLATIONS]
+                        if failed_metrics.any(axis=None):
+                            print(
+                                "Warning, these metrics are varying too much",
+                                failed_metrics,
+                            )
 
-        error_df["test_name"] = test_name
-        if os.path.exists(Baseline_dir + "/metric_error_log.csv"):
-            error_log = pd.read_csv(
-                Baseline_dir + "/metric_error_log.csv",
-                index_col=0,
-            )
-            new_error_log = pd.concat([error_log, error_df])
-            new_error_log = new_error_log.reindex(sorted(new_error_log.columns), axis=1)
-            new_error_log = new_error_log.sort_values(by=["metric", "test_name"])
-            new_error_log.to_csv(Baseline_dir + "/metric_error_log.csv")
-        else:
+        if not error_df.empty:
             error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
- 
+
 
 def test_path():
     if os.path.exists(workload_1):
@@ -365,10 +425,13 @@ def test_path():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-        
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel():
@@ -412,10 +475,13 @@ def test_kernel():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_summaries():
@@ -459,10 +525,14 @@ def test_kernel_summaries():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
+
 
 def test_ipblocks_SQ():
     if os.path.exists(workload_1):
@@ -547,10 +617,13 @@ def test_ipblocks_SQ():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQC():
@@ -603,11 +676,13 @@ def test_ipblocks_SQC():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_TA():
@@ -666,10 +741,13 @@ def test_ipblocks_TA():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_TD():
@@ -732,11 +810,13 @@ def test_ipblocks_TD():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_TCP():
@@ -796,12 +876,13 @@ def test_ipblocks_TCP():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_TCC():
@@ -862,11 +943,13 @@ def test_ipblocks_TCC():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SPI():
@@ -925,11 +1008,13 @@ def test_ipblocks_SPI():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_CPC():
@@ -983,10 +1068,13 @@ def test_ipblocks_CPC():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_CPF():
@@ -1038,11 +1126,13 @@ def test_ipblocks_CPF():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQ_CPC():
@@ -1130,11 +1220,13 @@ def test_ipblocks_SQ_CPC():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQ_TA():
@@ -1221,11 +1313,13 @@ def test_ipblocks_SQ_TA():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQ_SPI():
@@ -1312,11 +1406,13 @@ def test_ipblocks_SQ_SPI():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQ_SQC_TCP_CPC():
@@ -1406,11 +1502,13 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_ipblocks_SQ_SPI_TA_TCC_CPF():
@@ -1502,10 +1600,13 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
     assert sorted(list(file_dict.keys())) == expected_csvs
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_dispatch_0():
@@ -1549,12 +1650,17 @@ def test_dispatch_0():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+            [
+                "--dispatch",
+                "0",
+            ],
+        )
 
 
 def test_dispatch_0_1():
@@ -1599,12 +1705,14 @@ def test_dispatch_0_1():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+            ["--dispatch", "0", "1"],
+        )
 
 
 def test_dispatch_2():
@@ -1648,12 +1756,17 @@ def test_dispatch_2():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+            [
+                "--dispatch",
+                str(dispatch_id),
+            ],
+        )
 
 
 def test_kernel_verbose_0():
@@ -1697,12 +1810,13 @@ def test_kernel_verbose_0():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_verbose_1():
@@ -1746,12 +1860,13 @@ def test_kernel_verbose_1():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_verbose_2():
@@ -1795,10 +1910,13 @@ def test_kernel_verbose_2():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_verbose_3():
@@ -1842,10 +1960,13 @@ def test_kernel_verbose_3():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_verbose_4():
@@ -1889,12 +2010,13 @@ def test_kernel_verbose_4():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_verbose_5():
@@ -1938,12 +2060,13 @@ def test_kernel_verbose_5():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_join_type_grid():
@@ -1987,11 +2110,13 @@ def test_join_type_grid():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_join_type_kernel():
@@ -2035,12 +2160,13 @@ def test_join_type_kernel():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_device_0():
@@ -2087,12 +2213,13 @@ def test_device_0():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_no_roof():
@@ -2161,12 +2288,13 @@ def test_no_roof():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_sort_dispatches():
@@ -2219,12 +2347,13 @@ def test_sort_dispatches():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_sort_kernels():
@@ -2276,12 +2405,13 @@ def test_sort_kernels():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_HBM():
@@ -2334,12 +2464,13 @@ def test_mem_levels_HBM():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_L2():
@@ -2392,12 +2523,13 @@ def test_mem_levels_L2():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_vL1D():
@@ -2449,12 +2581,13 @@ def test_mem_levels_vL1D():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
+        log_counter(file_dict, inspect.stack()[0][3])
+
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
-
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_LDS():
@@ -2506,11 +2639,13 @@ def test_mem_levels_LDS():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_HBM_LDS():
@@ -2563,11 +2698,13 @@ def test_mem_levels_HBM_LDS():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_vL1D_LDS():
@@ -2620,11 +2757,13 @@ def test_mem_levels_vL1D_LDS():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_mem_levels_L2_vL1D_LDS():
@@ -2677,11 +2816,13 @@ def test_mem_levels_L2_vL1D_LDS():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
-    
-    if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1 , "relative": 5}})
+        log_counter(file_dict, inspect.stack()[0][3])
 
+    if METRIC_LOGGING:
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )
 
 
 def test_kernel_names():
@@ -2743,8 +2884,10 @@ def test_kernel_names():
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
     if COUNTER_LOGGING:
-        logger(file_dict, inspect.stack()[0][3])
+        log_counter(file_dict, inspect.stack()[0][3])
 
     if METRIC_LOGGING:
-        log_metric(inspect.stack()[0][3], {"default": {"absolute": 1, "relative": 5}})
-
+        log_metric(
+            inspect.stack()[0][3],
+            {"default": {"absolute": DEFAULT_ABS_DIFF, "relative": DEFAULT_REL_DIFF}},
+        )

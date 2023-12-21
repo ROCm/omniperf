@@ -352,20 +352,12 @@ def log_metric(test_name, thresholds, args=[]):
                 relative_diff = float(metric_info[-2])
                 absolute_diff = float(metric_info[-1])
                 if relative_diff > -99 or relative_diff < -101:
-                    print("metric info:", metric_info)
-                    print(
-                        re.findall(
-                            r"^" + metric + r".*", captured_output, flags=re.MULTILINE
-                        )
-                    )
-
                     relative_threshold = thresholds["default"]["relative"]
                     absolute_threshold = thresholds["default"]["absolute"]
 
                     if table_idx in thresholds:
                         relative_threshold = thresholds[table_idx]["relative"]
                         absolute_threshold = thresholds[table_idx]["absolute"]
-                    print(metric_idx)
                     if (
                         abs(relative_diff) > relative_threshold
                         and (metric_idx in CONSISTENT_REL_METRIC_INDICES)

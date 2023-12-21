@@ -225,7 +225,6 @@ def gpu_soc():
     soc_regex = re.compile(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", re.MULTILINE)
     gpu_id = list(filter(soc_regex.match, rocminfo))[0].split()[1]
 
-    print("gpu_id", gpu_id)
     if gpu_id == "gfx906":
         return "mi50"
     elif gpu_id == "gfx908":
@@ -266,7 +265,6 @@ with pytest.raises(SystemExit) as e:
 def log_counter(file_dict, test_name):
     for file in file_dict.keys():
         if file == "pmc_perf.csv" or "SQ" in file:
-            print(file)
             # read file in Baseline
             df_1 = pd.read_csv(Baseline_dir + "/" + file, index_col=0)
             # get corresponding file from current test run
@@ -321,9 +319,8 @@ def log_metric(test_name, thresholds, args=[]):
                 index_col=0,
             )
         output_metric_errors = re.findall(r"(\')([0-9.]*)(\')", captured_output)
-        naughty_metrics = [x[1] for x in output_metric_errors]
-        print("naughty metrics:", naughty_metrics)
-        for metric in naughty_metrics:
+        high_diff_metrics = [x[1] for x in output_metric_errors]
+        for metric in high_diff_metrics:
             metric_info = re.findall(
                 r"(^"
                 + metric
@@ -338,20 +335,12 @@ def log_metric(test_name, thresholds, args=[]):
                 relative_diff = float(metric_info[-2])
                 absolute_diff = float(metric_info[-1])
                 if relative_diff > -99 or relative_diff < -101:
-                    print("metric info:", metric_info)
-                    print(
-                        re.findall(
-                            r"^" + metric + r".*", captured_output, flags=re.MULTILINE
-                        )
-                    )
-
                     relative_threshold = thresholds["default"]["relative"]
                     absolute_threshold = thresholds["default"]["absolute"]
 
                     if table_idx in thresholds:
                         relative_threshold = thresholds[table_idx]["relative"]
                         absolute_threshold = thresholds[table_idx]["absolute"]
-                    print(metric_idx)
                     if (
                         abs(relative_diff) > relative_threshold
                         and (metric_idx in CONSISTENT_REL_METRIC_INDICES)
@@ -412,14 +401,12 @@ def test_path():
     for file in files_in_workload:
         if file.endswith(".csv"):
             file_dict[file] = pd.read_csv(workload_1 + "/" + file, index_col=0)
-            print("length is: ", len(file_dict[file].index))
-            print(file_dict[file])
             # TODO: verify contents: we know function evaluated
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -469,7 +456,7 @@ def test_kernel():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -519,7 +506,7 @@ def test_kernel_summaries():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -568,7 +555,7 @@ def test_ipblocks_SQ():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -660,7 +647,7 @@ def test_ipblocks_SQC():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "pmc_perf.csv",
         "pmc_perf_0.csv",
@@ -720,7 +707,7 @@ def test_ipblocks_TA():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
 
     expected_csvs = [
         "pmc_perf.csv",
@@ -785,7 +772,7 @@ def test_ipblocks_TD():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
 
     expected_csvs = [
         "pmc_perf.csv",
@@ -853,7 +840,7 @@ def test_ipblocks_TCP():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
 
     expected_csvs = [
         "pmc_perf.csv",
@@ -920,7 +907,7 @@ def test_ipblocks_TCC():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "pmc_perf.csv",
         "pmc_perf_0.csv",
@@ -986,7 +973,7 @@ def test_ipblocks_SPI():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
 
     expected_csvs = [
         "pmc_perf.csv",
@@ -1051,7 +1038,7 @@ def test_ipblocks_CPC():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "pmc_perf.csv",
         "pmc_perf_0.csv",
@@ -1111,7 +1098,7 @@ def test_ipblocks_CPF():
             file_dict[file] = pd.read_csv(workload_1 + "/" + file)
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "pmc_perf.csv",
         "pmc_perf_0.csv",
@@ -1171,7 +1158,7 @@ def test_ipblocks_SQ_CPC():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -1265,7 +1252,7 @@ def test_ipblocks_SQ_TA():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -1358,7 +1345,7 @@ def test_ipblocks_SQ_SPI():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -1453,7 +1440,7 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -1550,7 +1537,7 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
 
-    print(sorted(list(file_dict.keys())))
+    
     expected_csvs = [
         "SQ_IFETCH_LEVEL.csv",
         "SQ_INST_LEVEL_LDS.csv",
@@ -1644,7 +1631,7 @@ def test_dispatch_0():
             if not "sysinfo" in file and not "roofline" in file:
                 assert len(file_dict[file].index) == 1
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1699,7 +1686,7 @@ def test_dispatch_0_1():
                 assert len(file_dict[file].index) == 2
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1750,7 +1737,7 @@ def test_dispatch_2():
             if not "sysinfo" in file and not "roofline" in file:
                 assert len(file_dict[file].index) == 1
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1804,7 +1791,7 @@ def test_kernel_verbose_0():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1854,7 +1841,7 @@ def test_kernel_verbose_1():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1904,7 +1891,7 @@ def test_kernel_verbose_2():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1954,7 +1941,7 @@ def test_kernel_verbose_3():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2004,7 +1991,7 @@ def test_kernel_verbose_4():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2054,7 +2041,7 @@ def test_kernel_verbose_5():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2104,7 +2091,7 @@ def test_join_type_grid():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2154,7 +2141,7 @@ def test_join_type_kernel():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2207,7 +2194,7 @@ def test_device_0():
                 else:
                     assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2256,7 +2243,7 @@ def test_no_roof():
             if not "sysinfo" in file:
                 assert len(file_dict[file].index) >= num_kernels
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -2341,7 +2328,7 @@ def test_sort_dispatches():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2399,7 +2386,7 @@ def test_sort_kernels():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2458,7 +2445,7 @@ def test_mem_levels_HBM():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2517,7 +2504,7 @@ def test_mem_levels_L2():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2575,7 +2562,7 @@ def test_mem_levels_vL1D():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2633,7 +2620,7 @@ def test_mem_levels_LDS():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2692,7 +2679,7 @@ def test_mem_levels_HBM_LDS():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2751,7 +2738,7 @@ def test_mem_levels_vL1D_LDS():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2810,7 +2797,7 @@ def test_mem_levels_L2_vL1D_LDS():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -2867,7 +2854,7 @@ def test_kernel_names():
         elif file.endswith(".pdf"):
             file_dict[file] = "pdf"
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
+        
         assert sorted(list(file_dict.keys())) == [
             "empirRoof_gpu-ALL_fp32.pdf",
             "empirRoof_gpu-ALL_int8_fp16.pdf",

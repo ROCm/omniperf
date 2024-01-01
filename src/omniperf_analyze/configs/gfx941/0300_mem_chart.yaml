@@ -310,4 +310,4 @@ Panel Config:
             tips:
 
         comparable: false # for now
-        style: mem_chart
+        cli_style: mem_chart

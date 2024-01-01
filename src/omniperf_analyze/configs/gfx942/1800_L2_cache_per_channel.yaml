@@ -118,7 +118,7 @@ Panel Config:
               + TCC_MISS[::_1]) != 0) else None)
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1803
@@ -131,7 +131,7 @@ Panel Config:
             expr: (TO_INT(TCC_REQ[::_1]) / $denom)
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1804
@@ -148,7 +148,7 @@ Panel Config:
             atomic req: AVG((TO_INT(TCC_ATOMIC[::_1]) / $denom))
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_multiple_bar
+        cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1805
@@ -165,7 +165,7 @@ Panel Config:
             atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[::_1]) / $denom))
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_multiple_bar
+        cli_style: simple_multiple_bar
 
     # - metric_table:
     #     id: 1806
@@ -188,7 +188,7 @@ Panel Config:
     #           (TCC_EA0_ATOMIC[::_1] != 0) else 0))
     #       placeholder_range:
     #         "::_1": $totalL2Banks
-    #     style: simple_multiple_bar
+    #     cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1806
@@ -203,7 +203,7 @@ Panel Config:
               != 0) else None)
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1807
@@ -218,7 +218,7 @@ Panel Config:
               != 0) else None)
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1808
@@ -232,7 +232,7 @@ Panel Config:
               (TCC_EA0_ATOMIC[::_1] != 0) else 0)
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1809
@@ -249,7 +249,7 @@ Panel Config:
             ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[::_1]) / $denom))
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_multiple_bar
+        cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1810
@@ -268,7 +268,7 @@ Panel Config:
             ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA0_WRREQS_STALL[::_1]) / $denom))
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_multiple_bar
+        cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1811
@@ -281,7 +281,7 @@ Panel Config:
             expr: TCC_TAG_STALL[::_1]
           placeholder_range:
             "::_1": $totalL2Banks
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1812
@@ -295,4 +295,4 @@ Panel Config:
           placeholder_range:
             "::_1": $totalL2Banks
           # tips: Number of 128-byte read requests sent to EA
-        style: simple_box
+        cli_style: simple_box

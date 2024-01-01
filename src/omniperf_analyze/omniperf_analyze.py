@@ -255,9 +255,19 @@ def run_cli(args, runs):
 
     # TODO: In show_* functions always assume newest architecture. This way newest configs/figures are loaded
     if args.list_kernels:
-        tty.show_kernels(args, runs, archConfigs["gfx90a"], output)
+        tty.show_kernels(
+            args,
+            runs,
+            archConfigs[runs[args.path[0][0]].sys_info.iloc[0]["gpu_soc"]],
+            output,
+        )
     else:
-        tty.show_all(args, runs, archConfigs["gfx90a"], output)
+        tty.show_all(
+            args,
+            runs,
+            archConfigs[runs[args.path[0][0]].sys_info.iloc[0]["gpu_soc"]],
+            output,
+        )
 
 
 def roofline_only(path_to_dir, dev_id, sort_type, mem_level, kernel_names, verbose):

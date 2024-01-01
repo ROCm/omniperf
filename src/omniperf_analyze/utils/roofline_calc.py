@@ -23,13 +23,14 @@
 ##############################################################################el
 
 import sys
+import csv
+import os.path
+import pandas as pd
+import plotext as plt
 
 from dataclasses import dataclass
-import pandas as pd
 from collections import OrderedDict
-import os.path
-import plotext as plt
-import csv
+
 
 ################################################
 # Global vars

@@ -174,13 +174,13 @@ def show_all(args, runs, archConfigs, output):
                             )
 
                     # debug
-                    # if "style" in table_config and table_config["style"] == "simple_multiple_bar":
+                    # if "cli_style" in table_config and table_config["cli_style"] == "simple_multiple_bar":
                     #     print(df.transpose().to_dict("split"))
 
-                    if not args.table and "style" in table_config:
+                    if not args.table and "cli_style" in table_config:
                         # FIXME: support single run only for now
                         # TODO: make a dict for all styles
-                        if table_config["style"] == "mem_chart":
+                        if table_config["cli_style"] == "mem_chart":
                             # Todo: display N/A properly
                             # df.to_dict(index=False) should work for pandas > 2.0 ?
                             ss += mem_chart.plot_mem_chart(
@@ -191,13 +191,13 @@ def show_all(args, runs, archConfigs, output):
                                 .set_index("Metric")
                                 .to_dict()["Value"],
                             )
-                        elif table_config["style"] == "roofline_chart":
+                        elif table_config["cli_style"] == "roofline_chart":
                             ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
-                        elif table_config["style"] == "simple_bar":
+                        elif table_config["cli_style"] == "simple_bar":
                             ss += simple_charts.simple_bar(df)
-                        elif table_config["style"] == "simple_box":
+                        elif table_config["cli_style"] == "simple_box":
                             ss += simple_charts.simple_box(df)
-                        elif table_config["style"] == "simple_multiple_bar":
+                        elif table_config["cli_style"] == "simple_multiple_bar":
                             ss += simple_charts.simple_multiple_bar(df)
                     else:
                         # NB:

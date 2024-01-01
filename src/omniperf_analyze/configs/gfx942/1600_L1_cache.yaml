@@ -39,7 +39,7 @@ Panel Config:
               None))
             tips:
         comparable: false # for now
-        style: simple_bar
+        cli_style: simple_bar
 
     - metric_table:
         id: 1602
@@ -74,7 +74,7 @@ Panel Config:
               (((100 * TCP_ATOMIC_TAGCONFLICT_STALL_CYCLES_sum) / TCP_GATE_EN1_sum)
               if (TCP_GATE_EN1_sum != 0) else None)
             tips:
-        style: simple_box
+        cli_style: simple_box
 
     - metric_table:
         id: 1603

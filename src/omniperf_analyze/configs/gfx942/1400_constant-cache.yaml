@@ -26,7 +26,7 @@ Panel Config:
               if ((SQC_DCACHE_HITS + SQC_DCACHE_MISSES + SQC_DCACHE_MISSES_DUPLICATE) != 0) else None))
             tips:
         comparable: false # for now
-        style: simple_bar
+        cli_style: simple_bar
 
     - metric_table:
         id: 1402

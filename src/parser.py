@@ -50,7 +50,9 @@ def parse(my_parser):
     my_parser._positionals.title = "Modes"
     my_parser._optionals.title = "Help"
     general_group.add_argument("-v", "--version", action="version", version=versionString)
-    general_group.add_argument("-s", "--specs", help="check system spec", action="store_true")
+    general_group.add_argument(
+        "-s", "--specs", help="check system spec", action="store_true"
+    )
 
     subparsers = my_parser.add_subparsers(
         dest="mode", help="Select mode of interaction with the target application:"
@@ -88,7 +90,6 @@ def parse(my_parser):
     general_group.add_argument(
         "-V", "--verbose", help="Increase output verbosity", action="count", default=0
     )
-
     profile_group.add_argument(
         "-n",
         "--name",

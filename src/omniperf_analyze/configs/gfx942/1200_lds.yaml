@@ -33,7 +33,7 @@ Panel Config:
               if ((SQ_LDS_IDX_ACTIVE - SQ_LDS_BANK_CONFLICT) != 0) else None))
             tips:
         comparable: false # for now
-        style: simple_bar
+        cli_style: simple_bar
 
     - metric_table:
         id: 1202

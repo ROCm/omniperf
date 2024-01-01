@@ -7,5 +7,5 @@ Panel Config:
         id: 401
         source: roofline.csv
         comparable: false # for now
-        style: roofline_chart
+        cli_style: roofline_chart
         # TODO: refactoring the data structure to have metrics here!

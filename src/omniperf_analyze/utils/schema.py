@@ -85,8 +85,11 @@ supported_field = [
     "Mean",
     "Pct",
     "Std Dev",
+    "Q1",
+    "Q3",
+    "Expression",
     # Special keywords for Memory chart
-    "Alias",
+    # "Alias",
     # Special keywords for L2 channel
     "Channel",
     "L2 Cache Hit Rate (%)",
@@ -107,6 +110,24 @@ supported_field = [
     "L2-EA Write Stall - GMI (Cycles per)",
     "L2-EA Write Stall - DRAM (Cycles per)",
     "L2-EA Write Stall - Starve (Cycles per)",
+    "L2 Cache Hit Rate",
+    "Requests",
+    "L1-L2 Read",
+    "L1-L2 Write",
+    "L1-L2 Atomic",
+    "L2-EA Read",
+    "L2-EA Write",
+    "L2-EA Atomic",
+    "L2-EA Read Latency",
+    "L2-EA Write Latency",
+    "L2-EA Atomic Latency",
+    "L2-EA Read Stall - IO",
+    "L2-EA Read Stall - GMI",
+    "L2-EA Read Stall - DRAM",
+    "L2-EA Write Stall - IO",
+    "L2-EA Write Stall - GMI",
+    "L2-EA Write Stall - DRAM",
+    "L2-EA Write Stall - Starve",
 ]
 
 # The prefix of raw pmc_perf.csv

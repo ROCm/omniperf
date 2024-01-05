@@ -462,7 +462,7 @@ def parse(my_parser):
         metavar="",
         type=int,
         default=10,
-        help='\t\tSpecify the maximum number of kernels shown in "Top Stats" table (DEFAULT: 10)',
+        help="\t\tSpecify the maximum number of kernels shown (DEFAULT: 10)",
     )
     analyze_group.add_argument(
         "--config-dir",
@@ -486,6 +486,11 @@ def parse(my_parser):
         metavar="",
         default=2,
         help="\t\tSpecify the decimal to display. (DEFAULT: 2)",
+    )
+    analyze_group.add_argument(
+        "--table",
+        action="store_true",
+        help="\t\tShow data in plain table view",
     )
     analyze_group.add_argument(
         "--save-dfs",

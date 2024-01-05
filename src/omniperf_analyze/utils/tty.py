@@ -26,7 +26,7 @@ import pandas as pd
 from pathlib import Path
 from tabulate import tabulate
 
-from omniperf_analyze.utils import schema, parser
+from omniperf_analyze.utils import schema, parser, mem_chart, roofline_calc, simple_charts
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
@@ -80,10 +80,10 @@ def show_all(args, runs, archConfigs, output):
                             if (
                                 type == "raw_csv_table"
                                 and table_config["source"] == "pmc_kernel_top.csv"
-                                and header == "Kernel_Name"
+                                and header == "KernelName"
                             ):
                                 # NB: the width of kernel name might depend on the header of the table.
-                                adjusted_name = base_df["Kernel_Name"].apply(
+                                adjusted_name = base_df["KernelName"].apply(
                                     lambda x: string_multiple_lines(x, 40, 3)
                                 )
                                 df = pd.concat([df, adjusted_name], axis=1)
@@ -172,32 +172,53 @@ def show_all(args, runs, archConfigs, output):
                                 p.joinpath(table_id_str.replace(" ", "_") + ".csv"),
                                 index=False,
                             )
-                    # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
-                    if (
-                        type == "raw_csv_table"
-                        and table_config["source"] == "pmc_kernel_top.csv"
-                    ):
-                        df = df.head(args.max_kernel_num)
 
-                    # NB:
-                    # "columnwise: True" is a special attr of a table/df
-                    # For raw_csv_table, such as system_info, we transpose the
-                    # df when load it, because we need those items in column.
-                    # For metric_table, we only need to show the data in column
-                    # fash for now.
-                    ss += (
-                        tabulate(
-                            df.transpose()
-                            if type != "raw_csv_table"
-                            and "columnwise" in table_config
-                            and table_config["columnwise"] == True
-                            else df,
-                            headers="keys",
-                            tablefmt="fancy_grid",
-                            floatfmt="." + str(args.decimal) + "f",
+                    # debug
+                    # if "cli_style" in table_config and table_config["cli_style"] == "simple_multiple_bar":
+                    #     print(df.transpose().to_dict("split"))
+
+                    if not args.table and "cli_style" in table_config:
+                        # FIXME: support single run only for now
+                        # TODO: make a dict for all styles
+                        if table_config["cli_style"] == "mem_chart":
+                            # Todo: display N/A properly
+                            # df.to_dict(index=False) should work for pandas > 2.0 ?
+                            ss += mem_chart.plot_mem_chart(
+                                "",
+                                args.normal_unit,
+                                pd.DataFrame([df["Metric"], df["Value"]])
+                                .transpose()
+                                .set_index("Metric")
+                                .to_dict()["Value"],
+                            )
+                        elif table_config["cli_style"] == "roofline_chart":
+                            ss += roofline_calc.cli_get_roofline(base_run, args.verbose)
+                        elif table_config["cli_style"] == "simple_bar":
+                            ss += simple_charts.simple_bar(df)
+                        elif table_config["cli_style"] == "simple_box":
+                            ss += simple_charts.simple_box(df)
+                        elif table_config["cli_style"] == "simple_multiple_bar":
+                            ss += simple_charts.simple_multiple_bar(df)
+                    else:
+                        # NB:
+                        # "columnwise: True" is a special attr of a table/df
+                        # For raw_csv_table, such as system_info, we transpose the
+                        # df when load it, because we need those items in column.
+                        # For metric_table, we only need to show the data in column
+                        # fash for now.
+                        ss += (
+                            tabulate(
+                                df.transpose()
+                                if type != "raw_csv_table"
+                                and "columnwise" in table_config
+                                and table_config["columnwise"] == True
+                                else df,
+                                headers="keys",
+                                tablefmt="fancy_grid",
+                                floatfmt="." + str(args.decimal) + "f",
+                            )
+                            + "\n"
                         )
-                        + "\n"
-                    )
 
         if ss:
             print("\n" + "-" * 80, file=output)
@@ -221,7 +242,7 @@ def show_kernels(args, runs, archConfigs, output):
                     # NB:
                     #   For pmc_kernel_top.csv, have to sort here if not
                     #   sorted when load_table_data.
-                    df = pd.concat([df, single_df["Kernel_Name"]], axis=1)
+                    df = pd.concat([df, single_df["KernelName"]], axis=1)
 
     print(
         tabulate(

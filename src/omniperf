@@ -38,11 +38,18 @@ from pathlib import Path as path
 
 from parser import parse
 from utils import specs
-from utils.perfagg import perfmon_filter, pmc_filter, pmc_perf_split, join_prof, flatten_tcc_info_across_xccs
+from utils.perfagg import (
+    perfmon_filter,
+    pmc_filter,
+    pmc_perf_split,
+    join_prof,
+    flatten_tcc_info_across_hbm_stacks,
+)
 from utils import remove_workload
 from utils import csv_processor  # Import workload
 from omniperf_analyze.omniperf_analyze import roofline_only  # Standalone roofline
 from omniperf_analyze.omniperf_analyze import analyze  # CLI analysis
+from omniperf_analyze.utils.parser import get_hbm_stack_num
 from common import resolve_rocprof
 
 from common import (
@@ -54,36 +61,40 @@ from common import (
 
 from common import getVersion
 
+
 ################################################
 # Helper Functions
 ################################################
 def run_subprocess(cmd):
     subprocess.run(cmd, check=True)
 
+
 def capture_subprocess_output(subprocess_args, new_env=None):
     # Start subprocess
     # bufsize = 1 means output is line buffered
     # universal_newlines = True is required for line buffering
     process = (
-        subprocess.Popen(subprocess_args,
+        subprocess.Popen(
+            subprocess_args,
             bufsize=1,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            universal_newlines=True
-            )
-            if new_env == None
-            else subprocess.Popen(
-                subprocess_args,
-                bufsize=1,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                universal_newlines=True,
-                env=new_env,
-            )
+            universal_newlines=True,
+        )
+        if new_env == None
+        else subprocess.Popen(
+            subprocess_args,
+            bufsize=1,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+            env=new_env,
+        )
     )
-            
+
     # Create callback function for process output
     buf = io.StringIO()
+
     def handle_output(stream, mask):
         # Because the process' output is line buffered, there's only ever one
         # line to read when this function is called
@@ -107,7 +118,7 @@ def capture_subprocess_output(subprocess_args, new_env=None):
     return_code = process.wait()
     selector.close()
 
-    success = (return_code == 0)
+    success = return_code == 0
 
     # Store buffered output
     output = buf.getvalue()
@@ -117,27 +128,10 @@ def capture_subprocess_output(subprocess_args, new_env=None):
 
 
 def get_soc():
+    # Fixme: specify device id
     mspec = specs.get_machine_specs(0)
 
-    target = ""
-    if mspec.arch == "gfx906":
-        target = "mi50"
-    elif mspec.arch == "gfx908":
-        target = "mi100"
-    elif mspec.arch == "gfx90a":
-        target = "mi200"
-    elif mspec.arch == "gfx900":
-        target = "vega10"
-    elif mspec.arch == "gfx940":
-        target = "mi300"
-    elif mspec.arch == "gfx942":
-        target = "mi300"
-    elif mspec.arch == "gfx941": #NB: gfx942 is reported as gfx941 inside docker
-        target = "mi300"
-    else:
-        print("\nInvalid SoC")
-        sys.exit(0)
-    return target
+    return mspec.GPU
 
 
 def throw_parse_error(my_parser, message):
@@ -158,6 +152,7 @@ def isWorkloadEmpty(my_parser, path):
             my_parser, "Profling Error: Cannot find pmc_perf.csv in {}".format(path)
         )
 
+
 def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # Record system information
     mspec = specs.get_machine_specs(0)
@@ -166,9 +161,9 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # write header
     header = "workload_name,"
     header += "command,"
-    header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
-    header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,"
+    header += "host_name,host_cpu,sbios,host_distro,host_kernel,host_rocmver,date,"
+    header += "gpu_soc,vbios,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
+    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,hbmBW,compute_partition,memory_partition,"
     header += "ip_blocks\n"
     sysinfo.write(header)
 
@@ -184,6 +179,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     param += [
         mspec.hostname,
         mspec.CPU,
+        mspec.sbios,
         mspec.distro,
         mspec.kernel_version,
         mspec.rocm_version,
@@ -193,6 +189,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
     # GPU info
     param += [
         mspec.arch,
+        mspec.vbios,
         mspec.SE,
         mspec.CU,
         mspec.SIMD,
@@ -212,22 +209,23 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof):
         mspec.GPU,
         mspec.numSQC,
         mspec.hbmBW,
+        mspec.compute_partition,
+        mspec.memory_partition,
     ]
 
     blocks = []
+    if mspec.GPU == "gfx90a" and (not skip_roof):
+        blocks.append("roofline")
+
     # ip block info
     if ip_blocks == None:
         t = ["SQ", "LDS", "SQC", "TA", "TD", "TCP", "TCC", "SPI", "CPC", "CPF"]
         blocks += t
     else:
         blocks += ip_blocks
-
-    if mspec.GPU == "gfx90a" and (not skip_roof):
-        blocks.append("roofline")
-    
     param.append("|".join(blocks))
 
-    sysinfo.write(",".join(map(str, param)))
+    sysinfo.write(",".join(param))
     sysinfo.close()
 
 
@@ -239,23 +237,23 @@ def mongo_import(args, profileAndImport):
     csv_processor.convert_folder(connectionInfo)
     print("-- Complete! --")
 
+
 ################################################
 # Roofline Helpers
 ################################################
 def roof_setup(args, my_parser, VER):
     if args.path == os.getcwd() + "/workloads":
-        args.path += "/" + args.name + "/" + args.target
+        args.path += "/" + args.name + "/" + args.target.lower()
 
     # Do we need a new directory for roofline?
     if not os.path.isdir(args.path):
         os.makedirs(args.path)
-    
     # Does roof data exist?
     print("Checking for roofline.csv in ", args.path)
     roof_path = args.path + "/roofline.csv"
     roofline_exists = os.path.isfile(roof_path)
     if not roofline_exists:
-        if get_soc() != "mi200":
+        if get_soc().lower() != "mi200":
             throw_parse_error(
                 my_parser, "Invalid SoC.\nRoofline only availible on MI200."
             )
@@ -274,7 +272,7 @@ def roof_setup(args, my_parser, VER):
     app_path = args.path + "/pmc_perf.csv"
     app_exists = os.path.isfile(app_path)
     if not app_exists:
-        if get_soc() != "mi200":
+        if get_soc().lower() != "mi200":
             throw_parse_error(
                 my_parser, "Invalid SoC.\nRoofline only availible on MI200."
             )
@@ -309,8 +307,9 @@ def detect_roofline():
         # Must be a valid RHEL machine
         distro = rhel_distro
     elif (
-        (type(sles_distro) == str and len(sles_distro) >= 3) and # confirm string and len
-        sles_distro[:2] == "15" and int(sles_distro[3]) >= 3 # SLES15 and SP >= 3
+        (type(sles_distro) == str and len(sles_distro) >= 3)
+        and sles_distro[:2] == "15"  # confirm string and len
+        and int(sles_distro[3]) >= 3  # SLES15 and SP >= 3
     ):
         # Must be a valid SLES machine
         # Use SP3 binary for all forward compatible service pack versions
@@ -375,7 +374,7 @@ def characterize_app(args, VER):
     workload_dir = args.path
 
     # Perfmon filtering
-    pmc_filter(workload_dir, perfmon_dir, args.target)
+    pmc_filter(workload_dir, perfmon_dir, args.target.lower())
 
     # Separate pmc_perf runs
     pmc_perf_split(workload_dir)
@@ -415,21 +414,22 @@ def characterize_app(args, VER):
         if args.use_rocscope == True:
             run_rocscope(args, fname)
         else:
-            run_prof(fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose)
-    
+            run_prof(
+                fname, workload_dir, perfmon_dir, app_cmd, args.target, log, args.verbose
+            )
 
     if args.use_rocscope == False:
         # Manually join each pmc_perf*.csv output
         join_prof(workload_dir, args.join_type, log, args.verbose)
         # Demangle and overwrite original KernelNames
         csv_processor.kernel_name_shortener(workload_dir, args.kernelVerbose)
-        
     log.close()
 
 
 ################################################
 # Profiling Helpers
 ################################################
+
 
 def run_rocscope(args, fname):
     # profile the app
@@ -461,13 +461,16 @@ def run_rocscope(args, fname):
 def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
     global rocprof_cmd
 
+    # Fixme: allow to specify device_id or pass sysinfo in
+    m_specs = specs.get_machine_specs(0)
+
     fbase = os.path.splitext(os.path.basename(fname))[0]
 
     if verbose:
         print("pmc file:", os.path.basename(fname))
 
     # profile the app (run w/ custom config files for mi100)
-    if target == "mi100":
+    if target.lower() == "mi100":
         print("RUNNING WITH CUSTOM METRICS")
         success, output = capture_subprocess_output(
             [
@@ -481,11 +484,13 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 '"' + cmd + '"',
             ]
         )
-    elif (target == "mi300") and (
-        os.path.basename(fname) == "pmc_perf_15.txt"
+    elif (target.lower() == "mi300a_a0" or target.lower() == "mi300a_a1") and (
+        os.path.basename(fname) == "pmc_perf_13.txt"
+        or os.path.basename(fname) == "pmc_perf_14.txt"
+        or os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
     ):
-        # FIXME: remove all hack code specific to pmc_perf_*.txt and MI300A
+        # FIXME: remove all hack code specific to pmc_perf_*.txt
         new_env = os.environ.copy()
         new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
         success, output = capture_subprocess_output(
@@ -499,14 +504,53 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 fbase,
                 cmd,
             ],
-            new_env
+            new_env,
         )
         if success:
             f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
-            mspec = specs.get_machine_specs(0)
-            df = flatten_tcc_info_across_xccs(f, int(mspec.numXCC), 16)
+            hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
+            df = flatten_tcc_info_across_hbm_stacks(
+                f, hbm_stack_num, int(m_specs.L2Banks)
+            )
+            df.to_csv(f, index=False)
+
+    elif (target.lower() == "mi300x_a0" or target.lower() == "mi300x_a1") and (
+        os.path.basename(fname) == "pmc_perf_13.txt"
+        or os.path.basename(fname) == "pmc_perf_14.txt"
+        or os.path.basename(fname) == "pmc_perf_15.txt"
+        or os.path.basename(fname) == "pmc_perf_16.txt"
+    ):
+        # FIXME: remove all hack code specific to pmc_perf_*.txt
+        new_env = os.environ.copy()
+        new_env["ROCPROFILER_INDIVIDUAL_XCC_MODE"] = "1"
+        success, output = capture_subprocess_output(
+            [
+                rocprof_cmd,
+                "-i",
+                fname,
+                "-d",
+                workload_dir + "/" + "out",
+                "-o",
+                fbase,
+                cmd,
+            ],
+            new_env,
+        )
+        if success:
+            f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
+            hbm_stack_num = get_hbm_stack_num(target, m_specs.memory_partition)
+            df = flatten_tcc_info_across_hbm_stacks(
+                f, hbm_stack_num, int(m_specs.L2Banks)
+            )
             df.to_csv(f, index=False)
     else:
+        # print("rocprof cmd: ", rocprof_cmd,"-i",
+        #         fname,
+        #         "-d",
+        #         workload_dir + "/" + "out",
+        #         "-o",
+        #         fbase,
+        #         cmd)
         success, output = capture_subprocess_output(
             [
                 rocprof_cmd,
@@ -519,13 +563,16 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
                 cmd,
             ]
         )
-    # Copy over results 
-    shutil.copyfile(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", workload_dir + "/" + fbase + ".csv")
+    # Copy over results
+    shutil.copyfile(
+        workload_dir + "/out/pmc_1/results_" + fbase + ".csv",
+        workload_dir + "/" + fbase + ".csv",
+    )
     # Remove temp directory
     shutil.rmtree(workload_dir + "/" + "out")
     # Write output to log
     log_file.write(output)
-    
+
 
 def omniperf_profile(args, VER):
     # Verify valid name
@@ -550,10 +597,7 @@ def omniperf_profile(args, VER):
         print("KernelName verbose level: ", str(args.kernelVerbose))
 
     # Set up directories
-    if args.path == os.getcwd() + "/workloads":
-        workload_dir = args.path + "/" + args.name + "/" + args.target
-    else:
-        workload_dir = args.path
+    workload_dir = args.path + "/" + args.name + "/" + args.target
     perfmon_dir = str(OMNIPERF_HOME) + "/perfmon_pub"
 
     # Perfmon filtering
@@ -662,8 +706,16 @@ def omniperf_profile(args, VER):
             if args.use_rocscope == True:
                 run_rocscope(args, fname)
             else:
-                run_prof(fname, workload_dir, perfmon_dir, args.remaining, args.target, log, args.verbose)
-                
+                run_prof(
+                    fname,
+                    workload_dir,
+                    perfmon_dir,
+                    args.remaining,
+                    args.target,
+                    log,
+                    args.verbose,
+                )
+
         if args.use_rocscope == False:
             # Manually join each pmc_perf*.csv output
             join_prof(workload_dir, args.join_type, log, args.verbose)
@@ -735,8 +787,8 @@ def main():
 
     if args.specs:
         print(specs.get_machine_specs(0))
-        sys.exit(0) # Indicate successful on exit
-    
+        sys.exit(0)  # Indicate successful on exit
+
     if args.mode == None:
         throw_parse_error(
             my_parser,
@@ -756,7 +808,7 @@ def main():
                 my_parser, "Access denied. Cannot access parent directories in path ../"
             )
 
-        # Must have a valid soc in profile mode 
+        # Must have a valid soc in profile mode
         args.target = get_soc()
 
         # Verify correct command formatting
@@ -784,7 +836,14 @@ def main():
             # Setup prerequisits for roofline
             roof_setup(args, my_parser, VER)
             # Generate roofline
-            roofline_only(args.path, args.device, args.sort, args.mem_level, args.kernel_names, args.verbose)
+            roofline_only(
+                args.path,
+                args.device,
+                args.sort,
+                args.mem_level,
+                args.kernel_names,
+                args.verbose,
+            )
 
         # Profile only
         else:
@@ -870,7 +929,7 @@ def main():
                         \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
                         \n-------------------------------------------------------------------------------\n
                         \ntool: error: --gui cannot be used in combination with: -b/--metric
-                        """
+                        """,
                     )
                 print("\n--------\nAnalyze\n--------\n")
                 # Ensure absolute path

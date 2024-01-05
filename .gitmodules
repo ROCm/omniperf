@@ -1,0 +1,3 @@
+[submodule "src/omniperf_analyze/utils/third/plotext"]
+	path = src/omniperf_analyze/utils/third/plotext
+	url = https://github.com/is/plotext.git

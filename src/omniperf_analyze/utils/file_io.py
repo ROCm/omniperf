@@ -44,20 +44,24 @@ top_stats_build_in_config = {
     }
 }
 
-supported_arch = {
-    "gfx906": "mi50",
-    "gfx908": "mi100",
-    "gfx90a": "mi200",
-    "gfx940": "mi300",
-    "gfx942": "mi300",
-    "gfx941": "mi300", #NB: gfx942 is reported as gfx941 inside docker
+# List all supported archs and cards
+supported_devices = {
+    "gfx906": ["mi50"],
+    "gfx908": ["mi100"],
+    "gfx90a": ["mi200"],
+    "gfx940": ["mi300"],
+    "gfx941": ["mi300"],
+    "gfx942": ["mi300"],
 }
-# TODO:
-# it should be:
-# supported_arch = {"gfx906": ["mi50", "mi60"],
-#                   "gfx908": ["mi100"],
-#                   "gfx90a": ["mi210", "mi250", "mi250x"]
-#                   "gfx940": ["mi300a"]}
+
+# supported_devices = {
+#     "gfx906": ["MI50", "MI60"],
+#     "gfx908": ["MI100"],
+#     "gfx90a": ["MI210", "MI250", "MI250X"],
+#     "gfx940": ["MI300A_A0"],
+#     "gfx941": ["MI300X_A0"],
+#     "gfx942": ["MI300A_A1", "MI300X_A1"],
+# }
 
 time_units = {"s": 10**9, "ms": 10**6, "us": 10**3, "ns": 1}
 
@@ -84,14 +88,14 @@ def load_soc_params(dir):
 
 
 def get_soc(gfx_string):
-    return supported_arch[gfx_string]
+    return supported_devices[gfx_string]
 
 
 def get_soc_params(df, gfx_string):
     """
     Get soc params of single arch with gfx name
     """
-    return df.loc[supported_arch[gfx_string]]
+    return df.loc[supported_devices[gfx_string]]
 
 
 def load_panel_configs(dir):
@@ -252,13 +256,13 @@ def is_single_panel_config(root_dir):
     """
     ret = True
     counter = 0
-    for arch in supported_arch.keys():
+    for arch in supported_devices.keys():
         if root_dir.joinpath(arch).exists():
             counter += 1
 
     if counter == 0:
         return True
-    elif counter == len(supported_arch.keys()):
+    elif counter == len(supported_devices.keys()):
         return False
     else:
         raise Exception("Found multiple panel config sets but incomplete for all archs!")

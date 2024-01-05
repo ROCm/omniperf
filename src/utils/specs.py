@@ -34,19 +34,19 @@ from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
 
-gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx900", "gfx940", "gfx942", "gfx941"} #NB: gfx942 is reported as gfx941 inside docker
-
 
 @dataclass
 class MachineSpecs:
     hostname: str
     CPU: str
+    sbios: str
     kernel_version: str
     ram: str
     distro: str
     rocm_version: str
     GPU: str
     arch: str
+    vbios: str
     L1: str
     L2: str
     CU: str
@@ -61,55 +61,81 @@ class MachineSpecs:
     L2Banks: str
     LDSBanks: str
     numSQC: str
-    numXCC: str
     hbmBW: str
+    compute_partition: str
+    memory_partition: str
 
     def __str__(self):
         return dedent(
             f"""\
         Host info:
             hostname:           {self.hostname}
-            cpu info:           {self.CPU}
+            CPU:                {self.CPU}
+            sbios:              {self.sbios}
             ram:                {self.ram}
             distro:             {self.distro}
-            kernel version:     {self.kernel_version}
-            rocm version:       {self.rocm_version}
+            kernel_version:     {self.kernel_version}
+            rocm_version:       {self.rocm_version}
         Device info:
             GPU:                {self.GPU}
             arch:               {self.arch}
+            vbios:              {self.vbios}
             L1:                 {self.L1} KB
             L2:                 {self.L2} KB
-            Max SCLK:           {self.max_sclk} MHz
-            Current SCLK:       {self.cur_sclk} MHz
-            Current MCLK:       {self.cur_mclk} MHz
+            max_sclk:           {self.max_sclk} MHz
+            cur_sclk:           {self.cur_sclk} MHz
+            cur_mclk:           {self.cur_mclk} MHz
             CU:                 {self.CU}
             SIMD:               {self.SIMD}
             SE:                 {self.SE}
-            Wave Size:          {self.wave_size}
-            Workgroup Max Size: {self.workgroup_max_size}
-            Max Wave Per CU:    {self.max_waves_per_cu}
-            L2 Banks:           {self.L2Banks}
-            LDS Banks:          {self.LDSBanks}
-            Num SQC:            {self.numSQC}
-            Num XCC:            {self.numXCC}
-            HBM BW:             {self.hbmBW} MB/s
+            wave_size:          {self.wave_size}
+            workgroup_max_size: {self.workgroup_max_size}
+            max_waves_per_cu:   {self.max_waves_per_cu}
+            L2Banks:            {self.L2Banks}
+            LDSBanks:           {self.LDSBanks}
+            numSQC:             {self.numSQC}
+            hbmBW:              {self.hbmBW} MB/s
+            compute_partition:  {self.compute_partition}
+            memory_partition:   {self.memory_partition}
         """
         )
 
 
 def gpuinfo():
-    rocminfo = run(["rocminfo"]).split("\n")
+    # Local var only for rocminfo searching
+    gpu_list = {"gfx906", "gfx908", "gfx90a", "gfx940", "gfx941", "gfx942"}
+
+    # Fixme: find better way to differentiate cards, GPU vs APU, etc.
+    rocminfo_full = run(["rocminfo"])
+    rocminfo = rocminfo_full.split("\n")
 
     for idx1, linetext in enumerate(rocminfo):
-        gpu_id = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
-        if gpu_id in gpu_list:
+        gpu_arch = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
+        if gpu_arch in gpu_list:
             break
-        if str(gpu_id) in gpu_list:
-            gpu_id = str(gpu_id)
+        if str(gpu_arch) in gpu_list:
+            gpu_arch = str(gpu_arch)
             break
 
-    if not gpu_id in gpu_list:
-        return None, None, None, None, None, None, None, None, None, None
+    if not gpu_arch in gpu_list:
+        return (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        )
 
     L1, L2 = "", ""
     for idx2, linetext in enumerate(rocminfo[idx1 + 1 :]):
@@ -162,34 +188,53 @@ def gpuinfo():
     L2Banks = ""
     LDSBanks = "32"
     numSQC = ""
-    numXCC = ""
 
-    if gpu_id == "gfx906":
-        gpu_name = "mi50"
+    # supported_devices = {
+    #     "gfx906": ["MI50", "MI60"],
+    #     "gfx908": ["MI100"],
+    #     "gfx90a": ["MI210", "MI250", "MI250X"],
+    #     "gfx940": ["MI300A_A0"],
+    #     "gfx941": ["MI300X_A0"],
+    #     "gfx942": ["MI300A_A1", "MI300X_A1"],
+    # }
+
+    if gpu_arch == "gfx906":
+        gpu_name = "MI50"
         L2Banks = "16"
         numSQC = str(int(num_CU) // 4)
-    elif gpu_id == "gfx908":
-        gpu_name = "mi100"
+    elif gpu_arch == "gfx908":
+        gpu_name = "MI100"
         L2Banks = "32"
         numSQC = "48"
-    elif gpu_id == "gfx90a":
+    elif gpu_arch == "gfx90a":
         L2Banks = "32"
-        gpu_name = "mi200"
+        gpu_name = "MI200"
         numSQC = "56"
-    elif gpu_id == "gfx940":
-        gpu_name = "mi300"
+    elif gpu_arch == "gfx940":
+        gpu_name = "MI300A_A0"
         L2Banks = "16"
         numSQC = "56"
-        numXCC = "6"
-    elif gpu_id == "gfx942" or gpu_id == "gfx941":
-        gpu_name = "mi300"
+    elif gpu_arch == "gfx941":
+        gpu_name = "MI300X_A0"
         L2Banks = "16"
         numSQC = "56"
-        numXCC = "8"
+    elif (gpu_arch == "gfx942") and ("MI300A" in rocminfo_full):
+        gpu_name = "MI300A_A1"
+        L2Banks = "16"
+        numSQC = "56"
+    elif (gpu_arch == "gfx942") and ("MI300A" not in rocminfo_full):
+        gpu_name = "MI300X_A1"
+        L2Banks = "16"
+        numSQC = "56"
+    else:
+        print("\nInvalid SoC")
+        sys.exit(0)
 
+    compute_partition = ""
+    memory_partition = ""
     return (
         gpu_name,
-        gpu_id,
+        gpu_arch,
         L1,
         L2,
         max_sclk,
@@ -202,7 +247,8 @@ def gpuinfo():
         L2Banks,
         LDSBanks,
         numSQC,
-        numXCC,
+        compute_partition,
+        memory_partition,
     )
 
 
@@ -267,7 +313,7 @@ def get_machine_specs(devicenum):
 
     (
         gpu_name,
-        gpu_id,
+        gpu_arch,
         L1,
         L2,
         max_sclk,
@@ -280,7 +326,8 @@ def get_machine_specs(devicenum):
         L2Banks,
         LDSBanks,
         numSQC,
-        numXCC,
+        compute_partition,
+        memory_partition,
     ) = gpuinfo()
 
     rocm_smi = run(["rocm-smi"])
@@ -312,6 +359,10 @@ def get_machine_specs(devicenum):
     device = rf"^\s*{devicenum}(.*)"
 
     hostname = socket.gethostname()
+    sbios = (
+        path("/sys/class/dmi/id/bios_vendor").read_text().strip()
+        + path("/sys/class/dmi/id/bios_version").read_text().strip()
+    )
     CPU = search(r"^model name\s*: (.*?)$", cpuinfo)
     kernel_version = search(r"version (\S*)", version)
     ram = search(r"MemTotal:\s*(\S*)", meminfo)
@@ -330,34 +381,52 @@ def get_machine_specs(devicenum):
     if cur_mclk is None:
         cur_mclk = 0
 
+    # FIXME with device
+    vbios = search(r"VBIOS version: (.*?)$", run(["rocm-smi", "-v"]))
+
     # FIXME with spec
-    hbmBW = int(cur_mclk) / 1000 * 4096 / 8 * 2
+    hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
+
+    compute_partition = search(
+        r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
+    )
+    if compute_partition == None:
+        compute_partition = "NA"
+
+    memory_partition = search(
+        r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"])
+    )
+    if memory_partition == None:
+        memory_partition = "NA"
 
     return MachineSpecs(
         hostname,
         CPU,
+        sbios,
         kernel_version,
         ram,
         distro,
         rocm_version,
         gpu_name,
-        gpu_id,
+        gpu_arch,
+        vbios,
         L1,
         L2,
-        max_sclk,
         num_CU,
         num_SIMD,
         num_SE,
         wave_size,
         grp_size,
+        max_sclk,
         cur_sclk,
         cur_mclk,
         max_waves_per_cu,
         L2Banks,
         LDSBanks,
         numSQC,
-        numXCC,
         hbmBW,
+        compute_partition,
+        memory_partition,
     )
 
 

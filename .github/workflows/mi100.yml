@@ -14,48 +14,49 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  profile:
+    strategy:
+      matrix:
+        version: [5.5.1, 5.7.1]
     runs-on: [mi100, rhel9]
     env:
        PYTHONPATH: /home1/ciuser/omniperf_deps
 #       PYTHONPATH: ${{ github.workspace }}/python-libs
+    name: ROCm v${{ matrix.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: pythonpath
+      - name: Python Path
         run: echo ${PYTHONPATH}
       - name: Install Python collateral (build and test)
         run: |
            pip3 install -t ${PYTHONPATH} -r requirements.txt
            pip3 install -t ${PYTHONPATH} -r requirements-test.txt
+      - name: Load ROCm ${{ matrix.version}}
+        run: |
+          module load cmake
+          module load rocm/${{ matrix.version }}
+          echo $PATH > $GITHUB_PATH
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
+          echo "ROCM_PATH=$ROCM_PATH" >> "$GITHUB_ENV"
+      - name: Check Environment
+        run: |
+          echo "PATH=$PATH"
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+          echo "ROCM_PATH=$ROCM_PATH"
       - name: Configure
         run: |
           mkdir build
           cd build
           ml cmake
-          cmake -DENABLE_COVERAGE=OFF ..
-      # - name: Create HIP binary (vcopy)
-      #   run: hipcc -o tests/vcopy ./sample/vcopy.cpp
-      - name: path foo
-        run: |
-          module list
-          module load hpcfund
-          which rocminfo          
-          echo $LD_LIBRARY_PATH
-          ml swap rocm rocm/5.5.1
-          which rocminfo
-          echo $LD_LIBRARY_PATH
-      - name: rocminfo
-        run: |
-          ml load hpcfund
-          srun -N 1 -J omniperf -p ci -t 00:05:00 rocminfo
+          cmake -DENABLE_COVERAGE=ON ..
+      - name: Create HIP binary (vcopy)
+        run: hipcc -o tests/vcopy ./sample/vcopy.cpp
       - name: Run [profile] mode
         run: |
           cd build
-          module load hpcfund
-          module list
-          srun -N 1 -J omniperf -p ci -t 00:20:00 ctest --verbose -R test_profile_kernel_execution
-#         srun -N 1 -J omniperf -p ci -t 00:20:00 ctest -j 4 --resource-spec-file ../tests/4gpus.json --verbose -L profile
+          srun -N 1 -J omniperf -p ci -t 00:20:00 ctest -j 4 --resource-spec-file ../tests/4gpus.json --verbose -L profile
+#          srun -N 1 -J omniperf -p ci -t 00:20:00 ctest --verbose -R test_profile_kernel_execution
 ##       - name: Run [analyze] mode
 ##         if: '!cancelled()'
 ##         run: |

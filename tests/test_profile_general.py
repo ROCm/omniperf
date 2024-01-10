@@ -203,7 +203,7 @@ soc = gpu_soc()
 
 # if config["METRIC_LOGGING"]:
 #     # change to directory where baseline is at
-Baseline_dir = os.path.realpath("Baseline_vcopy_" + soc)
+Baseline_dir = os.path.realpath("tests/workloads/Baseline_vcopy_" + soc)
 #     if os.path.exists(Baseline_dir):
 #         shutil.rmtree(Baseline_dir)
 #     with pytest.raises(SystemExit) as e:
@@ -316,34 +316,40 @@ def baseline_compare_metric(test_name, workload_dir, thresholds, args=[]):
                             )
                             assert 0
                         continue
-
-                    if config["METRIC_LOGGING"] and (
-                        (abs(relative_diff) <= relative_threshold)
-                        or (abs(absolute_diff) <= absolute_threshold)
-                    ):
-                        new_error = pd.DataFrame.from_dict(
-                            {
-                                "Index": [metric_info[0]],
-                                "Metric": [metric_idx],
-                                "Percent Difference": [relative_diff],
-                                "Absolute Difference": [absolute_diff],
-                                "Baseline": [metric_info[-3]],
-                                "Current": [metric_info[-4]],
-                                "Test Name": [test_name],
-                            }
-                        )
-                        error_df = pd.concat([error_df, new_error])
-                        counts = error_df.groupby(["Index", "Test Name"]).cumcount()
-                        failed_metrics = error_df.loc[counts > MAX_METRIC_VIOLATIONS]
-                        failed_metrics["counts"] = counts[counts > MAX_METRIC_VIOLATIONS]
-                        if failed_metrics.any(axis=None):
-                            print(
-                                "Warning, these metrics are varying too much",
-                                failed_metrics,
+                    
+                    if config["METRIC_LOGGING"] and ((
+                        abs(relative_diff)
+                        <= relative_threshold
+                    ) or (
+                        abs(absolute_diff)
+                        <= absolute_threshold
+                    )):
+                        
+                            new_error = pd.DataFrame.from_dict(
+                                {
+                                    "Index": [metric_info[0]],
+                                    "Metric": [metric_idx],
+                                    "Percent Difference": [relative_diff],
+                                    "Absolute Difference": [absolute_diff],
+                                    "Baseline": [metric_info[-3]],
+                                    "Current": [metric_info[-4]],
+                                    "Test Name": [test_name],
+                                }
                             )
+                            error_df = pd.concat([error_df, new_error])
+                            counts = error_df.groupby(["Index", "Test Name"]).cumcount()
+                            failed_metrics = error_df.loc[counts > MAX_METRIC_VIOLATIONS]
+                            failed_metrics["counts"] = counts[
+                                counts > MAX_METRIC_VIOLATIONS
+                            ]
+                            if failed_metrics.any(axis=None):
+                                print(
+                                    "Warning, these metrics are varying too much",
+                                    failed_metrics,
+                                )
 
-                        if not error_df.empty:
-                            error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
+                            if not error_df.empty:
+                                error_df.to_csv(Baseline_dir + "/metric_error_log.csv")
 
 
 def logging(test_name, workload_dir, file_dict, thresholds, args=[]):

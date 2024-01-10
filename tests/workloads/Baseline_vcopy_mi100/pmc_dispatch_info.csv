@@ -1,0 +1,4 @@
+Index,KernelName,gpu-id
+0,"vecCopy(double*, double*, double*, int, int) ",2
+1,"vecCopy(double*, double*, double*, int, int) ",2
+2,"vecCopy(double*, double*, double*, int, int) ",2

@@ -562,6 +562,12 @@ The reader is referred to the [Instructions per-cycle and Utilizations](IPC_exam
 * - MFMA Instruction Cycles
   - The average duration of [MFMA](mfma) instructions in this kernel in cycles.  Computed as the ratio of the total number of cycles the [MFMA](mfma) unit was busy over the total number of [MFMA](mfma) instructions.  Compare to e.g., the [AMD Matrix Instruction Calculator](https://github.com/RadeonOpenCompute/amd_matrix_instruction_calculator).
   - Cycles per instruction
+* - VMEM Latency
+  - The average number of round-trip cycles (i.e., from issue to data-return / acknowledgment) required for a VMEM instruction to complete.
+  - Cycles
+* - SMEM Latency
+  - The average number of round-trip cycles (i.e., from issue to data-return / acknowledgment) required for a SMEM instruction to complete.
+  - Cycles
 ```
 
 ```{note}

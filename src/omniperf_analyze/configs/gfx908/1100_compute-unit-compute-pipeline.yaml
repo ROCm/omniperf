@@ -141,6 +141,20 @@ Panel Config:
             max: None # No HW module
             unit: cycles/instr
             tips:
+          VMEM Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            coll_level: SQ_INST_LEVEL_VMEM
+            tips:
+          SMEM Latency:
+            avg: None # No perf counter
+            min: None # No perf counter
+            max: None # No perf counter
+            unit: Cycles
+            coll_level: SQ_INST_LEVEL_SMEM
+            tips:
 
     - metric_table:
         id: 1103

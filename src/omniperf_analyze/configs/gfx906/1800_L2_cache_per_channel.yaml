@@ -13,7 +13,7 @@ Panel Config:
         title: Aggregate Stats (All 32 channels)
         header:
           metric: Metric
-          avg: Mean
+          avg: Avg
           std dev: Std Dev
           min: Min
           max: Max
@@ -167,7 +167,7 @@ Panel Config:
               + TCC_HIT[30])) + (TCC_MISS[31] + TCC_HIT[31])) != 0) else None))
             unit: pct
             tips: 
-          Req:
+          L2 Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_REQ[0]) + TO_INT(TCC_REQ[1]))
               + TO_INT(TCC_REQ[2])) + TO_INT(TCC_REQ[3])) + TO_INT(TCC_REQ[4])) + TO_INT(TCC_REQ[5]))
               + TO_INT(TCC_REQ[6])) + TO_INT(TCC_REQ[7])) + TO_INT(TCC_REQ[8])) + TO_INT(TCC_REQ[9]))
@@ -206,7 +206,7 @@ Panel Config:
               + TO_INT(TCC_REQ[30])) + TO_INT(TCC_REQ[31])) / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L1 - L2 Read Req:
+          L2 Read Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_READ[0]) + TO_INT(TCC_READ[1]))
               + TO_INT(TCC_READ[2])) + TO_INT(TCC_READ[3])) + TO_INT(TCC_READ[4])) + TO_INT(TCC_READ[5]))
               + TO_INT(TCC_READ[6])) + TO_INT(TCC_READ[7])) + TO_INT(TCC_READ[8])) + TO_INT(TCC_READ[9]))
@@ -249,7 +249,7 @@ Panel Config:
               + TO_INT(TCC_READ[31])) / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L1 - L2 Write Req:
+          L2 Write Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_WRITE[0]) + TO_INT(TCC_WRITE[1]))
               + TO_INT(TCC_WRITE[2])) + TO_INT(TCC_WRITE[3])) + TO_INT(TCC_WRITE[4])) +
               TO_INT(TCC_WRITE[5])) + TO_INT(TCC_WRITE[6])) + TO_INT(TCC_WRITE[7])) + TO_INT(TCC_WRITE[8]))
@@ -296,7 +296,7 @@ Panel Config:
               + TO_INT(TCC_WRITE[30])) + TO_INT(TCC_WRITE[31])) / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L1 - L2 Atomic Req:
+          L2 Atomic Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_ATOMIC[0]) + TO_INT(TCC_ATOMIC[1]))
               + TO_INT(TCC_ATOMIC[2])) + TO_INT(TCC_ATOMIC[3])) + TO_INT(TCC_ATOMIC[4]))
               + TO_INT(TCC_ATOMIC[5])) + TO_INT(TCC_ATOMIC[6])) + TO_INT(TCC_ATOMIC[7]))
@@ -347,7 +347,7 @@ Panel Config:
               / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L2 - EA Read Req:
+          L2 - Fabric Read Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_RDREQ[0]) + TO_INT(TCC_EA_RDREQ[1]))
               + TO_INT(TCC_EA_RDREQ[2])) + TO_INT(TCC_EA_RDREQ[3])) + TO_INT(TCC_EA_RDREQ[4]))
               + TO_INT(TCC_EA_RDREQ[5])) + TO_INT(TCC_EA_RDREQ[6])) + TO_INT(TCC_EA_RDREQ[7]))
@@ -398,7 +398,7 @@ Panel Config:
               / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L2 - EA Write Req:
+          L2 - Fabric Write Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_WRREQ[0]) + TO_INT(TCC_EA_WRREQ[1]))
               + TO_INT(TCC_EA_WRREQ[2])) + TO_INT(TCC_EA_WRREQ[3])) + TO_INT(TCC_EA_WRREQ[4]))
               + TO_INT(TCC_EA_WRREQ[5])) + TO_INT(TCC_EA_WRREQ[6])) + TO_INT(TCC_EA_WRREQ[7]))
@@ -449,7 +449,7 @@ Panel Config:
               / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L2 - EA Atomic Req:
+          L2 - Fabric Atomic Req:
             avg: AVG((((((((((((((((((((((((((((((((((TO_INT(TCC_EA_ATOMIC[0]) + TO_INT(TCC_EA_ATOMIC[1]))
               + TO_INT(TCC_EA_ATOMIC[2])) + TO_INT(TCC_EA_ATOMIC[3])) + TO_INT(TCC_EA_ATOMIC[4]))
               + TO_INT(TCC_EA_ATOMIC[5])) + TO_INT(TCC_EA_ATOMIC[6])) + TO_INT(TCC_EA_ATOMIC[7]))
@@ -500,7 +500,7 @@ Panel Config:
               / 32) / $denom))
             unit: (Req + $normUnit)
             tips: 
-          L2 - EA Read Lat:
+          L2 - Fabric Read Lat:
             avg: AVG((((((((((((((((((((((((((((((((((TCC_EA_RDREQ_LEVEL[0] + TCC_EA_RDREQ_LEVEL[1])
               + TCC_EA_RDREQ_LEVEL[2]) + TCC_EA_RDREQ_LEVEL[3]) + TCC_EA_RDREQ_LEVEL[4])
               + TCC_EA_RDREQ_LEVEL[5]) + TCC_EA_RDREQ_LEVEL[6]) + TCC_EA_RDREQ_LEVEL[7])
@@ -615,7 +615,7 @@ Panel Config:
               + TCC_EA_RDREQ[29]) + TCC_EA_RDREQ[30]) + TCC_EA_RDREQ[31]) != 0) else None))
             unit: Cycles
             tips: 
-          L2 - EA Write Lat:
+          L2 - Fabric Write Lat:
             avg: AVG((((((((((((((((((((((((((((((((((TCC_EA_WRREQ_LEVEL[0] + TCC_EA_WRREQ_LEVEL[1])
               + TCC_EA_WRREQ_LEVEL[2]) + TCC_EA_WRREQ_LEVEL[3]) + TCC_EA_WRREQ_LEVEL[4])
               + TCC_EA_WRREQ_LEVEL[5]) + TCC_EA_WRREQ_LEVEL[6]) + TCC_EA_WRREQ_LEVEL[7])
@@ -730,7 +730,7 @@ Panel Config:
               + TCC_EA_WRREQ[29]) + TCC_EA_WRREQ[30]) + TCC_EA_WRREQ[31]) != 0) else None))
             unit: Cycles
             tips: 
-          L2 - EA Atomic Lat:
+          L2 - Fabric Atomic Lat:
             avg: AVG((((((((((((((((((((((((((((((((((TCC_EA_ATOMIC_LEVEL[0] + TCC_EA_ATOMIC_LEVEL[1])
               + TCC_EA_ATOMIC_LEVEL[2]) + TCC_EA_ATOMIC_LEVEL[3]) + TCC_EA_ATOMIC_LEVEL[4])
               + TCC_EA_ATOMIC_LEVEL[5]) + TCC_EA_ATOMIC_LEVEL[6]) + TCC_EA_ATOMIC_LEVEL[7])
@@ -849,49 +849,49 @@ Panel Config:
               None))
             unit: Cycles
             tips: 
-          L2 - EA Read Stall (IO):
+          L2 - Fabric Read Stall (PCIe):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Read Stall (GMI):
+          L2 - Fabric Read Stall (Infinity Fabric™):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Read Stall (DRAM):
+          L2 - Fabric Read Stall (HBM):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Write Stall (IO):
+          L2 - Fabric Write Stall (PCIe):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Write Stall (GMI):
+          L2 - Fabric Write Stall (Infinity Fabric™):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Write Stall (DRAM):
+          L2 - Fabric Write Stall (HBM):
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
             max: None # No perf counter
             unit: (Cycles  + $normUnit)
             tips: 
-          L2 - EA Write Starve:
+          L2 - Fabric Write Starve:
             avg: None # No perf counter
             std dev: None # No perf counter
             min: None # No perf counter
@@ -906,22 +906,22 @@ Panel Config:
           channel: Channel
           hit rate: L2 Cache Hit Rate (%)
           req: Requests (Requests)
-          read req: L1-L2 Read (Requests)
-          write req: L1-L2 Write (Requests)
-          atomic req: L1-L2 Atomic (Requests)
-          ea read req: L2-EA Read (Requests)
-          ea write req: L2-EA Write (Requests)
-          ea atomic req: L2-EA Atomic (Requests)
-          ea read lat - cycles: L2-EA Read Latency (Cycles)
-          ea write lat - cycles: L2-EA Write Latency (Cycles)
-          ea atomic lat - cycles: L2-EA Atomic Latency (Cycles)
-          ea read stall - io: L2-EA Read Stall - IO (Cycles per)
-          ea read stall - gmi: L2-EA Read Stall - GMI (Cycles per)
-          ea read stall - dram: L2-EA Read Stall - DRAM (Cycles per)
-          ea write stall - io: L2-EA Write Stall - IO (Cycles per)
-          ea write stall - gmi: L2-EA Write Stall - GMI (Cycles per)
-          ea write stall - dram: L2-EA Write Stall - DRAM (Cycles per)
-          ea write stall - starve: L2-EA Write Stall - Starve (Cycles per)
+          read req: L2 Read (Requests)
+          write req: L2 Write (Requests)
+          atomic req: L2 Atomic (Requests)
+          ea read req: L2-Fabric Read (Requests)
+          ea write req: L2-Fabric Write and Atomic (Requests)
+          ea atomic req: L2-Fabric Atomic (Requests)
+          ea read lat - cycles: L2-Fabric Read Latency (Cycles)
+          ea write lat - cycles: L2-Fabric Write Latency (Cycles)
+          ea atomic lat - cycles: L2-Fabric Atomic Latency (Cycles)
+          ea read stall - io: L2-Fabric Read Stall - PCIe (Cycles per)
+          ea read stall - gmi: L2-Fabric Read Stall - Infinity Fabric™ (Cycles per)
+          ea read stall - dram: L2-Fabric Read Stall - HBM (Cycles per)
+          ea write stall - io: L2-Fabric Write Stall - PCIe (Cycles per)
+          ea write stall - gmi: L2-Fabric Write Stall - Infinity Fabric™ (Cycles per)
+          ea write stall - dram: L2-Fabric Write Stall - HBM (Cycles per)
+          ea write stall - starve: L2-Fabric Write Stall - Starve (Cycles per)
           tips: Tips
         metric:
           "0":
@@ -1381,22 +1381,22 @@ Panel Config:
           channel: Channel
           hit rate: L2 Cache Hit Rate (%)
           req: Requests (Requests)
-          read req: L1-L2 Read (Requests)
-          write req: L1-L2 Write (Requests)
-          atomic req: L1-L2 Atomic (Requests)
-          ea read req: L2-EA Read (Requests)
-          ea write req: L2-EA Write (Requests)
-          ea atomic req: L2-EA Atomic (Requests)
-          ea read lat - cycles: L2-EA Read Latency (Cycles)
-          ea write lat - cycles: L2-EA Write Latency (Cycles)
-          ea atomic lat - cycles: L2-EA Atomic Latency (Cycles)
-          ea read stall - io: L2-EA Read Stall - IO (Cycles per)
-          ea read stall - gmi: L2-EA Read Stall - GMI (Cycles per)
-          ea read stall - dram: L2-EA Read Stall - DRAM (Cycles per)
-          ea write stall - io: L2-EA Write Stall - IO (Cycles per)
-          ea write stall - gmi: L2-EA Write Stall - GMI (Cycles per)
-          ea write stall - dram: L2-EA Write Stall - DRAM (Cycles per)
-          ea write stall - starve: L2-EA Write Stall - Starve (Cycles per)
+          read req: L2 Read (Requests)
+          write req: L2 Write (Requests)
+          atomic req: L2 Atomic (Requests)
+          ea read req: L2-Fabric Read (Requests)
+          ea write req: L2-Fabric Write and Atomic (Requests)
+          ea atomic req: L2-Fabric Atomic (Requests)
+          ea read lat - cycles: L2-Fabric Read Latency (Cycles)
+          ea write lat - cycles: L2-Fabric Write Latency (Cycles)
+          ea atomic lat - cycles: L2-Fabric Atomic Latency (Cycles)
+          ea read stall - io: L2-Fabric Read Stall - PCIe (Cycles per)
+          ea read stall - gmi: L2-Fabric Read Stall - Infinity Fabric™ (Cycles per)
+          ea read stall - dram: L2-Fabric Read Stall - HBM (Cycles per)
+          ea write stall - io: L2-Fabric Write Stall - PCIe (Cycles per)
+          ea write stall - gmi: L2-Fabric Write Stall - Infinity Fabric™ (Cycles per)
+          ea write stall - dram: L2-Fabric Write Stall - HBM (Cycles per)
+          ea write stall - starve: L2-Fabric Write Stall - Starve (Cycles per)
           tips: Tips
         metric:
           "16":

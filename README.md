@@ -23,6 +23,11 @@ contribution process.
 
 * Licensing information can be found in the [LICENSE](LICENSE) file.
 
+## Examples
+A set of guided exercises demonstrating kernel optimization using Omniperf can be found in the [amd/HPCTrainingExamples](https://github.com/amd/HPCTrainingExamples/tree/main/OmniperfExamples) repo.
+
+
+
 ## Development 
 
 Omniperf follows a

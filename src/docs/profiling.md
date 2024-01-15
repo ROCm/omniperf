@@ -37,7 +37,7 @@ Releasing CPU memory
 ```
 
 ## Omniperf Profiling
-The *omniperf* script, availible through the [Omniperf](https://github.com/AMDResearch/omniperf) repository, is used to aquire all necessary perfmon data through analysis of compute workloads.
+The *omniperf* script, available through the Omniperf repository, is used to aquire all necessary performance monitoring data through analysis of compute workloads.
 
 **omniperf help:**
 ```shell-session
@@ -80,7 +80,7 @@ Profile Options:
   -p , --path                                           Specify path to save workload.
                                                         (DEFAULT: /home/colramos/GitHub/omniperf/workloads/<name>)
   -k  [ ...], --kernel  [ ...]                          Kernel filtering.
-  -b  [ ...], --ipblocks  [ ...]                        IP block filtering:
+  -b  [ ...], --ipblocks  [ ...]                        Hardware block filtering:
                                                            SQ
                                                            SQC
                                                            TA
@@ -108,6 +108,13 @@ Standalone Roofline Options:
   --kernel-names                                        Include kernel names in roofline plot.
 ```
 
+- The `-k` \<kernel> flag allows for kernel filtering, which is compatible with the current rocProf utility.
+
+- The `-d` \<dispatch> flag allows for dispatch ID filtering,  which is compatible with the current rocProf utility.
+
+- The `-b` \<ipblocks> allows system profiling on one or more selected hardware components to speed up the profiling process. One can gradually include more hardware components, without overwriting performance data acquired on other hardware components.
+
+
 The following sample command profiles the *vcopy* workload.
 
 **vcopy profiling:**
@@ -115,7 +122,6 @@ The following sample command profiles the *vcopy* workload.
 $ omniperf profile --name vcopy -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
-
 
 -------------
 Profile only
@@ -152,7 +158,7 @@ Finished executing kernel
 Finished copying the output vector from the GPU to the CPU
 Releasing GPU memory
 Releasing CPU memory
- 
+
 ... ...
 ROCPRofiler: 1 contexts collected, output directory /tmp/rpl_data_220527_130317_1787038/input_results_220527_130317
 File 'workloads/vcopy/mi200/timestamps.csv' is generating
@@ -204,16 +210,16 @@ Peak MFMA FLOPs (F64), GPU ID: 1, workgroupSize:256, workgroups:16384, experimen
  99% [||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ]
 Peak MFMA IOPs (I8), GPU ID: 1, workgroupSize:256, workgroups:16384, experiments:100, IOP:2147483648000, duration:14.3 ms, mean:150317.8 GOPS, stdev=203.5 GOPS
 ```
-You'll notice two stages in *default* Omniperf profiling. The first stage collects all the counters needed for Omniperf analysis (omitting any filters you've provided). The second stage collects data for the roofline analysis (this stage can be disabled using `--no-roof`)
+You will notice two stages in *default* Omniperf profiling. The first stage collects all the counters needed for Omniperf analysis (omitting any filters you have provided). The second stage collects data for the roofline analysis (this stage can be disabled using `--no-roof`)
 
-At the end of the profiling, all resulting csv files should be located in a SOC specific target directory, e.g.:
-  - "mi200" for the AMD Instinct (tm) MI-200 family of accelerators
-  - "mi100" for the AMD Instinct (tm) MI-100 family of accelerators
-etc.  The SOC names are generated as a part of Omniperf, and do not necessarily distinguish between different accelerators in the same family (e.g., an AMD Instinct (tm) MI-210 vs an MI-250)
+In this document, we use the term System on Chip (SoC) to refer to a particular family of accelerators. At the end of profiling, all resulting csv files should be located in a SoC specific target directory, e.g.:
+  - "mi200" for the AMD Instinct (tm) MI200 family of accelerators
+  - "mi100" for the AMD Instinct (tm) MI100 family of accelerators
+etc.  The SoC names are generated as a part of Omniperf, and do not necessarily distinguish between different accelerators in the same family (e.g., an AMD Instinct (tm) MI210 vs an MI250)
 
-> Note: Additionally, you'll notice a few extra files. An SoC parameters file, *sysinfo.csv*, is created to reflect the target device settings. All profiling output is stored in *log.txt*. Roofline specific benchmark results are stored in *roofline.csv*.
+> Note: Additionally, you will notice a few extra files. An SoC parameters file, *sysinfo.csv*, is created to reflect the target device settings. All profiling output is stored in *log.txt*. Roofline specific benchmark results are stored in *roofline.csv*.
 
-```shell
+```shell-session
 $ ls workloads/vcopy/mi200/
 total 112
 drwxrwxr-x 3 colramos colramos  4096 Apr 11 16:42 .
@@ -232,17 +238,17 @@ drwxrwxr-x 2 colramos colramos  4096 Apr 11 16:42 perfmon
 ```
 
 ### Filtering
-To reduce profiling time and the counters collected one may use profiling filters. Profiling filters and their functionality depend on the underlying profiler being used. While Omniperf is profiler agnostic, we've provided a detailed description of profiling filters available when using Omniperf with [rocProfiler](https://rocm.docs.amd.com/projects/rocprofiler/en/latest/rocprof.html) below.
+To reduce profiling time and the counters collected one may use profiling filters. Profiling filters and their functionality depend on the underlying profiler being used. While Omniperf is profiler agnostic, we have provided a detailed description of profiling filters available when using Omniperf with [rocProf](https://rocm.docs.amd.com/projects/rocprofiler/en/latest/rocprof.html) below.
 
 
 
 Filtering Options:
 
-- The `-k` \<kernel> flag allows for kernel filtering. Useage is equivalent with the current rocprof utility ([see details below](#kernel-filtering)).
+- The `-k` \<kernel> flag allows for kernel filtering. Useage is equivalent with the current rocProf utility ([see details below](#kernel-filtering)).
 
-- The `-d` \<dispatch> flag allows for dispatch ID filtering. Useage is equivalent with the current rocprof utility ([see details below](#dispatch-filtering)).
+- The `-d` \<dispatch> flag allows for dispatch ID filtering. Useage is equivalent with the current rocProf utility ([see details below](#dispatch-filtering)).
 
-- The `-b` \<ipblocks> allows system profiling on one or more selected IP blocks to speed up the profiling process. One can gradually incorporate more IP blocks, without overwriting performance data acquired on other IP blocks.
+- The `-b` \<ipblocks> allows system profiling on one or more selected hardware components to speed up the profiling process. One can gradually include more hardware components, without overwriting performance data acquired on other hardware components.
 
 ```{note}
 Be cautious while combining different profiling filters in the same call. Conflicting filters may result in error.
@@ -250,11 +256,11 @@ Be cautious while combining different profiling filters in the same call. Confli
 i.e. filtering dispatch X, but dispatch X does not match your kernel name filter
 ```
 
-#### IP Block Filtering
-One can profile a selected IP Block to speed up the profiling process. All profiling results are accumulated in the same target directory, without overwriting those for other IP blocks, hence enabling the incremental profiling and analysis.
+#### Hardware Component Filtering
+One can profile specific hardware components to speed up the profiling process. In Omniperf, we use the term IP block to refer to a hardware component or a group of hardware components. All profiling results are accumulated in the same target directory, without overwriting those for other hardware components, hence enabling the incremental profiling and analysis.
 
-The following example only gathers hardware counters for SQ and TCC, skipping all other IP Blocks:
-```shell
+The following example only gathers hardware counters for the Shader Sequencer (SQ) and L2 Cache (TCC) components, skipping all other hardware components:
+```shell-session
 $ omniperf profile --name vcopy -b SQ TCC -- ./sample/vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
@@ -291,14 +297,13 @@ Log:  /home/colramos/GitHub/omniperf-pub/workloads/vcopy/mi200/log.txt
 ```
 
 #### Kernel Filtering
-Kernel filtering is based on the name of the kernel(s) you'd like to isolate. Use a kernel name substring list to isolate desired kernels.
+Kernel filtering is based on the name of the kernel(s) you would like to isolate. Use a kernel name substring list to isolate desired kernels.
 
 The following example demonstrates profiling isolating the kernel matching substring "vecCopy":
-```shell
+```shell-session
 $ omniperf profile --name vcopy -k vecCopy -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
-
 
 -------------
 Profile only
@@ -323,7 +328,7 @@ Finished allocating vectors on the CPU
 ROCProfiler: input from "/tmp/rpl_data_230411_170300_29696/input0.xml"
   gpu_index = 
   kernel = vecCopy
- 
+
 ... ...
 ```
 
@@ -335,7 +340,6 @@ The following example profiles only the 0th dispatched kernel in execution of th
 $ omniperf profile --name vcopy -d 0 -- ./vcopy 1048576 256
 Resolving rocprof
 ROC Profiler:  /usr/bin/rocprof
-
 
 -------------
 Profile only
@@ -365,19 +369,18 @@ ROCProfiler: input from "/tmp/rpl_data_230411_170356_30314/input0.xml"
 ```
 
 
-
 ### Standalone Roofline
-If you're only interested in generating roofline analysis data try using `--roof-only`. This will only collect counters relevent to roofline, as well as generate a standalone .pdf output of your roofline plot. 
+If you are only interested in generating roofline analysis data try using `--roof-only`. This will only collect counters relevant to roofline, as well as generate a standalone .pdf output of your roofline plot. 
 
 Standalone Roofline Options:
 
-- The `--sort` \<desired_sort> allows you to specify whether you'd like to overlay top kernel or top dispatch data in your roofline plot.
+- The `--sort` \<desired_sort> allows you to specify whether you would like to overlay top kernel or top dispatch data in your roofline plot.
 
-- The `-m` \<cache_level> allows you to specify specific level(s) of cache you'd like to include in your roofline plot.
+- The `-m` \<cache_level> allows you to specify specific level(s) of cache you would like to include in your roofline plot.
 
 - The `--device` \<gpu_id> allows you to specify a device id to collect performace data from when running our roofline benchmark on your system.
 
-- If you'd like to distinguish different kernels in your .pdf roofline plot use `--kernel-names`. This will give each kernel a unique marker identifiable from the plot's key.
+- If you would like to distinguish different kernels in your .pdf roofline plot use `--kernel-names`. This will give each kernel a unique marker identifiable from the plot's key.
 
 
 #### Roofline Only

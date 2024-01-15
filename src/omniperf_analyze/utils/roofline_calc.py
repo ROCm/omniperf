@@ -184,7 +184,7 @@ def plot_roof(roof_details, roof_data, mem_level, verbose):
 # -------------------------------------------------------------------------------------
 #                              Overlay application performance
 # -------------------------------------------------------------------------------------
-# Calculate relevent metrics for ai calculation
+# Calculate relevant metrics for ai calculation
 def plot_application(sortType, ret_df, verbose):
     df = ret_df["pmc_perf"]
     # Sort by top kernels or top dispatches?

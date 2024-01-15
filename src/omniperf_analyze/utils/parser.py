@@ -113,6 +113,11 @@ def to_min(*args):
 def to_max(*args):
     if len(args) == 1 and isinstance(args[0], pd.core.series.Series):
         return args[0].max()
+    elif len(args) == 2 and (
+        isinstance(args[0], pd.core.series.Series)
+        or isinstance(args[1], pd.core.series.Series)
+    ):
+        return np.maximum(args[0], args[1])
     elif max(args) == None:
         return np.nan
     else:
@@ -268,7 +273,7 @@ def build_eval_string(equation, coll_level):
     # build-in variable starts with '$', python can not handle it.
     # replace '$' with 'ammolite__'.
     # TODO: pre-check there is no "ammolite__" in all config files.
-    s = re.sub("\$", "ammolite__", s)
+    s = re.sub(r"\$", "ammolite__", s)
 
     # convert equation string to intermediate expression in df array format
     ast_node = ast.parse(s)
@@ -282,7 +287,7 @@ def build_eval_string(equation, coll_level):
     # the target is df['TCC_HIT[0]']
     s = re.sub(r"\'\]\[(\d+)\]", r"[\g<1>]']", s)
     # use .get() to catch any potential KeyErrors
-    s = re.sub("raw_pmc_df\['(.*?)']", r'raw_pmc_df.get("\1")', s)
+    s = re.sub(r"raw_pmc_df\['(.*?)']", r'raw_pmc_df.get("\1")', s)
     # apply coll_level
     s = re.sub(r"raw_pmc_df", "raw_pmc_df.get('" + coll_level + "')", s)
     # print("--- build_eval_string, return: ", s)
@@ -306,7 +311,7 @@ def update_denom_string(equation, unit):
 
 def update_normUnit_string(equation, unit):
     """
-    Update $normUnit in equation with runtime nomorlization unit.
+    Update $normUnit in equation with runtime normalization unit.
     It is string replacement for display only.
     """
 
@@ -315,8 +320,8 @@ def update_normUnit_string(equation, unit):
         return ""
 
     return re.sub(
-        "\((?P<PREFIX>\w*)\s+\+\s+(\$normUnit\))",
-        "\g<PREFIX> " + re.sub("_", " ", unit),
+        r"\((?P<PREFIX>\w*)\s+\+\s+(\$normUnit\))",
+        r"\g<PREFIX> " + re.sub("_", " ", unit),
         str(equation),
     ).capitalize()
 
@@ -564,9 +569,10 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
     # NB:
     #  Following with Omniperf 0.2.0, we are using HW spec from sys_info instead.
     #  The soc_spec is not in using right now, but can be used to do verification
-    #  aganist sys_info, forced theoretical evaluation, or supporting tool-chains
+    #  against sys_info, forced theoretical evaluation, or supporting tool-chains
     #  broken.
     ammolite__numSE = sys_info.numSE
+    ammolite__numPipes = soc_spec.numPipes
     ammolite__numCU = sys_info.numCU
     ammolite__numSIMD = sys_info.numSIMD
     ammolite__numWavesPerCU = sys_info.maxWavesPerCU  # todo: check do we still need it
@@ -612,7 +618,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
                                     print("~" * 40 + "\nExpression:")
                                     print(expr, "=", row[expr])
                                     print("Inputs:")
-                                    matched_vars = re.findall("ammolite__\w+", row[expr])
+                                    matched_vars = re.findall(r"ammolite__\w+", row[expr])
                                     if matched_vars:
                                         for v in matched_vars:
                                             print(
@@ -622,12 +628,12 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
                                                 eval(compile(v, "<string>", "eval")),
                                             )
                                     matched_cols = re.findall(
-                                        "raw_pmc_df\['\w+'\]\['\w+'\]", row[expr]
+                                        r"raw_pmc_df\['\w+'\]\['\w+'\]", row[expr]
                                     )
                                     if matched_cols:
                                         for c in matched_cols:
                                             m = re.match(
-                                                "raw_pmc_df\['(\w+)'\]\['(\w+)'\]", c
+                                                r"raw_pmc_df\['(\w+)'\]\['(\w+)'\]", c
                                             )
                                             t = raw_pmc_df[m.group(1)][
                                                 m.group(2)
@@ -651,7 +657,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
                                         print("~" * 40)
                                     except TypeError:
                                         print(
-                                            "skiping entry. Encounterd a missing counter"
+                                            "skipping entry. Encountered a missing counter"
                                         )
                                         print(expr, " has been assigned to None")
                                         print(np.nan)
@@ -661,7 +667,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
                                             == "'NoneType' object has no attribute 'get'"
                                         ):
                                             print(
-                                                "skiping entry. Encounterd a missing csv"
+                                                "skipping entry. Encountered a missing csv"
                                             )
                                             print(np.nan)
                                         else:
@@ -769,7 +775,7 @@ def apply_filters(workload, dir, is_gui, debug):
                 print("{} is an invalid dispatch id.".format(d))
                 sys.exit(1)
         if ">" in workload.filter_dispatch_ids[0]:
-            m = re.match("\> (\d+)", workload.filter_dispatch_ids[0])
+            m = re.match(r"\> (\d+)", workload.filter_dispatch_ids[0])
             ret_df = ret_df[
                 ret_df[schema.pmc_perf_file_prefix]["Index"] > int(m.group(1))
             ]

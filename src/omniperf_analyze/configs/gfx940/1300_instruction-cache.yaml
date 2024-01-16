@@ -19,11 +19,14 @@ Panel Config:
           Bandwidth:
             value: AVG(((SQC_ICACHE_REQ * 100000) / (($sclk * $numSQC)
               * (EndNs - BeginNs))))
-            tips: 
+            tips:
           Cache Hit:
-            value: AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+            value:
+              AVG(((SQC_ICACHE_HITS * 100) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            tips: 
+            tips:
+        comparable: false # for now
+        cli_style: simple_bar
 
     - metric_table:
         id: 1302
@@ -37,35 +40,38 @@ Panel Config:
           tips: Tips
         metric:
           Req:
-            Avg: AVG((SQC_ICACHE_REQ / $denom))
+            avg: AVG((SQC_ICACHE_REQ / $denom))
             min: MIN((SQC_ICACHE_REQ / $denom))
             max: MAX((SQC_ICACHE_REQ / $denom))
             unit: (Req  + $normUnit)
-            tips: 
+            tips:
           Hits:
-            Avg: AVG((SQC_ICACHE_HITS / $denom))
+            avg: AVG((SQC_ICACHE_HITS / $denom))
             min: MIN((SQC_ICACHE_HITS / $denom))
             max: MAX((SQC_ICACHE_HITS / $denom))
             unit: (Hits  + $normUnit)
-            tips: 
+            tips:
           Misses - Non Duplicated:
-            Avg: AVG((SQC_ICACHE_MISSES / $denom))
+            avg: AVG((SQC_ICACHE_MISSES / $denom))
             min: MIN((SQC_ICACHE_MISSES / $denom))
             max: MAX((SQC_ICACHE_MISSES / $denom))
             unit: (Misses  + $normUnit)
-            tips: 
+            tips:
           Misses - Duplicated:
-            Avg: AVG((SQC_ICACHE_MISSES_DUPLICATE / $denom))
+            avg: AVG((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             min: MIN((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             max: MAX((SQC_ICACHE_MISSES_DUPLICATE / $denom))
             unit: (Misses  + $normUnit)
-            tips: 
+            tips:
           Cache Hit:
-            Avg: AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
+            avg:
+              AVG(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES)
               + SQC_ICACHE_MISSES_DUPLICATE)))
-            min: MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            min:
+              MIN(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
-            max: MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
+            max:
+              MAX(((100 * SQC_ICACHE_HITS) / ((SQC_ICACHE_HITS + SQC_ICACHE_MISSES) +
               SQC_ICACHE_MISSES_DUPLICATE)))
             unit: pct
-            tips: 
+            tips:

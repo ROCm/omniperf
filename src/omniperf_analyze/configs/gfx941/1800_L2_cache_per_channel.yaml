@@ -117,7 +117,7 @@ Panel Config:
               (((100 * TCC_HIT[::_1]) / (TCC_HIT[::_1] + TCC_MISS[::_1])) if ((TCC_HIT[::_1]
               + TCC_MISS[::_1]) != 0) else None)
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_box
 
     - metric_table:
@@ -130,7 +130,7 @@ Panel Config:
           "::_1":
             expr: (TO_INT(TCC_REQ[::_1]) / $denom)
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_box
 
     - metric_table:
@@ -147,7 +147,7 @@ Panel Config:
             write req: AVG((TO_INT(TCC_WRITE[::_1]) / $denom))
             atomic req: AVG((TO_INT(TCC_ATOMIC[::_1]) / $denom))
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_multiple_bar
 
     - metric_table:
@@ -160,11 +160,11 @@ Panel Config:
           atomic req: L2-EA Atomic
         metric:
           "::_1":
-            read req: AVG((TO_INT(TCC_EA_RDREQ[::_1]) / $denom))
-            write req: AVG((TO_INT(TCC_EA_WRREQ[::_1]) / $denom))
-            atomic req: AVG((TO_INT(TCC_EA_ATOMIC[::_1]) / $denom))
+            read req: AVG((TO_INT(TCC_EA0_RDREQ[::_1]) / $denom))
+            write req: AVG((TO_INT(TCC_EA0_WRREQ[::_1]) / $denom))
+            atomic req: AVG((TO_INT(TCC_EA0_ATOMIC[::_1]) / $denom))
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_multiple_bar
 
     # - metric_table:
@@ -178,16 +178,16 @@ Panel Config:
     #     metric:
     #       "::_1":
     #         read lat:
-    #           AVG(((TCC_EA_RDREQ_LEVEL[::_1] / TCC_EA_RDREQ[::_1]) if (TCC_EA_RDREQ[::_1]
+    #           AVG(((TCC_EA0_RDREQ_LEVEL[::_1] / TCC_EA0_RDREQ[::_1]) if (TCC_EA0_RDREQ[::_1]
     #           != 0) else None))
     #         write lat:
-    #           AVG(((TCC_EA_WRREQ_LEVEL[::_1] / TCC_EA_WRREQ[::_1]) if (TCC_EA_WRREQ[::_1]
+    #           AVG(((TCC_EA0_WRREQ_LEVEL[::_1] / TCC_EA0_WRREQ[::_1]) if (TCC_EA0_WRREQ[::_1]
     #           != 0) else None))
     #         atomic lat:
-    #           AVG(((TCC_EA_ATOMIC_LEVEL[::_1] / TCC_EA_ATOMIC[::_1]) if
-    #           (TCC_EA_ATOMIC[::_1] != 0) else 0))
+    #           AVG(((TCC_EA0_ATOMIC_LEVEL[::_1] / TCC_EA0_ATOMIC[::_1]) if
+    #           (TCC_EA0_ATOMIC[::_1] != 0) else 0))
     #       placeholder_range:
-    #         "::_1": 96
+    #         "::_1": $totalL2Banks
     #     cli_style: simple_multiple_bar
 
     - metric_table:
@@ -199,10 +199,10 @@ Panel Config:
         metric:
           "::_1":
             expr:
-              ((TCC_EA_RDREQ_LEVEL[::_1] / TCC_EA_RDREQ[::_1]) if (TCC_EA_RDREQ[::_1]
+              ((TCC_EA0_RDREQ_LEVEL[::_1] / TCC_EA0_RDREQ[::_1]) if (TCC_EA0_RDREQ[::_1]
               != 0) else None)
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_box
 
     - metric_table:
@@ -214,10 +214,10 @@ Panel Config:
         metric:
           "::_1":
             expr:
-              ((TCC_EA_WRREQ_LEVEL[::_1] / TCC_EA_WRREQ[::_1]) if (TCC_EA_WRREQ[::_1]
+              ((TCC_EA0_WRREQ_LEVEL[::_1] / TCC_EA0_WRREQ[::_1]) if (TCC_EA0_WRREQ[::_1]
               != 0) else None)
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_box
 
     - metric_table:
@@ -228,10 +228,10 @@ Panel Config:
           expr: Expression
         metric:
           "::_1":
-            expr: ((TCC_EA_ATOMIC_LEVEL[::_1] / TCC_EA_ATOMIC[::_1]) if
-              (TCC_EA_ATOMIC[::_1] != 0) else 0)
+            expr: ((TCC_EA0_ATOMIC_LEVEL[::_1] / TCC_EA0_ATOMIC[::_1]) if
+              (TCC_EA0_ATOMIC[::_1] != 0) else 0)
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_box
 
     - metric_table:
@@ -244,11 +244,11 @@ Panel Config:
           ea read stall - dram: L2-EA Read Stall - DRAM
         metric:
           "::_1":
-            ea read stall - io: AVG((TO_INT(TCC_EA_RDREQ_IO_CREDIT_STALL[::_1]) / $denom))
-            ea read stall - gmi: AVG((TO_INT(TCC_EA_RDREQ_GMI_CREDIT_STALL[::_1]) / $denom))
-            ea read stall - dram: AVG((TO_INT(TCC_EA_RDREQ_DRAM_CREDIT_STALL[::_1]) / $denom))
+            ea read stall - io: AVG((TO_INT(TCC_EA0_RDREQ_IO_CREDIT_STALL[::_1]) / $denom))
+            ea read stall - gmi: AVG((TO_INT(TCC_EA0_RDREQ_GMI_CREDIT_STALL[::_1]) / $denom))
+            ea read stall - dram: AVG((TO_INT(TCC_EA0_RDREQ_DRAM_CREDIT_STALL[::_1]) / $denom))
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_multiple_bar
 
     - metric_table:
@@ -262,10 +262,37 @@ Panel Config:
           ea write stall - starve: L2-EA Write Stall - Starve
         metric:
           "::_1":
-            ea write stall - io: AVG((TO_INT(TCC_EA_WRREQ_IO_CREDIT_STALL[::_1]) / $denom))
-            ea write stall - gmi: AVG((TO_INT(TCC_EA_WRREQ_GMI_CREDIT_STALL[::_1]) / $denom))
-            ea write stall - dram: AVG((TO_INT(TCC_EA_WRREQ_DRAM_CREDIT_STALL[::_1]) / $denom))
-            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[::_1]) / $denom))
+            ea write stall - io: AVG((TO_INT(TCC_EA0_WRREQ_IO_CREDIT_STALL[::_1]) / $denom))
+            ea write stall - gmi: AVG((TO_INT(TCC_EA0_WRREQ_GMI_CREDIT_STALL[::_1]) / $denom))
+            ea write stall - dram: AVG((TO_INT(TCC_EA0_WRREQ_DRAM_CREDIT_STALL[::_1]) / $denom))
+            ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA0_WRREQS_STALL[::_1]) / $denom))
           placeholder_range:
-            "::_1": 96
+            "::_1": $totalL2Banks
         cli_style: simple_multiple_bar
+
+    - metric_table:
+        id: 1811
+        title: L2 Tag Stall (cycles)
+        header:
+          metric: Metric
+          expr: Expression
+        metric:
+          "::_1":
+            expr: TCC_TAG_STALL[::_1]
+          placeholder_range:
+            "::_1": $totalL2Banks
+        cli_style: simple_box
+
+    - metric_table:
+        id: 1812
+        title: L2 Bubble (128B request)
+        header:
+          metric: Metric
+          expr: Expression
+        metric:
+          "::_1":
+            expr: TCC_BUBBLE[::_1]
+          placeholder_range:
+            "::_1": $totalL2Banks
+          # tips: Number of 128-byte read requests sent to EA
+        cli_style: simple_box

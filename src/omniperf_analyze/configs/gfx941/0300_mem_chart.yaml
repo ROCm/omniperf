@@ -77,19 +77,20 @@ Panel Config:
             tips:
           VGPR:
             #alias: vgpr_
-            value: ROUND(AVG(vgpr), 0)
+            value: ROUND(AVG(Arch_VGPR), 0)
             tips:
+          # Todo: add AGPRs
           SGPR:
             #alias: sgpr_
-            value: ROUND(AVG(sgpr), 0)
+            value: ROUND(AVG(SGPR), 0)
             tips:
           LDS Allocation:
             #alias: lds_alloc_
-            value: ROUND(AVG(lds), 0)
+            value: ROUND(AVG(LDS_Per_Workgroup), 0)
             tips:
           Scratch Allocation:
             #alias: scratch_alloc_
-            value: ROUND(AVG(scr), 0)
+            value: ROUND(AVG(Scratch_Per_Workitem), 0)
             tips:
           Wavefronts:
             #alias: wavefronts_
@@ -254,16 +255,16 @@ Panel Config:
           L2 Rd Lat:
             #alias: l2_rd_lat_
             value:
-              ROUND(AVG(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
-              if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None)),
-              0)
+              # ROUND(AVG(((TCP_TCC_READ_REQ_LATENCY_sum / (TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum))
+              # if ((TCP_TCC_READ_REQ_sum + TCP_TCC_ATOMIC_WITH_RET_REQ_sum) != 0) else None)),
+              # 0)
             tips:
           L2 Wr Lat:
             #alias: l2_wr_lat_
             value:
-              ROUND(AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum +
-              TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
-              != 0) else None)), 0)
+              # ROUND(AVG(((TCP_TCC_WRITE_REQ_LATENCY_sum / (TCP_TCC_WRITE_REQ_sum +
+              # TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)) if ((TCP_TCC_WRITE_REQ_sum + TCP_TCC_ATOMIC_WITHOUT_RET_REQ_sum)
+              # != 0) else None)), 0)
             tips:
 
           # ----------------------------------------

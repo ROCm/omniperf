@@ -82,8 +82,7 @@ def simple_multiple_bar(df, title=None):
     )
     sub_labels = t_df.transpose().to_dict("split")["index"]
     sub_labels.pop(0)
-    data = t_df.transpose().to_dict("split")["data"]
-    labels = data.pop(0)
+    data = t_df.astype(float).transpose().to_dict("split")["data"]
 
     # plt.simple_multiple_bar(labels, data, labels = sub_labels) #, width=w)
 
@@ -98,7 +97,7 @@ def simple_multiple_bar(df, title=None):
         h *= 300
 
     plt.plot_size(height=h)
-    plt.multiple_bar(labels, data, label=sub_labels, color=["blue", "blue+", 68, 63])
+    plt.multiple_bar(data.pop(0), data, labels=sub_labels, color=["blue", "blue+", 68, 63])
 
     # plt.show()
     return "\n" + plt.build() + "\n"
@@ -159,7 +158,7 @@ def simple_box(df, orientation="v", title=None):
         width=0.1,
         colors=["blue+", "orange+"],
         orientation=orientation,
-        hint="hint",
+        quintuples=True,
     )
     plt.theme("pro")
 

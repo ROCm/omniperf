@@ -82,22 +82,21 @@ def list_metrics(args):
     import pandas as pd
     from tabulate import tabulate
 
-    if args.list_metrics in file_io.supported_arch.keys():
+    if args.list_metrics in file_io.supported_devices.keys():
         arch = args.list_metrics
         if arch not in archConfigs.keys():
-            generate_config(arch, args.config_dir, args.list_kernels, args.filter_metrics)
-        print(
-            tabulate(
-                pd.DataFrame.from_dict(
-                    archConfigs[args.list_metrics].metric_list,
-                    orient="index",
-                    columns=["Metric"],
-                ),
-                headers="keys",
-                tablefmt="fancy_grid",
-            ),
-            file=output,
-        )
+            sys_info = file_io.load_sys_info(Path(args.path[0][0], "sysinfo.csv"))
+            generate_config(arch, args.config_dir, args.list_kernels, args.filter_metrics, sys_info.iloc[0])
+
+        for key, value in archConfigs[args.list_metrics].metric_list.items():
+            prefix = ""
+            if "." not in str(key):
+                prefix = ""
+            elif str(key).count(".") == 1:
+                prefix = "\t"
+            else:
+                prefix = "\t\t"
+            print(prefix + key, "->", value)
         sys.exit(0)
     else:
         print("Error: Unsupported arch")

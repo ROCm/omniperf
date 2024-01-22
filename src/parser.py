@@ -410,8 +410,8 @@ def parse(my_parser):
     analyze_group.add_argument(
         "--list-metrics",
         metavar="",
-        choices=["gfx906", "gfx908", "gfx90a"],
-        help="\t\tList metrics can be customized to analyze on specific arch:\n\t\t   gfx906\n\t\t   gfx908\n\t\t   gfx90a",
+        choices=["gfx906", "gfx908", "gfx90a", "gfx940", "gfx941", "gfx942"],
+        help="\t\tList metrics can be customized to analyze on specific arch:\n\t\t   gfx906\n\t\t   gfx908\n\t\t   gfx90a\n\t\t   gfx940\n\t\t   gfx941\n\t\t   gfx942",
     )
     analyze_group.add_argument(
         "-b",

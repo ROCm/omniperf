@@ -908,47 +908,14 @@ def main():
     # ANALYZE MODE
     ##############
     if args.mode == "analyze":
-        if args.list_metrics:
-            analyze(args)
-        else:
-            if args.path:
-                if ".." in str(args.path):
-                    throw_parse_error(
-                        my_parser,
-                        "Access denied. Cannot access parent directories in path ../",
-                    )
-                if args.filter_metrics and args.gui:
-                    throw_parse_error(
-                        my_parser,
-                        """
-                        omniperf analyze --path <workload_path> [analyze options]
-                        \n\n-------------------------------------------------------------------------------
-                        \nExamples:
-                        \n\tomniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
-                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
-                        \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
-                        \n-------------------------------------------------------------------------------\n
-                        \ntool: error: --gui cannot be used in combination with: -b/--metric
-                        """,
-                    )
-                print("\n--------\nAnalyze\n--------\n")
-                # Ensure absolute path
-                for dir in args.path:
-                    full_path = os.path.abspath(dir[0])
-                    dir[0] = full_path
-                    if not os.path.isdir(dir[0]):
-                        throw_parse_error(
-                            my_parser,
-                            "Error: invalid directory {}\nPlease try again.".format(
-                                dir[0]
-                            ),
-                        )
-                    isWorkloadEmpty(
-                        my_parser, dir[0]
-                    )  # Verify workload is valid before analyzing
 
-                analyze(args)
-            else:
+        if args.path:
+            if ".." in str(args.path):
+                throw_parse_error(
+                    my_parser,
+                    "Access denied. Cannot access parent directories in path ../",
+                )
+            if args.filter_metrics and args.gui:
                 throw_parse_error(
                     my_parser,
                     """
@@ -959,9 +926,40 @@ def main():
                     \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
                     \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
                     \n-------------------------------------------------------------------------------\n
-                    \ntool: error: the following arguments are required: -p/--path
+                    \ntool: error: --gui cannot be used in combination with: -b/--metric
                     """,
                 )
+            print("\n--------\nAnalyze\n--------\n")
+            # Ensure absolute path
+            for dir in args.path:
+                full_path = os.path.abspath(dir[0])
+                dir[0] = full_path
+                if not os.path.isdir(dir[0]):
+                    throw_parse_error(
+                        my_parser,
+                        "Error: invalid directory {}\nPlease try again.".format(
+                            dir[0]
+                        ),
+                    )
+                isWorkloadEmpty(
+                    my_parser, dir[0]
+                )  # Verify workload is valid before analyzing
+
+            analyze(args)
+        else:
+            throw_parse_error(
+                my_parser,
+                """
+                omniperf analyze --path <workload_path> [analyze options]
+                \n\n-------------------------------------------------------------------------------
+                \nExamples:
+                \n\tomniperf analyze -p workloads/vcopy/mi200/ --list-metrics gfx90a
+                \n\tomniperf analyze -p workloads/mixbench/mi200/ --filter-dispatch-ids 12 34 --decimal 3
+                \n\tomniperf analyze -p workloads/mixbench/mi200/ --gui
+                \n-------------------------------------------------------------------------------\n
+                \ntool: error: the following arguments are required: -p/--path
+                """,
+            )
 
     sys.exit(0)  # Indicate successful on exit
 

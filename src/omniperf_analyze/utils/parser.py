@@ -433,6 +433,11 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
             for type, data_config in data_source.items():
                 if type == "metric_table":
                     headers = ["Dispatch_ID"]
+                    data_source_idx = str(data_config["id"] // 100)
+                    if (data_source_idx != 0 or
+                        data_source_idx in filter_metrics
+                    ):
+                        metric_list[data_source_idx] = panel["title"]
 
                     if (
                         "cli_style" in data_config
@@ -480,6 +485,8 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                         ):
                             values.append(metric_idx)
                             values.append(key)
+
+                            metric_list[data_source_idx] = data_config["title"]
 
                             if (
                                 "cli_style" in data_config

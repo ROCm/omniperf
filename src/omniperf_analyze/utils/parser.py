@@ -432,7 +432,7 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
         for data_source in panel["data source"]:
             for type, data_config in data_source.items():
                 if type == "metric_table":
-                    headers = ["Index"]
+                    headers = ["Dispatch_ID"]
 
                     if (
                         "cli_style" in data_config
@@ -526,7 +526,7 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                         metric_list[metric_idx] = key.replace(" ", "_")
                         i += 1
 
-                    df.set_index("Index", inplace=True)
+                    df.set_index("Dispatch_ID", inplace=True)
                     # df.set_index('Metric', inplace=True)
                     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
                 elif type == "raw_csv_table":
@@ -755,7 +755,7 @@ def apply_filters(workload, is_gui, debug):
 
     if workload.filter_gpu_ids:
         ret_df = ret_df.loc[
-            ret_df[schema.pmc_perf_file_prefix]["gpu-id"]
+            ret_df[schema.pmc_perf_file_prefix]["GPU_ID"]
             .astype(str)
             .isin([workload.filter_gpu_ids])
         ]
@@ -808,11 +808,11 @@ def apply_filters(workload, is_gui, debug):
         if ">" in workload.filter_dispatch_ids[0]:
             m = re.match("\> (\d+)", workload.filter_dispatch_ids[0])
             ret_df = ret_df[
-                ret_df[schema.pmc_perf_file_prefix]["Index"] > int(m.group(1))
+                ret_df[schema.pmc_perf_file_prefix]["Dispatch_ID"] > int(m.group(1))
             ]
         else:
             ret_df = ret_df.loc[
-                ret_df[schema.pmc_perf_file_prefix]["Index"]
+                ret_df[schema.pmc_perf_file_prefix]["Dispatch_ID"]
                 .astype(str)
                 .isin(workload.filter_dispatch_ids)
             ]

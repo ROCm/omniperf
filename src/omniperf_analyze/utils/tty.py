@@ -80,10 +80,10 @@ def show_all(args, runs, archConfigs, output):
                             if (
                                 type == "raw_csv_table"
                                 and table_config["source"] == "pmc_kernel_top.csv"
-                                and header == "KernelName"
+                                and header == "Kernel_Name"
                             ):
                                 # NB: the width of kernel name might depend on the header of the table.
-                                adjusted_name = base_df["KernelName"].apply(
+                                adjusted_name = base_df["Kernel_Name"].apply(
                                     lambda x: string_multiple_lines(x, 40, 3)
                                 )
                                 df = pd.concat([df, adjusted_name], axis=1)
@@ -242,7 +242,7 @@ def show_kernels(args, runs, archConfigs, output):
                     # NB:
                     #   For pmc_kernel_top.csv, have to sort here if not
                     #   sorted when load_table_data.
-                    df = pd.concat([df, single_df["KernelName"]], axis=1)
+                    df = pd.concat([df, single_df["Kernel_Name"]], axis=1)
 
     print(
         tabulate(

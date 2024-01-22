@@ -193,7 +193,7 @@ def plot_roof(roof_details, roof_data, mem_level, verbose):
 def plot_application(sortType, ret_df, verbose):
     df = ret_df["pmc_perf"]
     # Sort by top kernels or top dispatches?
-    df = df.sort_values(by=["KernelName"])
+    df = df.sort_values(by=["Kernel_Name"])
     df = df.reset_index(drop=True)
 
     total_flops = (
@@ -226,9 +226,9 @@ def plot_application(sortType, ret_df, verbose):
         if idx + 1 == df.shape[0]:
             at_end = True
         else:
-            next_kernelName = df["KernelName"][idx + 1]
+            next_kernelName = df["Kernel_Name"][idx + 1]
 
-        kernelName = df["KernelName"][idx]
+        kernelName = df["Kernel_Name"][idx]
         try:
             total_flops += (
                 (

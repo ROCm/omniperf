@@ -47,12 +47,12 @@ def kernel_name_shortener(workload_dir, level):
         global cache
 
         columnName = ""
-        if "KernelName" in df:
-            columnName = "KernelName"
+        if "Kernel_Name" in df:
+            columnName = "Kernel_Name"
         if "Name" in df:
             columnName = "Name"
 
-        if columnName == "KernelName" or columnName == "Name":
+        if columnName == "Kernel_Name" or columnName == "Name":
             # loop through all indices
             for index in df.index:
                 original_name = df.loc[index, columnName]

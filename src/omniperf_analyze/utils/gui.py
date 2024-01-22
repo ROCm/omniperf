@@ -49,7 +49,7 @@ pd.set_option(
     "mode.chained_assignment", None
 )  # ignore SettingWithCopyWarning pandas warning
 
-HIDDEN_SECTIONS = ["Memory Chart Analysis", "Kernels"]
+HIDDEN_SECTIONS = ["Memory Chart", "Kernels"]
 HIDDEN_COLUMNS = ["Tips", "coll_level"]
 IS_DARK = True  # default dark theme
 
@@ -58,11 +58,10 @@ full_width_elmt = {1801}
 
 # Define different types of bar charts
 barchart_elements = {
-    # Group table ids by chart type
     "instr_mix": [1001, 1002],
     "multi_bar": [1604, 1704],
     "sol": [1101, 1201, 1301, 1401, 1601, 1701],
-    "l2_cache_per_chan": [1802, 1803],
+    #"l2_cache_per_chan": [1802, 1803]
 }
 
 
@@ -155,7 +154,7 @@ def build_bar_chart(display_df, table_config, norm_filt):
     # Insr Mix bar chart
     if table_config["id"] in barchart_elements["instr_mix"]:
         display_df["Avg"] = [
-            x.astype(int) if x != "" else int(0) for x in display_df["Avg"]
+            int(x) if x != "" else int(0) for x in display_df["Avg"]
         ]
         df_unit = display_df["Unit"][0]
         d_figs.append(
@@ -173,7 +172,7 @@ def build_bar_chart(display_df, table_config, norm_filt):
     # Multi bar chart
     elif table_config["id"] in barchart_elements["multi_bar"]:
         display_df["Avg"] = [
-            x.astype(int) if x != "" else int(0) for x in display_df["Avg"]
+            int(x) if x != "" else int(0) for x in display_df["Avg"]
         ]
         df_unit = display_df["Unit"][0]
         nested_bar = multi_bar_chart(table_config["id"], display_df)
@@ -194,37 +193,37 @@ def build_bar_chart(display_df, table_config, norm_filt):
                 .update_layout(title_x=0.5)
             )
     # L2 Cache per channel
-    elif table_config["id"] in barchart_elements["l2_cache_per_chan"]:
-        nested_bar = {}
-        channels = []
-        for colName, colData in display_df.items():
-            if colName == "Channel":
-                channels = list(colData.values)
-            else:
-                display_df[colName] = [
-                    x.astype(float) if x != "" and x != None else float(0)
-                    for x in display_df[colName]
-                ]
-                nested_bar[colName] = list(display_df[colName])
-        for group, metric in nested_bar.items():
-            d_figs.append(
-                px.bar(
-                    title=group[0 : group.rfind("(")],
-                    x=channels,
-                    y=metric,
-                    labels={
-                        "x": "Channel",
-                        "y": group[group.rfind("(") + 1 : len(group) - 1].replace(
-                            "per", norm_filt
-                        ),
-                    },
-                ).update_yaxes(rangemode="nonnegative")
-            )
+    # elif table_config["id"] in barchart_elements["l2_cache_per_chan"]:
+    #     nested_bar = {}
+    #     channels = []
+    #     for colName, colData in display_df.items():
+    #         if colName == "Channel":
+    #             channels = list(colData.values)
+    #         else:
+    #             display_df[colName] = [
+    #                 x.astype(float) if x != "" and x != None else float(0)
+    #                 for x in display_df[colName]
+    #             ]
+    #             nested_bar[colName] = list(display_df[colName])
+    #     for group, metric in nested_bar.items():
+    #         d_figs.append(
+    #             px.bar(
+    #                 title=group[0 : group.rfind("(")],
+    #                 x=channels,
+    #                 y=metric,
+    #                 labels={
+    #                     "x": "Channel",
+    #                     "y": group[group.rfind("(") + 1 : len(group) - 1].replace(
+    #                         "per", norm_filt
+    #                     ),
+    #                 },
+    #             ).update_yaxes(rangemode="nonnegative")
+    #         )
 
     # Speed-of-light bar chart
     elif table_config["id"] in barchart_elements["sol"]:
         display_df["Value"] = [
-            x.astype(float) if x != "" else float(0) for x in display_df["Value"]
+            float(x) if x != "" else float(0) for x in display_df["Value"]
         ]
         if table_config["id"] == 1701:
             # special layout for L2 Cache SOL
@@ -482,14 +481,14 @@ def build_layout(
         # Only display basic metrics if no filters are applied
         if not (disp_filt or kernel_filter or gcd_filter):
             temp = {}
-            keep = [1, 201, 101, 1901]
+            keep = [1, 201, 101, 301]
             for key in base_data[base_run].dfs:
                 if keep.count(key) != 0:
                     temp[key] = base_data[base_run].dfs[key]
 
             base_data[base_run].dfs = temp
             temp = {}
-            keep = [0, 100, 200, 1900]
+            keep = [0, 100, 200, 300]
             for key in panel_configs:
                 if keep.count(key) != 0:
                     temp[key] = panel_configs[key]
@@ -501,7 +500,7 @@ def build_layout(
 
         div_children = []
         div_children.append(
-            get_memchart(panel_configs[1900]["data source"], base_data[base_run])
+            get_memchart(panel_configs[300]["data source"], base_data[base_run])
         )
         # append roofline section
         has_roofline = os.path.isfile(path_to_dir + "/roofline.csv")
@@ -563,7 +562,7 @@ def build_layout(
                             if (
                                 len(d_figs) > 2
                                 and not table_config["id"]
-                                in barchart_elements["l2_cache_per_chan"]
+                                # in barchart_elements["l2_cache_per_chan"]
                             ):
                                 temp_obj = []
                                 for fig in d_figs:

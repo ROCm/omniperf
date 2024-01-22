@@ -802,7 +802,7 @@ def apply_filters(workload, is_gui, debug):
         # NB: support ignoring the 1st n dispatched execution by '> n'
         #     The better way may be parsing python slice string
         for d in workload.filter_dispatch_ids:
-            if int(d) >= len(ret_df):  # subtract 2 bc of the two header rows
+            if int(d) >= len(ret_df)+1: #TODO: Patch issue in rocprofv2 with deprecated 0 based dispatch indexing
                 print("{} is an invalid dispatch id.".format(d))
                 sys.exit(1)
         if ">" in workload.filter_dispatch_ids[0]:

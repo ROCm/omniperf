@@ -910,7 +910,6 @@ def main():
     # ANALYZE MODE
     ##############
     if args.mode == "analyze":
-
         if args.path:
             if ".." in str(args.path):
                 throw_parse_error(
@@ -939,9 +938,7 @@ def main():
                 if not os.path.isdir(dir[0]):
                     throw_parse_error(
                         my_parser,
-                        "Error: invalid directory {}\nPlease try again.".format(
-                            dir[0]
-                        ),
+                        "Error: invalid directory {}\nPlease try again.".format(dir[0]),
                     )
                 isWorkloadEmpty(
                     my_parser, dir[0]

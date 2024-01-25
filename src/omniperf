@@ -489,6 +489,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         or os.path.basename(fname) == "pmc_perf_14.txt"
         or os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
+        or os.path.basename(fname) == "pmc_perf_17.txt"
     ):
         # FIXME: remove all hack code specific to pmc_perf_*.txt
         new_env = os.environ.copy()
@@ -519,6 +520,7 @@ def run_prof(fname, workload_dir, perfmon_dir, cmd, target, log_file, verbose):
         or os.path.basename(fname) == "pmc_perf_14.txt"
         or os.path.basename(fname) == "pmc_perf_15.txt"
         or os.path.basename(fname) == "pmc_perf_16.txt"
+        or os.path.basename(fname) == "pmc_perf_17.txt"
     ):
         # FIXME: remove all hack code specific to pmc_perf_*.txt
         new_env = os.environ.copy()

@@ -1418,6 +1418,10 @@ This section gives a breakdown of what types of requests in a kernel caused a st
 Some AMD Instinct(tm) MI accelerators, e.g., the MI250X, [feature coherent CPU↔accelerator connections built using AMD Infinity Fabric(tm)](https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf)
 ```
 
+```{warning}
+On current CDNA accelerators and GCN GPUs, these L2↔Fabric stalls can be undercounted in some circumstances.
+```
+
 (SE)=
 ## Shader Engine (SE)
 

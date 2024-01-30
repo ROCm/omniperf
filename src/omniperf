@@ -26,6 +26,7 @@
 
 import sys
 from omniperf_base import Omniperf
+from utils.utils import console_error
 
 def main():
 
@@ -42,7 +43,7 @@ def main():
     elif mode == "analyze":
         omniperf.run_analysis()
     else:
-        omniperf.error("Unsupported execution mode")
+        console_error("Unsupported execution mode")
 
     sys.exit(0)
 

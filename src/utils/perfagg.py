@@ -622,7 +622,11 @@ def flatten_tcc_info_across_hbm_stacks(file, stack_num, tcc_channel_per_stack):
             # filter the channel index only
             p = re.compile(r"\[(\d+)\]")
             # pick up the 1st element only
-            r = lambda match: "[" + str(int(match.group(1)) + i * tcc_channel_per_stack) + "]"
+            r = (
+                lambda match: "["
+                + str(int(match.group(1)) + i * tcc_channel_per_stack)
+                + "]"
+            )
             tcc_cols_in_group[i].append(re.sub(pattern=p, repl=r, string=col))
 
     for i in range(0, stack_num):

@@ -31,6 +31,7 @@ import socket
 import subprocess
 import importlib
 import logging
+from math import ceil
 
 from dataclasses import dataclass
 from pathlib import Path as path
@@ -103,7 +104,6 @@ class MachineSpecs:
             memory_partition:   {self.memory_partition}
         """
         )
-
 
 def gpuinfo():
     from omniperf_base import SUPPORTED_ARCHS
@@ -195,10 +195,10 @@ def gpuinfo():
         error("Arch %s marked as supported, but couldn't find class implementation %s." % (gpu_arch, e))
     
     # load arch specific info
+    gpu_info['numSQC'] = str(total_sqc(gpu_arch, gpu_info['num_CU'], gpu_info['num_SE']))
     try:
         gpu_name = list(SUPPORTED_ARCHS[gpu_arch].keys())[0].upper()
         gpu_info['L2Banks'] = str(soc_module.SOC_PARAM['L2Banks'])
-        gpu_info['numSQC'] = str(soc_module.SOC_PARAM['numSQC'])
         gpu_info['LDSBanks'] = str(soc_module.SOC_PARAM['LDSBanks'])
         gpu_info['numPipes'] = str(soc_module.SOC_PARAM['numPipes'])
     except KeyError as e:
@@ -245,6 +245,13 @@ def search(pattern, string):
         return m.group(1)
     return None
 
+def total_sqc(archname, numCUs, numSEs):
+    cu_per_se = float(numCUs) / float(numSEs)
+    sq_per_se = cu_per_se / 2
+    if archname.lower() in ['mi50', 'mi100']:
+        sq_per_se = cu_per_se / 3
+    sq_per_se = ceil(sq_per_se)
+    return int(sq_per_se) * int(numSEs)
 
 def get_machine_specs(devicenum):
     cpuinfo = path("/proc/cpuinfo").read_text()

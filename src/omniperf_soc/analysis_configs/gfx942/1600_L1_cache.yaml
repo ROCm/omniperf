@@ -25,8 +25,8 @@ Panel Config:
             unit: Pct of Peak
             tips:
           Bandwidth:
-            value: ((100 * AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / (End_Timestamp - Start_Timestamp))))
-              / ((($sclk / 1000) * 64) * $numCU))
+            value: ((100 * AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / (End_Timestamp - Start_Timestamp))))
+              / ((($sclk / 1000) * 128) * $numCU))
             unit: Pct of Peak
             tips:
           Utilization:
@@ -116,9 +116,9 @@ Panel Config:
             unit: (Req  + $normUnit)
             tips:
           Cache BW:
-            avg: AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / $denom))
-            min: MIN(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / $denom))
-            max: MAX(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / $denom))
+            avg: AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / $denom))
+            min: MIN(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / $denom))
+            max: MAX(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / $denom))
             unit: (Bytes + $normUnit)
             tips:
           Cache Hit Rate:

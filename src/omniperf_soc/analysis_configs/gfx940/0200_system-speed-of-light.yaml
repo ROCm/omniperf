@@ -166,11 +166,11 @@ Panel Config:
               None))
             tips: 
           vL1D Cache BW:
-            value: AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / (End_Timestamp - Start_Timestamp)))
+            value: AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / (End_Timestamp - Start_Timestamp)))
             unit: GB/s
-            peak: ((($sclk / 1000) * 64) * $numCU)
-            pop: ((100 * AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 64) / (End_Timestamp - Start_Timestamp))))
-              / ((($sclk / 1000) * 64) * $numCU))
+            peak: ((($sclk / 1000) * 128) * $numCU)
+            pop: ((100 * AVG(((TCP_TOTAL_CACHE_ACCESSES_sum * 128) / (End_Timestamp - Start_Timestamp))))
+              / ((($sclk / 1000) * 128) * $numCU))
             tips: 
           L2 Cache Hit Rate:
             value: AVG((((100 * TCC_HIT_sum) / (TCC_HIT_sum + TCC_MISS_sum)) if ((TCC_HIT_sum

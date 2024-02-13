@@ -358,6 +358,8 @@ def get_machine_specs(devicenum):
     memory_partition = search(
         r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"])
     )
+    if memory_partition == None:
+        memory_partition = "NA"
 
     totalL2Banks = total_l2_banks(
         gpu_info['gpu_name'], int(gpu_info['L2Banks']), memory_partition)

@@ -107,27 +107,27 @@ Panel Config:
             unit: Instr/cycle
             tips: 
           SALU Utilization:
-            avg: AVG((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU))
-            min: MIN((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU))
-            max: MAX((((100 * SQ_ACTIVE_INST_SCA) / GRBM_GUI_ACTIVE) / $numCU))
+            avg: AVG((((100 * SQ_ACTIVE_INST_SCA) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            min: MIN((((100 * SQ_ACTIVE_INST_SCA) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            max: MAX((((100 * SQ_ACTIVE_INST_SCA) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
             unit: pct
             tips: 
           VALU Utilization:
-            avg: AVG((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU))
-            min: MIN((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU))
-            max: MAX((((100 * SQ_ACTIVE_INST_VALU) / GRBM_GUI_ACTIVE) / $numCU))
+            avg: AVG((((100 * SQ_ACTIVE_INST_VALU) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            min: MIN((((100 * SQ_ACTIVE_INST_VALU) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            max: MAX((((100 * SQ_ACTIVE_INST_VALU) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
             unit: pct
             tips: 
           VMEM Utilization:
-            avg: AVG((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / GRBM_GUI_ACTIVE) / $numCU))
-            min: MIN((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / GRBM_GUI_ACTIVE) / $numCU))
-            max: MAX((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / GRBM_GUI_ACTIVE) / $numCU))
+            avg: AVG((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            min: MIN((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            max: MAX((((100 * (SQ_ACTIVE_INST_FLAT+SQ_ACTIVE_INST_VMEM)) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
             unit: pct
             tips: 
           Branch Utilization:
-            avg: AVG((((100 * SQ_ACTIVE_INST_MISC) / GRBM_GUI_ACTIVE) / $numCU))
-            min: MIN((((100 * SQ_ACTIVE_INST_MISC) / GRBM_GUI_ACTIVE) / $numCU))
-            max: MAX((((100 * SQ_ACTIVE_INST_MISC) / GRBM_GUI_ACTIVE) / $numCU))
+            avg: AVG((((100 * SQ_ACTIVE_INST_MISC) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            min: MIN((((100 * SQ_ACTIVE_INST_MISC) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
+            max: MAX((((100 * SQ_ACTIVE_INST_MISC) / $GRBM_GUI_ACTIVE_PER_XCD) / $numCU))
             unit: pct
             tips: 
           VALU Active Threads:
@@ -140,9 +140,9 @@ Panel Config:
             unit: Threads
             tips: 
           MFMA Utilization:
-            avg: AVG(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE)))
-            min: MIN(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE)))
-            max: MAX(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * GRBM_GUI_ACTIVE)))
+            avg: AVG(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * $GRBM_GUI_ACTIVE_PER_XCD)))
+            min: MIN(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * $GRBM_GUI_ACTIVE_PER_XCD)))
+            max: MAX(((100 * SQ_VALU_MFMA_BUSY_CYCLES) / ((4 * $numCU) * $GRBM_GUI_ACTIVE_PER_XCD)))
             unit: pct
             tips: 
           MFMA Instr Cycles:

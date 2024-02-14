@@ -69,6 +69,7 @@ class MachineSpecs:
     hbmBW: str
     compute_partition: str
     memory_partition: str
+    XCDs: str
 
     def __str__(self):
         return dedent(
@@ -105,6 +106,7 @@ class MachineSpecs:
             hbmBW:              {self.hbmBW} MB/s
             compute_partition:  {self.compute_partition}
             memory_partition:   {self.memory_partition}
+            XCCs:               {self.XCCs}
         """
         )
 
@@ -130,7 +132,7 @@ def gpuinfo():
         "LDSBanks": None,
         "numSQC": None,
         "compute_partition": None,
-        "memory_partition": None,
+        "memory_partition": None
     }
 
     # we get the max mclk from rocm-smi --showmclkrange
@@ -273,6 +275,39 @@ def total_l2_banks(archname, L2Banks, memory_partition):
             archname, memory_partition)
     return totalL2Banks
 
+def total_xcds(archname, compute_partition):
+    # check MI300 has a valid compute partition
+    mi300a_archs = ["mi300a_a0", "mi300a_a1"]
+    mi300x_archs = ["mi300x_a0", "mi300x_a1"]
+    if archname.lower() in mi300a_archs + mi300x_archs \
+        and compute_partition == "NA":
+            print("Error: Invalid compute partition found for {}".format(archname))
+            sys.exit(1)
+    if archname.lower() not in mi300a_archs + mi300x_archs:
+        return 1
+    # from the whitepaper
+    # https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/white-papers/amd-cdna-3-white-paper.pdf
+    if compute_partition.lower() == "spx":
+        if archname.lower() in mi300a_archs:
+            return 6
+        if archname.lower() in mi300x_archs:
+            return 8
+    if compute_partition.lower() == "tpx":
+        if archname.lower() in mi300a_archs:
+            return 2
+    if compute_partition.lower() == "dpx":
+        if archname.lower() in mi300x_archs:
+            return 4
+    if compute_partition.lower() == "qpx":
+        if archname.lower() in mi300x_archs:
+            return 2
+    if compute_partition.lower() == "cpx":
+        if archname.lower() in mi300x_archs:
+            return 2
+    print("Error: Unknown compute partition / arch found for {} / {}".format(
+        compute_partition, archname))
+    sys.exit(1)
+
 def get_machine_specs(devicenum):
     cpuinfo = path("/proc/cpuinfo").read_text()
     meminfo = path("/proc/meminfo").read_text()
@@ -357,6 +392,7 @@ def get_machine_specs(devicenum):
     if memory_partition == None:
         memory_partition = "NA"
 
+    xcds = str(total_xcds(gpu_info['gpu_name'], compute_partition))
     totalL2Banks = total_l2_banks(
         gpu_info['gpu_name'], int(gpu_info['L2Banks']), memory_partition)
     hbmchannels = totalL2Banks
@@ -400,6 +436,7 @@ def get_machine_specs(devicenum):
         hbmBW,
         compute_partition,
         memory_partition,
+        xcds
     )
 
 

@@ -80,6 +80,9 @@ build_in_vars = {
               0) / $maxWavesPerCU) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) \
               / GRBM_GUI_ACTIVE)), 0), $maxWavesPerCU), 8)), $numCU))",
     "kernelBusyCycles": "ROUND(AVG((((End_Timestamp - Start_Timestamp) / 1000) * $sclk)), 0)",
+    "GRBM_GUI_ACTIVE_PER_XCD": "(GRBM_GUI_ACTIVE / $XCDs)",
+    "GRBM_COUNT_PER_XCD": "(GRBM_COUNT / $XCDs)",
+    "GRBM_SPI_BUSY_PER_XCD" : "(GRBM_SPI_BUSY / $XCDs)"
 }
 
 supported_call = {
@@ -693,6 +696,7 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
     ammolite__freq = sys_info.cur_sclk  # todo: check do we still need it
     ammolite__mclk = sys_info.cur_mclk
     ammolite__sclk = sys_info.sclk
+    ammolite__XCDs = sys_info.XCDs
     ammolite__maxWavesPerCU = sys_info.maxWavesPerCU
     ammolite__hbmBW = sys_info.hbmBW
     ammolite__totalL2Banks = calc_builtin_var("$totalL2Banks", sys_info)
@@ -714,6 +718,9 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
 
     ammolite__numActiveCUs = ammolite__build_in["numActiveCUs"]
     ammolite__kernelBusyCycles = ammolite__build_in["kernelBusyCycles"]
+    ammolite__GRBM_GUI_ACTIVE_PER_XCD = ammolite__build_in["GRBM_GUI_ACTIVE_PER_XCD"]
+    ammolite__GRBM_COUNT_PER_XCD = ammolite__build_in["GRBM_COUNT_PER_XCD"]
+    ammolite__GRBM_SPI_BUSY_PER_XCD = ammolite__build_in["GRBM_SPI_BUSY_PER_XCD"]
 
     # Hmmm... apply + lambda should just work
     # df['Value'] = df['Value'].apply(lambda s: eval(compile(str(s), '<string>', 'eval')))
@@ -1004,6 +1011,7 @@ def correct_sys_info(df, specs_correction):
         "hbmBW": "hbmBW",
         "compute_partition": "compute_partition",
         "memory_partition": "memory_partition",
+        "XCDs": "XCDs"
     }
 
     # todo: more err checking for string specs_correction

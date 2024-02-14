@@ -299,7 +299,8 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof, roof
     header += "command,"
     header += "host_name,host_cpu,sbios,host_distro,host_kernel,host_rocmver,date,"
     header += "gpu_soc,vbios,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,numPipes,hbmBW,compute_partition,memory_partition,"
+    header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,totalL2Banks,LDSBanks,name,numSQC,numPipes,"
+    header += "hbmBW,compute_partition,memory_partition,"
     header += "ip_blocks\n"
     sysinfo.write(header)
 
@@ -336,11 +337,12 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof, roof
     param += [
         mspec.L1,
         mspec.L2,
-        mspec.cur_mclk,
-        mspec.cur_mclk,
+        mspec.max_sclk,
+        mspec.max_mclk,
         mspec.cur_sclk,
         mspec.cur_mclk,
         mspec.L2Banks,
+        mspec.totalL2Banks,
         mspec.LDSBanks,
         mspec.GPU,
         mspec.numSQC,
@@ -351,7 +353,7 @@ def gen_sysinfo(workload_name, workload_dir, ip_blocks, app_cmd, skip_roof, roof
     ]
 
     blocks = []
-    if mspec.GPU == "gfx90a" and (not skip_roof):
+    if mspec.arch == "gfx90a" and (not skip_roof):
         blocks.append("roofline")
 
     # ip block info

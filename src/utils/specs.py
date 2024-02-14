@@ -36,7 +36,7 @@ from math import ceil
 from dataclasses import dataclass
 from pathlib import Path as path
 from textwrap import dedent
-from utils.utils import error
+from utils.utils import error, get_hbm_stack_num
 
 @dataclass
 class MachineSpecs:
@@ -58,10 +58,12 @@ class MachineSpecs:
     wave_size: str
     workgroup_max_size: str
     max_sclk: str
+    max_mclk: str
     cur_sclk: str
     cur_mclk: str
     max_waves_per_cu: str
     L2Banks: str
+    totalL2Banks: str
     LDSBanks: str
     numSQC: str
     numPipes: str
@@ -87,6 +89,7 @@ class MachineSpecs:
             L1:                 {self.L1} KB
             L2:                 {self.L2} KB
             max_sclk:           {self.max_sclk} MHz
+            max_mclk:           {self.max_mclk} MHz
             cur_sclk:           {self.cur_sclk} MHz
             cur_mclk:           {self.cur_mclk} MHz
             CU:                 {self.CU}
@@ -96,6 +99,7 @@ class MachineSpecs:
             workgroup_max_size: {self.workgroup_max_size}
             max_waves_per_cu:   {self.max_waves_per_cu}
             L2Banks:            {self.L2Banks}
+            totalL2Banks:       {self.totalL2Banks}
             LDSBanks:           {self.LDSBanks}
             numSQC:             {self.numSQC}
             numPipes:           {self.numPipes}
@@ -114,6 +118,7 @@ def gpuinfo():
         "L1": None,
         "L2": None,
         "max_sclk": None,
+        "max_mclk": None,
         "num_CU": None,
         "num_SIMD": None,
         "numPipes": None,
@@ -127,6 +132,10 @@ def gpuinfo():
         "compute_partition": None,
         "memory_partition": None,
     }
+
+    # we get the max mclk from rocm-smi --showmclkrange
+    rocm_smi_mclk = run(["rocm-smi", "--showmclkrange"], exit_on_error=True)
+    gpu_info['max_mclk'] = search(r'(\d+)Mhz\s*$', rocm_smi_mclk)
 
     # Fixme: find better way to differentiate cards, GPU vs APU, etc.
     rocminfo_full = run(["rocminfo"])
@@ -230,9 +239,10 @@ def run(cmd,exit_on_error=False):
     p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     if exit_on_error:
-        if cmd[0] == "rocm-smi" and p.returncode != 0:
-            logging.error("ERROR: No GPU detected. Unable to load rocm-smi")
-            sys.exit(1)
+        if cmd[0] == "rocm-smi":
+            if p.returncode != 2 and p.returncode != 0:
+                logging.error("ERROR: No GPU detected. Unable to load rocm-smi")
+                sys.exit(1)
         elif p.returncode != 0:
             logging.error("ERROR: command [%s] failed with non-zero exit code" % cmd)
             sys.exit(1)
@@ -245,6 +255,7 @@ def search(pattern, string):
         return m.group(1)
     return None
 
+
 def total_sqc(archname, numCUs, numSEs):
     cu_per_se = float(numCUs) / float(numSEs)
     sq_per_se = cu_per_se / 2
@@ -252,6 +263,24 @@ def total_sqc(archname, numCUs, numSEs):
         sq_per_se = cu_per_se / 3
     sq_per_se = ceil(sq_per_se)
     return int(sq_per_se) * int(numSEs)
+
+def total_l2_banks(archname, L2Banks, memory_partition):
+    # Fixme: support all supported partitioning mode
+    # Fixme: "name" is a bad name!
+    totalL2Banks = L2Banks
+    if (
+        archname.lower() == "mi300a_a0"
+        or archname.lower() == "mi300a_a1"
+    ):
+        totalL2Banks = L2Banks * get_hbm_stack_num(
+            archname, memory_partition)
+    elif (
+        archname.lower() == "mi300x_a0"
+        or archname.lower() == "mi300x_a1"
+    ):
+        totalL2Banks = L2Banks * get_hbm_stack_num(
+            archname, memory_partition)
+    return totalL2Banks
 
 def get_machine_specs(devicenum):
     cpuinfo = path("/proc/cpuinfo").read_text()
@@ -317,20 +346,13 @@ def get_machine_specs(devicenum):
 
     rocm_version = rocm_ver.strip()
 
-    freq = search(device, rocm_smi).split()
-    cur_sclk = search(r"([0-9]+)", freq[2])
-    if cur_sclk is None:
-        cur_sclk = ""
-
-    cur_mclk = search(r"([0-9]+)", freq[3])
-    if cur_mclk is None:
-        cur_mclk = 0
+    # these are just max's now, because the parsing was broken and this was inconsistent
+    # with how we use the clocks elsewhere (all max, all the time)
+    cur_sclk = gpu_info['max_sclk']
+    cur_mclk = gpu_info['max_mclk']
 
     # FIXME with device
     vbios = search(r"VBIOS version: (.*?)$", run(["rocm-smi", "-v"], exit_on_error=True))
-
-    # FIXME with spec
-    hbmBW = str(int(cur_mclk) / 1000 * 4096 / 8 * 2)
 
     compute_partition = search(
         r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
@@ -343,6 +365,18 @@ def get_machine_specs(devicenum):
     )
     if memory_partition == None:
         memory_partition = "NA"
+
+    totalL2Banks = total_l2_banks(
+        gpu_info['gpu_name'], int(gpu_info['L2Banks']), memory_partition)
+    hbmchannels = totalL2Banks
+    if (
+        gpu_info['gpu_name'].lower() == "mi300a_a0"
+        or gpu_info['gpu_name'].lower() == "mi300a_a1"
+    ) and memory_partition.lower() == "nps1":
+        # we have an extra 32 channels for the CCD
+        hbmchannels += 32
+    hbmBW = str(int(gpu_info['max_mclk']) / 1000 * 32 * hbmchannels)
+    totalL2Banks = str(totalL2Banks)
 
     return MachineSpecs(
         hostname,
@@ -363,10 +397,12 @@ def get_machine_specs(devicenum):
         gpu_info['wave_size'],
         gpu_info['grp_size'],
         gpu_info['max_sclk'],
+        gpu_info['max_mclk'],
         cur_sclk,
         cur_mclk,
         gpu_info['max_waves_per_cu'],
         gpu_info['L2Banks'],
+        totalL2Banks,
         gpu_info['LDSBanks'],
         gpu_info['numSQC'],
         gpu_info['numPipes'],

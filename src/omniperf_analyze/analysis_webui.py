@@ -166,7 +166,7 @@ class webui_analysis(OmniAnalyze_Base):
                 # update roofline for visualization in GUI
                 self.get_socs()[self.arch].analysis_setup(
                     roofline_parameters={
-                        'path_to_dir': self.dest_dir,
+                        'workload_dir': self.dest_dir,
                         'device_id': 0,
                         'sort_type': 'kernels',
                         'mem_level': 'ALL',
@@ -282,7 +282,7 @@ class webui_analysis(OmniAnalyze_Base):
             # create the loaded kernel stats
             parser.load_kernel_top(self._runs[self.dest_dir], self.dest_dir)
             # set architecture
-            self.arch = self._runs[self.dest_dir].sys_info.iloc[0]['gpu_soc']
+            self.arch = self._runs[self.dest_dir].sys_info.iloc[0]['GPU']
             
         else:
             self.error("Multiple runs not yet supported in GUI. Retry without --gui flag.")
@@ -306,6 +306,7 @@ class webui_analysis(OmniAnalyze_Base):
             input_filters,
             self._arch_configs[self.arch],
         )
+        # Here I expect that self._runs[<path>].raw_pmc will no longer be populated
         if args.random_port:
             self.app.run_server(debug=False, host="0.0.0.0", port=random.randint(1024, 49151))
         else:

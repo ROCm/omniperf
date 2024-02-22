@@ -64,7 +64,36 @@ ALL_CSVS = [
     "sysinfo.csv",
     "timestamps.csv",
 ]
-ALL_CSVS_MI200 =    ['SQ_IFETCH_LEVEL.csv', 'SQ_INST_LEVEL_LDS.csv', 'SQ_INST_LEVEL_SMEM.csv', 'SQ_INST_LEVEL_VMEM.csv', 'SQ_LEVEL_WAVES.csv', 'pmc_perf.csv', 'pmc_perf_0.csv', 'pmc_perf_1.csv', 'pmc_perf_10.csv', 'pmc_perf_11.csv', 'pmc_perf_12.csv', 'pmc_perf_13.csv', 'pmc_perf_14.csv', 'pmc_perf_15.csv', 'pmc_perf_16.csv', 'pmc_perf_17.csv', 'pmc_perf_18.csv', 'pmc_perf_2.csv', 'pmc_perf_3.csv', 'pmc_perf_4.csv', 'pmc_perf_5.csv', 'pmc_perf_6.csv', 'pmc_perf_7.csv', 'pmc_perf_8.csv', 'pmc_perf_9.csv', 'roofline.csv', 'sysinfo.csv', 'timestamps.csv']
+ALL_CSVS_MI200 = [
+    "SQ_IFETCH_LEVEL.csv",
+    "SQ_INST_LEVEL_LDS.csv",
+    "SQ_INST_LEVEL_SMEM.csv",
+    "SQ_INST_LEVEL_VMEM.csv",
+    "SQ_LEVEL_WAVES.csv",
+    "pmc_perf.csv",
+    "pmc_perf_0.csv",
+    "pmc_perf_1.csv",
+    "pmc_perf_10.csv",
+    "pmc_perf_11.csv",
+    "pmc_perf_12.csv",
+    "pmc_perf_13.csv",
+    "pmc_perf_14.csv",
+    "pmc_perf_15.csv",
+    "pmc_perf_16.csv",
+    "pmc_perf_17.csv",
+    "pmc_perf_18.csv",
+    "pmc_perf_2.csv",
+    "pmc_perf_3.csv",
+    "pmc_perf_4.csv",
+    "pmc_perf_5.csv",
+    "pmc_perf_6.csv",
+    "pmc_perf_7.csv",
+    "pmc_perf_8.csv",
+    "pmc_perf_9.csv",
+    "roofline.csv",
+    "sysinfo.csv",
+    "timestamps.csv",
+]
 
 ROOF_ONLY_FILES = [
     "empirRoof_gpu-0_fp32.pdf",
@@ -340,7 +369,10 @@ def baseline_compare_metric(test_name, workload_dir, args=[]):
                         )
 
                         isValid = (
-                            (abs(absolute_diff) <= METRIC_THRESHOLDS[metric_idx]["absolute"])
+                            (
+                                abs(absolute_diff)
+                                <= METRIC_THRESHOLDS[metric_idx]["absolute"]
+                            )
                             if (threshold_type == "absolute")
                             else (
                                 abs(relative_diff)
@@ -392,14 +424,17 @@ def baseline_compare_metric(test_name, workload_dir, args=[]):
                             counts > MAX_REOCCURING_COUNT
                         ]
                         if reoccurring_metrics.any(axis=None):
-                            with pd.option_context('display.max_rows', None,
-                       'display.max_columns', None,
-                    #    'display.precision', 3,
-                       ):
+                            with pd.option_context(
+                                "display.max_rows",
+                                None,
+                                "display.max_columns",
+                                None,
+                                #    'display.precision', 3,
+                            ):
                                 print(
-                                "These metrics appear alot\n",
-                                reoccurring_metrics,
-                            )
+                                    "These metrics appear alot\n",
+                                    reoccurring_metrics,
+                                )
                                 # print(list(reoccurring_metrics["Index"]))
 
                         # log into csv
@@ -429,7 +464,6 @@ def test_path():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
         print(sorted(list(file_dict.keys())))
-        print (sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -447,14 +481,35 @@ def test_no_roof():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        assert sorted(list(file_dict.keys())) == ['SQ_IFETCH_LEVEL.csv', 'SQ_INST_LEVEL_LDS.csv', 'SQ_INST_LEVEL_SMEM.csv', 
-         'SQ_INST_LEVEL_VMEM.csv', 'SQ_LEVEL_WAVES.csv', 'pmc_perf.csv', 
-         'pmc_perf_0.csv', 'pmc_perf_1.csv', 'pmc_perf_10.csv', 'pmc_perf_11.csv', 
-         'pmc_perf_12.csv', 'pmc_perf_13.csv', 'pmc_perf_14.csv', 'pmc_perf_15.csv', 
-         'pmc_perf_16.csv', 'pmc_perf_17.csv', 'pmc_perf_18.csv', 'pmc_perf_2.csv', 
-         'pmc_perf_3.csv', 'pmc_perf_4.csv', 'pmc_perf_5.csv', 'pmc_perf_6.csv', 'pmc_perf_7.csv', 
-         'pmc_perf_8.csv', 'pmc_perf_9.csv', 'sysinfo.csv', 'timestamps.csv']
+        assert sorted(list(file_dict.keys())) == [
+            "SQ_IFETCH_LEVEL.csv",
+            "SQ_INST_LEVEL_LDS.csv",
+            "SQ_INST_LEVEL_SMEM.csv",
+            "SQ_INST_LEVEL_VMEM.csv",
+            "SQ_LEVEL_WAVES.csv",
+            "pmc_perf.csv",
+            "pmc_perf_0.csv",
+            "pmc_perf_1.csv",
+            "pmc_perf_10.csv",
+            "pmc_perf_11.csv",
+            "pmc_perf_12.csv",
+            "pmc_perf_13.csv",
+            "pmc_perf_14.csv",
+            "pmc_perf_15.csv",
+            "pmc_perf_16.csv",
+            "pmc_perf_17.csv",
+            "pmc_perf_18.csv",
+            "pmc_perf_2.csv",
+            "pmc_perf_3.csv",
+            "pmc_perf_4.csv",
+            "pmc_perf_5.csv",
+            "pmc_perf_6.csv",
+            "pmc_perf_7.csv",
+            "pmc_perf_8.csv",
+            "pmc_perf_9.csv",
+            "sysinfo.csv",
+            "timestamps.csv",
+        ]
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
@@ -483,10 +538,19 @@ def test_kernel_names():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         # print(['empirRoof_gpu-0_fp32.pdf', 'empirRoof_gpu-0_int8_fp16.pdf', 'kernelName_legend.pdf', 'pmc_perf.csv', 'pmc_perf_0.csv', 'pmc_perf_1.csv', 'pmc_perf_2.csv', 'roofline.csv', 'sysinfo.csv', 'timestamps.csv'])
-        assert sorted(list(file_dict.keys())) == ['empirRoof_gpu-0_fp32.pdf', 'empirRoof_gpu-0_int8_fp16.pdf', 'kernelName_legend.pdf', 'pmc_perf.csv', 'pmc_perf_0.csv', 'pmc_perf_1.csv', 'pmc_perf_2.csv', 'roofline.csv', 'sysinfo.csv', 'timestamps.csv']
-
+        assert sorted(list(file_dict.keys())) == [
+            "empirRoof_gpu-0_fp32.pdf",
+            "empirRoof_gpu-0_int8_fp16.pdf",
+            "kernelName_legend.pdf",
+            "pmc_perf.csv",
+            "pmc_perf_0.csv",
+            "pmc_perf_1.csv",
+            "pmc_perf_2.csv",
+            "roofline.csv",
+            "sysinfo.csv",
+            "timestamps.csv",
+        ]
 
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -512,7 +576,6 @@ def test_device_filter():
 
     file_dict = test_utils.check_csv_files(workload_dir, 1, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -536,7 +599,6 @@ def test_kernel():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -558,7 +620,6 @@ def test_kernel_summaries():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -599,7 +660,6 @@ def test_ipblocks_SQ():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -653,7 +713,6 @@ def test_ipblocks_SQC():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(5, "roofline.csv")
 
     assert sorted(list(file_dict.keys())) == expected_csvs
@@ -688,7 +747,6 @@ def test_ipblocks_TA():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(9, "roofline.csv")
 
     assert sorted(list(file_dict.keys())) == expected_csvs
@@ -718,7 +776,6 @@ def test_ipblocks_TD():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "pmc_perf.csv",
             "pmc_perf_0.csv",
@@ -764,7 +821,6 @@ def test_ipblocks_TCP():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(11, "roofline.csv")
 
     assert sorted(list(file_dict.keys())) == expected_csvs
@@ -802,7 +858,6 @@ def test_ipblocks_TCC():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(12, "roofline.csv")
 
     assert sorted(list(file_dict.keys())) == expected_csvs
@@ -838,7 +893,6 @@ def test_ipblocks_SPI():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(10, "roofline.csv")
 
     assert sorted(list(file_dict.keys())) == expected_csvs
@@ -871,7 +925,6 @@ def test_ipblocks_CPC():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(7, "roofline.csv")
     assert sorted(list(file_dict.keys())) == expected_csvs
 
@@ -897,7 +950,6 @@ def test_ipblocks_CPF():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs.insert(5, "roofline.csv")
     assert sorted(list(file_dict.keys())) == expected_csvs
 
@@ -937,7 +989,6 @@ def test_ipblocks_SQ_CPC():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -1001,7 +1052,6 @@ def test_ipblocks_SQ_TA():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -1060,7 +1110,6 @@ def test_ipblocks_SQ_SPI():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -1123,7 +1172,6 @@ def test_ipblocks_SQ_SQC_TCP_CPC():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -1184,7 +1232,6 @@ def test_ipblocks_SQ_SPI_TA_TCC_CPF():
         "timestamps.csv",
     ]
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         expected_csvs = [
             "SQ_IFETCH_LEVEL.csv",
             "SQ_INST_LEVEL_LDS.csv",
@@ -1228,7 +1275,6 @@ def test_dispatch_0():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, 1)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1254,7 +1300,6 @@ def test_dispatch_0_1():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, 2)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1277,7 +1322,6 @@ def test_dispatch_2():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, 1)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1303,7 +1347,6 @@ def test_kernel_verbose_0():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1325,7 +1368,6 @@ def test_kernel_verbose_1():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1347,7 +1389,6 @@ def test_kernel_verbose_2():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1369,7 +1410,6 @@ def test_kernel_verbose_3():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1391,7 +1431,6 @@ def test_kernel_verbose_4():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1413,7 +1452,6 @@ def test_kernel_verbose_5():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1435,7 +1473,6 @@ def test_join_type_grid():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1458,7 +1495,6 @@ def test_join_type_kernel():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1490,7 +1526,6 @@ def test_sort_dispatches():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1521,7 +1556,6 @@ def test_sort_kernels():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1552,8 +1586,6 @@ def test_mem_levels_HBM():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1584,8 +1616,6 @@ def test_mem_levels_L2():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1616,8 +1646,6 @@ def test_mem_levels_vL1D():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1648,8 +1676,6 @@ def test_mem_levels_LDS():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1680,8 +1706,6 @@ def test_mem_levels_HBM_LDS():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1712,8 +1736,6 @@ def test_mem_levels_vL1D_LDS():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -1743,8 +1765,6 @@ def test_mem_levels_L2_vL1D_LDS():
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
 
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ROOF_ONLY_FILES
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS

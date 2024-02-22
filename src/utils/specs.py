@@ -106,7 +106,7 @@ class MachineSpecs:
             hbmBW:              {self.hbmBW} MB/s
             compute_partition:  {self.compute_partition}
             memory_partition:   {self.memory_partition}
-            XCCs:               {self.XCCs}
+            XCDs:               {self.XCDs}
         """
         )
 

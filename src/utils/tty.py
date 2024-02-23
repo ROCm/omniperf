@@ -170,9 +170,11 @@ def show_all(args, runs, archConfigs, output):
                                     else:
                                         cur_df_copy = copy.deepcopy(cur_df)
                                         cur_df_copy[header] = [
-                                            round(float(x), args.decimal)
-                                            if x != ""
-                                            else x
+                                            (
+                                                round(float(x), args.decimal)
+                                                if x != ""
+                                                else x
+                                            )
                                             for x in base_df[header]
                                         ]
                                         df = pd.concat([df, cur_df_copy[header]], axis=1)
@@ -201,9 +203,9 @@ def show_all(args, runs, archConfigs, output):
                             )
 
                     # Only show top N kernels (as specified in --max-kernel-num) in "Top Stats" section
-                    if(
-                        type == "raw_csv_table"
-                        and (table_config["source"] == "pmc_kernel_top.csv" or table_config["source"] == "pmc_dispatch_info.csv")
+                    if type == "raw_csv_table" and (
+                        table_config["source"] == "pmc_kernel_top.csv"
+                        or table_config["source"] == "pmc_dispatch_info.csv"
                     ):
                         df = df.head(args.max_stat_num)
                     # NB:
@@ -214,11 +216,13 @@ def show_all(args, runs, archConfigs, output):
                     # fash for now.
                     ss += (
                         tabulate(
-                            df.transpose()
-                            if type != "raw_csv_table"
-                            and "columnwise" in table_config
-                            and table_config["columnwise"] == True
-                            else df,
+                            (
+                                df.transpose()
+                                if type != "raw_csv_table"
+                                and "columnwise" in table_config
+                                and table_config["columnwise"] == True
+                                else df
+                            ),
                             headers="keys",
                             tablefmt="fancy_grid",
                             floatfmt="." + str(args.decimal) + "f",
@@ -251,7 +255,9 @@ def show_kernel_stats(args, runs, archConfigs, output):
                     #   sorted when load_table_data.
                     if table_config["id"] == 1:
                         print("\n" + "-" * 80, file=output)
-                        print("Detected Kernels (sorted decending by duration)", file=output)
+                        print(
+                            "Detected Kernels (sorted decending by duration)", file=output
+                        )
                         df = pd.concat([df, single_df["Kernel_Name"]], axis=1)
 
                     if table_config["id"] == 2:
@@ -268,4 +274,3 @@ def show_kernel_stats(args, runs, archConfigs, output):
                         ),
                         file=output,
                     )
-

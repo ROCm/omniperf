@@ -366,7 +366,6 @@ def baseline_compare_metric(test_name, workload_dir, args=[]):
                                 abs(absolute_diff)
                                 <= METRIC_THRESHOLDS[metric_idx]["absolute"]
                             )
-
                             if (threshold_type == "absolute")
                             else (
                                 abs(relative_diff)

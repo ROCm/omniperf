@@ -96,35 +96,36 @@ def get_color(catagory):
 #                           Plot BW at each cache level
 # -------------------------------------------------------------------------------------
 def calc_ceilings(roofline_parameters, dtype, benchmark_data):
-    """Given benchmarking data, calculate ceilings (or peak performance) for empirical roofline
-    """
+    """Given benchmarking data, calculate ceilings (or peak performance) for empirical roofline"""
     # TODO: This is where filtering by memory level will need to occur for standalone
     graphPoints = {"hbm": [], "l2": [], "l1": [], "lds": [], "valu": [], "mfma": []}
 
-    if roofline_parameters['mem_level'] == "ALL":
+    if roofline_parameters["mem_level"] == "ALL":
         cacheHierarchy = ["HBM", "L2", "L1", "LDS"]
     else:
-        cacheHierarchy = roofline_parameters['mem_level']
+        cacheHierarchy = roofline_parameters["mem_level"]
 
     x1 = y1 = x2 = y2 = -1
     x1_mfma = y1_mfma = x2_mfma = y2_mfma = -1
     target_precision = dtype[2:]
 
     if dtype != "FP16" and dtype != "I8":
-        peakOps = float(
-            benchmark_data[dtype + "Flops"][roofline_parameters['device_id']]
-        )
+        peakOps = float(benchmark_data[dtype + "Flops"][roofline_parameters["device_id"]])
     for i in range(0, len(cacheHierarchy)):
-        # Plot BW line  
+        # Plot BW line
         logging.debug("[roofline] Current cache level is %s" % cacheHierarchy[i])
         curr_bw = cacheHierarchy[i] + "Bw"
-        peakBw = float(benchmark_data[curr_bw][roofline_parameters['device_id']])
+        peakBw = float(benchmark_data[curr_bw][roofline_parameters["device_id"]])
 
         if dtype == "I8":
-            peakMFMA = float(benchmark_data["MFMAI8Ops"][roofline_parameters['device_id']])
+            peakMFMA = float(
+                benchmark_data["MFMAI8Ops"][roofline_parameters["device_id"]]
+            )
         else:
             peakMFMA = float(
-                benchmark_data["MFMAF{}Flops".format(target_precision)][roofline_parameters['device_id']]
+                benchmark_data["MFMAF{}Flops".format(target_precision)][
+                    roofline_parameters["device_id"]
+                ]
             )
 
         x1 = float(XMIN)
@@ -173,7 +174,9 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
         if x2_mfma < x0_mfma:
             x0_mfma = x2_mfma
 
-        logging.debug("MFMA ROOF [{}, {}], [{},{}]".format(x0_mfma, XMAX, peakMFMA, peakMFMA))
+        logging.debug(
+            "MFMA ROOF [{}, {}], [{},{}]".format(x0_mfma, XMAX, peakMFMA, peakMFMA)
+        )
         graphPoints["mfma"].append([x0_mfma, XMAX])
         graphPoints["mfma"].append([peakMFMA, peakMFMA])
         graphPoints["mfma"].append(peakMFMA)
@@ -186,28 +189,17 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
 # -------------------------------------------------------------------------------------
 # Calculate relevant metrics for ai calculation
 def calc_ai(sort_type, ret_df):
-    """Given counter data, calculate arithmetic intensity for each kernel in the application.
-    """
+    """Given counter data, calculate arithmetic intensity for each kernel in the application."""
     df = ret_df["pmc_perf"]
     # Sort by top kernels or top dispatches?
     df = df.sort_values(by=["Kernel_Name"])
     df = df.reset_index(drop=True)
 
-    total_flops = (
-        valu_flops
-    ) = (
-        mfma_flops_bf16
-    ) = (
-        mfma_flops_f16
-    ) = (
-        mfma_iops_i8
-    ) = (
+    total_flops = valu_flops = mfma_flops_bf16 = mfma_flops_f16 = mfma_iops_i8 = (
         mfma_flops_f32
-    ) = (
-        mfma_flops_f64
-    ) = (
-        lds_data
-    ) = L1cache_data = L2cache_data = hbm_data = calls = totalDuration = avgDuration = 0.0
+    ) = mfma_flops_f64 = lds_data = L1cache_data = L2cache_data = hbm_data = calls = (
+        totalDuration
+    ) = avgDuration = 0.0
 
     kernelName = ""
 
@@ -261,7 +253,11 @@ def calc_ai(sort_type, ret_df):
                 + (df["SQ_INSTS_VALU_MFMA_MOPS_F64"][idx] * 512)
             )
         except KeyError:
-            logging.debug("[roofline] {}: Skipped total_flops at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped total_flops at index {}".format(
+                    kernelName[:35], idx
+                )
+            )
             pass
         try:
             valu_flops += (
@@ -288,7 +284,9 @@ def calc_ai(sort_type, ret_df):
                 )
             )
         except KeyError:
-            logging.debug("{}: Skipped valu_flops at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "{}: Skipped valu_flops at index {}".format(kernelName[:35], idx)
+            )
             pass
 
         try:
@@ -298,7 +296,9 @@ def calc_ai(sort_type, ret_df):
             mfma_flops_f64 += df["SQ_INSTS_VALU_MFMA_MOPS_F64"][idx] * 512
             mfma_iops_i8 += df["SQ_INSTS_VALU_MFMA_MOPS_I8"][idx] * 512
         except KeyError:
-            logging.debug("[roofline] {}: Skipped mfma ops at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped mfma ops at index {}".format(kernelName[:35], idx)
+            )
             pass
 
         try:
@@ -308,13 +308,19 @@ def calc_ai(sort_type, ret_df):
                 * L2_BANKS
             )  # L2_BANKS = 32 (since assuming mi200)
         except KeyError:
-            logging.debug("[roofline] {}: Skipped lds_data at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped lds_data at index {}".format(kernelName[:35], idx)
+            )
             pass
 
         try:
             L1cache_data += df["TCP_TOTAL_CACHE_ACCESSES_sum"][idx] * 64
         except KeyError:
-            logging.debug("[roofline] {}: Skipped L1cache_data at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped L1cache_data at index {}".format(
+                    kernelName[:35], idx
+                )
+            )
             pass
 
         try:
@@ -325,7 +331,11 @@ def calc_ai(sort_type, ret_df):
                 + df["TCP_TCC_READ_REQ_sum"][idx] * 64
             )
         except KeyError:
-            logging.debug("[roofline] {}: Skipped L2cache_data at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped L2cache_data at index {}".format(
+                    kernelName[:35], idx
+                )
+            )
             pass
         try:
             hbm_data += (
@@ -335,7 +345,9 @@ def calc_ai(sort_type, ret_df):
                 + ((df["TCC_EA_WRREQ_sum"][idx] - df["TCC_EA_WRREQ_64B_sum"][idx]) * 32)
             )
         except KeyError:
-            logging.debug("[roofline] {}: Skipped hbm_data at index {}".format(kernelName[:35], idx))
+            logging.debug(
+                "[roofline] {}: Skipped hbm_data at index {}".format(kernelName[:35], idx)
+            )
             pass
 
         totalDuration += df["End_Timestamp"][idx] - df["Start_Timestamp"][idx]
@@ -368,23 +380,11 @@ def calc_ai(sort_type, ret_df):
                     kernelName, idx, calls
                 )
             )
-            total_flops = (
-                valu_flops
-            ) = (
-                mfma_flops_bf16
-            ) = (
-                mfma_flops_f16
-            ) = (
-                mfma_iops_i8
-            ) = (
+            total_flops = valu_flops = mfma_flops_bf16 = mfma_flops_f16 = mfma_iops_i8 = (
                 mfma_flops_f32
-            ) = (
-                mfma_flops_f64
-            ) = (
-                lds_data
-            ) = (
-                L1cache_data
-            ) = L2cache_data = hbm_data = calls = totalDuration = avgDuration = 0.0
+            ) = mfma_flops_f64 = lds_data = L1cache_data = L2cache_data = hbm_data = (
+                calls
+            ) = totalDuration = avgDuration = 0.0
 
         if sort_type == "dispatches":
             myList.append(
@@ -406,23 +406,11 @@ def calc_ai(sort_type, ret_df):
                     avgDuration,
                 )
             )
-            total_flops = (
-                valu_flops
-            ) = (
-                mfma_flops_bf16
-            ) = (
-                mfma_flops_f16
-            ) = (
-                mfma_iops_i8
-            ) = (
+            total_flops = valu_flops = mfma_flops_bf16 = mfma_flops_f16 = mfma_iops_i8 = (
                 mfma_flops_f32
-            ) = (
-                mfma_flops_f64
-            ) = (
-                lds_data
-            ) = (
-                L1cache_data
-            ) = L2cache_data = hbm_data = calls = totalDuration = avgDuration = 0.0
+            ) = mfma_flops_f64 = lds_data = L1cache_data = L2cache_data = hbm_data = (
+                calls
+            ) = totalDuration = avgDuration = 0.0
 
     myList.sort(key=lambda x: x.totalDuration, reverse=True)
 
@@ -434,24 +422,32 @@ def calc_ai(sort_type, ret_df):
     # Create list of top 5 intensities
     while i < TOP_N and i != len(myList):
         kernelNames.append(myList[i].KernelName)
-        intensities["ai_l1"].append(
-            myList[i].total_flops / myList[i].L1cache_data
-        ) if myList[i].L1cache_data else intensities["ai_l1"].append(0)
+        (
+            intensities["ai_l1"].append(myList[i].total_flops / myList[i].L1cache_data)
+            if myList[i].L1cache_data
+            else intensities["ai_l1"].append(0)
+        )
         # print("cur_ai_L1", myList[i].total_flops/myList[i].L1cache_data) if myList[i].L1cache_data else print("null")
         # print()
-        intensities["ai_l2"].append(
-            myList[i].total_flops / myList[i].L2cache_data
-        ) if myList[i].L2cache_data else intensities["ai_l2"].append(0)
+        (
+            intensities["ai_l2"].append(myList[i].total_flops / myList[i].L2cache_data)
+            if myList[i].L2cache_data
+            else intensities["ai_l2"].append(0)
+        )
         # print("cur_ai_L2", myList[i].total_flops/myList[i].L2cache_data) if myList[i].L2cache_data else print("null")
         # print()
-        intensities["ai_hbm"].append(
-            myList[i].total_flops / myList[i].hbm_data
-        ) if myList[i].hbm_data else intensities["ai_hbm"].append(0)
+        (
+            intensities["ai_hbm"].append(myList[i].total_flops / myList[i].hbm_data)
+            if myList[i].hbm_data
+            else intensities["ai_hbm"].append(0)
+        )
         # print("cur_ai_hbm", myList[i].total_flops/myList[i].hbm_data) if myList[i].hbm_data else print("null")
         # print()
-        curr_perf.append(myList[i].total_flops / myList[i].avgDuration) if myList[
-            i
-        ].avgDuration else curr_perf.append(0)
+        (
+            curr_perf.append(myList[i].total_flops / myList[i].avgDuration)
+            if myList[i].avgDuration
+            else curr_perf.append(0)
+        )
         # print("cur_perf", myList[i].total_flops/myList[i].avgDuration) if myList[i].avgDuration else print("null")
 
         i += 1

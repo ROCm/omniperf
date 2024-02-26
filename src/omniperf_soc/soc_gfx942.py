@@ -55,7 +55,7 @@ class gfx942_soc (OmniSoC_Base):
                 "TCC_channels": 32
             }
         )
-        self.roofline_obj = Roofline(args, self.__mspec)
+        self.roofline_obj = Roofline(args, self._mspec)
 
         # Set arch specific specs
         self._mspec.L2Banks = 16

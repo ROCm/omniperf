@@ -53,9 +53,10 @@ VERSION_LOC = [
 
 @dataclass
 class MachineSpecs:
-    def __init__(self, args, sysinfo=None):
+    def __init__(self, args, sysinfo:dict=None):
         if not sysinfo is None:
-            self.gpu_arch = sysinfo.iloc[0]["gpu_arch"]
+            for key, value in sysinfo.items():
+                setattr(self, key, value[0])
             return
         # read timestamp info
         now = datetime.now()
@@ -255,7 +256,10 @@ def get_rocm_ver():
     return rocm_ver
 
 def run(cmd,exit_on_error=False):
-    p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError as e:
+        error(f"Unable to parse specs. Can't find ROCm asset: {e.filename}\nTry passing a path to an existing workload results in 'analyze' mode.")
 
     if exit_on_error:
         if cmd[0] == "rocm-smi":

@@ -142,7 +142,10 @@ def to_median(a):
     if a is None:
         return None
     elif isinstance(a, pd.core.series.Series):
-        return a.median()
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            return a.median()
     else:
         raise Exception("to_median: unsupported type.")
 

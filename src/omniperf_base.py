@@ -75,7 +75,7 @@ class Omniperf:
     def print_graphic(self):
         """Log program name as ascii art to terminal.
         """
-        ascii_art = '''
+        ascii_art = r'''
   ___                  _                  __ 
  / _ \ _ __ ___  _ __ (_)_ __   ___ _ __ / _|
 | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_ 

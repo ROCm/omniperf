@@ -30,7 +30,7 @@ from utils.utils import demarcate, error
 class gfx908_soc (OmniSoC_Base):
     def __init__(self,args,mspec):
         super().__init__(args,mspec)
-        self.set_soc_name("gfx908")
+        self.set_arch("gfx908")
         self.set_perfmon_dir(os.path.join(str(config.omniperf_home), "omniperf_soc", "profile_configs", self.get_arch())) 
         self.set_compatible_profilers(["rocprofv1", "rocscope"])
         # Per IP block max number of simultaneous counters. GFX IP Blocks

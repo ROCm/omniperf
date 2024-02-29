@@ -852,7 +852,7 @@ def apply_filters(workload, dir, is_gui, debug):
                 if kernel_id >= len(kernels_df["Kernel_Name"]):
                     error(
                         "{} is an invalid kernel id. Please enter an id between 0-{}".format(
-                            kernel_id, len(kernels_df["Kernel_Name"])-1
+                            kernel_id, len(kernels_df["Kernel_Name"]) - 1
                         )
                     )
             kernels = []

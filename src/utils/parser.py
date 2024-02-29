@@ -144,7 +144,7 @@ def to_median(a):
         return None
     elif isinstance(a, pd.core.series.Series):
         with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=RuntimeWarning)
+            warnings.simplefilter("ignore", message='Mean of empty slice')
             return a.median()
     else:
         raise Exception("to_median: unsupported type.")

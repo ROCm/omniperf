@@ -78,11 +78,11 @@ supported_denom = {
 build_in_vars = {
     "GRBM_GUI_ACTIVE_PER_XCD": "(GRBM_GUI_ACTIVE / $num_xcd)",
     "GRBM_COUNT_PER_XCD": "(GRBM_COUNT / $num_xcd)",
-    "GRBM_SPI_BUSY_PER_XCD" : "(GRBM_SPI_BUSY / $num_xcd)",
+    "GRBM_SPI_BUSY_PER_XCD": "(GRBM_SPI_BUSY / $num_xcd)",
     "numActiveCUs": "TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / $GRBM_GUI_ACTIVE_PER_XCD)), \
               0) / $max_waves_per_cu) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) \
               / $GRBM_GUI_ACTIVE_PER_XCD)), 0), $max_waves_per_cu), 8)), $cu_per_gpu))",
-    "kernelBusyCycles": "ROUND(AVG((((End_Timestamp - Start_Timestamp) / 1000) * $max_sclk)), 0)"
+    "kernelBusyCycles": "ROUND(AVG((((End_Timestamp - Start_Timestamp) / 1000) * $max_sclk)), 0)",
 }
 
 supported_call = {
@@ -177,6 +177,7 @@ def to_round(a, b):
     else:
         return round(a, b)
 
+
 def to_quantile(a, b):
     if a is None:
         return None
@@ -184,6 +185,7 @@ def to_quantile(a, b):
         return a.quantile(b)
     else:
         raise Exception("to_quantile: unsupported type.")
+
 
 def to_mod(a, b):
     if isinstance(a, pd.core.series.Series):
@@ -405,6 +407,7 @@ def gen_counter_list(formula):
 
     return visited, counters
 
+
 def calc_builtin_var(var, sys_info):
     """
     Calculate build-in variable based on sys_info:
@@ -416,6 +419,7 @@ def calc_builtin_var(var, sys_info):
     else:
         print("Don't support", var)
         sys.exit(1)
+
 
 def build_dfs(archConfigs, filter_metrics, sys_info):
     """
@@ -450,7 +454,6 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                     type == "metric_table"
                     and "metric" in data_config
                     and "placeholder_range" in data_config["metric"]
-                    
                 ):
                     # print(data_config["metric"])
                     new_metrics = {}
@@ -478,16 +481,14 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                     data_config["metric"] = new_metrics
                     # print(data_config)
                     # print(data_config["metric"])
-                             
+
     for panel_id, panel in archConfigs.panel_configs.items():
         for data_source in panel["data source"]:
             for type, data_config in data_source.items():
                 if type == "metric_table":
                     headers = ["Metric_ID"]
                     data_source_idx = str(data_config["id"] // 100)
-                    if (data_source_idx != 0 or
-                        data_source_idx in filter_metrics
-                    ):
+                    if data_source_idx != 0 or data_source_idx in filter_metrics:
                         metric_list[data_source_idx] = panel["title"]
                     if (
                         "cli_style" in data_config
@@ -509,9 +510,9 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                     headers.append("coll_level")
                     if "tips" in data_config["header"].keys():
                         headers.append(data_config["header"]["tips"])
-                    
+
                     df = pd.DataFrame(columns=headers)
-                
+
                     i = 0
                     for key, entries in data_config["metric"].items():
                         data_source_idx = (
@@ -535,7 +536,7 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                         ):
                             values.append(metric_idx)
                             values.append(key)
-                            
+
                             metric_list[data_source_idx] = data_config["title"]
 
                             if (
@@ -681,11 +682,11 @@ def eval_metric(dfs, dfs_type, sys_info, raw_pmc_df, debug):
     ammolite__se_per_gpu = sys_info.se_per_gpu
     ammolite__pipes_per_gpu = sys_info.pipes_per_gpu
     ammolite__cu_per_gpu = sys_info.cu_per_gpu
-    ammolite__simd_per_cu = sys_info.simd_per_cu # not used
+    ammolite__simd_per_cu = sys_info.simd_per_cu  # not used
     ammolite__sqc_per_gpu = sys_info.sqc_per_gpu
     ammolite__lds_banks_per_cu = sys_info.lds_banks_per_cu
     ammolite__cur_sclk = sys_info.cur_sclk  # not used
-    ammolite__mclk = sys_info.cur_mclk # not used
+    ammolite__mclk = sys_info.cur_mclk  # not used
     ammolite__max_sclk = sys_info.max_sclk
     ammolite__max_waves_per_cu = sys_info.max_waves_per_cu
     ammolite__hbm_bw = sys_info.hbm_bw
@@ -920,7 +921,9 @@ def load_kernel_top(workload, dir):
             if file.exists():
                 tmp[id] = pd.read_csv(file)
             else:
-                logging.info("Warning: Issue loading top kernels. Check pmc_kernel_top.csv")
+                logging.info(
+                    "Warning: Issue loading top kernels. Check pmc_kernel_top.csv"
+                )
         # NB: Special case for sysinfo. Probably room for improvement in this whole function design
         elif "from_csv_columnwise" in df.columns and id == 101:
             tmp[id] = workload.sys_info.transpose()
@@ -938,7 +941,9 @@ def load_kernel_top(workload, dir):
                 #   so tty could detect them and show them correctly in comparison.
                 tmp[id].columns = ["Info"]
             else:
-                logging.info("Warning: Issue loading top kernels. Check pmc_kernel_top.csv")
+                logging.info(
+                    "Warning: Issue loading top kernels. Check pmc_kernel_top.csv"
+                )
     workload.dfs.update(tmp)
 
 
@@ -971,7 +976,8 @@ def build_comparable_columns(time_unit):
 
     return comparable_columns
 
-def correct_sys_info(mspec, specs_correction:dict):
+
+def correct_sys_info(mspec, specs_correction: dict):
     """
     Correct system spec items manually
     """
@@ -981,8 +987,8 @@ def correct_sys_info(mspec, specs_correction:dict):
 
     for k, v in pairs.items():
         if not hasattr(mspec, str(k)):
-            error(f"Invalid specs correction '{k}'. Please use --specs option to peak valid specs")
+            error(
+                f"Invalid specs correction '{k}'. Please use --specs option to peak valid specs"
+            )
         setattr(mspec, str(k), v)
     return mspec.get_class_members()
-
-

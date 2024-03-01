@@ -35,56 +35,71 @@ from pathlib import Path
 
 from omniperf_base import SUPPORTED_ARCHS
 
-class OmniSoC_Base():
-    def __init__(self,args,mspec): # new info field will contain rocminfo or sysinfo to populate properties
+
+class OmniSoC_Base:
+    def __init__(
+        self, args, mspec
+    ):  # new info field will contain rocminfo or sysinfo to populate properties
         self.__args = args
         self.__arch = None
         self._mspec = mspec
         self.__perfmon_dir = None
-        self.__perfmon_config = {} # Per IP block max number of simulutaneous counters. GFX IP Blocks
-        self.__soc_params = {} # SoC specifications
-        self.__compatible_profilers = [] # Store profilers compatible with SoC
+        self.__perfmon_config = (
+            {}
+        )  # Per IP block max number of simulutaneous counters. GFX IP Blocks
+        self.__soc_params = {}  # SoC specifications
+        self.__compatible_profilers = []  # Store profilers compatible with SoC
         self.populate_mspec()
         # In some cases (i.e. --specs) path will not be given
         if hasattr(self.__args, "path"):
             if self.__args.path == os.path.join(os.getcwd(), "workloads"):
-                self.__workload_dir = os.path.join(self.__args.path, self.__args.name, self._mspec.gpu_model)
+                self.__workload_dir = os.path.join(
+                    self.__args.path, self.__args.name, self._mspec.gpu_model
+                )
             else:
                 self.__workload_dir = self.__args.path
 
     def __hash__(self):
         return hash(self.__arch)
+
     def __eq__(self, other):
         if not isinstance(other, type(self)):
             return NotImplemented
         return self.__arch == other.get_soc()
 
-    def set_perfmon_dir(self, path:str):
+    def set_perfmon_dir(self, path: str):
         self.__perfmon_dir = path
+
     def set_perfmon_config(self, config: dict):
         self.__perfmon_config = config
+
     def get_workload_perfmon_dir(self):
         return str(Path(self.__perfmon_dir).parent.absolute())
+
     def get_soc_param(self):
         return self.__soc_params
+
     def set_arch(self, arch: str):
         self.__arch = arch
+
     def get_arch(self):
         return self.__arch
+
     def get_args(self):
         return self.__args
+
     def set_compatible_profilers(self, profiler_names: list):
         self.__compatible_profilers = profiler_names
+
     def get_compatible_profilers(self):
         return self.__compatible_profilers
-    
+
     @demarcate
     def get_profiler_options(self):
-        """Fetch any SoC specific arguments required by the profiler
-        """
+        """Fetch any SoC specific arguments required by the profiler"""
         # assume no SoC specific options and return empty list by default
         return []
-    
+
     @demarcate
     def populate_mspec(self):
         from utils.specs import search, run, total_sqc, total_xcds
@@ -140,17 +155,16 @@ class OmniSoC_Base():
             if key != None:
                 self._mspec.max_waves_per_cu = key
                 break
-        
+
         self._mspec.sqc_per_gpu = str(
             total_sqc(
-                self._mspec.gpu_arch, 
-                self._mspec.cu_per_gpu,
-                self._mspec.se_per_gpu
-            ))
-        
+                self._mspec.gpu_arch, self._mspec.cu_per_gpu, self._mspec.se_per_gpu
+            )
+        )
+
         # we get the max mclk from rocm-smi --showmclkrange
         rocm_smi_mclk = run(["rocm-smi", "--showmclkrange"], exit_on_error=True)
-        self._mspec.max_mclk = search(r'(\d+)Mhz\s*$', rocm_smi_mclk)
+        self._mspec.max_mclk = search(r"(\d+)Mhz\s*$", rocm_smi_mclk)
 
         # these are just max's now, because the parsing was broken and this was inconsistent
         # with how we use the clocks elsewhere (all max, all the time)
@@ -158,21 +172,32 @@ class OmniSoC_Base():
         self._mspec.cur_mclk = self._mspec.max_mclk
 
         # specify gpu name for gfx942 hardware
-        self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].keys())[0].upper()
+        self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].keys())[
+            0
+        ].upper()
         if self._mspec.gpu_model == "MI300":
-            self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].values())[0][0]
-        if (self._mspec.gpu_arch == "gfx942") and ("MI300A" in '\n'.join(self._mspec._rocminfo)):
+            self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].values())[
+                0
+            ][0]
+        if (self._mspec.gpu_arch == "gfx942") and (
+            "MI300A" in "\n".join(self._mspec._rocminfo)
+        ):
             self._mspec.gpu_model = "MI300A_A1"
-        if (self._mspec.gpu_arch == "gfx942") and ("MI300A" not in '\n'.join(self._mspec._rocminfo)):
+        if (self._mspec.gpu_arch == "gfx942") and (
+            "MI300A" not in "\n".join(self._mspec._rocminfo)
+        ):
             self._mspec.gpu_model = "MI300X_A1"
 
-        self._mspec.num_xcd = str(total_xcds(self._mspec.gpu_model, self._mspec.compute_partition))
+        self._mspec.num_xcd = str(
+            total_xcds(self._mspec.gpu_model, self._mspec.compute_partition)
+        )
 
     @demarcate
     def perfmon_filter(self, roofline_perfmon_only: bool):
-        """Filter default performance counter set based on user arguments
-        """
-        if roofline_perfmon_only and os.path.isfile(os.path.join(self.get_args().path, "pmc_perf.csv")):
+        """Filter default performance counter set based on user arguments"""
+        if roofline_perfmon_only and os.path.isfile(
+            os.path.join(self.get_args().path, "pmc_perf.csv")
+        ):
             return
         workload_perfmon_dir = self.__workload_dir + "/perfmon"
 
@@ -186,7 +211,9 @@ class OmniSoC_Base():
 
         if not roofline_perfmon_only:
             ref_pmc_files_list = glob.glob(self.__perfmon_dir + "/" + "pmc_*perf*.txt")
-            ref_pmc_files_list += glob.glob(self.__perfmon_dir + "/" + self.__arch + "/pmc_*_perf*.txt")
+            ref_pmc_files_list += glob.glob(
+                self.__perfmon_dir + "/" + self.__arch + "/pmc_*_perf*.txt"
+            )
 
             # Perfmon list filtering
             if self.__args.ipblocks != None:
@@ -211,38 +238,34 @@ class OmniSoC_Base():
             ref_pmc_files_list = glob.glob(self.__perfmon_dir + "/" + "pmc_roof_perf.txt")
             pmc_files_list = ref_pmc_files_list
 
-
         # Coalesce and writeback workload specific perfmon
-        pmc_list = perfmon_coalesce(pmc_files_list, self.__perfmon_config, self.__workload_dir)
+        pmc_list = perfmon_coalesce(
+            pmc_files_list, self.__perfmon_config, self.__workload_dir
+        )
         perfmon_emit(pmc_list, self.__perfmon_config, self.__workload_dir)
 
-    #----------------------------------------------------
+    # ----------------------------------------------------
     # Required methods to be implemented by child classes
-    #----------------------------------------------------
+    # ----------------------------------------------------
     @abstractmethod
     def profiling_setup(self):
-        """Perform any SoC-specific setup prior to profiling.
-        """
+        """Perform any SoC-specific setup prior to profiling."""
         logging.debug("[profiling] perform SoC profiling setup for %s" % self.__arch)
-
 
     @abstractmethod
     def post_profiling(self):
-        """Perform any SoC-specific post profiling activities.
-        """
+        """Perform any SoC-specific post profiling activities."""
         logging.debug("[profiling] perform SoC post processing for %s" % self.__arch)
 
     @abstractmethod
     def analysis_setup(self):
-        """Perform any SoC-specific setup prior to analysis.
-        """
+        """Perform any SoC-specific setup prior to analysis."""
         logging.debug("[analysis] perform SoC analysis setup for %s" % self.__arch)
-        
+
 
 @demarcate
 def perfmon_coalesce(pmc_files_list, perfmon_config, workload_dir):
-    """Sort and bucket all related performance counters to minimize required application passes
-    """
+    """Sort and bucket all related performance counters to minimize required application passes"""
     workload_perfmon_dir = workload_dir + "/perfmon"
 
     # match pattern for pmc counters
@@ -303,9 +326,15 @@ def perfmon_coalesce(pmc_files_list, perfmon_config, workload_dir):
 
     return pmc_list
 
+
 @demarcate
 def update_pmc_bucket(
-    counters, save_file, perfmon_config, pmc_list=None, stext=None, workload_perfmon_dir=None
+    counters,
+    save_file,
+    perfmon_config,
+    pmc_list=None,
+    stext=None,
+    workload_perfmon_dir=None,
 ):
     # Verify inputs.
     # If save_file is True, we're being called internally, from perfmon_coalesce
@@ -390,6 +419,7 @@ def update_pmc_bucket(
             pmc_list["TCC2"][str(ch)].sort()
     return pmc_list
 
+
 @demarcate
 def perfmon_emit(pmc_list, perfmon_config, workload_dir=None):
     # Calculate the minimum number of iteration to save the pmc counters
@@ -450,13 +480,13 @@ def perfmon_emit(pmc_list, perfmon_config, workload_dir=None):
     for iter in range(niter):
         # Prefix
         line = "pmc: "
-        
+
         N = perfmon_config["TCC"]
         # TCC per-channel counters
         tcc_counters = []
         for ch in range(perfmon_config["TCC_channels"]):
             tcc_counters += pmc_list["TCC2"][str(ch)][tcc2_index * N : tcc2_index * N + N]
-        
+
         tcc2_index += 1
 
         # TCC2 aggregated counters

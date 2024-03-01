@@ -34,7 +34,8 @@ pd.set_option(
     "mode.chained_assignment", None
 )  # ignore SettingWithCopyWarning pandas warning
 
-IS_DARK = True #TODO: Remove hardcoded in favor of class property
+IS_DARK = True  # TODO: Remove hardcoded in favor of class property
+
 
 ##################
 # HELPER FUNCTIONS
@@ -168,31 +169,31 @@ def build_bar_chart(display_df, table_config, barchart_elements, norm_filt):
             )
     # L2 Cache per channel
     # elif table_config["id"] in barchart_elements["l2_cache_per_chan"]:
-        # nested_bar = {}
-        # channels = []
-        # for colName, colData in display_df.items():
-        #     if colName == "Channel":
-        #         channels = list(colData.values)
-        #     else:
-        #         display_df[colName] = [
-        #             x.astype(float) if x != "" and x != None else float(0)
-        #             for x in display_df[colName]
-        #         ]
-        #         nested_bar[colName] = list(display_df[colName])
-        # for group, metric in nested_bar.items():
-        #     d_figs.append(
-        #         px.bar(
-        #             title=group[0 : group.rfind("(")],
-        #             x=channels,
-        #             y=metric,
-        #             labels={
-        #                 "x": "Channel",
-        #                 "y": group[group.rfind("(") + 1 : len(group) - 1].replace(
-        #                     "per", norm_filt
-        #                 ),
-        #             },
-        #         ).update_yaxes(rangemode="nonnegative")
-        #     )
+    # nested_bar = {}
+    # channels = []
+    # for colName, colData in display_df.items():
+    #     if colName == "Channel":
+    #         channels = list(colData.values)
+    #     else:
+    #         display_df[colName] = [
+    #             x.astype(float) if x != "" and x != None else float(0)
+    #             for x in display_df[colName]
+    #         ]
+    #         nested_bar[colName] = list(display_df[colName])
+    # for group, metric in nested_bar.items():
+    #     d_figs.append(
+    #         px.bar(
+    #             title=group[0 : group.rfind("(")],
+    #             x=channels,
+    #             y=metric,
+    #             labels={
+    #                 "x": "Channel",
+    #                 "y": group[group.rfind("(") + 1 : len(group) - 1].replace(
+    #                     "per", norm_filt
+    #                 ),
+    #             },
+    #         ).update_yaxes(rangemode="nonnegative")
+    #     )
 
     # Speed-of-light bar chart
     elif table_config["id"] in barchart_elements["sol"]:
@@ -226,9 +227,9 @@ def build_bar_chart(display_df, table_config, barchart_elements, norm_filt):
                 ).update_xaxes(range=[0, 1638])
             )  # append second GB/s chart
         else:
-            key = 'Avg'
-            if table_config['id'] in [1101]:
-                key = 'Pct of Peak'
+            key = "Avg"
+            if table_config["id"] in [1101]:
+                key = "Pct of Peak"
             d_figs.append(
                 px.bar(
                     display_df,
@@ -300,9 +301,11 @@ def build_table_chart(
         [
             {
                 column: {
-                    "value": str(row["Tips"])
-                    if column == display_columns[0] and row["Tips"]
-                    else "",
+                    "value": (
+                        str(row["Tips"])
+                        if column == display_columns[0] and row["Tips"]
+                        else ""
+                    ),
                     "type": "markdown",
                 }
                 for column, value in row.items()
@@ -327,52 +330,58 @@ def build_table_chart(
         # style cell
         style_cell={"maxWidth": "500px"},
         # display style
-        style_header={
-            "backgroundColor": "rgb(30, 30, 30)",
-            "color": "white",
-            "fontWeight": "bold",
-        }
-        if IS_DARK
-        else {},
-        style_data={
-            "backgroundColor": "rgb(50, 50, 50)",
-            "color": "white",
-            "whiteSpace": "normal",
-            "height": "auto",
-        }
-        if IS_DARK
-        else {},
-        style_data_conditional=[
-            {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"},
+        style_header=(
             {
-                "if": {"column_id": "PoP", "filter_query": "{PoP} > 50"},
-                "backgroundColor": "#ffa90a",
+                "backgroundColor": "rgb(30, 30, 30)",
                 "color": "white",
-            },
+                "fontWeight": "bold",
+            }
+            if IS_DARK
+            else {}
+        ),
+        style_data=(
             {
-                "if": {"column_id": "PoP", "filter_query": "{PoP} > 80"},
-                "backgroundColor": "#ff120a",
+                "backgroundColor": "rgb(50, 50, 50)",
                 "color": "white",
-            },
-            {
-                "if": {
-                    "column_id": "Avg",
-                    "filter_query": "{Unit} = Pct && {Avg} > 50",
+                "whiteSpace": "normal",
+                "height": "auto",
+            }
+            if IS_DARK
+            else {}
+        ),
+        style_data_conditional=(
+            [
+                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(60, 60, 60)"},
+                {
+                    "if": {"column_id": "PoP", "filter_query": "{PoP} > 50"},
+                    "backgroundColor": "#ffa90a",
+                    "color": "white",
                 },
-                "backgroundColor": "#ffa90a",
-                "color": "white",
-            },
-            {
-                "if": {
-                    "column_id": "Avg",
-                    "filter_query": "{Unit} = Pct && {Avg} > 80",
+                {
+                    "if": {"column_id": "PoP", "filter_query": "{PoP} > 80"},
+                    "backgroundColor": "#ff120a",
+                    "color": "white",
                 },
-                "backgroundColor": "#ff120a",
-                "color": "white",
-            },
-        ]
-        if IS_DARK
-        else [],
+                {
+                    "if": {
+                        "column_id": "Avg",
+                        "filter_query": "{Unit} = Pct && {Avg} > 50",
+                    },
+                    "backgroundColor": "#ffa90a",
+                    "color": "white",
+                },
+                {
+                    "if": {
+                        "column_id": "Avg",
+                        "filter_query": "{Unit} = Pct && {Avg} > 80",
+                    },
+                    "backgroundColor": "#ff120a",
+                    "color": "white",
+                },
+            ]
+            if IS_DARK
+            else []
+        ),
         # the df to display
         data=display_df.to_dict("records"),
     )

@@ -27,11 +27,19 @@ import config
 from omniperf_soc.soc_base import OmniSoC_Base
 from utils.utils import demarcate, error
 
-class gfx908_soc (OmniSoC_Base):
-    def __init__(self,args,mspec):
-        super().__init__(args,mspec)
+
+class gfx908_soc(OmniSoC_Base):
+    def __init__(self, args, mspec):
+        super().__init__(args, mspec)
         self.set_arch("gfx908")
-        self.set_perfmon_dir(os.path.join(str(config.omniperf_home), "omniperf_soc", "profile_configs", self.get_arch())) 
+        self.set_perfmon_dir(
+            os.path.join(
+                str(config.omniperf_home),
+                "omniperf_soc",
+                "profile_configs",
+                self.get_arch(),
+            )
+        )
         self.set_compatible_profilers(["rocprofv1", "rocscope"])
         # Per IP block max number of simultaneous counters. GFX IP Blocks
         self.set_perfmon_config(
@@ -63,13 +71,12 @@ class gfx908_soc (OmniSoC_Base):
         # Mi100 requires a custom xml config
         return ["-m", self.get_workload_perfmon_dir() + "/" + "metrics.xml"]
 
-    #-----------------------
+    # -----------------------
     # Required child methods
-    #-----------------------
+    # -----------------------
     @demarcate
     def profiling_setup(self):
-        """Perform any SoC-specific setup prior to profiling.
-        """
+        """Perform any SoC-specific setup prior to profiling."""
         super().profiling_setup()
         if self.get_args().roof_only:
             error("%s does not support roofline analysis" % self.get_arch())
@@ -78,12 +85,10 @@ class gfx908_soc (OmniSoC_Base):
 
     @demarcate
     def post_profiling(self):
-        """Perform any SoC-specific post profiling activities.
-        """
+        """Perform any SoC-specific post profiling activities."""
         super().post_profiling()
 
     @demarcate
     def analysis_setup(self):
-        """Perform any SoC-specific setup prior to analysis.
-        """
+        """Perform any SoC-specific setup prior to analysis."""
         super().analysis_setup()

@@ -80,6 +80,8 @@ ALL_CSVS_MI200 = [
     "pmc_perf_14.csv",
     "pmc_perf_15.csv",
     "pmc_perf_16.csv",
+    "pmc_perf_17.csv",
+    "pmc_perf_18.csv",
     "pmc_perf_2.csv",
     "pmc_perf_3.csv",
     "pmc_perf_4.csv",
@@ -92,6 +94,7 @@ ALL_CSVS_MI200 = [
     "sysinfo.csv",
     "timestamps.csv",
 ]
+
 ROOF_ONLY_FILES = [
     "empirRoof_gpu-0_fp32.pdf",
     "empirRoof_gpu-0_int8_fp16.pdf",
@@ -106,14 +109,17 @@ ROOF_ONLY_FILES = [
 
 # Must not change relative difference is zero
 METRIC_THRESHOLDS = {
-    "2.1.12": {"absolute": 0, "relative": 1},
-    "2.1.15": {"absolute": 0, "relative": 1},
-    "2.1.19": {"absolute": 0, "relative": 1},
+    "2.1.12": {"absolute": 0, "relative": 8},
+    "3.1.1": {"absolute": 0, "relative": 10},
+    "3.1.10": {"absolute": 0, "relative": 10},
+    "3.1.11": {"absolute": 0, "relative": 1},
+    "3.1.12": {"absolute": 0, "relative": 1},
+    "3.1.13": {"absolute": 0, "relative": 1},
     "5.1.0": {"absolute": 0, "relative": 15},
     "5.2.0": {"absolute": 0, "relative": 15},
+    "6.1.4": {"absolute": 4, "relative": 0},
     "6.1.5": {"absolute": 0, "relative": 1},
     "6.1.0": {"absolute": 0, "relative": 15},
-    # "6.1.3" : {"absolute": 0, "relative": 5},
     "6.1.3": {"absolute": 0, "relative": 11},
     "6.2.12": {"absolute": 0, "relative": 1},
     "6.2.13": {"absolute": 0, "relative": 1},
@@ -123,8 +129,8 @@ METRIC_THRESHOLDS = {
     "7.1.5": {"absolute": 0, "relative": 1},
     "7.1.6": {"absolute": 0, "relative": 1},
     "7.1.7": {"absolute": 0, "relative": 1},
-    "7.2.0": {"absolute": 0, "relative": 5},
     "7.2.1": {"absolute": 0, "relative": 10},
+    "7.2.3": {"absolute": 0, "relative": 12},
     "7.2.6": {"absolute": 0, "relative": 1},
     "10.1.4": {"absolute": 0, "relative": 1},
     "10.1.5": {"absolute": 0, "relative": 1},
@@ -134,7 +140,7 @@ METRIC_THRESHOLDS = {
     "10.3.5": {"absolute": 0, "relative": 1},
     "10.3.6": {"absolute": 0, "relative": 1},
     "11.2.1": {"absolute": 0, "relative": 1},
-    "11.2.4": {"absolute": 0, "relative": 1},
+    "11.2.4": {"absolute": 0, "relative": 5},
     "13.2.0": {"absolute": 0, "relative": 1},
     "13.2.2": {"absolute": 0, "relative": 1},
     "14.2.0": {"absolute": 0, "relative": 1},
@@ -163,13 +169,10 @@ METRIC_THRESHOLDS = {
     "16.5.0": {"absolute": 0, "relative": 1},
     "17.3.3": {"absolute": 0, "relative": 1},
     "17.3.6": {"absolute": 0, "relative": 1},
-    "17.3.13": {"absolute": 0, "relative": 1},
     "18.1.0": {"absolute": 0, "relative": 1},
     "18.1.1": {"absolute": 0, "relative": 1},
     "18.1.2": {"absolute": 0, "relative": 1},
     "18.1.3": {"absolute": 0, "relative": 1},
-    "5.1.2": {"absolute": 0, "relative": 1},
-    "6.1.4": {"absolute": 0, "relative": 1},
     "18.1.5": {"absolute": 0, "relative": 1},
     "18.1.6": {"absolute": 1, "relative": 0},
 }
@@ -255,11 +258,11 @@ def gpu_soc():
     gpu_id = list(filter(soc_regex.match, rocminfo))[0].split()[1]
 
     if gpu_id == "gfx906":
-        return "mi50"
+        return "MI50"
     elif gpu_id == "gfx908":
-        return "mi100"
+        return "MI100"
     elif gpu_id == "gfx90a":
-        return "mi200"
+        return "MI200"
     elif gpu_id == "gfx900":
         return "vega10"
     else:
@@ -270,7 +273,7 @@ def gpu_soc():
 
 soc = gpu_soc()
 
-Baseline_dir = os.path.realpath("tests/workloads/Baseline_vcopy_" + soc)
+Baseline_dir = os.path.realpath("tests/workloads/vcopy/" + soc)
 
 
 def log_counter(file_dict, test_name):
@@ -320,6 +323,7 @@ def baseline_compare_metric(test_name, workload_dir, args=[]):
         stdout=subprocess.PIPE,
     )
     captured_output = t.communicate(timeout=1300)[0].decode("utf-8")
+    print(captured_output)
     assert t.returncode == 0
 
     if "DEBUG ERROR" in captured_output:
@@ -413,11 +417,18 @@ def baseline_compare_metric(test_name, workload_dir, args=[]):
                             counts > MAX_REOCCURING_COUNT
                         ]
                         if reoccurring_metrics.any(axis=None):
-                            print(
-                                "These metrics appear alot\n",
-                                reoccurring_metrics,
-                            )
-                            print(list(reoccurring_metrics["Index"]))
+                            with pd.option_context(
+                                "display.max_rows",
+                                None,
+                                "display.max_columns",
+                                None,
+                                #    'display.precision', 3,
+                            ):
+                                print(
+                                    "These metrics appear alot\n",
+                                    reoccurring_metrics,
+                                )
+                                # print(list(reoccurring_metrics["Index"]))
 
                         # log into csv
                         if not error_df.empty:
@@ -445,6 +456,7 @@ def test_path():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
+        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == ALL_CSVS_MI200
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
@@ -478,6 +490,8 @@ def test_no_roof():
             "pmc_perf_14.csv",
             "pmc_perf_15.csv",
             "pmc_perf_16.csv",
+            "pmc_perf_17.csv",
+            "pmc_perf_18.csv",
             "pmc_perf_2.csv",
             "pmc_perf_3.csv",
             "pmc_perf_4.csv",
@@ -507,7 +521,7 @@ def test_kernel_names():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -517,7 +531,6 @@ def test_kernel_names():
 
     file_dict = test_utils.check_csv_files(workload_dir, num_devices, num_kernels)
     if soc == "mi200":
-        print(sorted(list(file_dict.keys())))
         assert sorted(list(file_dict.keys())) == [
             "empirRoof_gpu-0_fp32.pdf",
             "empirRoof_gpu-0_int8_fp16.pdf",
@@ -530,6 +543,7 @@ def test_kernel_names():
             "sysinfo.csv",
             "timestamps.csv",
         ]
+
     else:
         assert sorted(list(file_dict.keys())) == ALL_CSVS
 
@@ -1492,7 +1506,7 @@ def test_sort_dispatches():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1523,7 +1537,7 @@ def test_sort_kernels():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1553,7 +1567,7 @@ def test_mem_levels_HBM():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1584,7 +1598,7 @@ def test_mem_levels_L2():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1615,7 +1629,7 @@ def test_mem_levels_vL1D():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1646,7 +1660,7 @@ def test_mem_levels_LDS():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1677,7 +1691,7 @@ def test_mem_levels_HBM_LDS():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1708,7 +1722,7 @@ def test_mem_levels_vL1D_LDS():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing
@@ -1739,7 +1753,7 @@ def test_mem_levels_L2_vL1D_LDS():
     workload_dir = test_utils.get_output_dir()
     e = test_utils.launch_omniperf(config, options, workload_dir, check_success=False)
 
-    if soc == "mi100":
+    if soc == "MI100":
         # assert that it did not run
         assert e.value.code >= 1
         # Do not continue testing

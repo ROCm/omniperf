@@ -597,7 +597,7 @@ def search(pattern, string):
         return m.group(1)
     return None
 
-
+  
 def total_l2_banks(archname, L2Banks, memory_partition):
     # Fixme: support all supported partitioning mode
     # Fixme: "name" is a bad name!

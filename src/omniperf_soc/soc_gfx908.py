@@ -27,7 +27,6 @@ import config
 from omniperf_soc.soc_base import OmniSoC_Base
 from utils.utils import demarcate, error
 
-
 class gfx908_soc(OmniSoC_Base):
     def __init__(self, args, mspec):
         super().__init__(args, mspec)

@@ -29,7 +29,6 @@ from utils.utils import demarcate, mibench
 from roofline import Roofline
 import logging
 
-
 class gfx90a_soc(OmniSoC_Base):
     def __init__(self, args, mspec):
         super().__init__(args, mspec)

@@ -33,6 +33,7 @@ from utils import schema
 from utils.utils import error
 from pathlib import Path
 import logging
+import warnings
 
 # ------------------------------------------------------------------------------
 # Internal global definitions
@@ -145,7 +146,9 @@ def to_median(a):
     if a is None:
         return None
     elif isinstance(a, pd.core.series.Series):
-        return a.median()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", message="Mean of empty slice")
+            return a.median()
     else:
         raise Exception("to_median: unsupported type.")
 
@@ -856,10 +859,10 @@ def apply_filters(workload, dir, is_gui, debug):
             # Verify valid kernel filter
             kernels_df = pd.read_csv(os.path.join(dir, "pmc_kernel_top.csv"))
             for kernel_id in workload.filter_kernel_ids:
-                if kernel_id > len(kernels_df["Kernel_Name"]):
+                if kernel_id >= len(kernels_df["Kernel_Name"]):
                     error(
                         "{} is an invalid kernel id. Please enter an id between 0-{}".format(
-                            kernel_id, len(kernels_df["Kernel_Name"])
+                            kernel_id, len(kernels_df["Kernel_Name"]) - 1
                         )
                     )
             kernels = []
@@ -975,7 +978,6 @@ def build_comparable_columns(time_unit):
         comparable_columns.append(h + "(" + time_unit + ")")
 
     return comparable_columns
-
 
 def correct_sys_info(mspec, specs_correction: dict):
     """

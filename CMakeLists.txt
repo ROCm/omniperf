@@ -58,7 +58,7 @@ message(STATUS "Installation path: ${CMAKE_INSTALL_PREFIX}")
 # Python 3 is required
 message(STATUS "Detecting Python interpreter...")
 find_package(
-    Python3 3.7
+    Python3 3.8
     COMPONENTS Interpreter
     REQUIRED)
 
@@ -173,62 +173,70 @@ enable_testing()
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 set(COV_OPTION "")
 if(${ENABLE_COVERAGE})
-    set(COV_OPTION "--cov=src" "--junitxml=tests/test-results.xml" "--cov-append"
-                   "--cov-report=term-missing" "--cov-report=xml:tests/coverage.xml")
+    set(COV_OPTION "--cov=src" "--cov-append" "--cov-report=term-missing"
+                   "--cov-report=lcov:tests/coverage.info")
+    # "--cov-report=term-missing" "--cov-report=xml:tests/coverage.xml")
 endif()
 message(STATUS "Code coverage: ${ENABLE_COVERAGE}")
 
-# --------------------------------------------------------------------------------------------------------
+# CPU threads available for testing
+set(PYTEST_NUMPROCS
+    "1"
+    CACHE STRING "Number of parallel threads to use with CPU-oriented tests")
+message(STATUS "Pytest CPU threadcount: ${PYTEST_NUMPROCS}")
+
+# ---------------------------
 # profile mode tests
+# ---------------------------
 
 add_test(
     NAME test_profile_kernel_execution
-    COMMAND pytest -m kernel_execution ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND pytest -m kernel_execution --junitxml=tests/test_profile_kernel_execution.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_ipblocks
-    COMMAND pytest -m ipblocks ${COV_OPTION}
+    COMMAND pytest -m ipblocks --junitxml=tests/test_profile_ipblocks.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_property(TEST test_profile_ipblocks PROPERTY COST 11)
 
 add_test(
     NAME test_profile_dispatch
-    COMMAND pytest -m dispatch ${COV_OPTION}
+    COMMAND pytest -m dispatch --junitxml=tests/test_profile_dispatch.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_property(TEST test_profile_ipblocks PROPERTY COST 5)
 
 add_test(
     NAME test_profile_verbosity
-    COMMAND pytest -m verbosity ${COV_OPTION}
+    COMMAND pytest -m verbosity --junitxml=tests/test_profile_verbosity.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_property(TEST test_profile_ipblocks PROPERTY COST 10)
 
 add_test(
     NAME test_profile_mem
-    COMMAND pytest -m mem ${COV_OPTION}
+    COMMAND pytest -m mem --junitxml=tests/test_profile_mem.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_join
-    COMMAND pytest -m join ${COV_OPTION}
+    COMMAND pytest -m join --junitxml=tests/test_profile_join.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_sort
-    COMMAND pytest -m sort ${COV_OPTION}
+    COMMAND pytest -m sort --junitxml=tests/test_profile_sort.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_misc
-    COMMAND pytest -m misc ${COV_OPTION}
+    COMMAND pytest -m misc --junitxml=tests/test_profile_misc.xml ${COV_OPTION}
             ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
@@ -243,44 +251,89 @@ set_tests_properties(
     test_profile_misc
     PROPERTIES LABELS "profile" RESOURCE_GROUPS gpus:1)
 
-# original
-# add_test(
-#     NAME test_profiler_general
-#     COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
-#     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-# --------------------------------------------------------------------------------------------------------
+# original add_test( NAME test_profiler_general COMMAND pytest ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+
+# ---------------------------
+# analysis command tests
+# ---------------------------
 
 add_test(
     NAME test_analyze_commands
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
+    COMMAND pytest -n ${PYTEST_NUMPROCS} --junitxml=tests/test_analyze_commands.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+# add_test( NAME test_analyze_commands_misc COMMAND pytest -m misc ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_list_metrics COMMAND pytest -m list_metrics
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_filter_metrics COMMAND pytest -m filter_metrics
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_filter_kernel COMMAND pytest -m filter_kernel
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_dispatch COMMAND pytest -m dispatch ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_normal_unit COMMAND pytest -m normal_unit
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_max_kernel COMMAND pytest -m max_kernel
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_time_unit COMMAND pytest -m time_unit ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_decimal COMMAND pytest -m decimal ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_col COMMAND pytest -m col ${COV_OPTION}
+# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# add_test( NAME test_analyze_commands_kernel_verbose COMMAND pytest -m kernel_verbose
+# ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
+# ${PROJECT_SOURCE_DIR})
+#
+# set_tests_properties( test_analyze_commands_misc test_analyze_commands_list_metrics
+# test_analyze_commands_filter_metrics test_analyze_commands_filter_kernel
+# test_analyze_commands_dispatch test_analyze_commands_normal_unit
+# test_analyze_commands_max_kernel test_analyze_commands_time_unit
+# test_analyze_commands_decimal test_analyze_commands_col
+# test_analyze_commands_kernel_verbose PROPERTIES LABELS "analyze_commands")
+
+# ---------------------------
+# analyze workloads tests
+# ---------------------------
 
 add_test(
     NAME test_analyze_workloads
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
+    COMMAND pytest -n ${PYTEST_NUMPROCS} --junitxml=tests/test_analyze_workloads.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+# ---------------------------
+# saved analysis tests
+# ---------------------------
 
 add_test(
     NAME test_saved_analysis
     COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-
-# if(EXISTS ${PROJECT_SOURCE_DIR}/src/mibench/roofline/roofline.cpp) message(STATUS
-# "Enabling optional roofline binaries..") foreach(ROCM_VERSION ${ROCM_VERSIONS})
-# externalproject_add( roofline-rocm-${ROCM_VERSION} PREFIX
-# ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline SOURCE_DIR
-# ${PROJECT_SOURCE_DIR}/src/mibench/roofline BINARY_DIR
-# ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline/build BUILD_BYPRODUCTS
-# <BINARY_DIR>/roofline CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-# HIP_PATH=/opt/rocm-${ROCM_VERSION} ${CMAKE_COMMAND}
-# -DCMAKE_CXX_COMPILER=/opt/rocm-${ROCM_VERSION}/hip/bin/hipcc
-# -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -B <BINARY_DIR> <SOURCE_DIR> BUILD_COMMAND
-# ${CMAKE_COMMAND} --build <BINARY_DIR> --target all INSTALL_COMMAND "") #
-# add_dependencies(roofline-rocm-${ROCM_VERSION} run-pyinstaller) string(REGEX REPLACE
-# "([0-9]+)\.([0-9]+)\.([0-9]+)(.*)" "\\1.\\2" ROCM_BASIC_VERSION "${ROCM_VERSION}")
-# install( PROGRAMS ${PROJECT_BINARY_DIR}/rocm-${ROCM_VERSION}/roofline/build/roofline
-# DESTINATION ${CMAKE_INSTALL_BINDIR}/utils RENAME roofline-${ROCM_BASIC_VERSION})
-# endforeach() else() message(STATUS "Optional roofline package not found") endif()
 
 # ---------
 # Install
@@ -320,52 +373,13 @@ install(
     DIRECTORY src/omniperf_profile
     TYPE BIN
     PATTERN "__pycache__" EXCLUDE)
-
 # samples
 install(DIRECTORY sample TYPE DATA)
-
 # modulefile
 install(
     FILES
         ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
     DESTINATION ${MOD_INSTALL_PATH}/${PROJECT_NAME})
-
-# install(PROGRAMS src/omniperf.py DESTINATION ${OMNIPERF_PYINSTALLER_PATH})
-# set(OMNIPERF_BUILD_ARGS "-y --workpath=${PROJECT_BINARY_DIR}/pyinstaller
-# --distpath=${PROJECT_BINARY_DIR}/dist" CACHE STRING "Arguments for build.sh" FORCE)
-#
-# string(REPLACE " " ";" _OMNIPERF_BUILD_ARGS "${OMNIPERF_BUILD_ARGS}")
-#
-# add_custom_target( run-pyinstaller COMMAND ${PROJECT_SOURCE_DIR}/build.sh
-# ${_OMNIPERF_BUILD_ARGS} WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} BYPRODUCTS
-# ${PROJECT_BINARY_DIR}/dist COMMENT "Running pyinstaller")
-#
-# set(OMNIPERF_PYINSTALLER_PATH
-# "${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION}/site-packages/omniperf" CACHE STRING
-# "Relative installation directory for omniperf")
-#
-# install( DIRECTORY ${PROJECT_BINARY_DIR}/dist/omniperf/ DESTINATION
-# ${OMNIPERF_PYINSTALLER_PATH} USE_SOURCE_PERMISSIONS COMPONENT pyinstaller PATTERN ".a"
-# EXCLUDE PATTERN ".git" EXCLUDE PATTERN "utils/roofline" EXCLUDE)
-#
-# install(FILES ${PROJECT_SOURCE_DIR}/VERSION DESTINATION
-# ${OMNIPERF_PYINSTALLER_PATH}/../)
-#
-# file(RELATIVE_PATH OMNIPERF_RELATIVE_PATH
-# "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
-# "${CMAKE_INSTALL_PREFIX}/${OMNIPERF_PYINSTALLER_PATH}")
-#
-# configure_file(${PROJECT_SOURCE_DIR}/cmake/omniperf.sh.in
-# ${PROJECT_BINARY_DIR}/omniperf-sh @ONLY) install( PROGRAMS
-# ${PROJECT_BINARY_DIR}/omniperf-sh DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME omniperf)
-
-# Packaging directives set(CPACK_GENERATOR "DEB" "RPM" "TGZ") set(CPACK_PACKAGE_NAME
-# "omniperf") set(CPACK_PACKAGE_VENDOR "AMD") set(CPACK_PACKAGE_VERSION_MAJOR
-# ${PROJECT_VERSION_MAJOR}) set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
-# set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH}${OMNIPERF_VERSION_TWEAK})
-# set(CPACK_PACKAGE_CONTACT "Advanced Micro Devices Inc.")
-# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "omniperf") set(CPACK_RESOURCE_FILE_LICENSE
-# "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 
 # License header update(s)
 add_custom_target(

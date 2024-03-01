@@ -170,7 +170,7 @@ class Omniperf:
         if self.__args.specs:
             print(self.__mspec)
             sys.exit(0)
-
+            
         arch = self.__mspec.gpu_arch
 
         # NB: This checker is a bit redundent. We already check this in specs module

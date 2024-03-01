@@ -29,7 +29,6 @@ from utils.utils import demarcate, mibench
 from roofline import Roofline
 import logging
 
-
 class gfx940_soc(OmniSoC_Base):
     def __init__(self, args, mspec):
         super().__init__(args, mspec)
@@ -73,7 +72,7 @@ class gfx940_soc(OmniSoC_Base):
         self._mspec._l2_banks = 16
         self._mspec.lds_banks_per_cu = 32
         self._mspec.pipes_per_gpu = 4
-
+        
     # -----------------------
     # Required child methods
     # -----------------------

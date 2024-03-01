@@ -3,15 +3,20 @@ from pathlib import Path
 from unittest.mock import patch
 import pytest
 from importlib.machinery import SourceFileLoader
+import shutil
+import pandas as pd
 
 omniperf = SourceFileLoader("omniperf", "src/omniperf").load_module()
 
+baseline_opts = ["omniperf", "analyze"]
 
+
+@pytest.mark.misc
 def test_valid_path():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
-            ["omniperf", "analyze", "--path", "tests/workloads/mixbench/mi100"],
+            ["omniperf", "analyze", "--path", "tests/workloads/vcopy/MI100"],
         ):
             omniperf.main()
     assert e.value.code == 0
@@ -19,12 +24,13 @@ def test_valid_path():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
-            ["omniperf", "analyze", "--path", "tests/workloads/mixbench/mi200"],
+            ["omniperf", "analyze", "--path", "tests/workloads/vcopy/MI200"],
         ):
             omniperf.main()
     assert e.value.code == 0
 
 
+@pytest.mark.misc
 def test_list_kernels():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -33,8 +39,8 @@ def test_list_kernels():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
-                "--list-kernels",
+                "tests/workloads/vcopy/MI100",
+                "--list-stats",
             ],
         ):
             omniperf.main()
@@ -47,19 +53,20 @@ def test_list_kernels():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
-                "--list-kernels",
+                "tests/workloads/vcopy/MI200",
+                "--list-stats",
             ],
         ):
             omniperf.main()
     assert e.value.code == 0
 
 
+@pytest.mark.list_metrics
 def test_list_metrics_gfx90a():
     with pytest.raises(SystemExit) as e:
         with patch("sys.argv", ["omniperf", "analyze", "--list-metrics", "gfx90a"]):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -68,7 +75,7 @@ def test_list_metrics_gfx90a():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--list-metrics",
                 "gfx90a",
             ],
@@ -83,7 +90,7 @@ def test_list_metrics_gfx90a():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--list-metrics",
                 "gfx90a",
             ],
@@ -92,11 +99,12 @@ def test_list_metrics_gfx90a():
     assert e.value.code == 0
 
 
+@pytest.mark.list_metrics
 def test_list_metrics_gfx906():
     with pytest.raises(SystemExit) as e:
         with patch("sys.argv", ["omniperf", "analyze", "--list-metrics", "gfx906"]):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -105,7 +113,7 @@ def test_list_metrics_gfx906():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--list-metrics",
                 "gfx906",
             ],
@@ -120,7 +128,7 @@ def test_list_metrics_gfx906():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--list-metrics",
                 "gfx906",
             ],
@@ -129,11 +137,12 @@ def test_list_metrics_gfx906():
     assert e.value.code == 0
 
 
+@pytest.mark.list_metrics
 def test_list_metrics_gfx908():
     with pytest.raises(SystemExit) as e:
         with patch("sys.argv", ["omniperf", "analyze", "--list-metrics", "gfx908"]):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -142,7 +151,7 @@ def test_list_metrics_gfx908():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--list-metrics",
                 "gfx908",
             ],
@@ -157,7 +166,7 @@ def test_list_metrics_gfx908():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--list-metrics",
                 "gfx908",
             ],
@@ -166,6 +175,7 @@ def test_list_metrics_gfx908():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -174,7 +184,7 @@ def test_filter_metrics_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "1",
             ],
@@ -189,7 +199,7 @@ def test_filter_metrics_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "1",
             ],
@@ -198,6 +208,7 @@ def test_filter_metrics_1():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -206,7 +217,7 @@ def test_filter_metrics_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "5",
             ],
@@ -221,7 +232,7 @@ def test_filter_metrics_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "5",
             ],
@@ -230,6 +241,7 @@ def test_filter_metrics_2():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -238,7 +250,7 @@ def test_filter_metrics_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "5.2.2",
             ],
@@ -253,7 +265,7 @@ def test_filter_metrics_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "5.2.2",
             ],
@@ -262,6 +274,7 @@ def test_filter_metrics_3():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_4():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -270,7 +283,7 @@ def test_filter_metrics_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "6.1",
             ],
@@ -285,7 +298,7 @@ def test_filter_metrics_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "6.1",
             ],
@@ -294,6 +307,7 @@ def test_filter_metrics_4():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_5():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -302,7 +316,7 @@ def test_filter_metrics_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "10",
             ],
@@ -317,7 +331,7 @@ def test_filter_metrics_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "10",
             ],
@@ -326,6 +340,7 @@ def test_filter_metrics_5():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_metrics
 def test_filter_metrics_6():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -334,7 +349,7 @@ def test_filter_metrics_6():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--metric",
                 "100",
             ],
@@ -349,7 +364,7 @@ def test_filter_metrics_6():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--metric",
                 "100",
             ],
@@ -358,6 +373,7 @@ def test_filter_metrics_6():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_kernel
 def test_filter_kernel_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -366,7 +382,7 @@ def test_filter_kernel_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel",
                 "0",
             ],
@@ -381,7 +397,7 @@ def test_filter_kernel_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel",
                 "0",
             ],
@@ -390,6 +406,7 @@ def test_filter_kernel_1():
     assert e.value.code == 0
 
 
+@pytest.mark.filter_kernel
 def test_filter_kernel_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -398,13 +415,13 @@ def test_filter_kernel_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel",
                 "1",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -413,15 +430,16 @@ def test_filter_kernel_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel",
                 "1",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
+@pytest.mark.filter_kernel
 def test_filter_kernel_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -430,14 +448,14 @@ def test_filter_kernel_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel",
                 "0",
                 "1",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -446,16 +464,17 @@ def test_filter_kernel_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel",
                 "0",
                 "1",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
+@pytest.mark.dispatch
 def test_dispatch_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -464,7 +483,7 @@ def test_dispatch_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dispatch",
                 "0",
             ],
@@ -479,7 +498,7 @@ def test_dispatch_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--dispatch",
                 "0",
             ],
@@ -488,6 +507,7 @@ def test_dispatch_1():
     assert e.value.code == 0
 
 
+@pytest.mark.dispatch
 def test_dispatch_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -496,7 +516,7 @@ def test_dispatch_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dispatch",
                 "1",
             ],
@@ -511,7 +531,7 @@ def test_dispatch_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--dispatch",
                 "1",
             ],
@@ -520,6 +540,7 @@ def test_dispatch_2():
     assert e.value.code == 0
 
 
+@pytest.mark.dispatch
 def test_dispatch_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -528,7 +549,7 @@ def test_dispatch_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dispatch",
                 "2",
             ],
@@ -543,7 +564,7 @@ def test_dispatch_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--dispatch",
                 "2",
             ],
@@ -552,6 +573,7 @@ def test_dispatch_3():
     assert e.value.code == 0
 
 
+@pytest.mark.dispatch
 def test_dispatch_4():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -560,14 +582,14 @@ def test_dispatch_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dispatch",
                 "1",
                 "4",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -576,16 +598,17 @@ def test_dispatch_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--dispatch",
                 "1",
                 "4",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
+@pytest.mark.dispatch
 def test_dispatch_5():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -594,14 +617,14 @@ def test_dispatch_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dispatch",
                 "5",
                 "6",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -610,16 +633,17 @@ def test_dispatch_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--dispatch",
                 "5",
                 "6",
             ],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
+@pytest.mark.misc
 def test_gpu_ids():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -628,9 +652,9 @@ def test_gpu_ids():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--gpu-id",
-                "0",
+                "2",
             ],
         ):
             omniperf.main()
@@ -643,15 +667,16 @@ def test_gpu_ids():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--gpu-id",
-                "0",
+                "2",
             ],
         ):
             omniperf.main()
     assert e.value.code == 0
 
 
+@pytest.mark.normal_unit
 def test_normal_unit_per_wave():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -660,7 +685,7 @@ def test_normal_unit_per_wave():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--normal-unit",
                 "per_wave",
             ],
@@ -675,7 +700,7 @@ def test_normal_unit_per_wave():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--normal-unit",
                 "per_wave",
             ],
@@ -684,6 +709,7 @@ def test_normal_unit_per_wave():
     assert e.value.code == 0
 
 
+@pytest.mark.normal_unit
 def test_normal_unit_per_cycle():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -692,7 +718,7 @@ def test_normal_unit_per_cycle():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--normal-unit",
                 "per_cycle",
             ],
@@ -707,7 +733,7 @@ def test_normal_unit_per_cycle():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--normal-unit",
                 "per_cycle",
             ],
@@ -716,6 +742,7 @@ def test_normal_unit_per_cycle():
     assert e.value.code == 0
 
 
+@pytest.mark.normal_unit
 def test_normal_unit_per_second():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -724,7 +751,7 @@ def test_normal_unit_per_second():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--normal-unit",
                 "per_second",
             ],
@@ -739,7 +766,7 @@ def test_normal_unit_per_second():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--normal-unit",
                 "per_second",
             ],
@@ -748,6 +775,7 @@ def test_normal_unit_per_second():
     assert e.value.code == 0
 
 
+@pytest.mark.normal_unit
 def test_normal_unit_per_kernel():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -756,7 +784,7 @@ def test_normal_unit_per_kernel():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--normal-unit",
                 "per_kernel",
             ],
@@ -771,7 +799,7 @@ def test_normal_unit_per_kernel():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--normal-unit",
                 "per_kernel",
             ],
@@ -780,7 +808,8 @@ def test_normal_unit_per_kernel():
     assert e.value.code == 0
 
 
-def test_max_kernel_num_1():
+@pytest.mark.max_stat
+def test_max_stat_num_1():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -788,8 +817,8 @@ def test_max_kernel_num_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI100",
+                "--max-stat-num",
                 "0",
             ],
         ):
@@ -803,8 +832,8 @@ def test_max_kernel_num_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI200",
+                "--max-stat-num",
                 "0",
             ],
         ):
@@ -812,7 +841,8 @@ def test_max_kernel_num_1():
     assert e.value.code == 0
 
 
-def test_max_kernel_num_2():
+@pytest.mark.max_stat
+def test_max_stat_num_2():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -820,8 +850,8 @@ def test_max_kernel_num_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI100",
+                "--max-stat-num",
                 "5",
             ],
         ):
@@ -835,8 +865,8 @@ def test_max_kernel_num_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI200",
+                "--max-stat-num",
                 "5",
             ],
         ):
@@ -844,7 +874,8 @@ def test_max_kernel_num_2():
     assert e.value.code == 0
 
 
-def test_max_kernel_num_3():
+@pytest.mark.max_stat
+def test_max_stat_num_3():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -852,8 +883,8 @@ def test_max_kernel_num_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI100",
+                "--max-stat-num",
                 "10",
             ],
         ):
@@ -867,8 +898,8 @@ def test_max_kernel_num_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI200",
+                "--max-stat-num",
                 "10",
             ],
         ):
@@ -876,7 +907,8 @@ def test_max_kernel_num_3():
     assert e.value.code == 0
 
 
-def test_max_kernel_num_4():
+@pytest.mark.max_stat
+def test_max_stat_num_4():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -884,8 +916,8 @@ def test_max_kernel_num_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI100",
+                "--max-stat-num",
                 "15",
             ],
         ):
@@ -899,8 +931,8 @@ def test_max_kernel_num_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
-                "--max-kernel-num",
+                "tests/workloads/vcopy/MI200",
+                "--max-stat-num",
                 "15",
             ],
         ):
@@ -908,6 +940,7 @@ def test_max_kernel_num_4():
     assert e.value.code == 0
 
 
+@pytest.mark.time_unit
 def test_time_unit_s():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -916,7 +949,7 @@ def test_time_unit_s():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--time-unit",
                 "s",
             ],
@@ -931,7 +964,7 @@ def test_time_unit_s():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--time-unit",
                 "s",
             ],
@@ -940,6 +973,7 @@ def test_time_unit_s():
     assert e.value.code == 0
 
 
+@pytest.mark.time_unit
 def test_time_unit_ms():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -948,7 +982,7 @@ def test_time_unit_ms():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--time-unit",
                 "ms",
             ],
@@ -963,7 +997,7 @@ def test_time_unit_ms():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--time-unit",
                 "ms",
             ],
@@ -972,6 +1006,7 @@ def test_time_unit_ms():
     assert e.value.code == 0
 
 
+@pytest.mark.time_unit
 def test_time_unit_us():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -980,7 +1015,7 @@ def test_time_unit_us():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--time-unit",
                 "us",
             ],
@@ -995,7 +1030,7 @@ def test_time_unit_us():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--time-unit",
                 "us",
             ],
@@ -1004,6 +1039,7 @@ def test_time_unit_us():
     assert e.value.code == 0
 
 
+@pytest.mark.time_unit
 def test_time_unit_ns():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1012,7 +1048,7 @@ def test_time_unit_ns():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--time-unit",
                 "ns",
             ],
@@ -1027,7 +1063,7 @@ def test_time_unit_ns():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--time-unit",
                 "ns",
             ],
@@ -1036,6 +1072,7 @@ def test_time_unit_ns():
     assert e.value.code == 0
 
 
+@pytest.mark.decimal
 def test_decimal_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1044,7 +1081,7 @@ def test_decimal_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--decimal",
                 "0",
             ],
@@ -1059,7 +1096,7 @@ def test_decimal_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--decimal",
                 "0",
             ],
@@ -1068,6 +1105,7 @@ def test_decimal_1():
     assert e.value.code == 0
 
 
+@pytest.mark.decimal
 def test_decimal_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1076,7 +1114,7 @@ def test_decimal_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--decimal",
                 "1",
             ],
@@ -1091,7 +1129,7 @@ def test_decimal_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--decimal",
                 "1",
             ],
@@ -1100,6 +1138,7 @@ def test_decimal_2():
     assert e.value.code == 0
 
 
+@pytest.mark.decimal
 def test_decimal_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1108,7 +1147,7 @@ def test_decimal_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--decimal",
                 "4",
             ],
@@ -1123,7 +1162,7 @@ def test_decimal_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--decimal",
                 "4",
             ],
@@ -1132,7 +1171,10 @@ def test_decimal_3():
     assert e.value.code == 0
 
 
+@pytest.mark.misc
 def test_save_dfs():
+    output_path = "tests/workloads/vcopy/saved_analysis"
+
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -1140,9 +1182,9 @@ def test_save_dfs():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--save-dfs",
-                "saved_dfs",
+                output_path,
             ],
         ):
             omniperf.main()
@@ -1155,15 +1197,54 @@ def test_save_dfs():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--save-dfs",
-                "saved_dfs",
+                output_path,
             ],
         ):
             omniperf.main()
     assert e.value.code == 0
 
+    files_in_workload = os.listdir(output_path)
+    single_row_tables = [
+        "0.1_Top_Kernels.csv",
+        "13.3_Instruction_Cache_-_L2_Interface.csv",
+        "18.1_Aggregate_Stats_(All_32_channels).csv",
+    ]
+    for file_name in files_in_workload:
+        df = pd.read_csv(output_path + "/" + file_name)
+        if file_name in single_row_tables:
+            assert len(df.index) == 1
+        else:
+            assert len(df.index) >= 3
 
+    shutil.rmtree(output_path)
+
+    with pytest.raises(SystemExit) as e:
+        with patch(
+            "sys.argv",
+            [
+                "omniperf",
+                "analyze",
+                "--path",
+                "tests/workloads/vcopy/MI100",
+                "--save-dfs",
+                output_path,
+            ],
+        ):
+            omniperf.main()
+    assert e.value.code == 0
+
+    files_in_workload = os.listdir(output_path)
+    for file_name in files_in_workload:
+        df = pd.read_csv(output_path + "/" + file_name)
+        if file_name in single_row_tables:
+            assert len(df.index) == 1
+        else:
+            assert len(df.index) >= 3
+
+
+@pytest.mark.col
 def test_col_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1172,7 +1253,7 @@ def test_col_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--cols",
                 "0",
             ],
@@ -1187,7 +1268,7 @@ def test_col_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--cols",
                 "0",
             ],
@@ -1196,6 +1277,7 @@ def test_col_1():
     assert e.value.code == 0
 
 
+@pytest.mark.col
 def test_col_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1204,7 +1286,7 @@ def test_col_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--cols",
                 "2",
             ],
@@ -1219,7 +1301,7 @@ def test_col_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--cols",
                 "2",
             ],
@@ -1228,6 +1310,7 @@ def test_col_2():
     assert e.value.code == 0
 
 
+@pytest.mark.col
 def test_col_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1236,7 +1319,7 @@ def test_col_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--cols",
                 "0",
                 "2",
@@ -1252,7 +1335,7 @@ def test_col_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--cols",
                 "0",
                 "2",
@@ -1262,6 +1345,7 @@ def test_col_3():
     assert e.value.code == 0
 
 
+@pytest.mark.misc
 def test_g():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1270,7 +1354,7 @@ def test_g():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "-g",
             ],
         ):
@@ -1284,7 +1368,7 @@ def test_g():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "-g",
             ],
         ):
@@ -1292,6 +1376,7 @@ def test_g():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_0():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1300,7 +1385,7 @@ def test_kernel_verbose_0():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "0",
             ],
@@ -1315,7 +1400,7 @@ def test_kernel_verbose_0():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "0",
             ],
@@ -1324,6 +1409,7 @@ def test_kernel_verbose_0():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_1():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1332,7 +1418,7 @@ def test_kernel_verbose_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "1",
             ],
@@ -1347,7 +1433,7 @@ def test_kernel_verbose_1():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "1",
             ],
@@ -1356,6 +1442,7 @@ def test_kernel_verbose_1():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_2():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1364,7 +1451,7 @@ def test_kernel_verbose_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "2",
             ],
@@ -1379,7 +1466,7 @@ def test_kernel_verbose_2():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "2",
             ],
@@ -1388,6 +1475,7 @@ def test_kernel_verbose_2():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_3():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1396,7 +1484,7 @@ def test_kernel_verbose_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "3",
             ],
@@ -1411,7 +1499,7 @@ def test_kernel_verbose_3():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "3",
             ],
@@ -1420,6 +1508,7 @@ def test_kernel_verbose_3():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_4():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1428,7 +1517,7 @@ def test_kernel_verbose_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "4",
             ],
@@ -1443,7 +1532,7 @@ def test_kernel_verbose_4():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "4",
             ],
@@ -1452,6 +1541,7 @@ def test_kernel_verbose_4():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_5():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1460,7 +1550,7 @@ def test_kernel_verbose_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "5",
             ],
@@ -1475,7 +1565,7 @@ def test_kernel_verbose_5():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "5",
             ],
@@ -1484,6 +1574,7 @@ def test_kernel_verbose_5():
     assert e.value.code == 0
 
 
+@pytest.mark.kernel_verbose
 def test_kernel_verbose_6():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1492,7 +1583,7 @@ def test_kernel_verbose_6():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--kernel-verbose",
                 "6",
             ],
@@ -1507,7 +1598,7 @@ def test_kernel_verbose_6():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--kernel-verbose",
                 "6",
             ],
@@ -1516,6 +1607,7 @@ def test_kernel_verbose_6():
     assert e.value.code == 0
 
 
+@pytest.mark.misc
 def test_baseline():
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1524,9 +1616,9 @@ def test_baseline():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
             ],
         ):
             omniperf.main()
@@ -1539,9 +1631,9 @@ def test_baseline():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi200",
+                "tests/workloads/vcopy/MI200",
                 "--path",
-                "tests/workloads/mixbench1/mi200",
+                "tests/workloads/vcopy/MI200",
             ],
         ):
             omniperf.main()
@@ -1554,16 +1646,17 @@ def test_baseline():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--path",
-                "tests/workloads/mixbench1/mi100",
+                "tests/workloads/vcopy/MI100",
             ],
         ):
             omniperf.main()
     assert e.value.code == 0
 
 
-def test_dependency_mi100():
+@pytest.mark.misc
+def test_dependency_MI100():
     with pytest.raises(SystemExit) as e:
         with patch(
             "sys.argv",
@@ -1571,7 +1664,7 @@ def test_dependency_mi100():
                 "omniperf",
                 "analyze",
                 "--path",
-                "tests/workloads/mixbench/mi100",
+                "tests/workloads/vcopy/MI100",
                 "--dependency",
             ],
         ):

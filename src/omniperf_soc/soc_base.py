@@ -35,7 +35,6 @@ from pathlib import Path
 
 from omniperf_base import SUPPORTED_ARCHS
 
-
 class OmniSoC_Base:
     def __init__(
         self, args, mspec

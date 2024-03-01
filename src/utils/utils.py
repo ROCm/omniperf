@@ -200,9 +200,7 @@ def capture_subprocess_output(subprocess_args, new_env=None):
 
 
 def run_prof(fname, profiler_options, workload_dir, mspec):
-
     fbase = os.path.splitext(os.path.basename(fname))[0]
-
     logging.debug("pmc file: %s" % str(os.path.basename(fname)))
 
     # standard rocprof options
@@ -298,7 +296,6 @@ def replace_timestamps(workload_dir):
             "WARNING: Incomplete profiling data detected. Unable to update timestamps."
         )
         logging.warning(warning + "\n")
-
 
 def gen_sysinfo(
     workload_name, workload_dir, ip_blocks, app_cmd, skip_roof, roof_only, mspec

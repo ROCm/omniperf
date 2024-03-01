@@ -17,13 +17,12 @@ jobs:
   profile:
     strategy:
       matrix:
-        version: [5.5.1, 5.7.1]
+        version: [5.7.1]
       fail-fast: false
     runs-on: [mi100, rhel9]
 
     env:
        PYTHONPATH: /home1/ciuser/omniperf_deps
-#       PYTHONPATH: ${{ github.workspace }}/python-libs
     name: ROCm v${{ matrix.version }}
     steps:
       - name: Checkout
@@ -46,28 +45,44 @@ jobs:
           echo "PATH=$PATH"
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
           echo "ROCM_PATH=$ROCM_PATH"
+          ulimit -u
       - name: Configure
         run: |
           mkdir build
           cd build
           ml cmake
-          cmake -DENABLE_COVERAGE=ON ..
+          cmake -DENABLE_COVERAGE=ON -DPYTEST_NUMPROCS=8 ..
       - name: Create HIP binary (vcopy)
         run: hipcc -o tests/vcopy ./sample/vcopy.cpp
       - name: Run [profile] mode
         run: |
           cd build
           srun -N 1 -J omniperf -p ci -t 00:20:00 ctest -j 4 --resource-spec-file ../tests/4gpus.json --verbose -L profile
-#          srun -N 1 -J omniperf -p ci -t 00:20:00 ctest --verbose -R test_profile_kernel_execution
-##       - name: Run [analyze] mode
-##         if: '!cancelled()'
-##         run: |
-##           cd build
-##           srun -N 1 -J omniperf -p ci -t 00:55:00 ctest --verbose -R test_analyze_commands
-## ##       - name: Pytest coverage comment
-## ##         if: '!cancelled()'
-## ##         uses: MishaKav/pytest-coverage-comment@v1.1.48
-## ##         with:
-## ##           pytest-xml-coverage-path: 'tests/coverage.xml'
-## ##           junitxml-path: 'tests/test-results.xml'
-## ##           coverage-path-prefix: src/
+      - name: Run [analyze workloads] mode
+        if: '!cancelled()'
+        run: |
+          cd build
+          srun -N 1 -J omniperf -p ci -t 00:10:00 ctest --verbose -R test_analyze_workloads
+      - name: Run [analyze commands] mode
+        if: '!cancelled()'
+        run: |
+          cd build
+          srun -N 1 -J omniperf -p ci -t 00:10:00 ctest --verbose -R test_analyze_commands
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+          files: |
+            tests/**/test_*.xml
+      - name: Summarize code coverage
+        if: always()
+        run: coverage report
+      - name: Upload code coverage
+        uses: zgosalvez/github-actions-report-lcov@v3
+        if: always()
+        with:
+          coverage-files: tests/coverage.info
+          minimum-coverage: 35
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true

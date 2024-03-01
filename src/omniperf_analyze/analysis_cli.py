@@ -27,9 +27,7 @@ from utils.utils import demarcate, error
 from utils import file_io, parser, tty
 from utils.kernel_name_shortener import kernel_name_shortener
 
-
 class cli_analysis(OmniAnalyze_Base):
-
     # -----------------------
     # Required child methods
     # -----------------------

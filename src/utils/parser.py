@@ -70,17 +70,20 @@ pmc_kernel_top_table_id = 1
 #       }
 supported_denom = {
     "per_wave": "SQ_WAVES",
-    "per_cycle": "GRBM_GUI_ACTIVE",
+    "per_cycle": "$GRBM_GUI_ACTIVE_PER_XCD",
     "per_second": "((End_Timestamp - Start_Timestamp) / 1000000000)",
     "per_kernel": "1",
 }
 
 # Build-in defined in mongodb variables:
 build_in_vars = {
-    "numActiveCUs": "TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / GRBM_GUI_ACTIVE)), \
-              0) / $maxWavesPerCU) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) \
-              / GRBM_GUI_ACTIVE)), 0), $maxWavesPerCU), 8)), $numCU))",
-    "kernelBusyCycles": "ROUND(AVG((((End_Timestamp - Start_Timestamp) / 1000) * $sclk)), 0)",
+    "GRBM_GUI_ACTIVE_PER_XCD": "(GRBM_GUI_ACTIVE / $num_xcd)",
+    "GRBM_COUNT_PER_XCD": "(GRBM_COUNT / $num_xcd)",
+    "GRBM_SPI_BUSY_PER_XCD": "(GRBM_SPI_BUSY / $num_xcd)",
+    "numActiveCUs": "TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / $GRBM_GUI_ACTIVE_PER_XCD)), \
+              0) / $max_waves_per_cu) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) \
+              / $GRBM_GUI_ACTIVE_PER_XCD)), 0), $max_waves_per_cu), 8)), $cu_per_gpu))",
+    "kernelBusyCycles": "ROUND(AVG((((End_Timestamp - Start_Timestamp) / 1000) * $max_sclk)), 0)",
 }
 
 supported_call = {
@@ -144,7 +147,7 @@ def to_median(a):
         return None
     elif isinstance(a, pd.core.series.Series):
         with warnings.catch_warnings():
-            warnings.simplefilter("ignore", message="Mean of empty slice")
+            warnings.simplefilter("ignore", category=RuntimeWarning)
             return a.median()
     else:
         raise Exception("to_median: unsupported type.")
@@ -290,7 +293,7 @@ def build_eval_string(equation, coll_level):
     # build-in variable starts with '$', python can not handle it.
     # replace '$' with 'ammolite__'.
     # TODO: pre-check there is no "ammolite__" in all config files.
-    s = re.sub("\$", "ammolite__", s)
+    s = re.sub(r"\$", "ammolite__", s)
 
     # convert equation string to intermediate expression in df array format
     ast_node = ast.parse(s)
@@ -304,7 +307,7 @@ def build_eval_string(equation, coll_level):
     # the target is df['TCC_HIT[0]']
     s = re.sub(r"\'\]\[(\d+)\]", r"[\g<1>]']", s)
     # use .get() to catch any potential KeyErrors
-    s = re.sub("raw_pmc_df\['(.*?)']", r'raw_pmc_df.get("\1")', s)
+    s = re.sub(r"raw_pmc_df\['(.*?)']", r'raw_pmc_df.get("\1")', s)
     # apply coll_level
     s = re.sub(r"raw_pmc_df", "raw_pmc_df.get('" + coll_level + "')", s)
     # print("--- build_eval_string, return: ", s)
@@ -388,9 +391,9 @@ def gen_counter_list(formula):
             .replace("$denom", "SQ_WAVES")
             .replace(
                 "$numActiveCUs",
-                "TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / GRBM_GUI_ACTIVE)), \
+                "TO_INT(MIN((((ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) / $GRBM_GUI_ACTIVE_PER_XCD})), \
               0) / $maxWavesPerCU) * 8) + MIN(MOD(ROUND(AVG(((4 * SQ_BUSY_CU_CYCLES) \
-              / GRBM_GUI_ACTIVE)), 0), $maxWavesPerCU), 8)), $numCU))",
+              / $GRBM_GUI_ACTIVE_PER_XCD)), 0), $maxWavesPerCU), 8)), $numCU))",
             )
             .replace("$", "")
         )
@@ -414,8 +417,8 @@ def calc_builtin_var(var, sys_info):
     """
     if isinstance(var, int):
         return var
-    elif isinstance(var, str) and var.startswith("$totalL2Banks"):
-        return sys_info.totalL2Banks
+    elif isinstance(var, str) and var.startswith("$total_l2_chan"):
+        return sys_info.total_l2_chan
     else:
         print("Don't support", var)
         sys.exit(1)
@@ -494,7 +497,7 @@ def build_dfs(archConfigs, filter_metrics, sys_info):
                         "cli_style" in data_config
                         and data_config["cli_style"] == "simple_box"
                     ):
-                        headers.append("Metric")
+                        headers.append(data_config["header"]["metric"])
                         for k in simple_box.keys():
                             headers.append(k)
 
@@ -663,7 +666,7 @@ def build_metric_value_string(dfs, dfs_type, normal_unit):
         # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
 
 
-def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
+def eval_metric(dfs, dfs_type, sys_info, raw_pmc_df, debug):
     """
     Execute the expr string for each metric in the df.
     """
@@ -679,33 +682,29 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
         print("WARNING: Dectected GRBM_GUI_ACTIVE == 0\nHaulting execution.")
         sys.exit(1)
 
-    # NB:
-    #  Following with Omniperf 0.2.0, we are using HW spec from sys_info instead.
-    #  The soc_spec is not in using right now, but can be used to do verification
-    #  against sys_info, forced theoretical evaluation, or supporting tool-chains
-    #  broken.
-    ammolite__numSE = sys_info.numSE
-    ammolite__numPipes = sys_info.numPipes
-    ammolite__numCU = sys_info.numCU
-    ammolite__numSIMD = sys_info.numSIMD
-    ammolite__numWavesPerCU = sys_info.maxWavesPerCU  # todo: check do we still need it
-    ammolite__numSQC = sys_info.numSQC
-    ammolite__L2Banks = sys_info.L2Banks
-    ammolite__LDSBanks = soc_spec[
-        "LDSBanks"
-    ]  # todo: eventually switch this over to sys_info. its a new spec so trying not to break compatibility
-    ammolite__freq = sys_info.cur_sclk  # todo: check do we still need it
-    ammolite__mclk = sys_info.cur_mclk
-    ammolite__sclk = sys_info.sclk
-    ammolite__maxWavesPerCU = sys_info.maxWavesPerCU
-    ammolite__hbmBW = sys_info.hbmBW
-    ammolite__totalL2Banks = calc_builtin_var("$totalL2Banks", sys_info)
+    ammolite__se_per_gpu = sys_info.se_per_gpu
+    ammolite__pipes_per_gpu = sys_info.pipes_per_gpu
+    ammolite__cu_per_gpu = sys_info.cu_per_gpu
+    ammolite__simd_per_cu = sys_info.simd_per_cu  # not used
+    ammolite__sqc_per_gpu = sys_info.sqc_per_gpu
+    ammolite__lds_banks_per_cu = sys_info.lds_banks_per_cu
+    ammolite__cur_sclk = sys_info.cur_sclk  # not used
+    ammolite__mclk = sys_info.cur_mclk  # not used
+    ammolite__max_sclk = sys_info.max_sclk
+    ammolite__max_waves_per_cu = sys_info.max_waves_per_cu
+    ammolite__hbm_bw = sys_info.hbm_bw
+    ammolite__total_l2_chan = calc_builtin_var("$total_l2_chan", sys_info)
+    ammolite__num_xcd = sys_info.num_xcd
 
     # TODO: fix all $normUnit in Unit column or title
 
     # build and eval all derived build-in global variables
     ammolite__build_in = {}
+
+    # first pass, we do all per-xcd values, as these are used in subsequent builtins
     for key, value in build_in_vars.items():
+        if "PER_XCD" not in key:
+            continue
         # NB: assume all built-in vars from pmc_perf.csv for now
         s = build_eval_string(value, schema.pmc_perf_file_prefix)
         try:
@@ -715,7 +714,23 @@ def eval_metric(dfs, dfs_type, sys_info, soc_spec, raw_pmc_df, debug):
         except AttributeError as ae:
             if ae == "'NoneType' object has no attribute 'get'":
                 ammolite__build_in[key] = None
+    ammolite__GRBM_GUI_ACTIVE_PER_XCD = ammolite__build_in["GRBM_GUI_ACTIVE_PER_XCD"]
+    ammolite__GRBM_COUNT_PER_XCD = ammolite__build_in["GRBM_COUNT_PER_XCD"]
+    ammolite__GRBM_SPI_BUSY_PER_XCD = ammolite__build_in["GRBM_SPI_BUSY_PER_XCD"]
 
+    for key, value in build_in_vars.items():
+        # next pass, we evaluate the builtins the depend on the per-XCD values
+        if "PER_XCD" in key:
+            continue
+        # NB: assume all built-in vars from pmc_perf.csv for now
+        s = build_eval_string(value, schema.pmc_perf_file_prefix)
+        try:
+            ammolite__build_in[key] = eval(compile(s, "<string>", "eval"))
+        except TypeError:
+            ammolite__build_in[key] = None
+        except AttributeError as ae:
+            if ae == "'NoneType' object has no attribute 'get'":
+                ammolite__build_in[key] = None
     ammolite__numActiveCUs = ammolite__build_in["numActiveCUs"]
     ammolite__kernelBusyCycles = ammolite__build_in["kernelBusyCycles"]
 
@@ -840,12 +855,7 @@ def apply_filters(workload, dir, is_gui, debug):
     # We pick up kernel names from kerne ids first.
     # Then filter valid entries with kernel names.
     if workload.filter_kernel_ids:
-        # There are two ways Kernel filtering is done:
-        # 1) CLI accepts an array of ints, representing indexes of kernels from the pmc_kernel_top.csv
-        # 2) GUI will be passing an array of strs. The full names of kernels as selected from dropdown
-        if not is_gui:
-            if debug:
-                print("CLI kernel filtering")
+        if all(type(kid) == int for kid in workload.filter_kernel_ids):
             # Verify valid kernel filter
             kernels_df = pd.read_csv(os.path.join(dir, "pmc_kernel_top.csv"))
             for kernel_id in workload.filter_kernel_ids:
@@ -870,14 +880,14 @@ def apply_filters(workload, dir, is_gui, debug):
                 ret_df = ret_df.loc[
                     ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(kernels)
                 ]
-        else:
-            if debug:
-                print("GUI kernel filtering")
+        elif all(type(kid) == str for kid in workload.filter_kernel_ids):
             ret_df = ret_df.loc[
                 ret_df[schema.pmc_perf_file_prefix]["Kernel_Name"].isin(
                     workload.filter_kernel_ids
                 )
             ]
+        else:
+            error("Mixing kernel indices and string filters is not currently supported")
 
     if workload.filter_dispatch_ids:
         # NB: support ignoring the 1st n dispatched execution by '> n'
@@ -917,6 +927,11 @@ def load_kernel_top(workload, dir):
                 logging.info(
                     "Warning: Issue loading top kernels. Check pmc_kernel_top.csv"
                 )
+        # NB: Special case for sysinfo. Probably room for improvement in this whole function design
+        elif "from_csv_columnwise" in df.columns and id == 101:
+            tmp[id] = workload.sys_info.transpose()
+            # All transposed columns should be marked with a general header
+            tmp[id].columns = ["Info"]
         elif "from_csv_columnwise" in df.columns:
             # NB:
             #   Another way might be doing transpose in tty like metric_table.
@@ -947,7 +962,6 @@ def load_table_data(workload, dir, is_gui, debug, verbose, skipKernelTop=False):
         workload.dfs,
         workload.dfs_type,
         workload.sys_info.iloc[0],
-        workload.soc_spec,
         apply_filters(workload, dir, is_gui, debug),
         debug,
     )
@@ -966,58 +980,18 @@ def build_comparable_columns(time_unit):
     return comparable_columns
 
 
-def correct_sys_info(df, specs_correction):
+def correct_sys_info(mspec, specs_correction: dict):
     """
     Correct system spec items manually
     """
-
-    # NB: to keep the backwards compatibility, we don't touch the current
-    #   naming convention. Ideally, the header of sysinfo should use/include
-    #   the members of MachineSpecs directly.
-
-    # Sync up with the header defined in omniperf gen_sysinfo() !!
-    # header = "workload_name,"
-    # header += "command,"
-    # header += "host_name,host_cpu,host_distro,host_kernel,host_rocmver,date,"
-    # header += "gpu_soc,numSE,numCU,numSIMD,waveSize,maxWavesPerCU,maxWorkgroupSize,"
-    # header += "L1,L2,sclk,mclk,cur_sclk,cur_mclk,L2Banks,LDSBanks,name,numSQC,numPipes,hbmBW,compute_partition,memory_partition,"
-    # header += "ip_blocks\n"
-
-    name_map = {
-        "host_name": "hostname",
-        "CPU": "host_cpu",
-        "kernel_version": "host_kernel",
-        "host_distro": "distro",
-        # "ram": "",
-        "distro": "host_distro",
-        "rocm_version": "host_rocmver",
-        "GPU": "name",
-        "arch": "gpu_soc",
-        "L1": "L1",
-        "L2": "L2",
-        "CU": "numCU",
-        "SIMD": "numSIMD",
-        "SE": "numSE",
-        "wave_size": "waveSize",
-        "max_waves_per_cu": "maxWavesPerCU",
-        "max_waves_per_cu": "maxWorkgroupSize",
-        "max_sclk": "sclk",
-        "max_mclk": "mclk",
-        "cur_sclk": "cur_sclk",
-        "cur_mclk": "cur_mclk",
-        "L2Banks": "L2Banks",
-        "totalL2Banks": "totalL2Banks",
-        "LDSBanks": "LDSBanks",
-        "numSQC": "numSQC",
-        "numPipes": "numPipes",
-        "hbmBW": "hbmBW",
-        "compute_partition": "compute_partition",
-        "memory_partition": "memory_partition",
-    }
-
     # todo: more err checking for string specs_correction
-    pairs = dict(re.findall(r"(\w+):\s*(\d+)", specs_correction))
-    for k, v in pairs.items():
-        df[name_map[k]] = v
 
-    return df
+    pairs = dict(re.findall(r"(\w+):\s*(\d+)", specs_correction))
+
+    for k, v in pairs.items():
+        if not hasattr(mspec, str(k)):
+            error(
+                f"Invalid specs correction '{k}'. Please use --specs option to peak valid specs"
+            )
+        setattr(mspec, str(k), v)
+    return mspec.get_class_members()

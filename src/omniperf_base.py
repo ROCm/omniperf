@@ -28,7 +28,7 @@ import sys
 import os
 from pathlib import Path
 import shutil
-from utils.specs import get_machine_specs
+from utils.specs import generate_machine_specs
 from utils.utils import (
     demarcate,
     trace_logger,
@@ -68,6 +68,7 @@ class Omniperf:
         }
         self.__options = {}
         self.__supported_archs = SUPPORTED_ARCHS
+        self.__mspec: MachineSpecs = None  # to be initalized in load_soc_specs()
 
         self.setup_logging()
         self.set_version()
@@ -84,7 +85,7 @@ class Omniperf:
 
     def print_graphic(self):
         """Log program name as ascii art to terminal."""
-        ascii_art = """
+        ascii_art = r"""
   ___                  _                  __ 
  / _ \ _ __ ___  _ __ (_)_ __   ___ _ __ / _|
 | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_ 
@@ -163,33 +164,23 @@ class Omniperf:
         return
 
     @demarcate
-    def detect_soc(self, sys_info=pd.DataFrame()):
+    def load_soc_specs(self, sysinfo: dict = None):
         """Load OmniSoC instance for Omniperf run"""
-        # in case of analyze mode, we can explicitly specify an arch
-        # rather than detect from rocminfo
-        if sys_info.empty:
-            mspec = get_machine_specs(0)
-            arch = mspec.arch
-            target = mspec.GPU
-        else:
-            arch = sys_info.iloc[0]["gpu_soc"]
-            target = sys_info.iloc[0]["name"]
+        self.__mspec = generate_machine_specs(self.__args, sysinfo)
+        if self.__args.specs:
+            print(self.__mspec)
+            sys.exit(0)
 
-        # instantiate underlying SoC support class
-        # in case of analyze mode, __soc can accommodate multiple archs
+        arch = self.__mspec.gpu_arch
+
+        # NB: This checker is a bit redundent. We already check this in specs module
         if arch not in self.__supported_archs.keys():
             error("%s is an unsupported SoC" % arch)
-        else:
-            self.__soc_name.add(target)
-            if hasattr(self.__args, "target"):
-                self.__args.target = target
 
-            soc_module = importlib.import_module("omniperf_soc.soc_" + arch)
-            soc_class = getattr(soc_module, arch + "_soc")
-            self.__soc[arch] = soc_class(self.__args)
-
-        logging.info("SoC = %s" % self.__soc_name)
-        return arch
+        soc_module = importlib.import_module("omniperf_soc.soc_" + arch)
+        soc_class = getattr(soc_module, arch + "_soc")
+        self.__soc[arch] = soc_class(self.__args, self.__mspec)
+        return
 
     @demarcate
     def parse_args(self):
@@ -206,10 +197,10 @@ class Omniperf:
         )
         self.__args = parser.parse_args()
 
-        if self.__args.specs:
-            print(get_machine_specs(0))
-            sys.exit(0)
         if self.__args.mode == None:
+            if self.__args.specs:
+                print(generate_machine_specs(self.__args))
+                sys.exit(0)
             parser.print_help(sys.stderr)
             error("Omniperf requires a valid mode.")
 
@@ -218,12 +209,12 @@ class Omniperf:
     @demarcate
     def run_profiler(self):
         self.print_graphic()
-        targ_arch = self.detect_soc()
+        self.load_soc_specs()
 
         # Update default path
         if self.__args.path == os.path.join(os.getcwd(), "workloads"):
             self.__args.path = os.path.join(
-                self.__args.path, self.__args.name, self.__args.target
+                self.__args.path, self.__args.name, self.__mspec.gpu_model
             )
 
         logging.info("Profiler choice = %s" % self.__profiler_mode)
@@ -233,19 +224,19 @@ class Omniperf:
             from omniperf_profile.profiler_rocprof_v1 import rocprof_v1_profiler
 
             profiler = rocprof_v1_profiler(
-                self.__args, self.__profiler_mode, self.__soc[targ_arch]
+                self.__args, self.__profiler_mode, self.__soc[self.__mspec.gpu_arch]
             )
         elif self.__profiler_mode == "rocprofv2":
             from omniperf_profile.profiler_rocprof_v2 import rocprof_v2_profiler
 
             profiler = rocprof_v2_profiler(
-                self.__args, self.__profiler_mode, self.__soc[targ_arch]
+                self.__args, self.__profiler_mode, self.__soc[self.__mspec.gpu_arch]
             )
         elif self.__profiler_mode == "rocscope":
             from omniperf_profile.profiler_rocscope import rocscope_profiler
 
             profiler = rocscope_profiler(
-                self.__args, self.__profiler_mode, self.__soc[targ_arch]
+                self.__args, self.__profiler_mode, self.__soc[self.__mspec.gpu_arch]
             )
         else:
             logging.error("Unsupported profiler")
@@ -254,11 +245,11 @@ class Omniperf:
         # -----------------------
         # run profiling workflow
         # -----------------------
-        self.__soc[targ_arch].profiling_setup()
+        self.__soc[self.__mspec.gpu_arch].profiling_setup()
         profiler.pre_processing()
         profiler.run_profiling(self.__version["ver"], config.prog)
         profiler.post_processing()
-        self.__soc[targ_arch].post_profiling()
+        self.__soc[self.__mspec.gpu_arch].post_profiling()
 
         return
 
@@ -305,7 +296,9 @@ class Omniperf:
         # Load required SoC(s) from input
         for d in analyzer.get_args().path:
             sys_info = pd.read_csv(Path(d[0], "sysinfo.csv"))
-            self.detect_soc(sys_info)
+            sys_info = sys_info.to_dict("list")
+            sys_info = {key: value[0] for key, value in sys_info.items()}
+            self.load_soc_specs(sys_info)
 
         analyzer.set_soc(self.__soc)
         analyzer.pre_processing()

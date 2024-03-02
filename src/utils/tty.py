@@ -50,6 +50,15 @@ def string_multiple_lines(source, width, max_rows):
     return "\n".join(lines)
 
 
+def get_table_string(df, transpose=False, decimal=2):
+    return tabulate(
+        df.transpose() if transpose else df,
+        headers="keys",
+        tablefmt="fancy_grid",
+        floatfmt="." + str(decimal) + "f",
+    )
+
+
 def show_all(args, runs, archConfigs, output):
     """
     Show all panels with their data in plain text mode.
@@ -214,19 +223,13 @@ def show_all(args, runs, archConfigs, output):
                     # df when load it, because we need those items in column.
                     # For metric_table, we only need to show the data in column
                     # fash for now.
+                    transpose = (
+                        type != "raw_csv_table"
+                        and "columnwise" in table_config
+                        and table_config["columnwise"] == True
+                    )
                     ss += (
-                        tabulate(
-                            (
-                                df.transpose()
-                                if type != "raw_csv_table"
-                                and "columnwise" in table_config
-                                and table_config["columnwise"] == True
-                                else df
-                            ),
-                            headers="keys",
-                            tablefmt="fancy_grid",
-                            floatfmt="." + str(args.decimal) + "f",
-                        )
+                        get_table_string(df, transpose=transpose, decimal=args.decimal)
                         + "\n"
                     )
 
@@ -266,11 +269,6 @@ def show_kernel_stats(args, runs, archConfigs, output):
                         df = single_df
 
                     print(
-                        tabulate(
-                            df,
-                            headers="keys",
-                            tablefmt="fancy_grid",
-                            floatfmt="." + str(args.decimal) + "f",
-                        ),
+                        get_table_string(df, transpose=False, decimal=args.decimal),
                         file=output,
                     )

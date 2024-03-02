@@ -27,30 +27,17 @@ import config
 from omniperf_soc.soc_base import OmniSoC_Base
 from utils.utils import demarcate, error
 
-SOC_PARAM = {
-    "numSE": 8,
-    "numCU": 120,
-    "numSIMD": 480,
-    "numPipes": 4,
-    "numWavesPerCU": 40,
-    "numSQC": 30,
-    "L2Banks": 32,
-    "LDSBanks": 32,
-    "Freq": 1502,
-    "mclk": 1200,
-}
-
 
 class gfx908_soc(OmniSoC_Base):
-    def __init__(self, args):
-        super().__init__(args)
-        self.set_soc_name("gfx908")
+    def __init__(self, args, mspec):
+        super().__init__(args, mspec)
+        self.set_arch("gfx908")
         self.set_perfmon_dir(
             os.path.join(
                 str(config.omniperf_home),
                 "omniperf_soc",
                 "profile_configs",
-                self.get_soc_name(),
+                self.get_arch(),
             )
         )
         self.set_compatible_profilers(["rocprofv1", "rocscope"])
@@ -70,7 +57,14 @@ class gfx908_soc(OmniSoC_Base):
                 "TCC_channels": 32,
             }
         )
-        self.set_soc_param(SOC_PARAM)
+
+        # Set arch specific specs
+        self._mspec._l2_banks = 32
+        self._mspec.lds_banks_per_cu = 32
+        self._mspec.pipes_per_gpu = 4
+        # --showmclkrange is broken in Mi100, hardcode freq
+        self._mspec.max_mclk = 1200
+        self._mspec.cur_mclk = 1200
 
     @demarcate
     def get_profiler_options(self):
@@ -85,7 +79,7 @@ class gfx908_soc(OmniSoC_Base):
         """Perform any SoC-specific setup prior to profiling."""
         super().profiling_setup()
         if self.get_args().roof_only:
-            error("%s does not support roofline analysis" % self.get_soc_name())
+            error("%s does not support roofline analysis" % self.get_arch())
         # Perfmon filtering
         self.perfmon_filter(self.get_args().roof_only)
 

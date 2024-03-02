@@ -18,11 +18,11 @@ Panel Config:
           tips: Tips
         metric:
           Utilization:
-            value: AVG(((TCC_BUSY_sum * 100) / (TO_INT($L2Banks) * GRBM_GUI_ACTIVE)))
+            value: AVG(((TCC_BUSY_sum * 100) / (TO_INT($total_l2_chan) * $GRBM_GUI_ACTIVE_PER_XCD)))
             unit: pct
             tips:
           Bandwidth:
-            value: ((100 * AVG(((TCC_REQ_sum * 128) / (End_Timestamp - Start_Timestamp)))) / ((($sclk / 1000) * 128) * TO_INT($L2Banks)))
+            value: ((100 * AVG(((TCC_REQ_sum * 128) / (End_Timestamp - Start_Timestamp)))) / ((($max_sclk / 1000) * 128) * TO_INT($total_l2_chan)))
             unit: pct
             tips: 
           Hit Rate:
@@ -52,7 +52,7 @@ Panel Config:
           unit: Unit
           tips: Tips
         metric:
-          L2-Fabric Read BW:
+          Read BW:
             avg: AVG((((TCC_EA0_RDREQ_32B_sum * 32) + ((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_32B_sum)
               * 64)) / $denom))
             min: MIN((((TCC_EA0_RDREQ_32B_sum * 32) + ((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_32B_sum)
@@ -68,9 +68,9 @@ Panel Config:
             unit: pct
             tips:
           Remote Read Traffic:
-            avg: AVG((100 * ((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
-            min: MIN((100 * ((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
-            max: MAX((100 * ((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
+            avg: AVG((100 * (MAX((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum), 0) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
+            min: MIN((100 * (MAX((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum), 0) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
+            max: MAX((100 * (MAX((TCC_EA0_RDREQ_sum - TCC_EA0_RDREQ_DRAM_sum), 0) / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
             unit: pct
             tips:
           Uncached Read Traffic:
@@ -79,7 +79,7 @@ Panel Config:
             max: MAX((100 * (TCC_EA0_RD_UNCACHED_32B_sum / TCC_EA0_RDREQ_sum) if (TCC_EA0_RDREQ_sum != 0) else None))
             unit: pct
             tips:
-          L2-Fabric Write and Atomic BW:
+          Write and Atomic BW:
             avg:
               AVG((((TCC_EA0_WRREQ_64B_sum * 64) + ((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_64B_sum)
               * 32)) / $denom))
@@ -98,9 +98,9 @@ Panel Config:
             unit: pct
             tips:
           Remote Write and Atomic Traffic:
-            avg: AVG((100 * ((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
-            min: MIN((100 * ((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
-            max: MAX((100 * ((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
+            avg: AVG((100 * (MAX((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum),0) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
+            min: MIN((100 * (MAX((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum),0) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
+            max: MAX((100 * (MAX((TCC_EA0_WRREQ_sum - TCC_EA0_WRREQ_DRAM_sum),0) / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum != 0) else None))
             unit: pct
             tips:
           Atomic Traffic:
@@ -124,7 +124,7 @@ Panel Config:
               0) else None))
             unit: Cycles
             tips:
-          Write Latency:
+          Write and Atomic Latency:
             avg: AVG(((TCC_EA0_WRREQ_LEVEL_sum / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum !=
               0) else None))
             min: MIN(((TCC_EA0_WRREQ_LEVEL_sum / TCC_EA0_WRREQ_sum) if (TCC_EA0_WRREQ_sum !=

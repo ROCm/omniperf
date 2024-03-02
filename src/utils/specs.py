@@ -31,114 +31,33 @@ import socket
 import subprocess
 import importlib
 import logging
+import config
+import pandas as pd
 
-from dataclasses import dataclass
+from datetime import datetime
+from math import ceil
+from dataclasses import dataclass, field, asdict, fields
 from pathlib import Path as path
 from textwrap import dedent
-from utils.utils import error, get_hbm_stack_num
+from utils.utils import error, get_hbm_stack_num, get_version
+from utils.tty import get_table_string
+
+VERSION_LOC = [
+    "version",
+    "version-dev",
+    "version-hip-libraries",
+    "version-hiprt",
+    "version-hiprt-devel",
+    "version-hip-sdk",
+    "version-libs",
+    "version-utils",
+]
 
 
-@dataclass
-class MachineSpecs:
-    hostname: str
-    CPU: str
-    sbios: str
-    kernel_version: str
-    ram: str
-    distro: str
-    rocm_version: str
-    GPU: str
-    arch: str
-    vbios: str
-    L1: str
-    L2: str
-    CU: str
-    SIMD: str
-    SE: str
-    wave_size: str
-    workgroup_max_size: str
-    max_sclk: str
-    max_mclk: str
-    cur_sclk: str
-    cur_mclk: str
-    max_waves_per_cu: str
-    L2Banks: str
-    totalL2Banks: str
-    LDSBanks: str
-    numSQC: str
-    numPipes: str
-    hbmBW: str
-    compute_partition: str
-    memory_partition: str
-
-    def __str__(self):
-        return dedent(
-            f"""\
-        Host info:
-            hostname:       {self.hostname}
-            CPU:            {self.CPU}
-            sbios:          {self.sbios}
-            ram:            {self.ram}
-            distro:         {self.distro}
-            kernel_version: {self.kernel_version}
-            rocm_version:   {self.rocm_version}
-        Device info:
-            GPU:                {self.GPU}
-            arch:               {self.arch}
-            vbios:              {self.vbios}
-            L1:                 {self.L1} KB
-            L2:                 {self.L2} KB
-            max_sclk:           {self.max_sclk} MHz
-            max_mclk:           {self.max_mclk} MHz
-            cur_sclk:           {self.cur_sclk} MHz
-            cur_mclk:           {self.cur_mclk} MHz
-            CU:                 {self.CU}
-            SIMD:               {self.SIMD}
-            SE:                 {self.SE}
-            wave_size:          {self.wave_size}
-            workgroup_max_size: {self.workgroup_max_size}
-            max_waves_per_cu:   {self.max_waves_per_cu}
-            L2Banks:            {self.L2Banks}
-            totalL2Banks:       {self.totalL2Banks}
-            LDSBanks:           {self.LDSBanks}
-            numSQC:             {self.numSQC}
-            numPipes:           {self.numPipes}
-            hbmBW:              {self.hbmBW} MB/s
-            compute_partition:  {self.compute_partition}
-            memory_partition:   {self.memory_partition}
-        """
-        )
-
-
-def gpuinfo():
+def detect_arch(_rocminfo):
     from omniperf_base import SUPPORTED_ARCHS
 
-    gpu_info = {
-        "gpu_name": None,
-        "gpu_arch": None,
-        "L1": None,
-        "L2": None,
-        "max_sclk": None,
-        "max_mclk": None,
-        "num_CU": None,
-        "num_SIMD": None,
-        "numPipes": None,
-        "num_SE": None,
-        "wave_size": None,
-        "grp_size": None,
-        "max_waves_per_cu": None,
-        "L2Banks": None,
-        "LDSBanks": None,
-        "numSQC": None,
-        "compute_partition": None,
-        "memory_partition": None,
-    }
-
-    # Fixme: find better way to differentiate cards, GPU vs APU, etc.
-    rocminfo_full = run(["rocminfo"])
-    rocminfo = rocminfo_full.split("\n")
-
-    for idx1, linetext in enumerate(rocminfo):
+    for idx1, linetext in enumerate(_rocminfo):
         gpu_arch = search(r"^\s*Name\s*:\s+ ([a-zA-Z0-9]+)\s*$", linetext)
         if gpu_arch in SUPPORTED_ARCHS.keys():
             break
@@ -146,112 +65,529 @@ def gpuinfo():
             gpu_arch = str(gpu_arch)
             break
     if not gpu_arch in SUPPORTED_ARCHS.keys():
-        return gpu_info
+        error("[profiling] Cannot find a supported arch in rocminfo")
+    else:
+        return (gpu_arch, idx1)
 
-    gpu_info["L1"], gpu_info["L1"] = "", ""
-    for idx2, linetext in enumerate(rocminfo[idx1 + 1 :]):
-        key = search(r"^\s*L1:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["L1"] = key
-            continue
+# Custom decorator to mimic the behavior of kw_only found in Python 3.10  
+def kw_only(cls):
+    def __init__(self, *args, **kwargs):
+        for name, value in kwargs.items():
+            setattr(self, name, value)
+    cls.__init__ = __init__
+    return cls
 
-        key = search(r"^\s*L2:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["L2"] = key
-            continue
 
-        key = search(r"^\s*Max Clock Freq\. \(MHz\):\s+([0-9]+)", linetext)
-        if key != None:
-            gpu_info["max_sclk"] = key
-            continue
+def generate_machine_specs(args, sysinfo: dict = None):
+    if not sysinfo is None:
+        sysinfo_ver = str(sysinfo["version"])
+        version = get_version(config.omniperf_home)["version"]
+        if sysinfo_ver != version[: version.find(".")]:
+            logging.warning(
+                "WARNING: Detected mismatch in sysinfo versioning. You may need to reprofile to update data."
+            )
+        return MachineSpecs(**sysinfo)
+    # read timestamp info
+    now = datetime.now()
+    local_now = now.astimezone()
+    local_tz = local_now.tzinfo
+    local_tzname = local_tz.tzname(local_now)
+    timestamp = now.strftime("%c") + " (" + local_tzname + ")"
+    hostname = socket.gethostname()
 
-        key = search(r"^\s*Compute Unit:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["num_CU"] = key
-            continue
+    # set specs version
+    vData = get_version(config.omniperf_home)
+    version = vData["version"]
+    # NB: Just taking major as specs version. May want to make this more specific in the future
+    specs_version = version[
+        : version.find(".")
+    ]  # version will always follow 'major.minor.patch' format
 
-        key = search(r"^\s*SIMDs per CU:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["num_SIMD"] = key
-            continue
+    ##########################################
+    ## A. Machine Specs
+    ##########################################
+    cpuinfo = path("/proc/cpuinfo").read_text()
+    meminfo = path("/proc/meminfo").read_text()
+    version = path("/proc/version").read_text()
+    os_release = path("/etc/os-release").read_text()
+    cpu_model = search(r"^model name\s*: (.*?)$", cpuinfo)
+    sbios = (
+        path("/sys/class/dmi/id/bios_vendor").read_text().strip()
+        + path("/sys/class/dmi/id/bios_version").read_text().strip()
+    )
+    linux_kernel_version = search(r"version (\S*)", version)
+    amd_gpu_kernel_version = ""  # TODO: Extract amdgpu kernel version
+    cpu_memory = search(r"MemTotal:\s*(\S*)", meminfo)
+    gpu_memory = ""  # TODO: Extract gpu memory
+    linux_distro = search(r'PRETTY_NAME="(.*?)"', os_release)
+    if linux_distro is None:
+        linux_distro = ""
+    rocm_version = get_rocm_ver().strip()
+    # FIXME: use device
+    vbios = search(r"VBIOS version: (.*?)$", run(["rocm-smi", "-v"], exit_on_error=True))
+    compute_partition = search(
+        r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
+    )
+    if compute_partition is None:
+        compute_partition = "NA"
+    memory_partition = search(
+        r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"])
+    )
+    if memory_partition is None:
+        memory_partition = "NA"
 
-        key = search(r"^\s*Shader Engines:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["num_SE"] = key
-            continue
-
-        key = search(r"^\s*Wavefront Size:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["wave_size"] = key
-            continue
-
-        key = search(r"^\s*Workgroup Max Size:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["grp_size"] = key
-            continue
-
-        key = search(r"^\s*Max Waves Per CU:\s+ ([a-zA-Z0-9]+)\s*", linetext)
-        if key != None:
-            gpu_info["max_waves_per_cu"] = key
-            break
-
+    ##########################################
+    ## B. SoC Specs
+    ##########################################
+    # read rocminfo
+    rocminfo_full = run(["rocminfo"])
+    _rocminfo = rocminfo_full.split("\n")
+    gpu_arch, idx = detect_arch(_rocminfo)
+    _rocminfo = _rocminfo[idx + 1 :]  # update rocminfo for target section
+    specs = MachineSpecs(
+        version=specs_version,
+        timestamp=timestamp,
+        _rocminfo=_rocminfo,
+        hostname=hostname,
+        cpu_model=cpu_model,
+        sbios=sbios,
+        linux_kernel_version=linux_kernel_version,
+        amd_gpu_kernel_version=amd_gpu_kernel_version,
+        cpu_memory=cpu_memory,
+        gpu_memory=gpu_memory,
+        linux_distro=linux_distro,
+        rocm_version=rocm_version,
+        vbios=vbios,
+        compute_partition=compute_partition,
+        memory_partition=memory_partition,
+        gpu_arch=gpu_arch,
+    )
+    # Load above SoC specs via module import
     try:
-        soc_module = importlib.import_module("omniperf_soc.soc_" + gpu_arch)
+        soc_module = importlib.import_module("omniperf_soc.soc_" + specs.gpu_arch)
     except ModuleNotFoundError as e:
         error(
             "Arch %s marked as supported, but couldn't find class implementation %s."
-            % (gpu_arch, e)
+            % (specs.gpu_arch, e)
         )
+    soc_class = getattr(soc_module, specs.gpu_arch + "_soc")
+    soc_obj = soc_class(args, specs)
+    # Update arch specific specs
+    specs.total_l2_chan: str = total_l2_banks(
+        specs.gpu_model, int(specs._l2_banks), specs.memory_partition
+    )
+    specs.hbm_bw: str = str(int(specs.max_mclk) / 1000 * 32 * specs.get_hbm_channels())
+    return specs
 
-    # load arch specific info
-    try:
-        gpu_name = list(SUPPORTED_ARCHS[gpu_arch].keys())[0].upper()
-        gpu_info["L2Banks"] = str(soc_module.SOC_PARAM["L2Banks"])
-        gpu_info["numSQC"] = str(soc_module.SOC_PARAM["numSQC"])
-        gpu_info["LDSBanks"] = str(soc_module.SOC_PARAM["LDSBanks"])
-        gpu_info["numPipes"] = str(soc_module.SOC_PARAM["numPipes"])
-    except KeyError as e:
-        error(
-            "Incomplete class definition for %s. Expected a field for %s in SOC_PARAM."
-            % (gpu_arch, e)
-        )
 
-    # we get the max mclk from rocm-smi --showmclkrange
-    rocm_smi_mclk = run(["rocm-smi", "--showmclkrange"], exit_on_error=True)
-    gpu_info["max_mclk"] = search(r"(\d+)Mhz\s*$", rocm_smi_mclk)
-    # check that we got the mclk from smi
-    if gpu_info["max_mclk"] is None:
-        if gpu_name == "MI100":
-            # hardcoded due to rocm-smi limitation
-            gpu_info["max_mclk"] = str(1200)
-        else:
-            error(
-                "Could not obtain maximum mclk from rocm-smi for GPU: {}".format(gpu_info)
+@kw_only
+@dataclass
+class MachineSpecs:
+    ##########################################
+    ## A. Workload / Spec info
+    ##########################################
+
+    # these three fields are special in that they're not included
+    # when you use (e.g.,) --specs to view the machinespecs, but they
+    # _are_ included in profiling/analysis, so we mark them as 'optional'
+    # in the metadata to avoid erroring out on missing fields on
+    # serialization
+    workload_name: str = field(
+        default=None,
+        metadata={
+            "doc": "The name of the workload data was collected for.",
+            "name": "Workload Name",
+            "optional": True,
+        },
+    )
+    command: str = field(
+        default=None,
+        metadata={
+            "doc": "The command the workload was executed with.",
+            "name": "Command",
+            "optional": True,
+        },
+    )
+    ip_blocks: str = field(
+        default=None,
+        metadata={
+            "doc": "The hardware blocks profiling information was collected for.",
+            "name": "IP Blocks",
+            "optional": True,
+        },
+    )
+    timestamp: str = field(
+        default=None,
+        metadata={
+            "doc": "The time (in local system time) when data was collected",
+            "name": "Timestamp",
+        },
+    )
+    version: str = field(
+        default=None,
+        metadata={
+            "doc": "The version of the machine specification file format.",
+            "name": "MachineSpecs Version",
+            "intable": False,
+        },
+    )
+    timestamp: str = field(
+        default=None,
+        metadata={
+            "doc": "The time (in local system time) when data was collected",
+            "name": "Timestamp",
+        },
+    )
+    _rocminfo: list = field(default=None)
+    ##########################################
+    ## A. Machine Specs
+    ##########################################
+    hostname: str = field(
+        default=None, metadata={"doc": "The hostname of the machine.", "name": "Hostname"}
+    )
+    cpu_model: str = field(
+        default=None,
+        metadata={"doc": "The model name of the CPU used.", "name": "CPU Model"},
+    )
+    sbios: str = field(
+        default=None,
+        metadata={
+            "doc": "The system management bios version and vendor.",
+            "name": "SBIOS",
+        },
+    )
+    linux_distro: str = field(
+        default=None,
+        metadata={
+            "doc": "The Linux distribution installed on the machine.",
+            "name": "Linux Distribution",
+        },
+    )
+    linux_kernel_version: str = field(
+        default=None,
+        metadata={
+            "doc": "The Linux kernel version running on the machine.",
+            "name": "Linux Kernel Version",
+        },
+    )
+    amd_gpu_kernel_version: str = field(
+        default=None,
+        metadata={
+            "doc": "[RESERVED] The version of the AMDGPU driver installed on the machine. Unimplemented.",
+            "name": "AMD GPU Kernel Version",
+        },
+    )
+    cpu_memory: str = field(
+        default=None,
+        metadata={
+            "doc": "The total amount of memory available to the CPU.",
+            "unit": "KB",
+            "name": "CPU Memory",
+        },
+    )
+    gpu_memory: str = field(
+        default=None,
+        metadata={
+            "doc": "[RESERVED] The total amount of memory available to accelerators/GPUs in the system. Unimplemented.",
+            "unit": "KB",
+            "name": "GPU Memory",
+        },
+    )
+    rocm_version: str = field(
+        default=None,
+        metadata={
+            "doc": "The ROCm version used during data-collection.",
+            "name": "ROCm Version",
+        },
+    )
+    vbios: str = field(
+        default=None,
+        metadata={
+            "doc": "The version of the accelerators/GPUs video bios in the system.",
+            "name": "VBIOS",
+        },
+    )
+    compute_partition: str = field(
+        default=None,
+        metadata={
+            "doc": "The compute partitioning mode active on the accelerators/GPUs in the system (MI300 only).",
+            "name": "Compute Partition",
+        },
+    )
+    memory_partition: str = field(
+        default=None,
+        metadata={
+            "doc": "The memory partitioning mode active on the accelerators/GPUs in the system (MI300 only).",
+            "name": "Memory Partition",
+        },
+    )
+
+    ##########################################
+    ## B. SoC Specs
+    ##########################################
+    gpu_model: str = field(
+        default=None,
+        metadata={
+            "doc": "The product name of the accelerators/GPUs in the system.",
+            "name": "GPU Model",
+        },
+    )
+    gpu_arch: str = field(
+        default=None,
+        metadata={
+            "doc": "The architecture name of the accelerators/GPUs in the system,\n"
+            "as used by (e.g.,) the AMDGPU backed of LLVM.",
+            "name": "GPU Arch",
+        },
+    )
+    gpu_l1: str = field(
+        default=None,
+        metadata={
+            "doc": "The size of the vL1D cache (per compute-unit) on the accelerators/GPUs in the system in KiB",
+            "name": "GPU L1",
+        },
+    )
+    gpu_l2: str = field(
+        default=None,
+        metadata={
+            "doc": "The size of the vL1D cache (per compute-unit) on the accelerators/GPUs in the system in KiB",
+            "name": "GPU L2",
+        },
+    )
+    cu_per_gpu: str = field(
+        default=None,
+        metadata={
+            "doc": "The total number of compute units per accelerator/GPU in the system. On systems with configurable\n"
+            "partitioning, (e.g., MI300) this is the total number of compute units in a partition.",
+            "name": "CU per GPU",
+        },
+    )
+    simd_per_cu: str = field(
+        default=None,
+        metadata={
+            "doc": "The number of SIMD processors in a compute unit for the accelerators/GPUs in the system.",
+            "name": "SIMD per CU",
+        },
+    )
+    se_per_gpu: str = field(
+        default=None,
+        metadata={
+            "doc": "The number of shader engines on the accelerators/GPUs in the system. On systems with configurable\n"
+            "partitioning, (e.g., MI300) this is the total number of shader engines in a partition.",
+            "name": "SE per GPU",
+        },
+    )
+    wave_size: str = field(
+        default=None,
+        metadata={
+            "doc": "The number work-items in a wavefront on the accelerators/GPUs in the system.",
+            "name": "Wave Size",
+        },
+    )
+    workgroup_max_size: str = field(
+        default=None,
+        metadata={
+            "doc": "The maximum number of work-items in a workgroup on the accelerators/GPUs in the system.",
+            "name": "Workgroup Max Size",
+        },
+    )
+    max_waves_per_cu: str = field(
+        default=None,
+        metadata={
+            "doc": "The maximum number of wavefronts that can be resident on a compute unit on the\n"
+            "accelerators/GPUs in the system",
+            "name": "Max Waves per CU",
+        },
+    )
+    max_sclk: str = field(
+        default=None,
+        metadata={
+            "doc": "The maximum engine (compute-unit) clock rate of the accelerators/GPUs in the system.",
+            "name": "Max SCLK",
+            "unit": "MHz",
+        },
+    )
+    max_mclk: str = field(
+        default=None,
+        metadata={
+            "doc": "The maximum memory clock rate of the accelerators/GPUs in the system.",
+            "name": "Max MCLK",
+            "unit": "MHz",
+        },
+    )
+    cur_sclk: str = field(
+        default=None,
+        metadata={
+            "doc": "[RESERVED] The current engine (compute unit) clock rate of the accelerators/GPUs in the system. Unused.",
+            "name": "Cur SCLK",
+            "unit": "MHz",
+        },
+    )
+    cur_mclk: str = field(
+        default=None,
+        metadata={
+            "doc": "[RESERVED] The current memory clock rate of the accelerators/GPUs in the system. Unused.",
+            "name": "Cur MCLK",
+            "unit": "MHz",
+        },
+    )
+    _l2_banks: str = None  # NB: This only used in flatten_tcc_info_across_hbm_stacks()
+    total_l2_chan: str = field(
+        default=None,
+        metadata={
+            "doc": "The maximum number of L2 cache channels on the accelerators/GPUs in the system. On systems with\n"
+            "configurable partitioning, (e.g., MI300) this is the total number of L2 cache channels in a partition.",
+            "name": "Total L2 Channels",
+        },
+    )
+    lds_banks_per_cu: str = field(
+        default=None,
+        metadata={
+            "doc": "The number of banks in the LDS for a compute unit on the accelerators/GPUs in the system.",
+            "name": "LDS Banks per CU",
+        },
+    )
+    sqc_per_gpu: str = field(
+        default=None,
+        metadata={
+            "doc": "The number of L1I/sL1D caches on the accelerators/GPUs in the system. On systems with\n"
+            "configurable partitioning, (e.g., MI300) this is the total number of L1I/sL1D caches in a partition.",
+            "name": "SQC per GPU",
+        },
+    )
+    pipes_per_gpu: str = field(
+        default=None,
+        metadata={
+            "doc": "The number of scheduler-pipes on the accelerators/GPUs in the system.",
+            "name": "Pipes per GPU",
+        },
+    )
+    hbm_bw: str = field(
+        default=None,
+        metadata={
+            "doc": "The peak theoretical HBM bandwidth for the accelerators/GPUs in the system. On systems with\n"
+            "configurable partitioning, (e.g., MI300) this is the peak theoretical HBM bandwidth for a partition.",
+            "name": "HBM BW",
+            "unit": "MB/s",
+        },
+    )
+    num_xcd: str = field(
+        default=None,
+        metadata={
+            "doc": "The total number of accelerator complex dies in a compute partition on the accelerators/GPUs in the\n"
+            "system.  For accelerators without partitioning (i.e., pre-MI300), this is considered to be one.",
+            "name": "Num XCDs",
+            "unit": "MB/s",
+        },
+    )
+
+    def get_hbm_channels(self):
+        hbmchannels = int(self.total_l2_chan)
+        if (
+            self.gpu_model.lower() == "mi300a_a0" or self.gpu_model.lower() == "mi300a_a1"
+        ) and self.memory_partition.lower() == "nps1":
+            # we have an extra 32 channels for the CCD
+            hbmchannels += 32
+        return hbmchannels
+
+    def get_class_members(self):
+        all_populated = True
+        data = {}
+        # dataclass uses an OrderedDict for member variables, ensuring order consistency
+        for field in fields(self):
+            name = field.name
+            if not name.startswith("_"):
+                value = getattr(self, name)
+                if value is None:
+                    # check if we've marked it optional
+                    if (
+                        field.metadata
+                        and "optional" in field.metadata
+                        and field.metadata["optional"]
+                    ):
+                        pass
+                    else:
+                        # TODO: use proper logging function when that's merged
+                        logging.warning(
+                            f"WARNING: Incomplete class definition for {self.gpu_arch}. "
+                            f"Expecting populated {name} but detected None."
+                        )
+                        all_populated = False
+                data[name] = value
+
+        if not all_populated:
+            error("Missing specs fields for %s" % self.gpu_arch)
+        return pd.DataFrame(data, index=[0])
+
+    def __repr__(self):
+        topstr = "Machine Specifications: describing the state of the machine that Omniperf data was collected on.\n"
+        data = []
+        for field in fields(self):
+            name = field.name
+            if not name.startswith("_"):
+                _data = {}
+                value = getattr(self, name)
+                if field.metadata:
+                    # check out of table before any re-naming for pretty-printing
+                    if "intable" in field.metadata and not field.metadata["intable"]:
+                        if name == "version":
+                            topstr += f"Output version: {value}\n"
+                        else:
+                            error(f"Unknown out of table printing field: {name}")
+                        continue
+                    if "name" in field.metadata:
+                        name = field.metadata["name"]
+                    if "unit" in field.metadata:
+                        _data["Unit"] = field.metadata["unit"]
+                    if "doc" in field.metadata:
+                        _data["Description"] = field.metadata["doc"]
+                _data["Spec"] = name
+                _data["Value"] = value
+                data.append(_data)
+        df = pd.DataFrame(data)
+        columns = ["Spec", "Value"]
+        if "Description" in df.columns:
+            columns += ["Description"]
+        if "Unit" in df.columns:
+            columns += ["Unit"]
+        df = df[columns]
+        df = df.fillna("")
+        return topstr + get_table_string(df, transpose=False, decimal=2)
+
+
+def get_rocm_ver():
+    rocm_found = False
+    for itr in VERSION_LOC:
+        _path = os.path.join(os.getenv("ROCM_PATH", "/opt/rocm"), ".info", itr)
+        if os.path.exists(_path):
+            rocm_ver = path(_path).read_text()
+            rocm_found = True
+        break
+    if not rocm_found:
+        # check if ROCM_VER is supplied externally
+        ROCM_VER_USER = os.getenv("ROCM_VER")
+        if ROCM_VER_USER is not None:
+            logging.info(
+                "Overriding missing ROCm version detection with ROCM_VER = %s"
+                % ROCM_VER_USER
             )
-
-    # specify gpu name for gfx942 hardware
-    if gpu_name == "MI300":
-        gpu_name = list(SUPPORTED_ARCHS[gpu_arch].values())[0][0]
-    if (gpu_info["gpu_arch"] == "gfx942") and ("MI300A" in rocminfo_full):
-        gpu_name = "MI300A_A1"
-    if (gpu_arch == "gfx942") and ("MI300A" not in rocminfo_full):
-        gpu_name = "MI300X_A1"
-
-    gpu_info["gpu_name"] = gpu_name
-    gpu_info["gpu_arch"] = gpu_arch
-    gpu_info["compute_partition"] = ""
-    gpu_info["memory_partition"] = ""
-
-    # verify all fields are filled
-    for key, value in gpu_info.items():
-        if value is None:
-            logging.info("Warning: %s is missing from gpu_info dictionary." % key)
-
-    return gpu_info
+            rocm_ver = ROCM_VER_USER
+        else:
+            _rocm_path = os.getenv("ROCM_PATH", "/opt/rocm")
+            error(
+                "Unable to detect a complete local ROCm installation.\nThe expected %s/.info/ versioning directory is missing. Please ensure you have valid ROCm installation."
+                % _rocm_path
+            )
+    return rocm_ver
 
 
 def run(cmd, exit_on_error=False):
-    p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError as e:
+        error(
+            f"Unable to parse specs. Can't find ROCm asset: {e.filename}\nTry passing a path to an existing workload results in 'analyze' mode."
+        )
 
     if exit_on_error:
         if cmd[0] == "rocm-smi":
@@ -279,139 +615,51 @@ def total_l2_banks(archname, L2Banks, memory_partition):
         totalL2Banks = L2Banks * get_hbm_stack_num(archname, memory_partition)
     elif archname.lower() == "mi300x_a0" or archname.lower() == "mi300x_a1":
         totalL2Banks = L2Banks * get_hbm_stack_num(archname, memory_partition)
-    return totalL2Banks
+    return str(totalL2Banks)
 
 
-def get_machine_specs(devicenum):
-    cpuinfo = path("/proc/cpuinfo").read_text()
-    meminfo = path("/proc/meminfo").read_text()
-    version = path("/proc/version").read_text()
-    os_release = path("/etc/os-release").read_text()
+def total_sqc(archname, numCUs, numSEs):
+    cu_per_se = float(numCUs) / float(numSEs)
+    sq_per_se = cu_per_se / 2
+    if archname.lower() in ["mi50", "mi100"]:
+        sq_per_se = cu_per_se / 3
+    sq_per_se = ceil(sq_per_se)
+    return int(sq_per_se) * int(numSEs)
 
-    version_loc = [
-        "version",
-        "version-dev",
-        "version-hip-libraries",
-        "version-hiprt",
-        "version-hiprt-devel",
-        "version-hip-sdk",
-        "version-libs",
-        "version-utils",
-    ]
 
-    rocmFound = False
-    for itr in version_loc:
-        _path = os.path.join(os.getenv("ROCM_PATH", "/opt/rocm"), ".info", itr)
-        if os.path.exists(_path):
-            rocm_ver = path(_path).read_text()
-            rocmFound = True
-            break
-
-    if not rocmFound:
-        # check if ROCM_VER is supplied externally
-        ROCM_VER_USER = os.getenv("ROCM_VER")
-        if ROCM_VER_USER is not None:
-            print(
-                "Overriding missing ROCm version detection with ROCM_VER = %s"
-                % ROCM_VER_USER
-            )
-            rocm_ver = ROCM_VER_USER
-        else:
-            _rocm_path = os.getenv("ROCM_PATH", "/opt/rocm")
-            print("Error: Unable to detect a complete local ROCm installation.")
-            print(
-                "\nThe expected %s/.info/ versioning directory is missing. Please"
-                % _rocm_path
-            )
-            print("ensure you have valid ROCm installation.")
-            sys.exit(1)
-
-    gpu_info = gpuinfo()
-
-    rocm_smi = run(["rocm-smi"], exit_on_error=True)
-
-    device = rf"^\s*{devicenum}(.*)"
-
-    hostname = socket.gethostname()
-    sbios = (
-        path("/sys/class/dmi/id/bios_vendor").read_text().strip()
-        + path("/sys/class/dmi/id/bios_version").read_text().strip()
-    )
-    CPU = search(r"^model name\s*: (.*?)$", cpuinfo)
-    kernel_version = search(r"version (\S*)", version)
-    ram = search(r"MemTotal:\s*(\S*)", meminfo)
-    distro = search(r'PRETTY_NAME="(.*?)"', os_release)
-    if distro is None:
-        distro = ""
-
-    rocm_version = rocm_ver.strip()
-
-    # these are just max's now, because the parsing was broken and this was inconsistent
-    # with how we use the clocks elsewhere (all max, all the time)
-    cur_sclk = gpu_info["max_sclk"]
-    cur_mclk = gpu_info["max_mclk"]
-
-    # FIXME with device
-    vbios = search(r"VBIOS version: (.*?)$", run(["rocm-smi", "-v"], exit_on_error=True))
-
-    compute_partition = search(
-        r"Compute Partition:\s*(\w+)", run(["rocm-smi", "--showcomputepartition"])
-    )
-    if compute_partition == None:
-        compute_partition = "NA"
-
-    memory_partition = search(
-        r"Memory Partition:\s*(\w+)", run(["rocm-smi", "--showmemorypartition"])
-    )
-    if memory_partition == None:
-        memory_partition = "NA"
-
-    totalL2Banks = total_l2_banks(
-        gpu_info["gpu_name"], int(gpu_info["L2Banks"]), memory_partition
-    )
-    hbmchannels = totalL2Banks
-    if (
-        gpu_info["gpu_name"].lower() == "mi300a_a0"
-        or gpu_info["gpu_name"].lower() == "mi300a_a1"
-    ) and memory_partition.lower() == "nps1":
-        # we have an extra 32 channels for the CCD
-        hbmchannels += 32
-    hbmBW = str(int(gpu_info["max_mclk"]) / 1000 * 32 * hbmchannels)
-    totalL2Banks = str(totalL2Banks)
-
-    return MachineSpecs(
-        hostname,
-        CPU,
-        sbios,
-        kernel_version,
-        ram,
-        distro,
-        rocm_version,
-        gpu_info["gpu_name"],
-        gpu_info["gpu_arch"],
-        vbios,
-        gpu_info["L1"],
-        gpu_info["L2"],
-        gpu_info["num_CU"],
-        gpu_info["num_SIMD"],
-        gpu_info["num_SE"],
-        gpu_info["wave_size"],
-        gpu_info["grp_size"],
-        gpu_info["max_sclk"],
-        gpu_info["max_mclk"],
-        cur_sclk,
-        cur_mclk,
-        gpu_info["max_waves_per_cu"],
-        gpu_info["L2Banks"],
-        totalL2Banks,
-        gpu_info["LDSBanks"],
-        gpu_info["numSQC"],
-        gpu_info["numPipes"],
-        hbmBW,
-        compute_partition,
-        memory_partition,
+def total_xcds(archname, compute_partition):
+    # check MI300 has a valid compute partition
+    mi300a_archs = ["mi300a_a0", "mi300a_a1"]
+    mi300x_archs = ["mi300x_a0", "mi300x_a1"]
+    if archname.lower() in mi300a_archs + mi300x_archs and compute_partition == "NA":
+        error("Invalid compute partition found for {}".format(archname))
+    if archname.lower() not in mi300a_archs + mi300x_archs:
+        return 1
+    # from the whitepaper
+    # https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/white-papers/amd-cdna-3-white-paper.pdf
+    if compute_partition.lower() == "spx":
+        if archname.lower() in mi300a_archs:
+            return 6
+        if archname.lower() in mi300x_archs:
+            return 8
+    if compute_partition.lower() == "tpx":
+        if archname.lower() in mi300a_archs:
+            return 2
+    if compute_partition.lower() == "dpx":
+        if archname.lower() in mi300x_archs:
+            return 4
+    if compute_partition.lower() == "qpx":
+        if archname.lower() in mi300x_archs:
+            return 2
+    if compute_partition.lower() == "cpx":
+        if archname.lower() in mi300x_archs:
+            return 2
+    error(
+        "Unknown compute partition / arch found for {} / {}".format(
+            compute_partition, archname
+        )
     )
 
 
 if __name__ == "__main__":
-    print(get_machine_specs(0))
+    print(generate_machine_specs())

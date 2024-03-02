@@ -10,7 +10,7 @@ Panel Config:
   data source:
     - metric_table:
         id: 1801
-        title: Aggregate Stats (All 32 channels)
+        title: Aggregate Stats (All channels)
         header:
           metric: Metric
           avg: Avg
@@ -171,9 +171,9 @@ Panel Config:
 
     - metric_table:
         id: 1802
-        title: L2 Cache Hit Rate (%)
+        title: L2 Cache Hit Rate (pct)
         header:
-          metric: Metric
+          metric: Channel
           expr: Expression
         metric:
           "::_1":
@@ -181,54 +181,54 @@ Panel Config:
               (((100 * TCC_HIT[::_1]) / (TCC_HIT[::_1] + TCC_MISS[::_1])) if ((TCC_HIT[::_1]
               + TCC_MISS[::_1]) != 0) else None)
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_box
 
     - metric_table:
         id: 1803
-        title: L2 Requests (Requests)
+        title: L2 Requests (per normUnit)
         header:
-          metric: Metric
+          metric: Channel
           expr: Expression
         metric:
           "::_1":
             expr: (TO_INT(TCC_REQ[::_1]) / $denom)
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_box
 
     - metric_table:
         id: 1804
-        title: L2 Access (Requests)
+        title: L2 Requests (per normUnit)
         header:
-          metric: Metric
-          read req: L2 Read Req
-          write req: L2 Write Req
-          atomic req: L2 Atomic Req
+          metric: Channel
+          read req: L2 Read
+          write req: L2 Write
+          atomic req: L2 Atomic
         metric:
           "::_1":
             read req: AVG((TO_INT(TCC_READ[::_1]) / $denom))
             write req: AVG((TO_INT(TCC_WRITE[::_1]) / $denom))
             atomic req: AVG((TO_INT(TCC_ATOMIC[::_1]) / $denom))
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1805
-        title: L2 - Fabric Access (Requests)
+        title: L2-Fabric Requests (per normUnit)
         header:
-          metric: Metric
-          read req: L2 - Fabric Read Req
-          write req: L2 - Fabric Write and Atomic Req
-          atomic req: L2 - Fabric Atomic Req
+          metric: Channel
+          read req: L2-Fabric Read
+          write req: L2-Fabric Write and Atomic
+          atomic req: L2-Fabric Atomic
         metric:
           "::_1":
             read req: AVG((TO_INT(TCC_EA_RDREQ[::_1]) / $denom))
             write req: AVG((TO_INT(TCC_EA_WRREQ[::_1]) / $denom))
             atomic req: AVG((TO_INT(TCC_EA_ATOMIC[::_1]) / $denom))
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_multiple_bar
 
     # - metric_table:
@@ -256,9 +256,9 @@ Panel Config:
 
     - metric_table:
         id: 1806
-        title: L2 - Fabric Read Latency (Cycles)
+        title: L2-Fabric Read Latency (Cycles)
         header:
-          metric: Metric
+          metric: Channel
           expr: Expression
         metric:
           "::_1":
@@ -266,14 +266,14 @@ Panel Config:
               ((TCC_EA_RDREQ_LEVEL[::_1] / TCC_EA_RDREQ[::_1]) if (TCC_EA_RDREQ[::_1]
               != 0) else None)
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_box
 
     - metric_table:
         id: 1807
-        title: L2 - Fabric Write Latency (Cycles)
+        title: L2-Fabric Write and Atomic Latency (Cycles)
         header:
-          metric: Metric
+          metric: Channel
           expr: Expression
         metric:
           "::_1":
@@ -281,49 +281,49 @@ Panel Config:
               ((TCC_EA_WRREQ_LEVEL[::_1] / TCC_EA_WRREQ[::_1]) if (TCC_EA_WRREQ[::_1]
               != 0) else None)
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_box
 
     - metric_table:
         id: 1808
-        title: L2 - Fabric Atomic Latency (Cycles)
+        title: L2-Fabric Atomic Latency (Cycles)
         header:
-          metric: Metric
+          metric: Channel
           expr: Expression
         metric:
           "::_1":
             expr: ((TCC_EA_ATOMIC_LEVEL[::_1] / TCC_EA_ATOMIC[::_1]) if
               (TCC_EA_ATOMIC[::_1] != 0) else 0)
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_box
 
     - metric_table:
         id: 1809
-        title: L2 - Fabric Read Stall (Cycles per normUnit)
+        title: L2-Fabric Read Stall (Cycles per normUnit)
         header:
-          metric: Metric
-          ea read stall - pcie: L2 - Fabric Read Stall (PCIe)
-          ea read stall - if: L2 - Fabric Read Stall (Infinity Fabric™)
-          ea read stall - hbm: L2 - Fabric Read Stall (HBM)
+          metric: Channel
+          ea read stall - pcie: L2-Fabric Read Stall (PCIe)
+          ea read stall - if: L2-Fabric Read Stall (Infinity Fabric™)
+          ea read stall - hbm: L2-Fabric Read Stall (HBM)
         metric:
           "::_1":
             ea read stall - pcie: None # Missing perfmon
             ea read stall - if: None # Missing perfmon
             ea read stall - hbm: None # Missing perfmon
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_multiple_bar
 
     - metric_table:
         id: 1810
-        title: L2 - Fabric Write Stall (Cycles per normUnit)
+        title: L2-Fabric Write and Atomic Stall (Cycles per normUnit)
         header:
-          metric: Metric
-          ea write stall - pcie: L2 - Fabric Write Stall (PCIe)
-          ea write stall - if: L2 - Fabric Write Stall (Infinity Fabric™)
-          ea write stall - hbm: L2 - Fabric Write Stall (HBM)
-          ea write stall - starve: L2 - Fabric Write Starve
+          metric: Channel
+          ea write stall - pcie: L2-Fabric Write Stall (PCIe)
+          ea write stall - if: L2-Fabric Write Stall (Infinity Fabric™)
+          ea write stall - hbm: L2-Fabric Write Stall (HBM)
+          ea write stall - starve: L2-Fabric Write Starve
         metric:
           "::_1":
             ea write stall - pcie: None # Missing perfmon
@@ -331,5 +331,5 @@ Panel Config:
             ea write stall - hbm: None # Missing perfmon
             ea write stall - starve: AVG((TO_INT(TCC_TOO_MANY_EA_WRREQS_STALL[::_1]) / $denom))
           placeholder_range:
-            "::_1": 32
+            "::_1": $total_l2_chan
         cli_style: simple_multiple_bar

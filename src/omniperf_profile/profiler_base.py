@@ -320,10 +320,6 @@ class OmniProfiler_Base:
             logging.info("IP Blocks: All")
         else:
             logging.info("IP Blocks: " + str(self.__args.ipblocks))
-        if self.__args.kernel_verbose > 5:
-            logging.info("KernelName verbose: DISABLED")
-        else:
-            logging.info("KernelName verbose: " + str(self.__args.kernel_verbose))
 
         # Run profiling on each input file
         for fname in glob.glob(self.get_args().path + "/perfmon/*.txt"):

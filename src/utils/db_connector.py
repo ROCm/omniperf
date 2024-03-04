@@ -83,18 +83,31 @@ class DatabaseConnector:
                 )
                 try:
                     fileName = file[0 : file.find(".")]
-                    cmd = (
-                        "mongoimport --quiet --uri mongodb://{}:{}@{}:{}/{}?authSource=admin --file {} -c {} --drop --type csv --headerline"
-                    ).format(
+                    # insert verbose translation if necessary
+                    data = pd.read_csv(fileName)
+                    data.reset_index(inplace=True)
+                    data_dict = data.to_dict("records")
+                    
+                    client = MongoClient("mongodb+srv://{}:{}>@{}:{}?authSource=admin".format(
                         self.connection_info["username"],
                         self.connection_info["password"],
                         self.connection_info["host"],
                         self.connection_info["port"],
-                        self.connection_info["db"],
-                        self.connection_info["workload"] + "/" + file,
-                        fileName,
-                    )
-                    os.system(cmd)
+                        ))
+                    collection = client[self.connection_info["db"]]
+                    collection.insert_many(data_dict)
+                    # cmd = (
+                    #     "mongoimport --quiet --uri mongodb://{}:{}@{}:{}/{}?authSource=admin --file {} -c {} --drop --type csv --headerline"
+                    # ).format(
+                    #     self.connection_info["username"],
+                    #     self.connection_info["password"],
+                    #     self.connection_info["host"],
+                    #     self.connection_info["port"],
+                    #     self.connection_info["db"],
+                    #     self.connection_info["workload"] + "/" + file,
+                    #     fileName,
+                    # )
+                    # os.system(cmd)
                     i += 1
                 except pd.errors.EmptyDataError:
                     logging.info("[database] Skipping empty file: %s" % file)

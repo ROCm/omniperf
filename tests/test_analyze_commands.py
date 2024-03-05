@@ -970,7 +970,7 @@ def test_time_unit_s():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
 
 @pytest.mark.time_unit
@@ -1326,7 +1326,7 @@ def test_col_3():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1373,7 +1373,7 @@ def test_g():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
 
 @pytest.mark.kernel_verbose

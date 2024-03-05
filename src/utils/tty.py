@@ -1,7 +1,7 @@
 ##############################################################################bl
 # MIT License
 #
-# Copyright (c) 2021 - 2024 Advanced Micro Devices, Inc. All Rights Reserved.
+# Copyright (c) 2021 - 2023 Advanced Micro Devices, Inc. All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,98 @@ from pathlib import Path
 from tabulate import tabulate
 import sys
 import copy
+import numpy as np
 
 from utils import parser
 
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
+
+def smartUnits(df):
+    for idx, row in df[df["Unit"] == "Gb/s"].items():
+        for curr_metric in row:
+            if "Metric" in df:
+                curr_row = df[df["Metric"] == curr_metric]
+                if not curr_row.empty:
+                    # fix values
+                    val_type = ""
+                    avg_vals=[]
+                    min_vals=[]
+                    max_vals=[]
+                    avg_percent_diff=0
+                    new_units = []
+                    if "Value" in curr_row:
+                        val_type = "Value"
+                    elif "Avg" in curr_row:
+                        val_type = "Avg"
+                    if not val_type =="":
+                        # if baseline
+                        if isinstance(curr_row[val_type], pd.DataFrame):
+                            avg_baseline = curr_row[val_type].values[0][1].split()
+                            avg_percent_diff = avg_baseline[1]
+                            avg_vals = np.array([curr_row[val_type].values[0][0], float(avg_baseline[0])], dtype=object)
+                            
+                            if "Max" in curr_row:
+                                min_baseline = curr_row["Min"].values[0][1].split()
+                                min_percent_diff = min_baseline[1]
+                                min_vals = np.array([curr_row["Min"].values[0][0], float(min_baseline[0])])
+
+                                max_baseline = curr_row["Max"].values[0][1].split()
+                                max_percent_diff = max_baseline[1]
+                                max_vals = np.array([curr_row["Max"].values[0][0], float(max_baseline[0])])
+                        else:
+                            avg_vals = curr_row[val_type].values
+                            if "Max" in curr_row:
+                                max_vals = curr_row["Max"].values
+                                min_vals = curr_row["Min"].values
+
+                        # calculate units
+                        for val in avg_vals:
+                            if isinstance(
+                                val,
+                                float,
+                            ):
+                                if val < 0.001:
+                                    new_units.append("Kb/s")
+                                elif val < 1:
+                                    new_units.append("Mb/s")
+                                    if len(new_units) == 2:
+                                        if new_units[0] == "Kb/s":
+                                            new_units[0] = "Mb/s"
+                                else:
+                                    new_units.append("Gb/s")
+                                    if len(new_units) == 2:
+                                        new_units[0] = "Gb/s"
+                                        
+                        if len(new_units) > 0:
+                            # Convert to new_units
+                            multiplier = 1
+                            if new_units[0] == "Mb/s":
+                                multiplier = 1000
+                            elif new_units[0] == "Kb/s":
+                                multiplier = 1000000
+
+                            avg_vals = multiplier * avg_vals
+                            if "Max" in curr_row:
+                                max_vals = multiplier * max_vals
+                                min_vals = multiplier * min_vals
+                            
+
+                        # if baseline
+                        if len(new_units) == 2:
+                            avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
+                            if "Max" in curr_row:
+                                max_vals[1] = str(max_vals[1]) + " " + str(max_percent_diff)
+                                min_vals[1] = str(min_vals[1]) + " " + str(min_percent_diff)
+
+                        if len(new_units) > 0:
+                            df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
+                            df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                            if "Max" in curr_row:
+                                df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
+                                df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
+                            
+        return df
 
 
 def string_multiple_lines(source, width, max_rows):
@@ -189,6 +276,8 @@ def show_all(args, runs, archConfigs, output):
                                         df = pd.concat([df, cur_df_copy[header]], axis=1)
 
                 if not df.empty:
+                    if "Unit" in df:
+                        df = smartUnits(df)
                     # subtitle for each table in a panel if existing
                     table_id_str = (
                         str(table_config["id"] // 100)

@@ -64,7 +64,6 @@ class webui_analysis(OmniAnalyze_Base):
         """
         from utils.gui_components.header import get_header
         from utils.gui_components.memchart import get_memchart
-        
 
         comparable_columns = parser.build_comparable_columns(self.get_args().time_unit)
         base_run, base_data = next(iter(self._runs.items()))
@@ -105,7 +104,7 @@ class webui_analysis(OmniAnalyze_Base):
             logging.debug("[analysis] gui normalization is %s" % norm_filt)
 
             base_data = self.initalize_runs()  # Re-initalizes everything
-            hbm_bw =base_data[base_run].sys_info["hbm_bw"][0]
+            hbm_bw = base_data[base_run].sys_info["hbm_bw"][0]
             print(hbm_bw)
             panel_configs = copy.deepcopy(arch_configs.panel_configs)
             # Generate original raw df
@@ -330,7 +329,7 @@ def determine_chart_type(
     norm_filt,
     comparable_columns,
     decimal,
-    hbm_bw
+    hbm_bw,
 ):
     content = []
 
@@ -344,7 +343,9 @@ def determine_chart_type(
     # Determine chart type:
     # a) Barchart
     if table_config["id"] in [x for i in barchart_elements.values() for x in i]:
-        d_figs = build_bar_chart(display_df, table_config, barchart_elements, norm_filt, hbm_bw)
+        d_figs = build_bar_chart(
+            display_df, table_config, barchart_elements, norm_filt, hbm_bw
+        )
         # Smaller formatting if barchart yeilds several graphs
         if (
             len(d_figs)

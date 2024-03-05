@@ -120,7 +120,7 @@ def discrete_background_color_bins(df, n_bins=5, columns="all"):
 ####################
 # GRAPHICAL ELEMENTS
 ####################
-def build_bar_chart(display_df, table_config, barchart_elements, norm_filt, hbm_bw ):
+def build_bar_chart(display_df, table_config, barchart_elements, norm_filt, hbm_bw):
     """
     Read data into a bar chart. ID will determine which subtype of barchart.
     """

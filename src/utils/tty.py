@@ -58,19 +58,8 @@ def smartUnits(df):
                             avg_percent_diff = avg_baseline[1]
                             avg_vals = np.array([curr_row[val_type].values[0][0], float(avg_baseline[0])], dtype=object)
                             
-                            if "Max" in curr_row:
-                                min_baseline = curr_row["Min"].values[0][1].split()
-                                min_percent_diff = min_baseline[1]
-                                min_vals = np.array([curr_row["Min"].values[0][0], float(min_baseline[0])])
-
-                                max_baseline = curr_row["Max"].values[0][1].split()
-                                max_percent_diff = max_baseline[1]
-                                max_vals = np.array([curr_row["Max"].values[0][0], float(max_baseline[0])])
                         else:
                             avg_vals = curr_row[val_type].values
-                            if "Max" in curr_row:
-                                max_vals = curr_row["Max"].values
-                                min_vals = curr_row["Min"].values
 
                         # calculate units
                         for val in avg_vals:
@@ -99,24 +88,16 @@ def smartUnits(df):
                                 multiplier = 1000000
 
                             avg_vals = multiplier * avg_vals
-                            if "Max" in curr_row:
-                                max_vals = multiplier * max_vals
-                                min_vals = multiplier * min_vals
                             
 
                         # if baseline
                         if len(new_units) == 2:
                             avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
-                            if "Max" in curr_row:
-                                max_vals[1] = str(max_vals[1]) + " " + str(max_percent_diff)
-                                min_vals[1] = str(min_vals[1]) + " " + str(min_percent_diff)
 
                         if len(new_units) > 0:
                             df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
                             df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
-                            if "Max" in curr_row:
-                                df.loc[df["Metric"] == curr_metric, "Max"] = max_vals
-                                df.loc[df["Metric"] == curr_metric, "Min"] = min_vals
+
                             
         return df
 

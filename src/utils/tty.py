@@ -34,6 +34,7 @@ from utils import parser
 hidden_columns = ["Tips", "coll_level"]
 hidden_sections = [1900, 2000]
 
+
 def smartUnits(df):
     for idx, row in df[df["Unit"] == "Gb/s"].items():
         for curr_metric in row:
@@ -41,20 +42,23 @@ def smartUnits(df):
                 curr_row = df[df["Metric"] == curr_metric]
                 if not curr_row.empty:
                     val_type = ""
-                    avg_vals=[]
-                    avg_percent_diff=0
+                    avg_vals = []
+                    avg_percent_diff = 0
                     new_units = []
                     if "Value" in curr_row:
                         val_type = "Value"
                     elif "Avg" in curr_row:
                         val_type = "Avg"
-                    if not val_type =="":
+                    if not val_type == "":
                         # if baseline
                         if isinstance(curr_row[val_type], pd.DataFrame):
                             avg_baseline = curr_row[val_type].values[0][1].split()
                             avg_percent_diff = avg_baseline[1]
-                            avg_vals = np.array([curr_row[val_type].values[0][0], float(avg_baseline[0])], dtype=object)
-                            
+                            avg_vals = np.array(
+                                [curr_row[val_type].values[0][0], float(avg_baseline[0])],
+                                dtype=object,
+                            )
+
                         else:
                             avg_vals = curr_row[val_type].values
 
@@ -75,7 +79,7 @@ def smartUnits(df):
                                     new_units.append("Gb/s")
                                     if len(new_units) == 2:
                                         new_units[0] = "Gb/s"
-                                        
+
                         if len(new_units) > 0:
                             # Convert to new_units
                             multiplier = 1
@@ -85,7 +89,7 @@ def smartUnits(df):
                                 multiplier = 1000000
 
                             avg_vals = multiplier * avg_vals
-                            
+
                         if len(new_units) == 2:
                             avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
 
@@ -93,7 +97,6 @@ def smartUnits(df):
                             df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
                             df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
 
-                            
         return df
 
 

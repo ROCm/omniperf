@@ -40,11 +40,8 @@ def smartUnits(df):
             if "Metric" in df:
                 curr_row = df[df["Metric"] == curr_metric]
                 if not curr_row.empty:
-                    # fix values
                     val_type = ""
                     avg_vals=[]
-                    min_vals=[]
-                    max_vals=[]
                     avg_percent_diff=0
                     new_units = []
                     if "Value" in curr_row:
@@ -89,8 +86,6 @@ def smartUnits(df):
 
                             avg_vals = multiplier * avg_vals
                             
-
-                        # if baseline
                         if len(new_units) == 2:
                             avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
 

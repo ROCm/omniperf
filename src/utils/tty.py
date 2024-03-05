@@ -41,26 +41,20 @@ def smartUnits(df):
             if "Metric" in df:
                 curr_row = df[df["Metric"] == curr_metric]
                 if not curr_row.empty:
-                    val_type = ""
                     avg_vals = []
                     avg_percent_diff = 0
                     new_units = []
-                    if "Value" in curr_row:
-                        val_type = "Value"
-                    elif "Avg" in curr_row:
-                        val_type = "Avg"
-                    if not val_type == "":
+                    if "Avg" in curr_row:
                         # if baseline
-                        if isinstance(curr_row[val_type], pd.DataFrame):
-                            avg_baseline = curr_row[val_type].values[0][1].split()
+                        if isinstance(curr_row["Avg"], pd.DataFrame):
+                            avg_baseline = curr_row["Avg"].values[0][1].split()
                             avg_percent_diff = avg_baseline[1]
                             avg_vals = np.array(
-                                [curr_row[val_type].values[0][0], float(avg_baseline[0])],
+                                [curr_row["Avg"].values[0][0], float(avg_baseline[0])],
                                 dtype=object,
                             )
-
                         else:
-                            avg_vals = curr_row[val_type].values
+                            avg_vals = curr_row["Avg"].values
 
                         # calculate units
                         for val in avg_vals:

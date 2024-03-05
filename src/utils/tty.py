@@ -44,6 +44,8 @@ def smartUnits(df):
                     avg_vals = []
                     avg_percent_diff = 0
                     new_units = []
+                    peak_val = []
+                    peak_percent_diff = 0
                     if "Avg" in curr_row:
                         # if baseline
                         if isinstance(curr_row["Avg"], pd.DataFrame):
@@ -53,8 +55,20 @@ def smartUnits(df):
                                 [curr_row["Avg"].values[0][0], float(avg_baseline[0])],
                                 dtype=object,
                             )
+                            if "Peak" in curr_row:
+                                peak_baseline = curr_row["Peak"].values[0][1].split()
+                                peak_percent_diff = peak_baseline[1]
+                                peak_vals = np.array(
+                                    [
+                                        curr_row["Peak"].values[0][0],
+                                        float(peak_baseline[0]),
+                                    ],
+                                    dtype=object,
+                                )
                         else:
                             avg_vals = curr_row["Avg"].values
+                            if "Peak" in curr_row:
+                                peak_vals = curr_row["Peak"].values
 
                         # calculate units
                         for val in avg_vals:
@@ -83,13 +97,21 @@ def smartUnits(df):
                                 multiplier = 1000000
 
                             avg_vals = multiplier * avg_vals
+                            if "Peak" in curr_row:
+                                peak_vals = multiplier * peak_vals
 
                         if len(new_units) == 2:
                             avg_vals[1] = str(avg_vals[1]) + " " + str(avg_percent_diff)
+                            if "Peak" in curr_row:
+                                peak_vals[1] = (
+                                    str(peak_vals[1]) + " " + str(peak_percent_diff)
+                                )
 
                         if len(new_units) > 0:
                             df.loc[df["Metric"] == curr_metric, "Avg"] = avg_vals
                             df.loc[df["Metric"] == curr_metric, "Unit"] = new_units[0]
+                            if "Peak" in curr_row:
+                                df.loc[df["Metric"] == curr_metric, "Peak"] = peak_vals
 
         return df
 

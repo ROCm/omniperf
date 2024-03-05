@@ -23,7 +23,7 @@
 ##############################################################################el
 
 from omniperf_analyze.analysis_base import OmniAnalyze_Base
-from utils.utils import demarcate, error
+from utils.utils import demarcate
 from utils import file_io, parser
 from utils.gui import build_bar_chart, build_table_chart
 
@@ -64,10 +64,12 @@ class webui_analysis(OmniAnalyze_Base):
         """
         from utils.gui_components.header import get_header
         from utils.gui_components.memchart import get_memchart
+        
 
         comparable_columns = parser.build_comparable_columns(self.get_args().time_unit)
         base_run, base_data = next(iter(self._runs.items()))
         self.app.layout = html.Div(style={"backgroundColor": "rgb(50, 50, 50)"})
+        # hbm_bw = base_data.sys_info["hbm_bw"]
 
         filt_kernel_names = []
         kernel_top_df = base_data.dfs[1]
@@ -103,6 +105,8 @@ class webui_analysis(OmniAnalyze_Base):
             logging.debug("[analysis] gui normalization is %s" % norm_filt)
 
             base_data = self.initalize_runs()  # Re-initalizes everything
+            hbm_bw =base_data[base_run].sys_info["hbm_bw"][0]
+            print(hbm_bw)
             panel_configs = copy.deepcopy(arch_configs.panel_configs)
             # Generate original raw df
             base_data[base_run].raw_pmc = file_io.create_df_pmc(
@@ -163,7 +167,7 @@ class webui_analysis(OmniAnalyze_Base):
                 # update roofline for visualization in GUI
                 self.get_socs()[self.arch].analysis_setup(
                     roofline_parameters={
-                        "workload_dir": self.dest_dir,
+                        "path_to_dir": self.dest_dir,
                         "device_id": 0,
                         "sort_type": "kernels",
                         "mem_level": "ALL",
@@ -213,6 +217,7 @@ class webui_analysis(OmniAnalyze_Base):
                                 norm_filt=norm_filt,
                                 comparable_columns=comparable_columns,
                                 decimal=self.get_args().decimal,
+                                hbm_bw=base_data[base_run].sys_info["hbm_bw"][0],
                             )
 
                             # Update content for this section
@@ -284,7 +289,7 @@ class webui_analysis(OmniAnalyze_Base):
             # create the loaded kernel stats
             parser.load_kernel_top(self._runs[self.dest_dir], self.dest_dir)
             # set architecture
-            self.arch = self._runs[self.dest_dir].sys_info.iloc[0]["gpu_arch"]
+            self.arch = self._runs[self.dest_dir].sys_info.iloc[0]["gpu_soc"]
 
         else:
             self.error(
@@ -308,7 +313,6 @@ class webui_analysis(OmniAnalyze_Base):
             input_filters,
             self._arch_configs[self.arch],
         )
-        # Here I expect that self._runs[<path>].raw_pmc will no longer be populated
         if args.random_port:
             self.app.run_server(
                 debug=False, host="0.0.0.0", port=random.randint(1024, 49151)
@@ -326,6 +330,7 @@ def determine_chart_type(
     norm_filt,
     comparable_columns,
     decimal,
+    hbm_bw
 ):
     content = []
 
@@ -339,7 +344,7 @@ def determine_chart_type(
     # Determine chart type:
     # a) Barchart
     if table_config["id"] in [x for i in barchart_elements.values() for x in i]:
-        d_figs = build_bar_chart(display_df, table_config, barchart_elements, norm_filt)
+        d_figs = build_bar_chart(display_df, table_config, barchart_elements, norm_filt, hbm_bw)
         # Smaller formatting if barchart yeilds several graphs
         if (
             len(d_figs)

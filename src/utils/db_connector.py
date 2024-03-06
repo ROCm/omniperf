@@ -60,8 +60,9 @@ class DatabaseConnector:
         sys_info = os.path.join(self.connection_info["workload"], "sysinfo.csv")
         if os.path.isfile(sys_info):
             sys_info = pd.read_csv(sys_info)
-            soc = sys_info["name"][0]
-            name = sys_info["workload_name"][0]
+            print("sysinfo: ", sys_info.keys())
+            soc = sys_info["gpu_arch "][0]
+            name = sys_info["workload_name "][0]
         else:
             error("[database] Unable to parse SoC and/or workload name from sysinfo.csv")
 
@@ -83,31 +84,29 @@ class DatabaseConnector:
                 )
                 try:
                     fileName = file[0 : file.find(".")]
+                    print("file: ", self.connection_info["workload"]
+                    + "/" + file)
                     # insert verbose translation if necessary
-                    data = pd.read_csv(fileName)
+                    data = pd.read_csv(self.connection_info["workload"]
+                    + "/" + file)
                     data.reset_index(inplace=True)
                     data_dict = data.to_dict("records")
+                    print("database info: ", self.connection_info["username"],
+                        self.connection_info["password"],
+                        self.connection_info["host"],
+                        self.connection_info["port"],
+                        'omniperf_pymongo_Vcopy_gfx908',)
                     
-                    client = MongoClient("mongodb+srv://{}:{}>@{}:{}?authSource=admin".format(
+                    client = MongoClient("mongodb://{}:{}@{}:{}/{}?authSource=admin".format(
                         self.connection_info["username"],
                         self.connection_info["password"],
                         self.connection_info["host"],
                         self.connection_info["port"],
+                        "omniperf_pymongo_Vcopy_gfx908",
                         ))
-                    collection = client[self.connection_info["db"]]
+                    db = client["omniperf_pymongo_Vcopy_gfx908"]
+                    collection=db[fileName]
                     collection.insert_many(data_dict)
-                    # cmd = (
-                    #     "mongoimport --quiet --uri mongodb://{}:{}@{}:{}/{}?authSource=admin --file {} -c {} --drop --type csv --headerline"
-                    # ).format(
-                    #     self.connection_info["username"],
-                    #     self.connection_info["password"],
-                    #     self.connection_info["host"],
-                    #     self.connection_info["port"],
-                    #     self.connection_info["db"],
-                    #     self.connection_info["workload"] + "/" + file,
-                    #     fileName,
-                    # )
-                    # os.system(cmd)
                     i += 1
                 except pd.errors.EmptyDataError:
                     logging.info("[database] Skipping empty file: %s" % file)

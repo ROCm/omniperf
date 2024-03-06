@@ -353,6 +353,14 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
         dest="workload",
         help="\t\t\t\tSpecify name of workload (to remove) or path to workload (to import)",
     )
+    connection_group.add_argument(
+        "--kernel-verbose",
+        required=False,
+        metavar="",
+        help="\t\tSpecify Kernel Name verbose level 1-5. Lower the level, shorter the kernel name. (DEFAULT: 5) (DISABLE: 5)",
+        default=5,
+        type=int,
+    )
 
     ## Analyze Command Line Options
     ## ----------------------------

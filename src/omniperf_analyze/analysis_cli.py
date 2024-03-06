@@ -39,9 +39,6 @@ class cli_analysis(OmniAnalyze_Base):
         if self.get_args().random_port:
             error("--gui flag is required to enable --random-port")
         for d in self.get_args().path:
-            # demangle and overwrite original 'Kernel_Name'
-            kernel_name_shortener(d[0], self.get_args().kernel_verbose)
-
             file_io.create_df_kernel_top_stats(
                 raw_data_dir=d[0],
                 filter_gpu_ids=self._runs[d[0]].filter_gpu_ids,

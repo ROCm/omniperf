@@ -26,6 +26,7 @@ from abc import ABC, abstractmethod
 from utils.utils import error, is_workload_empty, demarcate
 from pymongo import MongoClient
 from tqdm import tqdm
+from utils.kernel_name_shortener import kernel_name_shortener
 
 import os
 import logging
@@ -83,19 +84,14 @@ class DatabaseConnector:
                     + file
                 )
                 try:
-                    fileName = file[0 : file.find(".")]
-                    print("file: ", self.connection_info["workload"]
-                    + "/" + file)
-                    # insert verbose translation if necessary
+                    fileName = file[0 : file.find(".")]                    
                     data = pd.read_csv(self.connection_info["workload"]
                     + "/" + file)
+                    
+                    # Demangle original KernelNames
+                    kernel_name_shortener(data, self.args.kernel_verbose)
                     data.reset_index(inplace=True)
                     data_dict = data.to_dict("records")
-                    print("database info: ", self.connection_info["username"],
-                        self.connection_info["password"],
-                        self.connection_info["host"],
-                        self.connection_info["port"],
-                        'omniperf_pymongo_Vcopy_gfx908',)
                     
                     client = MongoClient("mongodb://{}:{}@{}:{}/{}?authSource=admin".format(
                         self.connection_info["username"],

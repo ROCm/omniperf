@@ -36,7 +36,7 @@ cache = dict()
 
 
 # Note: shortener is now dependent on a rocprof install with llvm
-def kernel_name_shortener(workload_dir, level):
+def kernel_name_shortener(df, level):
     def shorten_file(df, level):
         global cache
 
@@ -125,18 +125,12 @@ def kernel_name_shortener(workload_dir, level):
         if not os.path.isfile(cpp_filt):
             error("Could not resolve c++filt in expected directory: %s" % cpp_filt)
 
-        for fpath in glob.glob(workload_dir + "/[SQpmc]*.csv"):
-            try:
-                orig_df = pd.read_csv(
-                    fpath,
-                    on_bad_lines="skip",
-                    engine="python",
-                )
-                modified_df = shorten_file(orig_df, level)
-                modified_df.to_csv(fpath, index=False)
-            except pd.errors.EmptyDataError:
+        try:
+                modified_df = shorten_file(df, level)
+        except pd.errors.EmptyDataError:
                 logging.debug(
-                    "[profiling] Skipping shortening on empty csv: %s" % str(fpath)
+                    "[profiling] Skipping shortening on empty csv"
                 )
 
         logging.info("[profiling] Kernel_Name shortening complete.")
+        return modified_df

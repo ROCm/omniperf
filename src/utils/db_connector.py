@@ -61,9 +61,8 @@ class DatabaseConnector:
         sys_info = os.path.join(self.connection_info["workload"], "sysinfo.csv")
         if os.path.isfile(sys_info):
             sys_info = pd.read_csv(sys_info)
-            print("sysinfo: ", sys_info.keys())
-            soc = sys_info["gpu_arch "][0]
-            name = sys_info["workload_name "][0]
+            soc = sys_info["gpu_arch "][0].strip()
+            name = sys_info["workload_name "][0].strip()
         else:
             error("[database] Unable to parse SoC and/or workload name from sysinfo.csv")
 
@@ -98,9 +97,9 @@ class DatabaseConnector:
                         self.connection_info["password"],
                         self.connection_info["host"],
                         self.connection_info["port"],
-                        "omniperf_pymongo_Vcopy_gfx908",
+                        self.connection_info["db"],
                         ))
-                    db = client["omniperf_pymongo_Vcopy_gfx908"]
+                    db = client[self.connection_info["db"]]
                     collection=db[fileName]
                     collection.insert_many(data_dict)
                     i += 1

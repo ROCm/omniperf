@@ -56,7 +56,6 @@ class DatabaseConnector:
 
     @demarcate
     def prep_import(self):
-
         # Extract SoC and workload name from sysinfo.csv
         sys_info = os.path.join(self.connection_info["workload"], "sysinfo.csv")
         if os.path.isfile(sys_info):
@@ -83,24 +82,25 @@ class DatabaseConnector:
                     + file
                 )
                 try:
-                    fileName = file[0 : file.find(".")]                    
-                    data = pd.read_csv(self.connection_info["workload"]
-                    + "/" + file)
-                    
+                    fileName = file[0 : file.find(".")]
+                    data = pd.read_csv(self.connection_info["workload"] + "/" + file)
+
                     # Demangle original KernelNames
                     kernel_name_shortener(data, self.args.kernel_verbose)
                     data.reset_index(inplace=True)
                     data_dict = data.to_dict("records")
-                    
-                    client = MongoClient("mongodb://{}:{}@{}:{}/{}?authSource=admin".format(
-                        self.connection_info["username"],
-                        self.connection_info["password"],
-                        self.connection_info["host"],
-                        self.connection_info["port"],
-                        self.connection_info["db"],
-                        ))
+
+                    client = MongoClient(
+                        "mongodb://{}:{}@{}:{}/{}?authSource=admin".format(
+                            self.connection_info["username"],
+                            self.connection_info["password"],
+                            self.connection_info["host"],
+                            self.connection_info["port"],
+                            self.connection_info["db"],
+                        )
+                    )
                     db = client[self.connection_info["db"]]
-                    collection=db[fileName]
+                    collection = db[fileName]
                     collection.insert_many(data_dict)
                     i += 1
                 except pd.errors.EmptyDataError:

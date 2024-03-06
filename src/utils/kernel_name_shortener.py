@@ -126,11 +126,9 @@ def kernel_name_shortener(df, level):
             error("Could not resolve c++filt in expected directory: %s" % cpp_filt)
 
         try:
-                modified_df = shorten_file(df, level)
+            modified_df = shorten_file(df, level)
         except pd.errors.EmptyDataError:
-                logging.debug(
-                    "[profiling] Skipping shortening on empty csv"
-                )
+            logging.debug("[profiling] Skipping shortening on empty csv")
 
         logging.info("[profiling] Kernel_Name shortening complete.")
         return modified_df

@@ -23,12 +23,11 @@
 ##############################################################################el
 
 from omniperf_analyze.analysis_base import OmniAnalyze_Base
-from utils.utils import demarcate, error
+from utils.utils import demarcate, console_debug, console_error
 from utils import file_io, parser
 from utils.gui import build_bar_chart, build_table_chart
 
 import os
-import logging
 import random
 import copy
 import dash
@@ -100,7 +99,7 @@ class webui_analysis(OmniAnalyze_Base):
         def generate_from_filter(
             disp_filt, kernel_filter, gcd_filter, norm_filt, top_n_filt, div_children
         ):
-            logging.debug("[analysis] gui normalization is %s" % norm_filt)
+            console_debug("analysis", "gui normalization is %s" % norm_filt)
 
             base_data = self.initalize_runs()  # Re-initalizes everything
             panel_configs = copy.deepcopy(arch_configs.panel_configs)
@@ -108,10 +107,10 @@ class webui_analysis(OmniAnalyze_Base):
             base_data[base_run].raw_pmc = file_io.create_df_pmc(
                 self.dest_dir, self.get_args().verbose
             )
-            logging.debug("[analysis] gui dispatch filter is %s" % disp_filt)
-            logging.debug("[analysis] gui kernel filter is %s" % kernel_filter)
-            logging.debug("[analysis] gui gpu filter is %s" % gcd_filter)
-            logging.debug("[analysis] gui top-n filter is %s" % top_n_filt)
+            console_debug("analysis", "gui dispatch filter is %s" % disp_filt)
+            console_debug("analysis", "gui kernel filter is %s" % kernel_filter)
+            console_debug("analysis", "gui gpu filter is %s" % gcd_filter)
+            console_debug("analysis", "gui top-n filter is %s" % top_n_filt)
             base_data[base_run].filter_kernel_ids = kernel_filter
             base_data[base_run].filter_gpu_ids = gcd_filter
             base_data[base_run].filter_dispatch_ids = disp_filt
@@ -287,7 +286,7 @@ class webui_analysis(OmniAnalyze_Base):
             self.arch = self._runs[self.dest_dir].sys_info.iloc[0]["gpu_arch"]
 
         else:
-            self.error(
+            console_error(
                 "Multiple runs not yet supported in GUI. Retry without --gui flag."
             )
 

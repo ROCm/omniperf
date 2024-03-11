@@ -28,16 +28,19 @@ import sys
 import os
 from pathlib import Path
 import shutil
-from utils.specs import generate_machine_specs
+from utils.specs import MachineSpecs, generate_machine_specs
 from utils.utils import (
     demarcate,
-    trace_logger,
     get_version,
     get_version_display,
     detect_rocprof,
-    error,
     get_submodules,
+    console_debug,
+    console_log,
+    console_error,
+    set_locale_encoding,
 )
+from utils.logger import setup_console_handler, setup_logging_priority, setup_file_handler
 from argparser import omniarg_parser
 import config
 import pandas as pd
@@ -69,19 +72,22 @@ class Omniperf:
         self.__options = {}
         self.__supported_archs = SUPPORTED_ARCHS
         self.__mspec: MachineSpecs = None  # to be initalized in load_soc_specs()
-
-        self.setup_logging()
+        setup_console_handler()
         self.set_version()
         self.parse_args()
-
         self.__mode = self.__args.mode
+        self.__loglevel = setup_logging_priority(
+            self.__args.verbose, self.__args.quiet, self.__mode
+        )
+        setattr(self.__args, "loglevel", self.__loglevel)
+        set_locale_encoding()
 
         if self.__mode == "profile":
             self.detect_profiler()
         elif self.__mode == "analyze":
             self.detect_analyze()
 
-        logging.info("Execution mode = %s" % self.__mode)
+        console_debug("Execution mode = %s" % self.__mode)
 
     def print_graphic(self):
         """Log program name as ascii art to terminal."""
@@ -93,32 +99,7 @@ class Omniperf:
  \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|  
                         |_|                  
 """
-        logging.info(ascii_art)
-
-    def setup_logging(self):
-        # register a trace level logger
-        logging.TRACE = logging.DEBUG - 5
-        logging.addLevelName(logging.TRACE, "TRACE")
-        setattr(logging, "TRACE", logging.TRACE)
-        setattr(logging, "trace", trace_logger)
-
-        # demonstrate override of default loglevel via env variable
-        loglevel = logging.INFO
-        if "OMNIPERF_LOGLEVEL" in os.environ.keys():
-            loglevel = os.environ["OMNIPERF_LOGLEVEL"]
-            if loglevel in {"DEBUG", "debug"}:
-                loglevel = logging.DEBUG
-            elif loglevel in {"TRACE", "trace"}:
-                loglevel = logging.TRACE
-            elif loglevel in {"INFO", "info"}:
-                loglevel = logging.INFO
-            elif loglevel in {"ERROR", "error"}:
-                loglevel = logging.ERROR
-            else:
-                print("Ignoring unsupported OMNIPERF_LOGLEVEL setting (%s)" % loglevel)
-                sys.exit(1)
-
-        logging.basicConfig(format="%(message)s", level=loglevel, stream=sys.stdout)
+        print(ascii_art)
 
     def get_mode(self):
         return self.__mode
@@ -138,8 +119,7 @@ class Omniperf:
             or self.__args.use_rocscope
         ):
             if not shutil.which("rocscope"):
-                logging.error("Rocscope must be in PATH")
-                sys.exit(1)
+                console_error("Rocscope must be in PATH")
             else:
                 self.__profiler_mode = "rocscope"
         else:
@@ -149,11 +129,10 @@ class Omniperf:
             elif str(rocprof_cmd).endswith("rocprofv2"):
                 self.__profiler_mode = "rocprofv2"
             else:
-                error(
+                console_error(
                     "Incompatible profiler: %s. Supported profilers include: %s"
                     % (rocprof_cmd, get_submodules("omniperf_profile"))
                 )
-
         return
 
     def detect_analyze(self):
@@ -175,14 +154,13 @@ class Omniperf:
 
         # NB: This checker is a bit redundent. We already check this in specs module
         if arch not in self.__supported_archs.keys():
-            error("%s is an unsupported SoC" % arch)
+            console_error("%s is an unsupported SoC" % arch)
 
         soc_module = importlib.import_module("omniperf_soc.soc_" + arch)
         soc_class = getattr(soc_module, arch + "_soc")
         self.__soc[arch] = soc_class(self.__args, self.__mspec)
         return
 
-    @demarcate
     def parse_args(self):
         parser = argparse.ArgumentParser(
             description="Command line interface for AMD's GPU profiler, Omniperf",
@@ -202,8 +180,7 @@ class Omniperf:
                 print(generate_machine_specs(self.__args))
                 sys.exit(0)
             parser.print_help(sys.stderr)
-            error("Omniperf requires a valid mode.")
-
+            console_error("Omniperf requires you pass a valid mode. Detected None.")
         return
 
     @demarcate
@@ -216,8 +193,6 @@ class Omniperf:
             self.__args.path = os.path.join(
                 self.__args.path, self.__args.name, self.__mspec.gpu_model
             )
-
-        logging.info("Profiler choice = %s" % self.__profiler_mode)
 
         # instantiate desired profiler
         if self.__profiler_mode == "rocprofv1":
@@ -239,13 +214,16 @@ class Omniperf:
                 self.__args, self.__profiler_mode, self.__soc[self.__mspec.gpu_arch]
             )
         else:
-            logging.error("Unsupported profiler")
-            sys.exit(1)
+            console_error("Unsupported profiler")
 
         # -----------------------
         # run profiling workflow
         # -----------------------
+
         self.__soc[self.__mspec.gpu_arch].profiling_setup()
+        # enable file-based logging
+        setup_file_handler(self.__args.loglevel, self.__args.path)
+
         profiler.pre_processing()
         profiler.run_profiling(self.__version["ver"], config.prog)
         profiler.post_processing()
@@ -275,7 +253,7 @@ class Omniperf:
     def run_analysis(self):
         self.print_graphic()
 
-        logging.info("Analysis mode = %s" % self.__analyze_mode)
+        console_log("Analysis mode = %s" % self.__analyze_mode)
 
         if self.__analyze_mode == "cli":
             from omniperf_analyze.analysis_cli import cli_analysis
@@ -286,7 +264,7 @@ class Omniperf:
 
             analyzer = webui_analysis(self.__args, self.__supported_archs)
         else:
-            error("Unsupported anlaysis mode -> %s" % self.__analyze_mode)
+            console_error("Unsupported analysis mode -> %s" % self.__analyze_mode)
 
         # -----------------------
         # run analysis workflow

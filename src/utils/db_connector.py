@@ -60,8 +60,8 @@ class DatabaseConnector:
         sys_info = os.path.join(self.connection_info["workload"], "sysinfo.csv")
         if os.path.isfile(sys_info):
             sys_info = pd.read_csv(sys_info)
-            soc = sys_info["gpu_arch "][0].strip()
-            name = sys_info["workload_name "][0].strip()
+            soc = sys_info["gpu_arch"][0].strip()
+            name = sys_info["workload_name"][0].strip()
         else:
             error("[database] Unable to parse SoC and/or workload name from sysinfo.csv")
 

@@ -181,7 +181,7 @@ class OmniSoC_Base:
         if (self._mspec.gpu_arch == "gfx942"):
             if "MI300A" in "\n".join(self._mspec._rocminfo):
                 self._mspec.gpu_model = "MI300A_A1"
-            elif "MI300A" not in "\n".join(self._mspec._rocminfo):
+            elif "MI300X"  in "\n".join(self._mspec._rocminfo):
                 self._mspec.gpu_model = "MI300X_A1"
             else:
                 console_error("Cannot parse MI300 details from rocminfo. Please verify output.")

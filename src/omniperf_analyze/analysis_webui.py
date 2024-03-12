@@ -67,7 +67,6 @@ class webui_analysis(OmniAnalyze_Base):
         comparable_columns = parser.build_comparable_columns(self.get_args().time_unit)
         base_run, base_data = next(iter(self._runs.items()))
         self.app.layout = html.Div(style={"backgroundColor": "rgb(50, 50, 50)"})
-        # hbm_bw = base_data.sys_info["hbm_bw"]
 
         filt_kernel_names = []
         kernel_top_df = base_data.dfs[1]
@@ -104,7 +103,6 @@ class webui_analysis(OmniAnalyze_Base):
 
             base_data = self.initalize_runs()  # Re-initalizes everything
             hbm_bw = base_data[base_run].sys_info["hbm_bw"][0]
-            print(hbm_bw)
             panel_configs = copy.deepcopy(arch_configs.panel_configs)
             # Generate original raw df
             base_data[base_run].raw_pmc = file_io.create_df_pmc(

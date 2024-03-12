@@ -23,14 +23,13 @@
 ##############################################################################el
 
 from abc import ABC, abstractmethod
-import logging
 import os
 import math
 import shutil
 import glob
 import re
 import numpy as np
-from utils.utils import demarcate
+from utils.utils import demarcate, console_debug, console_log, console_error
 from pathlib import Path
 
 from omniperf_base import SUPPORTED_ARCHS
@@ -179,14 +178,15 @@ class OmniSoC_Base:
             self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].values())[
                 0
             ][0]
-        if (self._mspec.gpu_arch == "gfx942") and (
-            "MI300A" in "\n".join(self._mspec._rocminfo)
-        ):
-            self._mspec.gpu_model = "MI300A_A1"
-        if (self._mspec.gpu_arch == "gfx942") and (
-            "MI300A" not in "\n".join(self._mspec._rocminfo)
-        ):
-            self._mspec.gpu_model = "MI300X_A1"
+        if self._mspec.gpu_arch == "gfx942":
+            if "MI300A" in "\n".join(self._mspec._rocminfo):
+                self._mspec.gpu_model = "MI300A_A1"
+            elif "MI300X" in "\n".join(self._mspec._rocminfo):
+                self._mspec.gpu_model = "MI300X_A1"
+            else:
+                console_error(
+                    "Cannot parse MI300 details from rocminfo. Please verify output."
+                )
 
         self._mspec.num_xcd = str(
             total_xcds(self._mspec.gpu_model, self._mspec.compute_partition)
@@ -204,8 +204,10 @@ class OmniSoC_Base:
         # Initialize directories
         if not os.path.isdir(self.__workload_dir):
             os.makedirs(self.__workload_dir)
-        else:
+        elif not os.path.islink(self.__workload_dir):
             shutil.rmtree(self.__workload_dir)
+        else:
+            os.unlink(self.__workload_dir)
 
         os.makedirs(workload_perfmon_dir)
 
@@ -227,9 +229,9 @@ class OmniSoC_Base:
                     ip = re.match(mpattern, fbase).group(1)
                     if ip in self.__args.ipblocks:
                         pmc_files_list.append(fname)
-                        logging.info("fname: " + fbase + ": Added")
+                        console_log("fname: " + fbase + ": Added")
                     else:
-                        logging.info("fname: " + fbase + ": Skipped")
+                        console_log("fname: " + fbase + ": Skipped")
 
             else:
                 # default: take all perfmons
@@ -250,17 +252,17 @@ class OmniSoC_Base:
     @abstractmethod
     def profiling_setup(self):
         """Perform any SoC-specific setup prior to profiling."""
-        logging.debug("[profiling] perform SoC profiling setup for %s" % self.__arch)
+        console_debug("profiling", "perform SoC profiling setup for %s" % self.__arch)
 
     @abstractmethod
     def post_profiling(self):
         """Perform any SoC-specific post profiling activities."""
-        logging.debug("[profiling] perform SoC post processing for %s" % self.__arch)
+        console_debug("profiling", "perform SoC post processing for %s" % self.__arch)
 
     @abstractmethod
     def analysis_setup(self):
         """Perform any SoC-specific setup prior to analysis."""
-        logging.debug("[analysis] perform SoC analysis setup for %s" % self.__arch)
+        console_debug("analysis", "perform SoC analysis setup for %s" % self.__arch)
 
 
 @demarcate

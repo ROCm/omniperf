@@ -25,12 +25,13 @@
 ##############################################################################el
 
 import sys
+import logging
 from omniperf_base import Omniperf
+from utils.utils import console_error
 
 def main():
 
     omniperf = Omniperf()
-    omniperf.parse_args() #TODO: We already do this in the __init__ for Omniperf(). Change that?
 
     mode = omniperf.get_mode()
 
@@ -42,7 +43,7 @@ def main():
     elif mode == "analyze":
         omniperf.run_analysis()
     else:
-        omniperf.error("Unsupported execution mode")
+        console_error("Unsupported execution mode")
 
     sys.exit(0)
 

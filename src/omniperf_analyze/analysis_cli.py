@@ -23,7 +23,7 @@
 ##############################################################################el
 
 from omniperf_analyze.analysis_base import OmniAnalyze_Base
-from utils.utils import demarcate, error
+from utils.utils import demarcate, console_error
 from utils import file_io, parser, tty
 from utils.kernel_name_shortener import kernel_name_shortener
 
@@ -37,22 +37,25 @@ class cli_analysis(OmniAnalyze_Base):
         """Perform any pre-processing steps prior to analysis."""
         super().pre_processing()
         if self.get_args().random_port:
-            error("--gui flag is required to enable --random-port")
+            console_error("--gui flag is required to enable --random-port")
         for d in self.get_args().path:
-            # demangle and overwrite original 'Kernel_Name'
-            kernel_name_shortener(d[0], self.get_args().kernel_verbose)
-
             file_io.create_df_kernel_top_stats(
                 raw_data_dir=d[0],
                 filter_gpu_ids=self._runs[d[0]].filter_gpu_ids,
                 filter_dispatch_ids=self._runs[d[0]].filter_dispatch_ids,
                 time_unit=self.get_args().time_unit,
                 max_stat_num=self.get_args().max_stat_num,
+                kernel_verbose=self.get_args().kernel_verbose,
             )
             # create 'mega dataframe'
             self._runs[d[0]].raw_pmc = file_io.create_df_pmc(
-                d[0], self.get_args().verbose
+                d[0], self.get_args().kernel_verbose, self.get_args().verbose
             )
+            # demangle and overwrite original 'Kernel_Name'
+            kernel_name_shortener(
+                self._runs[d[0]].raw_pmc, self.get_args().kernel_verbose
+            )
+
             # create the loaded table
             parser.load_table_data(
                 workload=self._runs[d[0]],

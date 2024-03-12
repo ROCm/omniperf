@@ -33,8 +33,9 @@ import collections
 from collections import OrderedDict
 from pathlib import Path
 from utils import schema
+from utils.utils import console_debug, console_error
+from utils.kernel_name_shortener import kernel_name_shortener
 import config
-import logging
 
 # TODO: use pandas chunksize or dask to read really large csv file
 # from dask import dataframe as dd
@@ -89,6 +90,7 @@ def create_df_kernel_top_stats(
     filter_dispatch_ids,
     time_unit,
     max_stat_num,
+    kernel_verbose,
     sortby="sum",
 ):
     """
@@ -97,6 +99,8 @@ def create_df_kernel_top_stats(
     # NB:
     #   We even don't have to create pmc_kernel_top.csv explictly
     df = pd.read_csv(os.path.join(raw_data_dir, schema.pmc_perf_file_prefix + ".csv"))
+    # Demangle original KernelNames
+    kernel_name_shortener(df, kernel_verbose)
 
     # The logic below for filters are the same as in parser.apply_filters(),
     # which can be merged together if need it.
@@ -154,7 +158,7 @@ def create_df_kernel_top_stats(
         grouped.to_csv(os.path.join(raw_data_dir, "pmc_kernel_top.csv"), index=False)
 
 
-def create_df_pmc(raw_data_dir, verbose):
+def create_df_pmc(raw_data_dir, kernel_verbose, verbose):
     """
     Load all raw pmc counters and join into one df.
     """
@@ -170,12 +174,13 @@ def create_df_pmc(raw_data_dir, verbose):
                 f == schema.pmc_perf_file_prefix + ".csv"
             ):
                 tmp_df = pd.read_csv(os.path.join(root, f))
+                # Demangle original KernelNames
+                kernel_name_shortener(tmp_df, kernel_verbose)
                 dfs.append(tmp_df)
                 coll_levels.append(f[:-4])
     final_df = pd.concat(dfs, keys=coll_levels, axis=1, copy=False)
-    # TODO: join instead of concat!
     if verbose >= 2:
-        print("pmc_raw_data final_df ", final_df.info())
+        console_debug("pmc_raw_data final_df $s" % final_df.info())
     return final_df
 
 
@@ -231,5 +236,4 @@ def is_single_panel_config(root_dir, supported_archs):
     elif counter == len(supported_archs):
         return False
     else:
-        logging.error("Found multiple panel config sets but incomplete for all archs!")
-        sys.exit(1)
+        console_error("Found multiple panel config sets but incomplete for all archs.")

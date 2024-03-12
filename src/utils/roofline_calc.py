@@ -25,7 +25,7 @@
 import os
 
 from dataclasses import dataclass
-import logging
+from utils.utils import console_debug
 import csv
 
 ################################################
@@ -113,7 +113,7 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
         peakOps = float(benchmark_data[dtype + "Flops"][roofline_parameters["device_id"]])
     for i in range(0, len(cacheHierarchy)):
         # Plot BW line
-        logging.debug("[roofline] Current cache level is %s" % cacheHierarchy[i])
+        console_debug("roofline" "Current cache level is %s" % cacheHierarchy[i])
         curr_bw = cacheHierarchy[i] + "Bw"
         peakBw = float(benchmark_data[curr_bw][roofline_parameters["device_id"]])
 
@@ -143,9 +143,9 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
         y2_mfma = peakMFMA
 
         # These are the points to use:
-        logging.debug("[roofline] coordinate points:")
-        logging.debug("x = [{}, {}]".format(x1, x2_mfma))
-        logging.debug("y = [{}, {}]".format(y1, y2_mfma))
+        console_debug("roofline", "coordinate points:")
+        console_debug("x = [{}, {}]".format(x1, x2_mfma))
+        console_debug("y = [{}, {}]".format(y1, y2_mfma))
 
         graphPoints[cacheHierarchy[i].lower()].append([x1, x2_mfma])
         graphPoints[cacheHierarchy[i].lower()].append([y1, y2_mfma])
@@ -161,7 +161,7 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
         if x2 < x0:
             x0 = x2
 
-        logging.debug("FMA ROOF [{}, {}], [{},{}]".format(x0, XMAX, peakOps, peakOps))
+        console_debug("FMA ROOF [{}, {}], [{},{}]".format(x0, XMAX, peakOps, peakOps))
         graphPoints["valu"].append([x0, XMAX])
         graphPoints["valu"].append([peakOps, peakOps])
         graphPoints["valu"].append(peakOps)
@@ -174,7 +174,7 @@ def calc_ceilings(roofline_parameters, dtype, benchmark_data):
         if x2_mfma < x0_mfma:
             x0_mfma = x2_mfma
 
-        logging.debug(
+        console_debug(
             "MFMA ROOF [{}, {}], [{},{}]".format(x0_mfma, XMAX, peakMFMA, peakMFMA)
         )
         graphPoints["mfma"].append([x0_mfma, XMAX])
@@ -253,10 +253,9 @@ def calc_ai(sort_type, ret_df):
                 + (df["SQ_INSTS_VALU_MFMA_MOPS_F64"][idx] * 512)
             )
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped total_flops at index {}".format(
-                    kernelName[:35], idx
-                )
+            console_debug(
+                "roofline",
+                "{}: Skipped total_flops at index {}".format(kernelName[:35], idx),
             )
             pass
         try:
@@ -284,8 +283,9 @@ def calc_ai(sort_type, ret_df):
                 )
             )
         except KeyError:
-            logging.debug(
-                "{}: Skipped valu_flops at index {}".format(kernelName[:35], idx)
+            console_debug(
+                "roofline",
+                "{}: Skipped valu_flops at index {}".format(kernelName[:35], idx),
             )
             pass
 
@@ -296,8 +296,9 @@ def calc_ai(sort_type, ret_df):
             mfma_flops_f64 += df["SQ_INSTS_VALU_MFMA_MOPS_F64"][idx] * 512
             mfma_iops_i8 += df["SQ_INSTS_VALU_MFMA_MOPS_I8"][idx] * 512
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped mfma ops at index {}".format(kernelName[:35], idx)
+            console_debug(
+                "roofline",
+                "{}: Skipped mfma ops at index {}".format(kernelName[:35], idx),
             )
             pass
 
@@ -308,18 +309,18 @@ def calc_ai(sort_type, ret_df):
                 * L2_BANKS
             )  # L2_BANKS = 32 (since assuming mi200)
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped lds_data at index {}".format(kernelName[:35], idx)
+            console_debug(
+                "roofline",
+                "{}: Skipped lds_data at index {}".format(kernelName[:35], idx),
             )
             pass
 
         try:
             L1cache_data += df["TCP_TOTAL_CACHE_ACCESSES_sum"][idx] * 64
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped L1cache_data at index {}".format(
-                    kernelName[:35], idx
-                )
+            console_debug(
+                "roofline",
+                "{}: Skipped L1cache_data at index {}".format(kernelName[:35], idx),
             )
             pass
 
@@ -331,10 +332,9 @@ def calc_ai(sort_type, ret_df):
                 + df["TCP_TCC_READ_REQ_sum"][idx] * 64
             )
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped L2cache_data at index {}".format(
-                    kernelName[:35], idx
-                )
+            console_debug(
+                "roofline",
+                "{}: Skipped L2cache_data at index {}".format(kernelName[:35], idx),
             )
             pass
         try:
@@ -345,8 +345,9 @@ def calc_ai(sort_type, ret_df):
                 + ((df["TCC_EA_WRREQ_sum"][idx] - df["TCC_EA_WRREQ_64B_sum"][idx]) * 32)
             )
         except KeyError:
-            logging.debug(
-                "[roofline] {}: Skipped hbm_data at index {}".format(kernelName[:35], idx)
+            console_debug(
+                "roofline",
+                "{}: Skipped hbm_data at index {}".format(kernelName[:35], idx),
             )
             pass
 
@@ -375,7 +376,7 @@ def calc_ai(sort_type, ret_df):
                     avgDuration / calls,
                 )
             )
-            logging.debug(
+            console_debug(
                 "Just added {} to AI_Data at index {}. # of calls: {}".format(
                     kernelName, idx, calls
                 )

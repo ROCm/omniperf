@@ -24,12 +24,17 @@
 
 from abc import ABC, abstractmethod
 import os
-import logging
 import sys
 import copy
 from collections import OrderedDict
 from pathlib import Path
-from utils.utils import demarcate, error, is_workload_empty
+from utils.utils import (
+    demarcate,
+    is_workload_empty,
+    console_log,
+    console_debug,
+    console_error,
+)
 from utils import schema, file_io, parser
 import pandas as pd
 from tabulate import tabulate
@@ -103,7 +108,7 @@ class OmniAnalyze_Base:
                 print(prefix + key, "->", value)
             sys.exit(0)
         else:
-            error("Unsupported arch")
+            console_error("Unsupported arch")
 
     @demarcate
     def load_options(self, normalization_filter):
@@ -117,14 +122,15 @@ class OmniAnalyze_Base:
                 parser.build_metric_value_string(v.dfs, v.dfs_type, normalization_filter)
 
         args = self.__args
-        # Error checking for multiple runs and multiple gpu_kernel filters
+        # Error checking for multiple runs and multiple kernel filters
         if args.gpu_kernel and (len(args.path) != len(args.gpu_kernel)):
             if len(args.gpu_kernel) == 1:
                 for i in range(len(args.path) - 1):
                     args.gpu_kernel.extend(args.gpu_kernel)
             else:
-                error(
-                    "Error: the number of --filter-kernels doesn't match the number of --dir."
+                console_error(
+                    "analysis"
+                    "The number of -k/--kernel doesn't match the number of --dir."
                 )
 
     @demarcate
@@ -165,16 +171,18 @@ class OmniAnalyze_Base:
     def sanitize(self):
         """Perform sanitization of inputs"""
         if not self.__args.path:
-            error("The following arguments are required: -p/--path")
+            console_error("The following arguments are required: -p/--path")
         # verify not accessing parent directories
         if ".." in str(self.__args.path):
-            error("Access denied. Cannot access parent directories in path (i.e. ../)")
+            console_error(
+                "Access denied. Cannot access parent directories in path (i.e. ../)"
+            )
         # ensure absolute path
         for dir in self.__args.path:
             full_path = os.path.abspath(dir[0])
             dir[0] = full_path
             if not os.path.isdir(dir[0]):
-                error("Invalid directory {}\nPlease try again.".format(dir[0]))
+                console_error("Invalid directory {}\nPlease try again.".format(dir[0]))
             # validate profiling data
             is_workload_empty(dir[0])
 
@@ -184,8 +192,8 @@ class OmniAnalyze_Base:
     @abstractmethod
     def pre_processing(self):
         """Perform initialization prior to analysis."""
-        logging.debug("[analysis] prepping to do some analysis")
-        logging.info("[analysis] deriving Omniperf metrics...")
+        console_debug("analysis", "prepping to do some analysis")
+        console_log("analysis", "deriving Omniperf metrics...")
         # initalize output file
         self._output = (
             open(self.__args.output_file, "w+") if self.__args.output_file else sys.stdout
@@ -214,4 +222,4 @@ class OmniAnalyze_Base:
     @abstractmethod
     def run_analysis(self):
         """Run analysis."""
-        logging.debug("[analysis] generating analysis")
+        console_debug("analysis", "generating analysis")

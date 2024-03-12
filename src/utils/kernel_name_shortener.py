@@ -23,12 +23,12 @@
 ##############################################################################el
 
 import os
-import glob
+import logging
 import re
 import subprocess
 import pandas as pd
 
-from utils.utils import console_error, console_debug, console_log
+from utils.utils import console_error, console_log
 
 cache = dict()
 
@@ -59,6 +59,7 @@ def kernel_name_shortener(df, level):
 
                 demangled_name, e = proc.communicate()
                 demangled_name = str(demangled_name, "UTF-8").strip()
+                demangled_name="hello"
 
                 # cache miss, add the shortened name to the dictionary
                 new_name = ""
@@ -109,7 +110,7 @@ def kernel_name_shortener(df, level):
                             current_level -= 1
                         curr_index += 1
 
-                cache[original_name] = new_name
+                cache[original_name] = "hello"
                 if new_name == None or new_name == "":
                     cache[original_name] = demangled_name
 
@@ -125,18 +126,13 @@ def kernel_name_shortener(df, level):
                 "Could not resolve c++filt in expected directory: %s" % cpp_filt
             )
 
-        for fpath in glob.glob(workload_dir + "/[SQpmc]*.csv"):
-            try:
-                orig_df = pd.read_csv(
-                    fpath,
-                    on_bad_lines="skip",
-                    engine="python",
-                )
-                modified_df = shorten_file(orig_df, level)
+        try:
+                modified_df = shorten_file(df, level)
+                console_log("profiling", "Kernel_Name shortening complete.")
                 return modified_df
-            except pd.errors.EmptyDataError:
-                console_debug(
-                    "profiling", "Skipping shortening on empty csv: %s" % str(fpath)
+        except pd.errors.EmptyDataError:
+                logging.debug("[profiling] Skipping shortening on empty csv"
                 )
 
-        console_log("profiling", "Kernel_Name shortening complete.")
+        
+        

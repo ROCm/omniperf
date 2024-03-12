@@ -123,6 +123,7 @@ class webui_analysis(OmniAnalyze_Base):
                 filter_dispatch_ids=base_data[base_run].filter_dispatch_ids,
                 time_unit=self.get_args().time_unit,
                 max_stat_num=base_data[base_run].filter_top_n,
+                kernel_verbose=self.get_args().kernel_verbose
             )
             # Only display basic metrics if no filters are applied
             if not (disp_filt or kernel_filter or gcd_filter):
@@ -275,10 +276,11 @@ class webui_analysis(OmniAnalyze_Base):
                 filter_dispatch_ids=self._runs[self.dest_dir].filter_dispatch_ids,
                 time_unit=args.time_unit,
                 max_stat_num=args.max_stat_num,
+                kernel_verbose=self.get_args().kernel_verbose
             )
             # create 'mega dataframe'
             self._runs[self.dest_dir].raw_pmc = file_io.create_df_pmc(
-                self.dest_dir, args.verbose
+                self.dest_dir, self.get_args().kernel_verbose,  args.verbose
             )
             # create the loaded kernel stats
             parser.load_kernel_top(self._runs[self.dest_dir], self.dest_dir)

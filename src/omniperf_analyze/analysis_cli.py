@@ -45,15 +45,17 @@ class cli_analysis(OmniAnalyze_Base):
                 filter_dispatch_ids=self._runs[d[0]].filter_dispatch_ids,
                 time_unit=self.get_args().time_unit,
                 max_stat_num=self.get_args().max_stat_num,
-                kernel_verbose = self.get_args().kernel_verbose,
+                kernel_verbose=self.get_args().kernel_verbose,
             )
             # create 'mega dataframe'
             self._runs[d[0]].raw_pmc = file_io.create_df_pmc(
                 d[0], self.get_args().kernel_verbose, self.get_args().verbose
             )
             # demangle and overwrite original 'Kernel_Name'
-            kernel_name_shortener(self._runs[d[0]].raw_pmc, self.get_args().kernel_verbose)
-            
+            kernel_name_shortener(
+                self._runs[d[0]].raw_pmc, self.get_args().kernel_verbose
+            )
+
             # create the loaded table
             parser.load_table_data(
                 workload=self._runs[d[0]],
@@ -62,7 +64,6 @@ class cli_analysis(OmniAnalyze_Base):
                 debug=self.get_args().debug,
                 verbose=self.get_args().verbose,
             )
-            
 
     @demarcate
     def run_analysis(self):

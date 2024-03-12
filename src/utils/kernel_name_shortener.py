@@ -59,7 +59,6 @@ def kernel_name_shortener(df, level):
 
                 demangled_name, e = proc.communicate()
                 demangled_name = str(demangled_name, "UTF-8").strip()
-                demangled_name="hello"
 
                 # cache miss, add the shortened name to the dictionary
                 new_name = ""
@@ -110,7 +109,7 @@ def kernel_name_shortener(df, level):
                             current_level -= 1
                         curr_index += 1
 
-                cache[original_name] = "hello"
+                cache[original_name] = new_name
                 if new_name == None or new_name == "":
                     cache[original_name] = demangled_name
 
@@ -127,12 +126,8 @@ def kernel_name_shortener(df, level):
             )
 
         try:
-                modified_df = shorten_file(df, level)
-                console_log("profiling", "Kernel_Name shortening complete.")
-                return modified_df
+            modified_df = shorten_file(df, level)
+            console_log("profiling", "Kernel_Name shortening complete.")
+            return modified_df
         except pd.errors.EmptyDataError:
-                logging.debug("[profiling] Skipping shortening on empty csv"
-                )
-
-        
-        
+            logging.debug("[profiling] Skipping shortening on empty csv")

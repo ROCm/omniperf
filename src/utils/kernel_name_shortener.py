@@ -28,7 +28,7 @@ import re
 import subprocess
 import pandas as pd
 
-from utils.utils import console_error, console_log
+from utils.utils import console_error, console_log, console_debug
 
 cache = dict()
 

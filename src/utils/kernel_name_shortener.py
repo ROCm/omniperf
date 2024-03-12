@@ -130,4 +130,4 @@ def kernel_name_shortener(df, level):
             console_log("profiling", "Kernel_Name shortening complete.")
             return modified_df
         except pd.errors.EmptyDataError:
-            logging.debug("[profiling] Skipping shortening on empty csv")
+            console_debug("profiling", "Skipping shortening on empty csv")

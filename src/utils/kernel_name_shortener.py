@@ -23,14 +23,12 @@
 ##############################################################################el
 
 import os
-import sys
-import logging
 import glob
 import re
 import subprocess
 import pandas as pd
 
-from utils.utils import error
+from utils.utils import console_error, console_debug, console_log
 
 cache = dict()
 
@@ -123,12 +121,22 @@ def kernel_name_shortener(df, level):
     if level < 5:
         cpp_filt = os.path.join("/usr", "bin", "c++filt")
         if not os.path.isfile(cpp_filt):
-            error("Could not resolve c++filt in expected directory: %s" % cpp_filt)
+            console_error(
+                "Could not resolve c++filt in expected directory: %s" % cpp_filt
+            )
 
-        try:
-            modified_df = shorten_file(df, level)
-        except pd.errors.EmptyDataError:
-            logging.debug("[profiling] Skipping shortening on empty csv")
+        for fpath in glob.glob(workload_dir + "/[SQpmc]*.csv"):
+            try:
+                orig_df = pd.read_csv(
+                    fpath,
+                    on_bad_lines="skip",
+                    engine="python",
+                )
+                modified_df = shorten_file(orig_df, level)
+                return modified_df
+            except pd.errors.EmptyDataError:
+                console_debug(
+                    "profiling", "Skipping shortening on empty csv: %s" % str(fpath)
+                )
 
-        logging.info("[profiling] Kernel_Name shortening complete.")
-        return modified_df
+        console_log("profiling", "Kernel_Name shortening complete.")

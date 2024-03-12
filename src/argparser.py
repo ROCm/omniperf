@@ -50,6 +50,16 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
     general_group.add_argument(
         "-s", "--specs", action="store_true", help="Print system specs."
     )
+    general_group.add_argument(
+        "-q", "--quiet", action="store_true", help="Run in quiet mode."
+    )
+    general_group.add_argument(
+        "-V",
+        "--verbose",
+        help="Increase output verbosity (use multiple times for higher levels)",
+        action="count",
+        default=0,
+    )
 
     subparsers = parser.add_subparsers(
         dest="mode", help="Select mode of interaction with the target application:"
@@ -61,16 +71,17 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
         "profile",
         help="Profile the target application",
         usage="""
-            \nomniperf profile --name <workload_name> [profile options] [roofline options] -- <profile_cmd>
 
-            \n\n-------------------------------------------------------------------------------
-            \nExamples:
-            \n\tomniperf profile -n vcopy_all -- ./vcopy -n 1048576 -b 256
-            \n\tomniperf profile -n vcopy_SPI_TCC -b SQ TCC -- ./vcopy -n 1048576 -b 256
-            \n\tomniperf profile -n vcopy_kernel -k vecCopy -- ./vcopy -n 1048576 -b 256
-            \n\tomniperf profile -n vcopy_disp -d 0 -- ./vcopy -n 1048576 -b 256
-            \n\tomniperf profile -n vcopy_roof --roof-only -- ./vcopy -n 1048576 -b 256
-            \n-------------------------------------------------------------------------------\n
+omniperf profile --name <workload_name> [profile options] [roofline options] -- <profile_cmd>
+
+---------------------------------------------------------------------------------
+Examples:
+\tomniperf profile -n vcopy_all -- ./vcopy -n 1048576 -b 256
+\tomniperf profile -n vcopy_SPI_TCC -b SQ TCC -- ./vcopy -n 1048576 -b 256
+\tomniperf profile -n vcopy_kernel -k vecCopy -- ./vcopy -n 1048576 -b 256
+\tomniperf profile -n vcopy_disp -d 0 -- ./vcopy -n 1048576 -b 256
+\tomniperf profile -n vcopy_roof --roof-only -- ./vcopy -n 1048576 -b 256
+---------------------------------------------------------------------------------
         """,
         prog="tool",
         allow_abbrev=False,
@@ -88,7 +99,14 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
         "-v", "--version", action="version", version=omniperf_version["ver_pretty"]
     )
     general_group.add_argument(
-        "-V", "--verbose", help="Increase output verbosity", action="count", default=0
+        "-q", "--quiet", action="store_true", help="Run in quiet mode."
+    )
+    general_group.add_argument(
+        "-V",
+        "--verbose",
+        help="Increase output verbosity (use multiple times for higher levels)",
+        action="count",
+        default=0,
     )
     general_group.add_argument(
         "-s", "--specs", action="store_true", help="Print system specs."
@@ -290,7 +308,11 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
         "-v", "--version", action="version", version=omniperf_version["ver_pretty"]
     )
     general_group.add_argument(
-        "-V", "--verbose", help="Increase output verbosity", action="count", default=0
+        "-V",
+        "--verbose",
+        help="Increase output verbosity (use multiple times for higher levels)",
+        action="count",
+        default=0,
     )
     general_group.add_argument(
         "-s", "--specs", action="store_true", help="Print system specs."
@@ -393,7 +415,11 @@ def omniarg_parser(parser, omniperf_home, supported_archs, omniperf_version):
         "-v", "--version", action="version", version=omniperf_version["ver_pretty"]
     )
     general_group.add_argument(
-        "-V", "--verbose", help="Increase output verbosity", action="count", default=0
+        "-V",
+        "--verbose",
+        help="Increase output verbosity (use multiple times for higher levels)",
+        action="count",
+        default=0,
     )
     general_group.add_argument(
         "-s", "--specs", action="store_true", help="Print system specs."

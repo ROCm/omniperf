@@ -37,7 +37,7 @@ pythonpath = [
 
 markers = [
 	"kernel_execution",
-	"ipblocks",
+	"block",
 	"misc",
 	"mem",
 	"sort",
@@ -45,7 +45,7 @@ markers = [
 	"verbosity",
 	"dispatch",
 	"list_metrics",
-	"filter_metrics",
+	"filter_block",
 	"filter_kernel",
 	"dispatch",
 	"normal_unit",

@@ -164,7 +164,7 @@ class webui_analysis(OmniAnalyze_Base):
                 # update roofline for visualization in GUI
                 self.get_socs()[self.arch].analysis_setup(
                     roofline_parameters={
-                        "path_to_dir": self.dest_dir,
+                        "workload_dir": self.dest_dir,
                         "device_id": 0,
                         "sort_type": "kernels",
                         "mem_level": "ALL",

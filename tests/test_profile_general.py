@@ -18,16 +18,13 @@ import test_utils
 config = {}
 config["omniperf"] = SourceFileLoader("omniperf", "src/omniperf").load_module()
 config["kernel_name_1"] = "vecCopy(double*, double*, double*, int, int) [clone .kd]"
-config["app_1"] = ["./tests/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
+config["app_1"] = ["./sample/vcopy_MI100", "-n", "1048576", "-b", "256", "-i", "3"]
 config["cleanup"] = True
 config["COUNTER_LOGGING"] = False
 config["METRIC_COMPARE"] = False
 config["METRIC_LOGGING"] = False
 
 baseline_opts = ["omniperf", "profile", "-n", "app_1", "-VVV"]
-
-# app_1 = ["./tests/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
-# app_1 = ["./sample/vcopy", "-n", "1048576", "-b", "256", "-i", "3"]
 
 num_kernels = 3
 num_devices = 1
@@ -107,7 +104,6 @@ ROOF_ONLY_FILES = [
     "timestamps.csv",
 ]
 
-# Must not change relative difference is zero
 METRIC_THRESHOLDS = {
     "2.1.12": {"absolute": 0, "relative": 8},
     "3.1.1": {"absolute": 0, "relative": 10},
@@ -857,7 +853,21 @@ def test_block_TCC():
         "timestamps.csv",
     ]
     if soc == "MI200":
-        expected_csvs.insert(12, "roofline.csv")
+        expected_csvs = [
+            "pmc_perf.csv",
+            "pmc_perf_0.csv",
+            "pmc_perf_1.csv",
+            "pmc_perf_2.csv",
+            "pmc_perf_3.csv",
+            "pmc_perf_4.csv",
+            "pmc_perf_5.csv",
+            "pmc_perf_6.csv",
+            "pmc_perf_7.csv",
+            "pmc_perf_8.csv",
+            "roofline.csv",
+            "sysinfo.csv",
+            "timestamps.csv",
+        ]
 
     assert sorted(list(file_dict.keys())) == expected_csvs
 
@@ -867,7 +877,7 @@ def test_block_TCC():
         file_dict,
     )
 
-    test_utils.clean_output_dir(config["cleanup"], workload_dir)
+    # test_utils.clean_output_dir(config["cleanup"], workload_dir)
 
 
 @pytest.mark.block
@@ -1336,6 +1346,7 @@ def test_dispatch_2():
     )
 
     test_utils.clean_output_dir(config["cleanup"], workload_dir)
+
 
 @pytest.mark.join
 def test_join_type_grid():

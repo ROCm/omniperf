@@ -583,7 +583,7 @@ def test_device_filter():
         file_dict,
     )
 
-    # test_utils.clean_output_dir(config["cleanup"], workload_dir)
+    test_utils.clean_output_dir(config["cleanup"], workload_dir)
 
 
 @pytest.mark.kernel_execution
@@ -688,7 +688,7 @@ def test_block_SQ():
         file_dict,
     )
 
-    # test_utils.clean_output_dir(config["cleanup"], workload_dir)
+    test_utils.clean_output_dir(config["cleanup"], workload_dir)
 
 
 @pytest.mark.block
@@ -877,7 +877,7 @@ def test_block_TCC():
         file_dict,
     )
 
-    # test_utils.clean_output_dir(config["cleanup"], workload_dir)
+    test_utils.clean_output_dir(config["cleanup"], workload_dir)
 
 
 @pytest.mark.block

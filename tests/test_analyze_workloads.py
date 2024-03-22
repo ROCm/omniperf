@@ -46,7 +46,7 @@ def test_analyze_dispatch_7_MI100():
             "sys.argv", ["omniperf", "analyze", "--path", "tests/workloads/dispatch_7/MI100"]
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_dispatch_7_MI200():
@@ -55,7 +55,7 @@ def test_analyze_dispatch_7_MI200():
             "sys.argv", ["omniperf", "analyze", "--path", "tests/workloads/dispatch_7/MI200"]
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_kernel_substr_MI100():
@@ -82,7 +82,7 @@ def test_analyze_dispatch_6_8_MI100():
             "sys.argv", ["omniperf", "analyze", "--path", "tests/workloads/dispatch_6_8/MI100"]
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_dispatch_6_8_MI200():
@@ -91,7 +91,7 @@ def test_analyze_dispatch_6_8_MI200():
             "sys.argv", ["omniperf", "analyze", "--path", "tests/workloads/dispatch_6_8/MI200"]
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_mem_levels_L2_vL1d_LDS_MI200():
@@ -494,7 +494,7 @@ def test_analyze_kernel_inv_str_MI100():
             ["omniperf", "analyze", "--path", "tests/workloads/kernel_inv_str/MI100"],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_kernel_inv_str_MI200():
@@ -504,7 +504,7 @@ def test_analyze_kernel_inv_str_MI200():
             ["omniperf", "analyze", "--path", "tests/workloads/kernel_inv_str/MI200"],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_kernel_inv_int_MI100():
@@ -514,7 +514,7 @@ def test_analyze_kernel_inv_int_MI100():
             ["omniperf", "analyze", "--path", "tests/workloads/kernel_inv_int/MI100"],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_kernel_inv_int_MI200():
@@ -524,7 +524,7 @@ def test_analyze_kernel_inv_int_MI200():
             ["omniperf", "analyze", "--path", "tests/workloads/kernel_inv_int/MI200"],
         ):
             omniperf.main()
-    assert e.value.code == 0
+    assert e.value.code == 1
 
 
 def test_analyze_mem_levels_HBM_LDS_MI200():

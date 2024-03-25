@@ -12,6 +12,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
@@ -21,22 +25,21 @@ jobs:
        image: colramos/target-images:rhel8
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Cancel any previous runs
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Install baseline OS dependencies
         run: |
+          # https://github.com/actions/runner/issues/2033
+          chown -R $(id -u):$(id -g) $PWD
           yum -y update
           yum -y install git
           yum -y install python39
           yum -y install cmake3
           yum -y install which
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Install Python prereqs
         run: |
           python3.9 -m pip install -r requirements.txt
-          python3.9 -m pip install pyinstaller pytest pytest-cov mock
+          python3.9 -m pip install pyinstaller pytest pytest-cov mock pytest-xdist
       - name: Configure and install
         run: |
           mkdir build

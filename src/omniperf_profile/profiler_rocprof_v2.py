@@ -79,16 +79,16 @@ class rocprof_v2_profiler(OmniProfiler_Base):
         # Workaround for rocprofv2 being silly and using 1-based dispatch indicies
         import pandas as pd
         import glob
+
         # first read pmc_perf
         df = pd.read_csv(self.get_args().path + "/pmc_perf.csv")
-        df['Dispatch_ID'] -= 1
+        df["Dispatch_ID"] -= 1
         df.to_csv(self.get_args().path + "/pmc_perf.csv", index=False)
         # next glob for *LEVEL*.csv
         for f in glob.glob(self.get_args().path + "/*LEVEL*.csv"):
             df = pd.read_csv(f)
-            df['Dispatch_ID'] -= 1
+            df["Dispatch_ID"] -= 1
             df.to_csv(f, index=False)
-
 
     @demarcate
     def post_processing(self):

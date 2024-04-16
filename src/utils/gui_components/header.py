@@ -282,7 +282,7 @@ def get_header(raw_pmc, input_filters, kernel_names):
                                                 id="kernel-filt",
                                                 multi=True,
                                                 value=input_filters["kernel"],
-                                                optionHeight=150,
+                                                optionHeight=36,
                                                 placeholder="ALL",
                                                 style={
                                                     "width": "600px",  # TODO: Change these widths to % rather than fixed value

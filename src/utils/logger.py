@@ -34,7 +34,7 @@ COLOR_SEQ = "\033[%dm"
 
 COLORS = {
     "WARNING": YELLOW,
-    "INFO": GREEN,
+    "INFO": WHITE,
     "DEBUG": BLUE,
     "CRITICAL": RED,
     "ERROR": RED,
@@ -47,9 +47,12 @@ class ColoredFormatter(logging.Formatter):
     def format(self, record):
         levelname = record.levelname
         if levelname in COLORS:
-            levelname_color = COLOR_SEQ % (30 + COLORS[levelname]) + levelname + RESET_SEQ
-            record.levelname = levelname_color
-        return logging.Formatter.format(self, record)
+            if levelname == "WARNING" or levelname == "ERROR" or levelname == "DEBUG":
+                log_fmt = f"{COLOR_SEQ % (30 + COLORS[levelname])}%(levelname)s: %(message)s{RESET_SEQ}"
+            else:
+                log_fmt = f"{COLOR_SEQ % (30 + COLORS[levelname])}%(message)s{RESET_SEQ}"
+            formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
 
 
 class ColoredFormatterAll(logging.Formatter):
@@ -84,6 +87,12 @@ def setup_console_handler():
 
     color_setting = 1
     if "OMNIPERF_COLOR" in os.environ.keys():
+        if type(os.environ["OMNIPERF_COLOR"]) != int:
+            raise TypeError(
+                "OMNIPERF_COLOR must be of type int. Detected: {}".format(
+                    type(os.environ["OMNIPERF_COLOR"])
+                )
+            )
         color_setting = int(os.environ["OMNIPERF_COLOR"])
 
     if color_setting == 0:

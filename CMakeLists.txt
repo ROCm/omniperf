@@ -50,75 +50,78 @@ endif()
 set(CMAKE_BUILD_TYPE "Release")
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX
-        "/opt/apps/omniperf"
+        "/opt/rocm"
         CACHE PATH "default install path" FORCE)
 endif()
 message(STATUS "Installation path: ${CMAKE_INSTALL_PREFIX}")
 
-# Python 3 is required
-message(STATUS "Detecting Python interpreter...")
-find_package(
-    Python3 3.8
-    COMPONENTS Interpreter
-    REQUIRED)
+option(CHECK_PYTHON_DEPS "Verify necessary python dependencies" ON)
+if(CHECK_PYTHON_DEPS)
+    # Python 3 is required
+    message(STATUS "Detecting Python interpreter...")
+    find_package(
+        Python3 3.8
+        COMPONENTS Interpreter
+        REQUIRED)
 
-# Allow user-provided python search path
-if(DEFINED PYTHON_DEPS)
-    set(ENV{PYTHONPATH} "${PYTHON_DEPS}")
-    message(STATUS "Optional PYTHON_DEPS provided:")
+    # Allow user-provided python search path
+    if(DEFINED PYTHON_DEPS)
+        set(ENV{PYTHONPATH} "${PYTHON_DEPS}")
+        message(STATUS "Optional PYTHON_DEPS provided:")
+        list(APPEND CMAKE_MESSAGE_INDENT "  ")
+        message(STATUS "including ${PYTHON_DEPS} in search path")
+        list(POP_BACK CMAKE_MESSAGE_INDENT)
+    endif()
+
+    # Check required Python packages
+    file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt" pythonDeps)
+
+    message(STATUS "Checking for required Python package dependencies...")
+    set_property(GLOBAL PROPERTY pythonDepsFlag "groovy")
+
+    function(checkPythonPackage [package])
+        # mapping for non-default package names
+        set(PACKAGE ${ARGV0})
+        if(${ARGV0} STREQUAL "pyyaml")
+            set(PACKAGE "yaml")
+        endif()
+        execute_process(
+            COMMAND ${Python3_EXECUTABLE} -c "import ${PACKAGE}"
+            OUTPUT_QUIET ERROR_QUIET
+            RESULT_VARIABLE EXIT_CODE)
+        if(${EXIT_CODE} EQUAL 0)
+            message(STATUS "${ARGV0} = yes")
+        else()
+            message(STATUS "${ARGV0} = missing")
+            set_property(GLOBAL PROPERTY pythonDepsFlag "missing")
+        endif()
+    endfunction()
+
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
-    message(STATUS "including ${PYTHON_DEPS} in search path")
+    foreach(package IN LISTS pythonDeps)
+        # Filter out any version requirements from requirements.txt
+        string(REGEX REPLACE "[><=].*" "" package "${package}")
+        string(REPLACE "-" "_" package "${package}")
+        checkpythonpackage(${package})
+    endforeach()
     list(POP_BACK CMAKE_MESSAGE_INDENT)
-endif()
 
-# Check required Python packages
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt" pythonDeps)
-
-message(STATUS "Checking for required Python package dependencies...")
-set_property(GLOBAL PROPERTY pythonDepsFlag "groovy")
-
-function(checkPythonPackage [package])
-    # mapping for non-default package names
-    set(PACKAGE ${ARGV0})
-    if(${ARGV0} STREQUAL "pyyaml")
-        set(PACKAGE "yaml")
-    endif()
-    execute_process(
-        COMMAND ${Python3_EXECUTABLE} -c "import ${PACKAGE}"
-        OUTPUT_QUIET ERROR_QUIET
-        RESULT_VARIABLE EXIT_CODE)
-    if(${EXIT_CODE} EQUAL 0)
-        message(STATUS "${ARGV0} = yes")
+    get_property(pythonDepsInstalled GLOBAL PROPERTY pythonDepsFlag)
+    if(${pythonDepsInstalled} STREQUAL "groovy")
+        message(STATUS "OK: Python dependencies available in current environment.")
     else()
-        message(STATUS "${ARGV0} = missing")
-        set_property(GLOBAL PROPERTY pythonDepsFlag "missing")
+        message(
+            FATAL_ERROR
+                "\nNecessary Python package dependencies not found. Please install required dependencies "
+                "above using your favorite package manager. If using pip, consider running:\n"
+                "python3 -m pip install -r requirements.txt\n"
+                "at the top-level of this repository. If preparing a shared installation for "
+                "multiple users, consider adding the -t <target-dir> option to install necessary dependencies "
+                "into a shared directory, e.g.\n"
+                "python3 -m pip install -t <shared-install-path> -r requirements.txt\n"
+                "Note that the -DPYTHON_DEPS=<shared-install-path> can be used to provide an "
+                "additional search path to cmake for python packages.")
     endif()
-endfunction()
-
-list(APPEND CMAKE_MESSAGE_INDENT "  ")
-foreach(package IN LISTS pythonDeps)
-    # Filter out any version requirements from requirements.txt
-    string(REGEX REPLACE "[><=].*" "" package "${package}")
-    string(REPLACE "-" "_" package "${package}")
-    checkpythonpackage(${package})
-endforeach()
-list(POP_BACK CMAKE_MESSAGE_INDENT)
-
-get_property(pythonDepsInstalled GLOBAL PROPERTY pythonDepsFlag)
-if(${pythonDepsInstalled} STREQUAL "groovy")
-    message(STATUS "OK: Python dependencies available in current environment.")
-else()
-    message(
-        FATAL_ERROR
-            "\nNecessary Python package dependencies not found. Please install required dependencies "
-            "above using your favorite package manager. If using pip, consider running:\n"
-            "python3 -m pip install -r requirements.txt\n"
-            "at the top-level of this repository. If preparing a shared installation for "
-            "multiple users, consider adding the -t <target-dir> option to install necessary dependencies "
-            "into a shared directory, e.g.\n"
-            "python3 -m pip install -t <shared-install-path> -r requirements.txt\n"
-            "Note that the -DPYTHON_DEPS=<shared-install-path> can be used to provide an "
-            "additional search path to cmake for python packages.")
 endif()
 
 # ----------------------
@@ -126,7 +129,7 @@ endif()
 # ----------------------
 
 set(MOD_INSTALL_PATH
-    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles"
+    "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/modulefiles/${PROJECT_NAME}"
     CACHE STRING "Install path for modulefile")
 message(STATUS "Modulefile install path: ${MOD_INSTALL_PATH}")
 
@@ -134,30 +137,15 @@ set(moduleFileTemplate "omniperf.lua.in")
 
 configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/${moduleFileTemplate}
-    ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
-    @ONLY)
-
-# Crusher mods
-if(LOCALHOST MATCHES ".*\.crusher\.olcf\.ornl\.gov")
-    list(APPEND CMAKE_MESSAGE_INDENT "  ")
-    message(STATUS "Using crusher-specific modulefile modification")
-    file(READ ${PROJECT_SOURCE_DIR}/cmake/modfile.crusher.mod mod_additions)
-    file(
-        APPEND
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
-        ${mod_additions})
-    list(POP_BACK CMAKE_MESSAGE_INDENT)
-endif()
+    ${PROJECT_BINARY_DIR}/${MOD_INSTALL_PATH}/${OMNIPERF_FULL_VERSION}.lua @ONLY)
 
 # Thera mods
 if(LOCALHOST MATCHES "TheraS01|.*\.thera\.amd\.com|thera-hn")
     list(APPEND CMAKE_MESSAGE_INDENT "  ")
     message(STATUS "Using thera-specific modulefile modification")
     file(READ ${PROJECT_SOURCE_DIR}/cmake/modfile.thera.mod mod_additions)
-    file(
-        APPEND
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
-        ${mod_additions})
+    file(APPEND ${PROJECT_BINARY_DIR}/${MOD_INSTALL_PATH}/${OMNIPERF_FULL_VERSION}.lua
+         ${mod_additions})
     list(POP_BACK CMAKE_MESSAGE_INDENT)
 endif()
 
@@ -253,11 +241,6 @@ add_test(
             ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-# add_test( NAME test_analyze_commands_serial COMMAND pytest -m "serial"
-# --junitxml=tests/test_analyze_commands_serial.xml ${COV_OPTION}
-# ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py WORKING_DIRECTORY
-# ${PROJECT_SOURCE_DIR})
-
 # ---------------------------
 # analyze workloads tests
 # ---------------------------
@@ -281,45 +264,78 @@ add_test(
 # Install
 # ---------
 
-# top-level driver and associated .py files
-install(PROGRAMS src/omniperf TYPE BIN)
-install(FILES src/argparser.py TYPE BIN)
-install(FILES src/config.py TYPE BIN)
-install(FILES src/omniperf_base.py TYPE BIN)
-install(FILES src/roofline.py TYPE BIN)
-
-install(FILES VERSION VERSION.sha DESTINATION ${CMAKE_INSTALL_PREFIX})
+# top-level omniperf utility
+install(
+    PROGRAMS src/omniperf
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main)
+# python dependency requirements
+install(
+    FILES requirements.txt
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main)
+# support files and version info
+install(
+    FILES src/argparser.py src/config.py src/omniperf_base.py src/roofline.py VERSION
+          VERSION.sha
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main)
 # src/omniperf_analyze
 install(
     DIRECTORY src/omniperf_analyze
-    TYPE BIN
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main
     PATTERN src/omniperf_analyze/tests EXCLUDE
     PATTERN "__pycache__" EXCLUDE)
 # src/utils
 install(
     DIRECTORY src/utils
-    TYPE BIN
-    PATTERN "rooflines*" EXCLUDE)
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main
+    PATTERN "rooflines*" EXCLUDE
+    PATTERN "__pycache__" EXCLUDE)
 # src/utils/rooflines
 file(GLOB rooflinebins src/utils/rooflines/roofline-*)
-install(PROGRAMS ${rooflinebins} DESTINATION ${CMAKE_INSTALL_BINDIR}/utils/rooflines)
+install(
+    PROGRAMS ${rooflinebins}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    COMPONENT main)
 # src/omniperf_soc
 install(
     DIRECTORY src/omniperf_soc
-    TYPE BIN
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main
     PATTERN "__pycache__" EXCLUDE)
 # src/omniperf_profile
 install(
     DIRECTORY src/omniperf_profile
-    TYPE BIN
+    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+    COMPONENT main
     PATTERN "__pycache__" EXCLUDE)
 # samples
-install(DIRECTORY sample TYPE DATA)
+install(
+    DIRECTORY sample
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
+    COMPONENT main
+    FILES_MATCHING
+    PATTERN "*.hip"
+    PATTERN "*.h"
+    PATTERN "*.cpp"
+    PATTERN "workloads" EXCLUDE)
 # modulefile
 install(
-    FILES
-        ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_DATAROOTDIR}/modulefiles/${PROJECT_NAME}/${OMNIPERF_FULL_VERSION}.lua
-    DESTINATION ${MOD_INSTALL_PATH}/${PROJECT_NAME})
+    FILES ${PROJECT_BINARY_DIR}/${MOD_INSTALL_PATH}/${OMNIPERF_FULL_VERSION}.lua
+    DESTINATION ${MOD_INSTALL_PATH}
+    COMPONENT main)
+
+# top-level symlink for bin/omniperf
+install(
+    CODE "execute_process(
+    COMMAND bash -c \"set -e
+    cd \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}
+    ln -sf ../${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/omniperf ${CMAKE_INSTALL_BINDIR}/omniperf
+    \")"
+    COMPONENT main)
 
 # License header update(s)
 add_custom_target(
@@ -333,6 +349,65 @@ add_custom_target(
         "src/omniperf,cmake/Dockerfile,cmake/rocm_install.sh,docker/docker-entrypoint.sh,src/omniperf_analyze/convertor/mongodb/convert"
     )
 
+# TEST collateral
+option(INSTALL_TESTS "Build test suite" OFF)
+if(INSTALL_TESTS)
+    install(
+        DIRECTORY tests
+        DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+        COMPONENT tests
+        FILES_MATCHING
+        PATTERN "*.py"
+        PATTERN "__pycache__" EXCLUDE)
+    install(
+        FILES requirements-test.txt
+        DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+        COMPONENT tests)
+    install(
+        FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake
+        COMPONENT tests
+        DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME})
+endif()
+message(STATUS "Install tests: ${INSTALL_TESTS}")
+
+# ----------
+# Packaging
+# ----------
+
+message(STATUS "Packaging config...")
+set(CPACK_GENERATOR
+    "DEB" "RPM"
+    CACHE STRING "")
+set(CPACK_PACKAGE_NAME
+    "${PROJECT_NAME}"
+    CACHE STRING "")
+set(CPACK_PACKAGE_CONTACT "https://github.com/ROCm/omniperf")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Omniperf: tool for GPU performance profiling")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "Omniperf is a performance analysis tool for profiling
+machine learning/HPC workloads running on AMD GPUs.")
+set(CPACK_PACKAGE_VENDOR "Advanced Micro Devices, Inc.")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_RPM_PACKAGE_LICENSE "MIT")
+set(CPACK_RPM_PACKAGE_PROVIDES "${CPACK_PACKAGE_NAME}")
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+set(CPACK_RPM_MAIN_FILE_NAME "RPM-DEFAULT")
+set(CPACK_RPM_TESTS_FILE_NAME "RPM-DEFAULT")
+set(CPACK_DEBIAN_MAIN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_RPM_MAIN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}")
+
+# dependencies
+set(PACKAGE_REQUIRES
+    "rocprofiler"
+    CACHE STRING "Package dependencies")
+message(STATUS "  package dependencies: ${PACKAGE_REQUIRES}")
+set(CPACK_RPM_PACKAGE_REQUIRES ${PACKAGE_REQUIRES})
+
+if(INSTALL_TESTS)
+    set(CPACK_RPM_TESTS_PACKAGE_REQUIRES ${CPACK_PACKAGE_NAME})
+endif()
+
 # Source tarball
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-${FULL_VERSION_STRING})
@@ -344,4 +419,5 @@ set(CPACK_SOURCE_IGNORE_FILES
     \.gitignore
     /tests
     /build)
+
 include(CPack)

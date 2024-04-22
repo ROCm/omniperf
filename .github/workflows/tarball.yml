@@ -6,6 +6,10 @@ on:
       - main
       - 2.x
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
   
 jobs:
   distbuild:
@@ -26,8 +30,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.sha-mode.sha }}
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
       - name: Install Python
         uses: actions/setup-python@v5
         with:
@@ -56,8 +58,6 @@ jobs:
     env:
       INSTALL_DIR: /tmp/foo2
     steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.12.1
       - name: Access tarball
         uses: actions/download-artifact@v4
         with:
@@ -74,8 +74,7 @@ jobs:
           mkdir build
           cd build
           cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/omniperf \
-            -DPYTHON_DEPS=${INSTALL_DIR}/python-libs \
-            -DMOD_INSTALL_PATH=${INSTALL_DIR}/modulefiles ..
+            -DPYTHON_DEPS=${INSTALL_DIR}/python-libs ..
       - name: Install
         run:  |
           cd omniperf-*
@@ -83,12 +82,17 @@ jobs:
           make install
       - name: Verify expected paths
         run: |
+          # find $INSTALL_DIR
           test -d $INSTALL_DIR/omniperf
-          test -s $INSTALL_DIR/omniperf/VERSION
-          test -s $INSTALL_DIR/omniperf/VERSION.sha
-          test -d $INSTALL_DIR/omniperf/bin
           test -x $INSTALL_DIR/omniperf/bin/omniperf
-          test -d $INSTALL_DIR/modulefiles/omniperf
+          test -s $INSTALL_DIR/omniperf/libexec/omniperf/VERSION
+          test -s $INSTALL_DIR/omniperf/libexec/omniperf/VERSION.sha
+          test -d $INSTALL_DIR/omniperf/libexec/omniperf/omniperf_analyze
+          test -d $INSTALL_DIR/omniperf/libexec/omniperf/omniperf_profile
+          test -d $INSTALL_DIR/omniperf/libexec/omniperf/omniperf_soc
+          test -d $INSTALL_DIR/omniperf/libexec/omniperf/utils
+          test -s $INSTALL_DIR/omniperf/share/omniperf/sample/vcopy.cpp
+          test -d $INSTALL_DIR/omniperf/share/omniperf/modulefiles
       - name: Query version (setting PYTHONPATH by hand)
         run: |
           export PYTHONPATH=${INSTALL_DIR}/python-libs:$PYTHONPATH
@@ -98,7 +102,7 @@ jobs:
       - name: Access omniperf using modulefile
         run: |
           . /etc/profile.d/lmod.sh 
-          module use $INSTALL_DIR/modulefiles
+          module use $INSTALL_DIR/omniperf/share/omniperf/modulefiles
           module load omniperf
           module list
           omniperf --version

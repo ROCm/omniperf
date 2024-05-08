@@ -1,5 +1,69 @@
-#################
+*****************
 What is Omniperf?
-#################
+*****************
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+Omniperf is a kernel-level profiling tool for machine learning and HPC workloads running on AMD Instinct™ accelerators.
+AMD Instinct MI-series accelerators are data center-class GPUs designed for compute and with some graphics capabilities
+disabled or removed. The Omniperf tool primarily targets accelerators in the MI100, MI200, and MI300 families.
+Development is in progress to support Radeon™ (RDNA) GPUs.
+
+Omniperf is currently built on top of :doc:`rocprof <rocprofiler:rocprofv1>` to monitor hardware performance counters.
+
+Features
+========
+
+Omniperf performs profiling based on all available hardware counters for the target accelerator. It provides high-level
+performance analysis features including System Speed-of-Light, Hardware block level Speed-of-Light, Memory Chart
+Analysis, Roofline Analysis, Baseline Comparisons, and more.
+
+Both command line analysis and GUI analysis are supported.
+
+Detailed Feature List:
+
+- MI100 support
+- MI200 support
+- Standalone GUI Analyzer
+- Grafana/MongoDB GUI Analyzer
+- Dispatch Filtering
+- Kernel Filtering
+- GPU ID Filtering
+- Baseline Comparison
+- Multi-Normalizations
+- System Info Panel
+- System Speed-of-Light Panel
+- Kernel Statistic Panel
+- Memory Chart Analysis Panel
+- Roofline Analysis Panel (*Supported on MI200 only, Ubuntu 20.04, SLES 15 SP3 or RHEL8*)
+- Command Processor (CP) Panel
+- Workgroup Manager (SPI) Panel
+- Wavefront Launch Panel
+- Compute Unit - Instruction Mix Panel
+- Compute Unit - Pipeline Panel
+- Local Data Share (LDS) Panel
+- Instruction Cache Panel
+- Scalar L1D Cache Panel
+- L1 Address Processing Unit, a.k.a. Texture Addresser (TA) / L1 Backend Data Processing Unit, a.k.a. Texture Data (TD) panel(s)
+- Vector L1D Cache Panel
+- L2 Cache Panel
+- L2 Cache (per-Channel) Panel
+
+Compatible SoCs
+===============
+
+.. list-table::
+    :header-rows: 1
+
+    * - Platform
+      - Status
+
+    * - Vega 20 (MI50/60)
+      - No support
+
+    * - MI100
+      - Supported
+
+    * - MI200
+      - Supported
+
+    * - MI300
+      - Supported

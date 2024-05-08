@@ -1,5 +1,119 @@
-#################
-What is Omniperf?
-#################
+.. meta::
+   :description: What is Omniperf?
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.
+*****************
+What is Omniperf?
+*****************
+
+Omniperf is a kernel-level profiling tool for machine learning and high
+performance computing (HPC) workloads running on AMD Instinct™ accelerators.
+
+AMD Instinct MI-series accelerators are data center-class GPUs designed for
+compute and have some graphics capabilities disabled or removed. Omniperf
+primarily targets use with
+:doc:`accelerators in the MI300, MI200, and MI100 families <rocm:conceptual/gpu-arch>`.
+Development is in progress to support Radeon™ (RDNA) GPUs.
+
+Omniperf is built on top of :doc:`ROCProfiler <rocprofiler:rocprofv1>` to
+monitor hardware performance counters.
+
+.. _high-level-design:
+
+High-level design of Omniperf
+=============================
+
+The architecture of Omniperf consists of three major components shown in the
+following diagram.
+
+Core Omniperf profiler
+   Acquires raw performance counters via application replay using ``rocprof``.
+   Counters are stored in a comma-separated-values format for further
+   :doc:`analysis <how-to/analyze/mode>`. It runs a set of accelerator-specific
+   micro-benchmarks to acquire hierarchical roofline data. The roofline model is
+   not available on accelerators pre-MI200.
+
+Grafana server for Omniperf
+   * **Grafana database import**: All raw performance counters are imported into
+     a :ref:`backend MongoDB database <grafana-mongodb-setup>` to support
+     analysis and visualization in the Grafana GUI. Compatibility with
+     previously generated data using older Omniperf versions is not guaranteed.
+   * **Grafana analysis dashboard GUI**: The
+     :doc:`Grafana dashboard <how-to/analyze/grafana-gui>` retrieves the raw
+     counters information from the backend database. It displays the relevant
+     performance metrics and visualization.
+
+Omniperf standalone GUI analyzer
+   Omniperf provides a :doc:`standalone GUI <how-to/analyze/standalone-gui>` to
+   enable basic performance analysis without the need to import data into a
+   database instance.
+
+.. figure:: ./data/install/omniperf_server_vs_client_install.png
+   :align: center
+   :alt: Architectural design of Omniperf
+
+Omniperf features
+=================
+
+Omniperf offers comprehensive profiling based on all available hardware counters
+for the target accelerator. It delivers advanced performance analysis features,
+such as system Speed-of-Light (SOL) and hardware block-level SOL evaluations.
+Additionally, Omniperf provides in-depth memory chart analysis, roofline
+analysis, baseline comparisons, and more, ensuring a thorough understanding of
+system performance.
+
+Omniperf supports analysis through both the :doc:`command line </how-to/analyze/cli>` or a
+:doc:`GUI </how-to/analyze/grafana-gui>`. The following list describes Omniperf's features at a
+high level.
+
+* :doc:`Support for AMD Instinct MI300, MI200, and MI100 accelerators <reference/compatible-accelerators>`
+
+* :doc:`Standalone GUI analyzer </how-to/analyze/standalone-gui>`
+
+* :doc:`GUI analyzer via Grafana and MongoDB </how-to/analyze/grafana-gui>`
+
+  * *System Info* panel
+
+  * *System Speed-of-Light* panel
+
+  * *Kernel Statistic* panel
+
+  * *Memory Chart Analysis* panel
+
+  * *Roofline Analysis* panel (*Supported on MI200 only, Ubuntu 20.04, SLES 15 SP3 or RHEL8*)
+
+  * *Command Processor (CP)* panel
+
+  * *Workgroup Manager (SPI)* panel
+
+  * *Wavefront Launch* panel
+
+  * *Compute Unit - Instruction Mix* panel
+
+  * *Compute Unit - Pipeline* panel
+
+  * *Local Data Share (LDS)* panel
+
+  * *Instruction Cache* panel
+
+  * *Scalar L1D Cache* panel
+
+  * *L1 Address Processing Unit*, or, *Texture Addresser (TA)* and *L1 Backend Data Processing Unit*, or, *Texture Data (TD)* panels
+
+  * *Vector L1D Cache* panel
+
+  * *L2 Cache* panel
+
+  * *L2 Cache (per-channel)* panel
+
+* :ref:`Filtering <filtering>` to reduce profiling time
+
+  * Filtering by dispatch
+
+  * Filter by kernel
+
+  * Filtering by GPU ID
+
+* :ref:`Baseline comparisons <analysis-baseline-comparison>`
+
+* :ref:`Multiple normalizations <normalization-units>`

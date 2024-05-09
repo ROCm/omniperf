@@ -22,20 +22,20 @@ See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
         * :doc:`Quick start <install/quick-start>`
         * :doc:`Install Omniperf <install/omniperf>`
 
-    .. grid-item-card:: Reference
+    .. grid-item-card:: Conceptual
 
-        * :doc:`FAQ <reference/faq>`
-        * :doc:`Glossary <reference/glossary>`
+        * :doc:`High-level design of Omniperf <conceptual/overview>`
+        * :doc:`Performance model <conceptual/performance-model>`
 
     .. grid-item-card:: How to
 
         * :doc:`Profiling <how-to/profiling>`
         * :doc:`Analysis <how-to/analysis>`
 
-    .. grid-item-card:: Conceptual
+    .. grid-item-card:: Reference
 
-        * :doc:`High-level design of Omniperf <conceptual/overview>`
-        * :doc:`Performance model <conceptual/performance-model>`
+        * :doc:`FAQ <reference/faq>`
+        * :doc:`Glossary <reference/glossary>`
 
 This project is proudly open source and we welcome all feedback! For more details on how to contribute, refer to
 `Contributing to ROCm <https://rocm.docs.amd.com/en/latest/contribute/contributing.html>`_.

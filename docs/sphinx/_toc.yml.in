@@ -13,11 +13,6 @@ subtrees:
     - file: install/quick-start.rst
     - file: install/omniperf.rst
 
-  - caption: Reference
-    entries:
-    - file: reference/faq.rst
-    - file: reference/glossary.rst
-
   - caption: How to
     entries:
     - file: how-to/profiling.rst
@@ -27,3 +22,8 @@ subtrees:
     entries:
     - file: conceptual/overview.rst
     - file: conceptual/performance-model.rst
+
+  - caption: Reference
+    entries:
+    - file: reference/faq.rst
+    - file: reference/glossary.rst

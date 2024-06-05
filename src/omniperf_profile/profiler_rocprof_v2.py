@@ -48,10 +48,7 @@ class rocprof_v2_profiler(OmniProfiler_Base):
             # v2 requires output directory argument
             "-d",
             self.get_args().path + "/" + "out",
-            # v2 does not require csv extension
-            "-o",
-            fbase,
-            # v2 doen not require quotes on cmd
+            # v2 does not require quotes on cmd
             app_cmd,
         ]
         return args

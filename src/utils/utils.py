@@ -282,12 +282,13 @@ def run_prof(fname, profiler_options, workload_dir, mspec, loglevel):
                 console_error(output, exit=False)
         console_error("Profiling execution failed.")
 
-    # Get results
-    results_files = glob.glob(workload_dir + "/out/pmc_1/results_*.csv")
+    if rocprof_cmd.endswith("v2"):
+        # rocprofv2 has separate csv files for each process
+        results_files = glob.glob(workload_dir + "/out/pmc_1/results_*.csv")
 
-    # Combine results into single CSV file
-    combined_results = pd.concat([pd.read_csv(f) for f in results_files])
-    combined_results.to_csv(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
+        # Combine results into single CSV file
+        combined_results = pd.concat([pd.read_csv(f) for f in results_files])
+        combined_results.to_csv(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
 
     if new_env:
         # flatten tcc for applicable mi300 input

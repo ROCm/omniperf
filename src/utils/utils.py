@@ -287,7 +287,7 @@ def run_prof(fname, profiler_options, workload_dir, mspec, loglevel):
         results_files = glob.glob(workload_dir + "/out/pmc_1/results_*.csv")
 
         # Combine results into single CSV file
-        combined_results = pd.concat([pd.read_csv(f) for f in results_files])
+        combined_results = pd.concat([pd.read_csv(f) for f in results_files], ignore_index=True)
         combined_results.to_csv(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
 
     if new_env:

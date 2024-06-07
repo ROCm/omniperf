@@ -2,14 +2,17 @@
 What is Omniperf?
 *****************
 
-Omniperf is a kernel-level profiling tool for machine learning and HPC workloads running on AMD Instinct™ accelerators.
+Omniperf is a kernel-level profiling tool for machine learning and HPC workloads
+running on AMD Instinct™ accelerators.
 
-AMD Instinct MI-series accelerators are data center-class GPUs designed for compute and have some graphics capabilities
-disabled or removed. The Omniperf tool targets use with
-:doc:`accelerators in the MI100, MI200, and MI300 families <rocm:conceptual/gpu-arch>`, primarily. Development is in
-progress to support Radeon™ (RDNA) GPUs.
+AMD Instinct MI-series accelerators are data center-class GPUs designed for
+compute and have some graphics capabilities disabled or removed. Omniperf
+primarily targets use with
+:doc:`accelerators in the MI100, MI200, and MI300 families <rocm:conceptual/gpu-arch>`.
+Development is in progress to support Radeon™ (RDNA) GPUs.
 
-Omniperf is currently built on top of :doc:`rocprof <rocprofiler:rocprofv1>` to monitor hardware performance counters.
+Omniperf is built on top of :doc:`rocprofiler <rocprofiler:rocprofv1>` to
+monitor hardware performance counters.
 
 Features
 ========

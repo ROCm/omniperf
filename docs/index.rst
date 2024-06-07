@@ -6,11 +6,13 @@
 Omniperf documentation
 **********************
 
-Here, we provide a detailed breakdown of all facets of Omniperf. In addition to a full deployment guide with
-installation instructions, we also explain the design of the tool and each of its components.
+Omniperf documentation provides a detailed breakdown of all facets of Omniperf.
+In addition to a full deployment guide with installation instructions, we also
+explain the design of the tool and each of its components.
 
-If you're new to Omniperf, these chapters can be followed to gradually acquaint yourself with the tool and progressively
-introduce its more advanced features. To get started, see :doc:`What is Omniperf? <what-is-omniperf>`.
+If you're new to Omniperf, gradually acquaint yourself with the tool by 
+following the chapters that following and progressively learn its more advanced
+features. To get started, see :doc:`What is Omniperf? <what-is-omniperf>`.
 
 See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
 
@@ -37,9 +39,11 @@ See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
         * :doc:`FAQ <reference/faq>`
         * :doc:`Glossary <reference/glossary>`
 
-This project is proudly open source and we welcome all feedback! For more details on how to contribute, refer to
-`Contributing to ROCm <https://rocm.docs.amd.com/en/latest/contribute/contributing.html>`_.
+This project is proudly open source and we welcome all feedback! For more
+details on how to contribute, refer to `Contributing to ROCm
+<https://rocm.docs.amd.com/en/latest/contribute/contributing.html>`_.
 
-Find licensing information on the `Licensing <https://rocm.docs.amd.com/en/latest/about/license.html>`_ page.
+Find licensing information on the
+`Licensing <https://rocm.docs.amd.com/en/latest/about/license.html>`_ page.
 
 

@@ -28,7 +28,6 @@ from utils.utils import (
     demarcate,
     console_log,
     replace_timestamps,
-    fixup_rocprofv2_dispatch_ids,
 )
 
 
@@ -84,7 +83,5 @@ class rocprof_v2_profiler(OmniProfiler_Base):
         if self.ready_to_profile:
             # Manually join each pmc_perf*.csv output
             self.join_prof()
-            # Correct dispatch ids
-            fixup_rocprofv2_dispatch_ids(self.get_args().path)
             # Replace timestamp data to solve a known rocprof bug
             replace_timestamps(self.get_args().path)

@@ -288,8 +288,12 @@ def run_prof(fname, profiler_options, workload_dir, mspec, loglevel):
 
         # Combine results into single CSV file
         combined_results = pd.concat([pd.read_csv(f) for f in results_files], ignore_index=True)
-        combined_results.to_csv(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
 
+        # Overwrite column to ensure unique IDs.
+        combined_results['Dispatch_ID'] = range(0, len(combined_results))
+        
+        combined_results.to_csv(workload_dir + "/out/pmc_1/results_" + fbase + ".csv", index=False)
+    
     if new_env:
         # flatten tcc for applicable mi300 input
         f = path(workload_dir + "/out/pmc_1/results_" + fbase + ".csv")
@@ -663,16 +667,3 @@ def set_locale_encoding():
             exit=False,
         )
         console_error(error)
-
-
-def fixup_rocprofv2_dispatch_ids(workload_dir):
-    # Workaround for rocprofv2 using 1-based dispatch indicies
-    # first read pmc_perf
-    df = pd.read_csv(workload_dir + "/pmc_perf.csv")
-    df["Dispatch_ID"] -= 1
-    df.to_csv(workload_dir + "/pmc_perf.csv", index=False)
-    # next glob for *LEVEL*.csv
-    for f in glob.glob(workload_dir + "/*LEVEL*.csv"):
-        df = pd.read_csv(f)
-        df["Dispatch_ID"] -= 1
-        df.to_csv(f, index=False)

@@ -456,6 +456,13 @@ Examples:
         const=8050,
         help="\t\tActivate a GUI to interate with Omniperf metrics.\n\t\tOptionally, specify port to launch application (DEFAULT: 8050)",
     )
+    analyze_group.add_argument(
+        "--bottleneck-trace",
+        required=False,
+        metavar="",
+        help="\t\tSpecify path to Omnitrace (.proto) output to be used in bottleneck characterization.",
+
+    )
     analyze_advanced_group.add_argument(
         "--random-port",
         action="store_true",

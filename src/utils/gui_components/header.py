@@ -22,8 +22,10 @@
 # SOFTWARE.
 ##############################################################################el
 
-from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash import html, dcc
+from utils.utils import console_error
+from utils.workload_characterization import Bottleneck_Classification
 
 from utils import schema
 
@@ -42,8 +44,50 @@ def list_unique(orig_list, is_numeric):
 def create_span(input):
     return {"label": html.Span(str(input), title=str(input)), "value": str(input)}
 
+def get_bottleneck_section(input_filters, omniperf_dir):
+    if not input_filters["bottleneck_trace"]:
+        return html.H3(
+            children=["Include the '--bottleneck-trace' option to load a bottleneck classification for your workload."],
+            style={"color": "white"},
+        )
+    else:
+        # Instantiate the Bottleneck Classification object
+        bc = Bottleneck_Classification(
+            omniperf_dir=omniperf_dir,
+            omnitrace_dir=input_filters["bottleneck_trace"],
+            treshold_ratio=0.8
+        )
+        # make sure that the gpu ids match between omnitrace and omniperf
+        if not (list(bc.omnitrace_data['gpu_ids']).sort() == list(bc.omniperf_data['gpu_bounds_time'].keys()).sort()):
+            console_error("Bottleneck Characterization", "GPU ids in omnitrace and omniperf do not match")
+        plt1, plt2 = bc.create_output_plots()
+        return html.Div(
+            className="float-container",
+            children=[  
+                html.Div(
+                    className="float-child",
+                    children=[
+                        html.H3(
+                            "E2E Runtime Classification: CPU, GPU, Communication"
+                        ),
+                        dcc.Graph(figure=plt1),
+                    ]
+                ),
+                html.Div(
+                    className="float-child",
+                    children=[
+                        html.H3(
+                            "GPU Kernel Runtime Breakdowns by Bottlenecks and Performance"
+                        ),
+                        dcc.Graph(figure=plt2),
+                    ]
+                )
+            ]
+        )
 
-def get_header(raw_pmc, input_filters, kernel_names):
+
+
+def get_header(raw_pmc, input_filters, omniperf_dir, kernel_names):
     kernel_names = list(
         map(
             str,
@@ -318,10 +362,7 @@ def get_header(raw_pmc, input_filters, kernel_names):
             html.Div(
                 className="row banner",
                 children=[
-                    html.H3(
-                        children=["Placeholder. Guided Analysis coming soon..."],
-                        style={"color": "white"},
-                    ),
+                    get_bottleneck_section(input_filters, omniperf_dir),
                 ],
             ),
             html.P(

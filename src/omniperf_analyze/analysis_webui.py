@@ -77,7 +77,7 @@ class webui_analysis(OmniAnalyze_Base):
             children=[
                 dbc.Spinner(
                     children=[
-                        get_header(base_data.raw_pmc, input_filters, filt_kernel_names),
+                        get_header(base_data.raw_pmc, input_filters, self.get_args().path, filt_kernel_names),
                         html.Div(id="container", children=[]),
                     ],
                     fullscreen=True,
@@ -305,6 +305,7 @@ class webui_analysis(OmniAnalyze_Base):
             "dispatch": self._runs[self.dest_dir].filter_dispatch_ids,
             "normalization": args.normal_unit,
             "top_n": args.max_stat_num,
+            "bottleneck_trace": args.bottleneck_trace,
         }
 
         self.build_layout(

@@ -11,14 +11,15 @@ primarily targets use with
 :doc:`accelerators in the MI100, MI200, and MI300 families <rocm:conceptual/gpu-arch>`.
 Development is in progress to support Radeon™ (RDNA) GPUs.
 
-Omniperf is built on top of :doc:`rocprofiler <rocprofiler:rocprofv1>` to
+Omniperf is built on top of :doc:`ROCProfiler <rocprofiler:rocprofv1>` to
 monitor hardware performance counters.
 
 Features
 ========
 
-Omniperf performs profiling based on all available hardware counters for the target accelerator. It provides high-level
-performance analysis features including System Speed of Light (SOL), Hardware block-level SOL, Memory Chart
+Omniperf performs profiling based on all available hardware counters for the
+target accelerator. It provides high-level performance analysis features
+including System Speed of Light (SOL), Hardware block-level SOL, Memory Chart
 Analysis, Roofline Analysis, Baseline Comparisons, and more.
 
 Omniperf supports both command line analysis and GUI analysis.

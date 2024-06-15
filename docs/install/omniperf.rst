@@ -4,61 +4,63 @@ Install Omniperf
 
 Omniperf consists of two installation components:
 
-1. Omniperf client-side
+* :ref:`Omniperf client-side <install-client-side>`
 
     * Provides core application profiling capability.
-    * Allows collection of performance counters, filtering by hardware block, dispatch, kernel, and more.
+    * Allows collection of performance counters, filtering by hardware block,
+      dispatch, kernel, and more.
     * Provides CLI-based analysis mode.
     * Provides standalone web interface for importing analysis metrics.
 
-2. Omniperf server-side
+* :ref:`Omniperf server-side <install-server-side>`
 
-    * Hosts MongoDB backend and Grafana instance.
+    * Hosts the MongoDB backend and Grafana instance.
     * Packaged in a Docker container for easy setup.
 
-Determine what you need to install based on how you would like to interact with Omniperf. See the decision tree below
-to help determine what installation is right for you.
+Determine what you need to install based on how you would like to interact with
+Omniperf. See the following decision tree to help determine what installation is
+right for you.
+
+.. _install-client-side:
 
 Client-side installation
 ========================
 
 Omniperf client-side requires the following basic software dependencies prior to usage:
 
-* Python (>=3.8)
-* CMake (>= 3.19)
-* ROCm (>= 5.7.1)
+* Python ``>= 3.8``
+* CMake ``>= 3.19``
+* ROCm ``>= 5.7.1``
 
 In addition, Omniperf leverages a number of Python packages that are
-documented in the top-level `requirements.txt` file.  These must be
-installed prior to Omniperf configuration.
+documented in the top-level ``requirements.txt`` file. These must be
+installed *before* configuring Omniperf.
 
-Optional packages
------------------
+.. admonition:: Optional packages for developers
 
-If you would like to build Omniperf as a developer, consider these additional requirements:
+   If you would like to build Omniperf as a developer, consider these additional
+   requirements:
 
-.. TODO: update this
+   .. list-table::
+       :header-rows: 1
 
-.. list-table::
-    :header-rows: 1
+       * - Requirement file
+         - Description
 
-    * - Requirement file
-      - Description
+       * - requirements-doc.txt **CHANGE ME**
+         - Python packages required to build docs from source.
 
-    * - requirements-doc.txt
-      - Python packages required to build docs from source.
+       * - requirements-test.txt
+         - Python packages required to run Omniperf's CI suite via PyTest.
 
-    * - requirements-test.txt
-      - Python packages required to run Omniperf's CI suite via PyTest.
-
-The recommended procedure for Omniperf usage is to install into a shared file system so that multiple users can access
-the final installation.  The following steps illustrate how to install the necessary Python dependencies using
-`pip <https://packaging.python.org/en/latest/>`_ and Omniperf into a shared location controlled by the ``INSTALL_DIR``
-environment variable.
+   The recommended procedure for Omniperf usage is to install into a shared file
+   system so that multiple users can access the final installation. The
+   following steps illustrate how to install the necessary Python dependencies
+   using `pip <https://packaging.python.org/en/latest/>`_ and Omniperf into a
+   shared location controlled by the ``INSTALL_DIR`` environment variable.
 
 Configuration variables
 -----------------------
-
 The following installation example leverages several
 [CMake](https://cmake.org/cmake/help/latest/) project variables
 defined as follows:
@@ -178,6 +180,8 @@ wishes to use instead.
 %%% cpack -G DEB -D CPACK_PACKAGING_INSTALL_PREFIX=/opt/omniperf
 %%% cpack -G RPM -D CPACK_PACKAGING_INSTALL_PREFIX=/opt/omniperf
 %%% ```
+
+.. _install-server-side:
 
 Server-side installation
 ========================

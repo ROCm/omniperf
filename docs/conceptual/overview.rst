@@ -1,6 +1,6 @@
-*****************
+*******************
 High-level overview
-*****************
+*******************
 
 Omniperf is architecturally composed of three major components, as shown in the following figure.
 

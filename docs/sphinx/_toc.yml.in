@@ -18,6 +18,11 @@ subtrees:
     - file: how-to/profiling.rst
     - file: how-to/analysis.rst
 
+  - caption: Tutorials
+    entries:
+    - url: https://github.com/amd/HPCTrainingExamples/tree/main/OmniperfExamples
+      title: Omniperf example exercises
+
   - caption: Conceptual
     entries:
     - file: conceptual/overview.rst

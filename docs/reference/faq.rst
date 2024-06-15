@@ -11,10 +11,10 @@ Frequently asked questions and troubleshooting tips.
 1. How do I export profiling data I have already generated using Omniperf?
 ==========================================================================
 
-To interact with the Grafana GUI you must sync data with the MongoDB backend. This interaction is done through
-**database** mode.
+To interact with the Grafana GUI, you must sync data with the MongoDB backend.
+This interaction is done through **database** mode.
 
-Simply pass the directory of your desired workload like so,
+Pass the directory of your desired workload like so,
 
 .. code:: bash
 
@@ -70,6 +70,6 @@ This pop up will appear
    - Remote Port: [PORT]
 
    SSH Server
-   - SSH server: Name of the server one is connecting to
-   - SSH login: Username to login to the server
+   - SSH server: name of the server one is connecting to
+   - SSH login: username to login to the server
    - SSH port: 22

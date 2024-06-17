@@ -56,7 +56,8 @@ of LLVM:
 
    * - Global
      - Memory that can be seen by all threads in a process, and may be backed by
-       the local accelerator's HBM, a remote accelerator's HBM, or the CPU's DRAM.
+       the local accelerator's HBM, a remote accelerator's HBM, or the CPU's
+       DRAM.
 
    * - Local
      - Memory that is only visible to a particular workgroup. On AMD's Instinct
@@ -95,5 +96,5 @@ In addition, these memory types *may* differ between accelerators on the same
 system, even when accessing the same memory allocation.
 
 For example, an [MI2XX](2xxnote) accelerator accessing "fine-grained" memory
-allocated local to that device may see the allocation as coherently cachable,
+allocated local to that device may see the allocation as coherently cacheable,
 While a remote accelerator might see the same allocation as uncached.

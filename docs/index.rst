@@ -11,19 +11,19 @@ In addition to a full deployment guide with installation instructions, this
 documentation also explains the ideas motivating the design behind the tool and
 its components.
 
+See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
+
 If you're new to Omniperf, acquaint yourself with the tool by reviewing the
 chapters that follow and gradually learn its more advanced features. To get
 started, see :doc:`What is Omniperf? <what-is-omniperf>`.
-
-See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
 
 .. grid:: 2
    :gutter: 3
 
    .. grid-item-card:: Install
 
-      * :doc:`install/quick-start`
-      * :doc:`install/omniperf`
+      * :doc:`install/core-install`
+      * :doc:`install/grafana-setup`
 
    .. grid-item::
 
@@ -34,11 +34,6 @@ in practice.
 .. grid:: 2
    :gutter: 3
 
-   .. grid-item-card:: Conceptual
-
-      * :doc:`conceptual/overview`
-      * :doc:`conceptual/performance-model`
-
    .. grid-item-card:: How to
 
       * :doc:`how-to/profiling`
@@ -47,6 +42,11 @@ in practice.
    .. grid-item-card:: Tutorials
 
       * `Omniperf example exercises <https://github.com/amd/HPCTrainingExamples/tree/main/OmniperfExamples>`_
+
+   .. grid-item-card:: Conceptual
+
+      * :doc:`conceptual/overview`
+      * :doc:`conceptual/performance-model`
 
    .. grid-item-card:: Reference
 

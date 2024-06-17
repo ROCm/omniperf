@@ -10,11 +10,13 @@ subtrees:
 
   - caption: Install
     entries:
-    - file: install/quick-start.rst
-    - file: install/omniperf.rst
+    - file: install/core-install.rst
+    - file: install/grafana-setup.rst
+
 
   - caption: How to
     entries:
+    - file: install/quick-start.rst
     - file: how-to/profiling.rst
     - file: how-to/analysis.rst
 

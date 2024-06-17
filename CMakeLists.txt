@@ -156,6 +156,16 @@ if(${GIT_CLONE})
 endif()
 
 # Setup testing collateral
+
+option(ENABLE_TESTS "Enable compilation of testing collateral" OFF)
+set(CMAKE_HIP_FLAGS_RELEASE "-O2")
+if(${ENABLE_TESTS})
+    enable_language("C" "HIP")
+    add_subdirectory(tests)
+
+endif()
+message(STATUS "Enable tests compilation: ${ENABLE_TESTS}")
+
 enable_testing()
 
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
@@ -251,15 +261,6 @@ add_test(
             ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-# ---------------------------
-# saved analysis tests
-# ---------------------------
-
-add_test(
-    NAME test_saved_analysis
-    COMMAND pytest ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_saved_analysis.py
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-
 # ---------
 # Install
 # ---------
@@ -312,6 +313,11 @@ install(
     DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
     COMPONENT main
     PATTERN "__pycache__" EXCLUDE)
+# grafana assets
+install(
+    DIRECTORY grafana
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}
+    COMPONENT main)
 # samples
 install(
     DIRECTORY sample

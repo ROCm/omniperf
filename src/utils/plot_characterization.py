@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import plotly.graph_objects as go
 import pandas as pd
+import time
 
 plt.rcParams['figure.figsize'] = [20, 8]
 plt.rcParams['font.size'] = 24
@@ -33,16 +34,16 @@ plt.rcParams['font.size'] = 24
 WIDTH = 0.5
 COLORS = ["#2e8b57","#ffa500","#1e90ff","#0000ff","#00ff00", "#ff1493"]
 
-def create_plots(charaterization_input: pd.DataFrame):
+def create_plots(charaterization_input: pd.DataFrame, omniperf_output_dir):
     data_df = charaterization_input
-    plt1 = end_to_end_plt_v2(data_df)
-    plt2 = gpu_bottleneck_plt_v2(data_df)
+    plt1 = end_to_end_plt_v2(data_df, omniperf_output_dir)
+    plt2 = gpu_bottleneck_plt_v2(data_df, omniperf_output_dir)
     # test other plots
     end_to_end_plt(data_df)
     gpu_bottleneck_plt(data_df)
     return plt1, plt2
 
-def end_to_end_plt_v2(data_df):
+def end_to_end_plt_v2(data_df, omniperf_output_dir):
     '''
     This portion of code will graph the end-to-end CPU/GPU timing breakdown
     '''
@@ -57,7 +58,8 @@ def end_to_end_plt_v2(data_df):
         # and subtract gpu time, communication time, and cold invoke time
         # note: depending on omnitrace bugs, you may want to use 
         # omniperf's gpu runtime and/or gpu-gpu communication time
-        cpu_time = data_df['ot_total_trace_time'][row_idx] - data_df['op_gpu_time'][row_idx] - \
+        cpu_time = data_df['ot_total_trace_time'][row_idx] - \
+            data_df['op_gpu_time'][row_idx] - \
             data_df['ot_host_device_time'][row_idx] - \
             data_df['ot_device_host_time'][row_idx] - \
             data_df['op_gpu_gpu_comm_time'][row_idx] - \
@@ -97,10 +99,13 @@ def end_to_end_plt_v2(data_df):
                             x=0,  # Set legend x-position to 0 (leftmost)
                             y=-0.5,  # Set legend y-position slightly below the plot area 
                       ))
+    fig.write_image(omniperf_output_dir + '/e2e_time.pdf')
+    time.sleep(1)
+    fig.write_image(omniperf_output_dir + '/e2e_time.pdf')
     return fig
 
 
-def gpu_bottleneck_plt_v2(data_df):
+def gpu_bottleneck_plt_v2(data_df, omniperf_output_dir):
     '''
     This portion of code will plot the GPU kernel's bottlenecks
     '''
@@ -230,6 +235,9 @@ def gpu_bottleneck_plt_v2(data_df):
                             x=0,  # Set legend x-position to 0 (leftmost)
                             y=-0.5  # Set legend y-position slightly below the plot area
                       ))
+    fig.write_image(omniperf_output_dir + '/gpu_time.pdf')
+    time.sleep(1)
+    fig.write_image(omniperf_output_dir + '/gpu_time.pdf')
     return fig
 
 def end_to_end_plt(data_df):

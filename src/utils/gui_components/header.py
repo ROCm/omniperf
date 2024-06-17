@@ -81,6 +81,16 @@ def get_bottleneck_section(input_filters, omniperf_dir):
                         ),
                         dcc.Graph(figure=plt2),
                     ]
+                ),
+                html.Div(
+                    className="disclaimer",
+                    children=[
+                        html.P([
+                            "Note: Bottleneck Classification is still an experimental feature and may exhibit some inaccuracies. Please see ",
+                            html.A('https://github.com/ROCm/omniperf/discussions/378', href='https://github.com/ROCm/omniperf/discussions/378'),
+                            " for known issues and workarounds."
+                        ])
+                    ]
                 )
             ]
         )

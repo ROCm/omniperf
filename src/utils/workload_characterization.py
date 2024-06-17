@@ -510,7 +510,7 @@ class Bottleneck_Classification():
             output_df.loc[len(output_df)] = output_row
         
         # Share df with plot creation module
-        return create_plots(output_df)
+        return create_plots(output_df, self.input_dirs["omniperf"][0][0])
 
 
 def find_ops_bytes_mi200(df_row):

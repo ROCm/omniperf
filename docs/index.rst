@@ -2,48 +2,64 @@
    :description: Omniperf documentation and reference
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD
 
-**********************
-Omniperf documentation
-**********************
+********
+Omniperf
+********
 
 Omniperf documentation provides a detailed breakdown of all facets of Omniperf.
-In addition to a full deployment guide with installation instructions, we also
-explain the design of the tool and each of its components.
+In addition to a full deployment guide with installation instructions, this 
+documentation also explains the ideas motivating the design behind the tool and
+its components.
 
-If you're new to Omniperf, gradually acquaint yourself with the tool by 
-following the chapters that following and progressively learn its more advanced
-features. To get started, see :doc:`What is Omniperf? <what-is-omniperf>`.
+If you're new to Omniperf, acquaint yourself with the tool by reviewing the
+chapters that follow and gradually learn its more advanced features. To get
+started, see :doc:`What is Omniperf? <what-is-omniperf>`.
 
 See Omniperf source code at `<https://github.com/ROCm/omniperf>`__.
 
 .. grid:: 2
-    :gutter: 3
+   :gutter: 3
 
-    .. grid-item-card:: Install
+   .. grid-item-card:: Install
 
-        * :doc:`Quick start <install/quick-start>`
-        * :doc:`Install Omniperf <install/omniperf>`
+      * :doc:`install/quick-start`
+      * :doc:`install/omniperf`
 
-    .. grid-item-card:: Conceptual
+   .. grid-item::
 
-        * :doc:`High-level design of Omniperf <conceptual/overview>`
-        * :doc:`Performance model <conceptual/performance-model>`
+Use the following topics to learn more about the advantages of Omniperf in your
+development toolkit, how it aims to model performance, and how to use Omniperf
+in practice.
 
-    .. grid-item-card:: How to
+.. grid:: 2
+   :gutter: 3
 
-        * :doc:`Profiling <how-to/profiling>`
-        * :doc:`Analysis <how-to/analysis>`
+   .. grid-item-card:: Conceptual
 
-    .. grid-item-card:: Reference
+      * :doc:`conceptual/overview`
+      * :doc:`conceptual/performance-model`
 
-        * :doc:`FAQ <reference/faq>`
-        * :doc:`Glossary <reference/glossary>`
+   .. grid-item-card:: How to
 
-This project is proudly open source and we welcome all feedback! For more
+      * :doc:`how-to/profiling`
+      * :doc:`how-to/analysis`
+
+   .. grid-item-card:: Tutorials
+
+      * `Omniperf example exercises <https://github.com/amd/HPCTrainingExamples/tree/main/OmniperfExamples>`_
+
+   .. grid-item-card:: Reference
+
+      * :doc:`reference/compatible-accelerators`
+      * :doc:`reference/faq`
+      * :doc:`reference/glossary`
+      * :doc:`license`
+
+
+This project is proudly open source and we welcome all feedback. For more
 details on how to contribute, refer to `Contributing to ROCm
 <https://rocm.docs.amd.com/en/latest/contribute/contributing.html>`_.
 
 Find licensing information on the
 `Licensing <https://rocm.docs.amd.com/en/latest/about/license.html>`_ page.
-
 

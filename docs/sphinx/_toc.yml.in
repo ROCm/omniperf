@@ -30,7 +30,7 @@ subtrees:
 
   - caption: Reference
     entries:
+    - file: reference/compatible-accelerators.rst
     - file: reference/faq.rst
     - file: reference/glossary.rst
-
     - file: license.rst

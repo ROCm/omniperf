@@ -35,21 +35,25 @@ with open("../VERSION", encoding="utf-8") as f:
     if not match:
         raise ValueError("VERSION not found!")
     version_number = match[1]
-left_nav_title = f"Omniperf {version_number} documentation"
 
-# for PDF output on Read the Docs
-project = "Omniperf documentation"
+project = "omniperf"
 author = "Advanced Micro Devices, Inc."
 copyright = "Copyright (c) 2024 Advanced Micro Devices, Inc. All rights reserved."
 version = version_number
 release = version_number
+html_title = f"Omniperf {version} documentation"
 
 external_toc_path = "./sphinx/_toc.yml"
+extensions = []
 
-docs_core = ROCmDocs(left_nav_title)
+docs_core = ROCmDocs(html_title)
 docs_core.setup()
-
-external_projects_current_project = "omniperf"
 
 for sphinx_var in ROCmDocs.SPHINX_VARS:
     globals()[sphinx_var] = getattr(docs_core, sphinx_var)
+
+# A string of rST that will be included at the beginning of every source file
+# that is read. Adds substitutions that should be available in every file.
+rst_prolog = """
+.. |TM| replace:: ™
+"""

@@ -32,3 +32,5 @@ subtrees:
     entries:
     - file: reference/faq.rst
     - file: reference/glossary.rst
+
+    - file: license.rst

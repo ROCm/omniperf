@@ -8,3 +8,24 @@ subtrees:
   - entries:
     - file: what-is-omniperf.rst
 
+  - caption: Install
+    entries:
+    - file: install/quick-start.rst
+    - file: install/omniperf.rst
+
+  - caption: How to
+    entries:
+    - file: how-to/profiling.rst
+    - file: how-to/analysis.rst
+
+  - caption: Conceptual
+    entries:
+    - file: conceptual/overview.rst
+    - file: conceptual/performance-model.rst
+
+  - caption: Reference
+    entries:
+    - file: reference/faq.rst
+    - file: reference/glossary.rst
+
+    - file: license.rst

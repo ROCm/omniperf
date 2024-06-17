@@ -44,10 +44,13 @@ def list_unique(orig_list, is_numeric):
 def create_span(input):
     return {"label": html.Span(str(input), title=str(input)), "value": str(input)}
 
+
 def get_bottleneck_section(input_filters, omniperf_dir):
     if not input_filters["bottleneck_trace"]:
         return html.H3(
-            children=["Include the '--bottleneck-trace' option to load a bottleneck classification for your workload."],
+            children=[
+                "Include the '--bottleneck-trace' option to load a bottleneck classification for your workload."
+            ],
             style={"color": "white"},
         )
     else:
@@ -55,23 +58,27 @@ def get_bottleneck_section(input_filters, omniperf_dir):
         bc = Bottleneck_Classification(
             omniperf_dir=omniperf_dir,
             omnitrace_dir=input_filters["bottleneck_trace"],
-            treshold_ratio=0.8
+            treshold_ratio=0.8,
         )
         # make sure that the gpu ids match between omnitrace and omniperf
-        if not (list(bc.omnitrace_data['gpu_ids']).sort() == list(bc.omniperf_data['gpu_bounds_time'].keys()).sort()):
-            console_error("Bottleneck Characterization", "GPU ids in omnitrace and omniperf do not match")
+        if not (
+            list(bc.omnitrace_data["gpu_ids"]).sort()
+            == list(bc.omniperf_data["gpu_bounds_time"].keys()).sort()
+        ):
+            console_error(
+                "Bottleneck Characterization",
+                "GPU ids in omnitrace and omniperf do not match",
+            )
         plt1, plt2 = bc.create_output_plots()
         return html.Div(
             className="float-container",
-            children=[  
+            children=[
                 html.Div(
                     className="float-child",
                     children=[
-                        html.H3(
-                            "E2E Runtime Classification: CPU, GPU, Communication"
-                        ),
+                        html.H3("E2E Runtime Classification: CPU, GPU, Communication"),
                         dcc.Graph(figure=plt1),
-                    ]
+                    ],
                 ),
                 html.Div(
                     className="float-child",
@@ -80,21 +87,25 @@ def get_bottleneck_section(input_filters, omniperf_dir):
                             "GPU Kernel Runtime Breakdowns by Bottlenecks and Performance"
                         ),
                         dcc.Graph(figure=plt2),
-                    ]
+                    ],
                 ),
                 html.Div(
                     className="disclaimer",
                     children=[
-                        html.P([
-                            "Note: Bottleneck Classification is still an experimental feature and may exhibit some inaccuracies. Please see ",
-                            html.A('https://github.com/ROCm/omniperf/discussions/378', href='https://github.com/ROCm/omniperf/discussions/378'),
-                            " for known issues and workarounds."
-                        ])
-                    ]
-                )
-            ]
+                        html.P(
+                            [
+                                "Note: Bottleneck Classification is still an experimental feature and may exhibit some inaccuracies. Please see ",
+                                html.A(
+                                    "https://github.com/ROCm/omniperf/discussions/378",
+                                    href="https://github.com/ROCm/omniperf/discussions/378",
+                                ),
+                                " for known issues and workarounds.",
+                            ]
+                        )
+                    ],
+                ),
+            ],
         )
-
 
 
 def get_header(raw_pmc, input_filters, omniperf_dir, kernel_names):

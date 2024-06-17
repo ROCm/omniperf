@@ -77,7 +77,12 @@ class webui_analysis(OmniAnalyze_Base):
             children=[
                 dbc.Spinner(
                     children=[
-                        get_header(base_data.raw_pmc, input_filters, self.get_args().path, filt_kernel_names),
+                        get_header(
+                            base_data.raw_pmc,
+                            input_filters,
+                            self.get_args().path,
+                            filt_kernel_names,
+                        ),
                         html.Div(id="container", children=[]),
                     ],
                     fullscreen=True,

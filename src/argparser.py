@@ -461,7 +461,6 @@ Examples:
         required=False,
         metavar="",
         help="\t\tSpecify path to Omnitrace (.proto) output to be used in bottleneck characterization.",
-
     )
     analyze_advanced_group.add_argument(
         "--random-port",

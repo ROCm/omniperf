@@ -55,7 +55,7 @@ Detailed feature list
 * *Instruction Cache* panel
 * *Scalar L1D Cache* panel
 * *L1 Address Processing Unit*, or, *Texture Addresser (TA)* and
- *L1 Backend Data Processing Unit*, or, *Texture Data (TD)* panels
+  *L1 Backend Data Processing Unit*, or, *Texture Data (TD)* panels
 * *Vector L1D Cache* panel
 * *L2 Cache* panel
 * *L2 Cache (per-channel)* panel

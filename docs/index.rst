@@ -36,6 +36,7 @@ in practice.
 
    .. grid-item-card:: How to
 
+      * :doc:`how-to/use`
       * :doc:`how-to/profiling`
       * :doc:`how-to/analysis`
 

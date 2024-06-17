@@ -45,16 +45,12 @@ dependencies.
 Omniperf depends on a number of Python packages documented in the top-level
 ``requirements.txt`` file. Install these *before* configuring Omniperf.
 
-.. admonition:: Optional packages for developers
+.. tip::
 
-   For those looking to build Omniperf as a developer, consider these additional
+   If looking to build Omniperf as a developer, consider these additional
    requirements.
 
    .. list-table::
-       :header-rows: 1
-
-       * - Requirements file
-         - Description
 
        * - ``docs/sphinx/requirements.txt``
          - Python packages required to build this documentation from source.
@@ -62,11 +58,11 @@ Omniperf depends on a number of Python packages documented in the top-level
        * - ``requirements-test.txt``
          - Python packages required to run Omniperf's CI suite using PyTest.
 
-   The recommended procedure for Omniperf usage is to install into a shared file
-   system so that multiple users can access the final installation. The
-   following steps illustrate how to install the necessary Python dependencies
-   using `pip <https://packaging.python.org/en/latest/>`_ and Omniperf into a
-   shared location controlled by the ``INSTALL_DIR`` environment variable.
+The recommended procedure for Omniperf usage is to install into a shared file
+system so that multiple users can access the final installation. The
+following steps illustrate how to install the necessary Python dependencies
+using `pip <https://packaging.python.org/en/latest/>`_ and Omniperf into a
+shared location controlled by the ``INSTALL_DIR`` environment variable.
 
 .. _core-install-cmake-vars:
 

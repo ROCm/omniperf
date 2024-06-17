@@ -182,6 +182,6 @@ ROCProfiler
 
 Omniperf relies on ROCProfiler's ``rocprof`` binary during the profiling
 process. Normally, the path to this binary is detected automatically, but you
-can override the path by the setting the optional `ROCPROF` environment
+can override the path by the setting the optional ``ROCPROF`` environment
 variable.
 

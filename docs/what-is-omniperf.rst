@@ -60,3 +60,4 @@ Detailed feature list
 * *L2 Cache* panel
 * *L2 Cache (per-channel)* panel
 
+.. include:: ./conceptual/includes/high-level-design.rst

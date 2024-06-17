@@ -60,6 +60,8 @@ Common filters to customize data collection include:
    Enables collection metrics for only the specified (one or more) hardware
    component blocks.
 
+See :ref:`Filtering <profiling-filtering>` for an in-depth walkthrough.
+
 To view available metrics by hardware block, use the ``--list-metrics``
 argument:
 

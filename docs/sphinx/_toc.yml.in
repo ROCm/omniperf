@@ -16,7 +16,7 @@ subtrees:
 
   - caption: How to
     entries:
-    - file: install/quick-start.rst
+    - file: how-to/use.rst
     - file: how-to/profiling.rst
     - file: how-to/analysis.rst
 

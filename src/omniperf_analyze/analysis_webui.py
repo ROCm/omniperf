@@ -80,7 +80,7 @@ class webui_analysis(OmniAnalyze_Base):
                         get_header(
                             base_data.raw_pmc,
                             input_filters,
-                            self.get_args().path,
+                            self._bottleneck_characterization,
                             filt_kernel_names,
                         ),
                         html.Div(id="container", children=[]),
@@ -301,7 +301,7 @@ class webui_analysis(OmniAnalyze_Base):
 
     @demarcate
     def run_analysis(self):
-        """Run CLI analysis."""
+        """Run GUI analysis."""
         super().run_analysis()
         args = self.get_args()
         input_filters = {
@@ -310,7 +310,6 @@ class webui_analysis(OmniAnalyze_Base):
             "dispatch": self._runs[self.dest_dir].filter_dispatch_ids,
             "normalization": args.normal_unit,
             "top_n": args.max_stat_num,
-            "bottleneck_trace": args.bottleneck_trace,
         }
 
         self.build_layout(

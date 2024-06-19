@@ -26,7 +26,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import plotly.graph_objects as go
 import pandas as pd
-import time
 
 plt.rcParams["figure.figsize"] = [20, 8]
 plt.rcParams["font.size"] = 24
@@ -35,14 +34,14 @@ WIDTH = 0.5
 COLORS = ["#2e8b57", "#ffa500", "#1e90ff", "#0000ff", "#00ff00", "#ff1493"]
 
 
-def create_plots(charaterization_input: pd.DataFrame, omniperf_output_dir):
+def create_plots(charaterization_input: pd.DataFrame):
     data_df = charaterization_input
-    plt1 = end_to_end_plt(data_df, omniperf_output_dir)
-    plt2 = gpu_bottleneck_plt(data_df, omniperf_output_dir)
-    return plt1, plt2
+    e2e_plt = end_to_end_plt(data_df)
+    gpu_plt = gpu_bottleneck_plt(data_df)
+    return e2e_plt, gpu_plt
 
 
-def end_to_end_plt(data_df, omniperf_output_dir):
+def end_to_end_plt(data_df):
     """
     This portion of code will graph the end-to-end CPU/GPU timing breakdown
     """
@@ -156,14 +155,10 @@ def end_to_end_plt(data_df, omniperf_output_dir):
             y=-0.5,  # Set legend y-position slightly below the plot area
         ),
     )
-    fig.write_image(omniperf_output_dir + "/characterization-e2e_time.pdf")
-    # Re-save to remove loading MathJax pop up
-    time.sleep(1)
-    fig.write_image(omniperf_output_dir + "/characterization-e2e_time.pdf")
     return fig
 
 
-def gpu_bottleneck_plt(data_df, omniperf_output_dir):
+def gpu_bottleneck_plt(data_df):
     """
     This portion of code will plot the GPU kernel's bottlenecks
     """
@@ -179,7 +174,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
     for row_idx in range(data_df.shape[0]):
         color_idx = 0
 
-        # ax.barh(row_idx, data_df['ot_above_util_lds_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -192,7 +186,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_above_util_lds_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_above_util_gl1_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -205,7 +198,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_above_util_gl1_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_above_util_gl2_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -218,7 +210,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_above_util_gl2_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_above_util_hbm_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -231,7 +222,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_above_util_hbm_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_above_util_valu_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -244,7 +234,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_above_util_valu_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_above_util_mfma_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx])
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -262,7 +251,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
     for row_idx in range(data_df.shape[0]):
         color_idx = 0
 
-        # ax.barh(row_idx, data_df['ot_under_util_lds_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -276,7 +264,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_under_util_lds_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_under_util_gl1_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -290,7 +277,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_under_util_gl1_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_under_util_gl2_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -304,7 +290,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_under_util_gl2_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_under_util_hbm_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -318,7 +303,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_under_util_hbm_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_under_util_valu_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -332,7 +316,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_under_util_valu_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_under_util_mfma_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='/')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -351,7 +334,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
     for row_idx in range(data_df.shape[0]):
         color_idx = 0
 
-        # ax.barh(row_idx, data_df['ot_no_flops_lds_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -365,7 +347,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_no_flops_lds_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_no_flops_gl1_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -379,7 +360,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_no_flops_gl1_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_no_flops_gl2_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -393,7 +373,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_no_flops_gl2_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_no_flops_hbm_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -407,7 +386,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_no_flops_hbm_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_no_flops_valu_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -421,7 +399,6 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
         bases[row_idx] += data_df["ot_no_flops_valu_time"][row_idx]
         color_idx += 1
 
-        # ax.barh(row_idx, data_df['ot_no_flops_mfma_time'][row_idx], WIDTH, left=bases[row_idx], color=COLORS[color_idx], hatch='X')
         fig.add_trace(
             go.Bar(
                 y=[row_idx],
@@ -484,8 +461,4 @@ def gpu_bottleneck_plt(data_df, omniperf_output_dir):
             y=-0.5,  # Set legend y-position slightly below the plot area
         ),
     )
-    fig.write_image(omniperf_output_dir + "/characterization-gpu_time.pdf")
-    # Re-save to remove loading MathJax pop up
-    time.sleep(1)
-    fig.write_image(omniperf_output_dir + "/characterization-gpu_time.pdf")
     return fig

@@ -50,26 +50,25 @@ class Bottleneck_Classification:
         # Populate data structures
         self.parse_omniperf()
         self.parse_omnitrace()
+        # Initalize output plots
+        self.end_to_end_plot = None
+        self.gpu_bottleneck_plot = None
 
     def parse_omniperf(self):
         """
         The utilization ratio is used to set a threshold for percentage of the empirical peak FLOPS/s.
         Used to classify a kernel as performing well and underperforming.
         """
-        perf_df = pd.read_csv(
-            os.path.join(self.input_dirs["omniperf"][0][0], "pmc_perf.csv")
-        )
+        perf_df = pd.read_csv(os.path.join(self.input_dirs["omniperf"], "pmc_perf.csv"))
         # Verify that roofline.csv exists
         if not os.path.exists(
-            os.path.abspath(
-                os.path.join(self.input_dirs["omniperf"][0][0], "roofline.csv")
-            )
+            os.path.abspath(os.path.join(self.input_dirs["omniperf"], "roofline.csv"))
         ):
             console_error(
-                f"The Omniperf file {os.path.join(self.input_dirs['omniperf'][0][0], 'roofline.csv')} is required to use the --bottleneck-trace flag."
+                f"The Omniperf file {os.path.join(self.input_dirs['omniperf'], 'roofline.csv')} is required to use the --bottleneck-trace flag."
             )
         roofline_df = pd.read_csv(
-            os.path.join(self.input_dirs["omniperf"][0][0], "roofline.csv")
+            os.path.join(self.input_dirs["omniperf"], "roofline.csv")
         )
 
         # go row by row in pmc_perf to parse the relevant performance counters per kernel to
@@ -646,7 +645,9 @@ class Bottleneck_Classification:
             output_df.loc[len(output_df)] = output_row
 
         # Share df with plot creation module
-        return create_plots(output_df, self.input_dirs["omniperf"][0][0])
+        e2e_plt, gpu_plt = create_plots(output_df)
+        self.end_to_end_plot = e2e_plt
+        self.gpu_bottleneck_plot = gpu_plt
 
 
 def find_ops_bytes_mi200(df_row):

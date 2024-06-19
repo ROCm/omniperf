@@ -26,6 +26,7 @@ from abc import ABC, abstractmethod
 import os
 import sys
 import copy
+import time
 from collections import OrderedDict
 from pathlib import Path
 from utils.utils import (
@@ -36,6 +37,7 @@ from utils.utils import (
     console_error,
 )
 from utils import schema, file_io, parser
+from utils.workload_characterization import Bottleneck_Classification
 
 
 class OmniAnalyze_Base:
@@ -46,6 +48,7 @@ class OmniAnalyze_Base:
         self.__supported_archs = supported_archs
         self._output = None
         self.__socs: dict = None  # available OmniSoC objs
+        self._bottleneck_characterization: Bottleneck_Classification = None
 
     def get_args(self):
         return self.__args
@@ -230,3 +233,41 @@ class OmniAnalyze_Base:
     def run_analysis(self):
         """Run analysis."""
         console_debug("analysis", "generating analysis")
+        if self.get_args().bottleneck_trace:
+            self._bottleneck_characterization = get_bottleneck_characterization(
+                self.get_args()
+            )
+
+
+def get_bottleneck_characterization(args):
+    # Instantiate the Bottleneck Classification object
+    bc = Bottleneck_Classification(
+        omniperf_dir=args.path[0][0],
+        omnitrace_dir=args.bottleneck_trace,
+        treshold_ratio=0.8,
+    )
+    # make sure that the gpu ids match between omnitrace and omniperf
+    if not (
+        list(bc.omnitrace_data["gpu_ids"]).sort()
+        == list(bc.omniperf_data["gpu_bounds_time"].keys()).sort()
+    ):
+        console_error(
+            "Bottleneck Characterization",
+            "GPU ids in omnitrace and omniperf do not match",
+        )
+    # create and save plots (Re-save to remove loading MathJax pop up)
+    bc.create_output_plots()
+    bc.end_to_end_plot.write_image(
+        bc.input_dirs["omniperf"] + "/characterization-e2e_time.pdf"
+    )
+    bc.gpu_bottleneck_plot.write_image(
+        bc.input_dirs["omniperf"] + "/characterization-gpu_time.pdf"
+    )
+    time.sleep(1)
+    bc.end_to_end_plot.write_image(
+        bc.input_dirs["omniperf"] + "/characterization-e2e_time.pdf"
+    )
+    bc.gpu_bottleneck_plot.write_image(
+        bc.input_dirs["omniperf"] + "/characterization-gpu_time.pdf"
+    )
+    return bc

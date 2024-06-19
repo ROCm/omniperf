@@ -59,6 +59,15 @@ class Bottleneck_Classification:
         perf_df = pd.read_csv(
             os.path.join(self.input_dirs["omniperf"][0][0], "pmc_perf.csv")
         )
+        # Verify that roofline.csv exists
+        if not os.path.exists(
+            os.path.abspath(
+                os.path.join(self.input_dirs["omniperf"][0][0], "roofline.csv")
+            )
+        ):
+            console_error(
+                f"The Omniperf file {os.path.join(self.input_dirs['omniperf'][0][0], 'roofline.csv')} is required to use the --bottleneck-trace flag."
+            )
         roofline_df = pd.read_csv(
             os.path.join(self.input_dirs["omniperf"][0][0], "roofline.csv")
         )

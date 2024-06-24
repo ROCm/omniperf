@@ -46,14 +46,13 @@ in practice.
 
    .. grid-item-card:: Conceptual
 
-      * :doc:`conceptual/overview`
       * :doc:`conceptual/performance-model`
+      * :doc:`conceptual/glossary`
 
    .. grid-item-card:: Reference
 
       * :doc:`reference/compatible-accelerators`
       * :doc:`reference/faq`
-      * :doc:`reference/glossary`
       * :doc:`license`
 
 

@@ -1,14 +1,14 @@
 .. _high-level-design:
 
-High-level design
-=================
+High-level design of Omniperf
+=============================
 
 The architecture of Omniperf consists of three major components shown in the
 following diagram.
 
-Omniperf profiling
+Core Omniperf profiler
    Acquires raw performance counters via application replay using ``rocprof``.
-   Counters are stored in a comma-separated values format for further analysis.
+   Counters are stored in a comma-separated-values format for further analysis.
    It runs a set of accelerator-specific micro benchmarks to acquire
    hierarchical roofline data. The roofline model is not available on
    accelerators pre-MI200.

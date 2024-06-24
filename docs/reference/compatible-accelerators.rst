@@ -6,9 +6,11 @@
 Compatible accelerators
 ***********************
 
-The following table lists SoCs (System on Chip) tested for compatibility with Omniperf. See
-:doc:`rocm:reference/gpu-arch-specs` for full AMD accelerator and GPU
-specifications.
+The following table lists SoCs (System on Chip) tested for compatibility with
+Omniperf. See :doc:`rocm:reference/gpu-arch-specs` for full AMD accelerator and
+GPU specifications.
+
+.. _def-soc:
 
 .. note::
 

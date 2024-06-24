@@ -33,7 +33,7 @@ Omniperf supports both command line analysis and GUI analysis.
 Detailed feature list
 ---------------------
 
-* :doc:`Support for MI300, MI200, and MI100 <reference/compatible-accelerators>`
+* :doc:`Support for AMD Instinct MI300, MI200, and MI100 accelerators <reference/compatible-accelerators>`
 * Standalone GUI analyzer
 * GUI analyzer via Grafana and MongoDB
 * Dispatch filtering
@@ -41,7 +41,7 @@ Detailed feature list
 * GPU ID filtering
 * Baseline comparison
 * Multiple normalizations
-* *System info* panel
+* *System Info* panel
 * *System Speed-of-Light* panel
 * *Kernel Statistic* panel
 * *Memory Chart Analysis* panel

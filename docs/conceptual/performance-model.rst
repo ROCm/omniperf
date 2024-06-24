@@ -17,23 +17,23 @@ To best use profiling data, it's important to understand the role of various
 hardware blocks of AMD Instinct accelerators. This section describes each
 hardware block on the accelerator as interacted with by a software developer to
 give a deeper understanding of the metrics reported by profiling data. Refer to
-:doc:`<how-to/profiling>` for more practical examples and details on how to use
+:doc:`<how-to/profile-mode>` for more practical examples and details on how to use
 Omniperf to optimize your code.
 
 .. note::
 
-    In this guide, **MI2XX** refers to any of the CDNA2 architecture-based AMD
-    Instinct MI250X, MI250, and MI210 accelerators interchangeably in cases
-    where the exact product at hand is not vital.
+   In this guide, **MI2XX** refers to any of the CDNA2 architecture-based AMD
+   Instinct MI250X, MI250, and MI210 accelerators interchangeably in cases
+   where the exact product at hand is not vital.
 
-    For a comparison of AMD Instinct accelerator specifications, refer to
-    :doc:`Hardware specifications <rocm:reference/gpu-arch-specs>`. For product
-    details, see the
-    `MI250X <https://www.amd.com/en/products/accelerators/instinct/mi200/mi250x>`_,
-    `MI250 <https://www.amd.com/en/products/accelerators/instinct/mi200/mi250>`_,
-    and
-    `MI210 <https://www.amd.com/en/products/accelerators/instinct/mi200/mi210>`_
-    product pages.
+   For a comparison of AMD Instinct accelerator specifications, refer to
+   :doc:`Hardware specifications <rocm:reference/gpu-arch-specs>`. For product
+   details, see the
+   `MI250X <https://www.amd.com/en/products/accelerators/instinct/mi200/mi250x>`_,
+   `MI250 <https://www.amd.com/en/products/accelerators/instinct/mi200/mi250>`_,
+   and
+   `MI210 <https://www.amd.com/en/products/accelerators/instinct/mi200/mi210>`_
+   product pages.
 
 .. include:: ./includes/compute-unit.rst
 

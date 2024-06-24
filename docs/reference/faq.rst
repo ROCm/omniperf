@@ -12,7 +12,7 @@ Frequently asked questions and troubleshooting tips.
 ==========================================================================
 
 To interact with the Grafana GUI, you must sync data with the MongoDB backend.
-This interaction is done through **database** mode.
+This interaction is done through :ref:`database <modes-database>` mode.
 
 Pass the directory of your desired workload like so,
 
@@ -23,7 +23,8 @@ Pass the directory of your desired workload like so,
 2. python ast error: 'Constant' object has no attribute 'kind'
 ==============================================================
 
-This comes from a bug in the default astunparse 1.6.3 with python 3.8. Seems good with python 3.7 and 3.9.
+This comes from a bug in the default astunparse 1.6.3 with python 3.8. Seems
+good with python 3.7 and 3.9.
 
 Workaround:
 ```shell
@@ -43,23 +44,23 @@ $ export LANG=C.UTF-8
 
 1. Open MobaXterm
 2. In the top ribbon, select `Tunneling`
-``` {image} images/tunnel_demo1.png
-:alt: MobaXterm Tunnel Button
-:class: bg-primary
-:align: center
-```
+
+.. image:: ../data/faq/tunnel_demo1.png
+   :align: center
+   :alt: MobaXterm Tunnel button
+
 This pop up will appear
-``` {image} images/tunnel_demo2.png
-:alt: MobaXterm Pop Up
-:class: bg-primary
-:align: center
-```
+
+.. image:: ../data/faq/tunnel_demo2.png
+   :align: center
+   :alt: MobaXterm pop-up
+
 3. Press `New SSH tunnel`
-``` {image} images/tunnel_demo3.png
-:alt: MobaXterm Pop Up
-:class: bg-primary
-:align: center
-```
+
+.. image:: ../data/faq/tunnel_demo3.png
+   :align: center
+   :alt: MobaXterm pop-up
+
 4. Configure tunnel accordingly
 
    Local clients

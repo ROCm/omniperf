@@ -154,3 +154,4 @@ arguments.
    * - Interact with profiling results from CLI
      - ``analyze``
      - ``--path``
+

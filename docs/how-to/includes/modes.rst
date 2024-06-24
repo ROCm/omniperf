@@ -23,7 +23,8 @@ Profile mode
 
       $ omniperf profile --help
 
-See :doc:`profile-mode` for an in-depth walkthrough of profiling with Omniperf.
+See :doc:`profile-mode` to learn about this mode in depth and to get started
+profiling with Omniperf.
 
 .. _modes-analyze:
 
@@ -47,6 +48,9 @@ Analyze mode
 
       $ omniperf analyze --help
 
+See :doc:`analyze-mode` to learn about this mode in depth and to get started
+with analysis using Omniperf.
+
 .. _modes-database:
 
 Database mode
@@ -63,3 +67,6 @@ Database mode
    .. code-block:: shell
 
       $ omniperf database --help
+
+See :doc:`grafana-setup` to learn about setting up a Grafana server and database
+instance to make your profiling data more digestible and shareable.

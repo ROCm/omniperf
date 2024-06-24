@@ -14,7 +14,10 @@ via the ``$OMNIPERF_SHARE/sample`` directory when using the supplied modulefile.
 
 The examples in this section use a compiled version of this workload to
 demonstrate the use of Omniperf in MI accelerator performance analysis. Unless
-otherwise noted, the performance analysis is done on the MI200 platform.
+otherwise noted, the performance analysis is done on the
+:ref:`MI200 platform <def-soc>`.
+
+Learn about Omniperf's other modes in :ref:`modes`.
 
 Workload compilation
 ====================
@@ -39,8 +42,8 @@ The following example exhibits ``vcopy`` compilation.
    Releasing GPU memory
    Releasing CPU memory
 
-Profiling with Omniperf
-=======================
+Profiling
+=========
 
 Use the ``omniperf`` executable to acquire all necessary performance monitoring
 data through analysis of compute workloads.
@@ -164,12 +167,13 @@ Notice the two main stages in Omniperf's *default* profiling routine.
 2. The second stage collects data for the roofline analysis (this stage can be
    disabled using ``--no-roof``).
 
-At the end of profiling, you can find all resulting ``csv`` files in a SoC
-specific target directory; for example:
+At the end of profiling, you can find all resulting ``csv`` files in a
+:doc:`SoC <../reference/compatible-accelerators>`-specific target directory; for
+example:
 
-  - "MI300A" or "MI300X" for the AMD Instinct MI300 family of accelerators
-  - "MI200" for the AMD Instinct MI200 family of accelerators
-  - "MI100" for the AMD Instinct MI100 family of accelerators
+* "MI300A" or "MI300X" for the AMD Instinct™ MI300 family of accelerators
+* "MI200" for the AMD Instinct MI200 family of accelerators
+* "MI100" for the AMD Instinct MI100 family of accelerators
 
 The SoC names are generated as a part of Omniperf, and do not *always*
 distinguish between different accelerators in the same family; for instance,
@@ -208,7 +212,7 @@ To reduce profiling time and the counters collected, you should use profiling
 filters. Profiling filters and their functionality depend on the underlying
 profiler being used. While Omniperf is profiler-agnostic, this following is a
 detailed description of profiling filters available when using Omniperf with
-:doc:`ROCProfiler <rocprofiler:index>.
+:doc:`ROCProfiler <rocprofiler:index>`.
 
 Filtering options
 -----------------

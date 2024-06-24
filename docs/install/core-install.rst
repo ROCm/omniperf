@@ -31,7 +31,7 @@ right for you.
    :alt: Decision tree for installing and deploying Omniperf
 
 .. _core-install:
-   
+ 
 Core installation
 =================
 
@@ -168,7 +168,8 @@ Execution without modulefiles
 
 To use Omniperf without the companion modulefile, update your ``PATH``
 settings to enable access to the command line binary. If you installed Python
-dependencies in a shared location, also update your `PYTHONPATH` configuration.
+dependencies in a shared location, also update your ``PYTHONPATH``
+configuration.
 
 .. code-block:: shell
 
@@ -180,8 +181,8 @@ dependencies in a shared location, also update your `PYTHONPATH` configuration.
 ROCProfiler
 -----------
 
-Omniperf relies on ROCProfiler's ``rocprof`` binary during the profiling
-process. Normally, the path to this binary is detected automatically, but you
-can override the path by the setting the optional ``ROCPROF`` environment
-variable.
+Omniperf relies on :doc:`ROCProfiler <rocprofiler:index>`'s ``rocprof`` binary
+during the profiling process. Normally, the path to this binary is detected
+automatically, but you can override the path by the setting the optional
+``ROCPROF`` environment variable.
 

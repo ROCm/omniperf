@@ -3,6 +3,9 @@
 Normalization units
 ===================
 
+A user-configurable unit by which you can choose to normalize data. Options
+include:
+
 .. list-table::
    :header-rows: 1
 
@@ -31,11 +34,11 @@ Normalization units
        that is, the total runtime of the kernel in seconds, as measured by the
        :ref:`command processor <def-cp>`.
 
-By default, Omniperf uses the ``per_wave`` normalization. The ideal
-normalization will vary depending on your use case.
+By default, Omniperf uses the ``per_wave`` normalization.
 
-For instance, a ``per_second`` normalization may be useful for FLOP or bandwidth
+The ideal normalization varies depending on your use case. For instance, a
+``per_second`` normalization might be useful for FLOP or bandwidth
 comparisons, while a ``per_wave`` normalization could be useful to see how many
-(and what types) of instructions are used per wavefront, and a ``per_kernel``
+(and what types) of instructions are used per wavefront; a ``per_kernel``
 normalization may be useful to get the total aggregate values of metrics for
 comparison between different configurations.

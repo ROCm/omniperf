@@ -96,6 +96,9 @@ Installation steps
    from `<https://github.com/ROCm/omniperf/releases>`__. From there, untar and
    navigate into the top-level directory.
 
+   ..
+      {{ config.version }} substitutes the Omniperf version in ../conf.py
+
    .. datatemplate:nodata::
 
       .. code-block:: shell

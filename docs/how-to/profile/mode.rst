@@ -1,5 +1,5 @@
 .. meta::
-   :description: Omniperf client-side installation and deployment
+   :description: How to use Omniperf's profile mode
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD,
               profiling, profile mode
 
@@ -7,22 +7,48 @@
 Profile mode
 ************
 
+The following chapter walks you through Omniperf's core profiling features by
+example.
+
+Learn about analysis with Omniperf in :doc:`../analyze/mode`. For an overview of
+Omniperf's other modes, see :ref:`modes`.
+
+Profiling
+=========
+
+Use the ``omniperf`` executable to acquire all necessary performance monitoring
+data through analysis of compute workloads.
+
+Profiling with Omniperf yields the following benefits.
+
+* **Automate counter collection**: Omniperf handles all of your profiling via
+  preconfigured input files.
+* **Filtering**: Apply runtime filters to speed up the profiling process.
+* **Standalone roofline**: Isolate a subset of built-in metrics or build your
+  own profiling configuration.
+
+Run ``omniperf profile -h`` for more details. See
+:ref:`Basic usage <modes-profile>`.
+
+.. _profile-example:
+
+Profiling example
+-----------------
+
 The `<https://github.com/ROCm/omniperf>`__ repository includes source code for
 a sample GPU compute workload, ``vcopy.cpp``. A copy of this file is available
 in the ``share/sample`` subdirectory after a normal Omniperf installation, or
 via the ``$OMNIPERF_SHARE/sample`` directory when using the supplied modulefile.
 
-The examples in this section use a compiled version of this workload to
+The examples in this section use a compiled version of the ``vcopy`` workload to
 demonstrate the use of Omniperf in MI accelerator performance analysis. Unless
 otherwise noted, the performance analysis is done on the
 :ref:`MI200 platform <def-soc>`.
 
-Learn about Omniperf's other modes in :ref:`modes`.
-
 Workload compilation
-====================
+^^^^^^^^^^^^^^^^^^^^
 
-The following example exhibits ``vcopy`` compilation.
+The following example demonstrates compilation of ``vcopy``.
 
 .. code-block:: shell
 
@@ -34,7 +60,7 @@ The following example exhibits ``vcopy`` compilation.
    Finished allocating vectors on the CPU
    Finished allocating vectors on the GPU
    Finished copying vectors to the GPU
-   sw thinks it moved 1.000000 KB per wave 
+   sw thinks it moved 1.000000 KB per wave
    Total threads: 1048576, Grid Size: 4096 block Size:256, Wavefronts:16384:
    Launching the  kernel on the GPU
    Finished executing kernel
@@ -42,39 +68,19 @@ The following example exhibits ``vcopy`` compilation.
    Releasing GPU memory
    Releasing CPU memory
 
-Profiling
-=========
-
-Use the ``omniperf`` executable to acquire all necessary performance monitoring
-data through analysis of compute workloads.
-
-Profiling with Omniperf has the following benefits.
-
-* **Automate counter collection**: Omniperf handles all of your profiling via
-  preconfigured input files.
-* **Filtering**: Apply runtime filters to speed up the profiling process.
-* **Standalone roofline**: Isolate a subset of built-in metrics or build your
-  own profiling configuration.
-
-Run ``omniperf profile -h`` for more details. See
-:ref:`Basic usage <modes-profile>`.
-
-Profiling example
------------------
-
 The following sample command profiles the ``vcopy`` workload.
 
 .. code-block:: shell
- 
+
    $ omniperf profile --name vcopy -- ./vcopy -n 1048576 -b 256
- 
+
      ___                  _                  __ 
     / _ \ _ __ ___  _ __ (_)_ __   ___ _ __ / _|
    | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_ 
    | |_| | | | | | | | | | | |_) |  __/ |  |  _|
     \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|  
                            |_|                  
- 
+
    Omniperf version: 2.0.0
    Profiler choice: rocprofv1
    Path: /home/auser/repos/omniperf/sample/workloads/vcopy/MI200
@@ -83,11 +89,11 @@ The following sample command profiles the ``vcopy`` workload.
    Kernel Selection: None
    Dispatch Selection: None
    Hardware Blocks: All
- 
+
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    Collecting Performance Counters
    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
+
    [profiling] Current input file: /home/auser/repos/omniperf/sample/workloads/vcopy/MI200/perfmon/SQ_IFETCH_LEVEL.txt
       |-> [rocprof] RPL: on '240312_174329' from '/opt/rocm-5.2.1' in '/home/auser/repos/omniperf/src/omniperf'
       |-> [rocprof] RPL: profiling '""./vcopy -n 1048576 -b 256""'
@@ -116,9 +122,9 @@ The following sample command profiles the ``vcopy`` workload.
        |-> [rocprof] File '/home/auser/repos/omniperf/sample/workloads/vcopy/MI200/SQ_IFETCH_LEVEL.csv' is generating
       |-> [rocprof] 
    [profiling] Current input file: /home/auser/repos/omniperf/sample/workloads/vcopy/MI200/perfmon/SQ_INST_LEVEL_LDS.txt
- 
-   ... 
- 
+
+   ...
+
    [roofline] Checking for roofline.csv in /home/auser/repos/omniperf/sample/workloads/vcopy/MI200
    [roofline] No roofline data found. Generating...
    Empirical Roofline Calculation
@@ -168,7 +174,7 @@ Notice the two main stages in Omniperf's *default* profiling routine.
    disabled using ``--no-roof``).
 
 At the end of profiling, you can find all resulting ``csv`` files in a
-:doc:`SoC <../reference/compatible-accelerators>`-specific target directory; for
+:doc:`SoC <compatible-accelerators>`-specific target directory; for
 example:
 
 * "MI300A" or "MI300X" for the AMD Instinct™ MI300 family of accelerators
@@ -361,13 +367,14 @@ of the application (note zero-based indexing).
    ...
 
 Standalone roofline
--------------------
+===================
 
 If you are only interested in generating roofline analysis data try using
 ``--roof-only``. This will only collect counters relevant to roofline, as well
 as generate a standalone ``.pdf`` output of your roofline plot. 
 
-Standalone roofline options:
+Roofline options
+----------------
 
 ``--sort <desired_sort>``
    Allows you to specify whether you would like to overlay top kernel or top
@@ -387,7 +394,7 @@ the plot's key.
 
 
 Roofline only
-^^^^^^^^^^^^^
+-------------
 
 The following example demonstrates profiling roofline data only:
 
@@ -431,7 +438,7 @@ successfully.
 The following image is a sample ``empirRoof_gpu-ALL_fp32_fp64.pdf`` roofline
 plot.
 
-.. image:: ../data/profile/sample-roof-plot.png
+.. image:: ../../data/profile/sample-roof-plot.png
    :align: center
    :alt: Sample Omniperf roofline output
 

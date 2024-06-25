@@ -3,14 +3,17 @@
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD,
               install, deploy, Grafana, server, configuration,
 
-**************************************
-Setting up Grafana server for Omniperf
-**************************************
+****************************************
+Setting up a Grafana server for Omniperf
+****************************************
 
-A Grafana instance is *not required* to profile or analyze performance data
+A Grafana server is *not required* to profile or analyze performance data
 from the CLI. It's a supplementary mechanism to help you import performance
 data and examine it in a detailed
 `Grafana <https://github.com/grafana/grafana>`_ dashboard GUI.
+
+Learn about installing and configuring the main Omniperf tool in
+:ref:`core-install`.
 
 Setting up a Grafana instance for Omniperf requires the following basic software
 dependencies.
@@ -53,8 +56,7 @@ Set up persistent storage
 -------------------------
 
 Bind MongoDB to a directory on the host OS to create a local backup in case of a
-crash or reset. This is called "creating a persistent volume" in the Docker
-world.
+crash or reset.
 
 .. code-block:: bash
 
@@ -63,8 +65,12 @@ world.
    $ sudo docker volume create --driver local --opt type=none --opt device=/usr/local/persist/grafana-storage --opt o=bind grafana-storage
    $ sudo docker volume create --driver local --opt type=none --opt device=/usr/local/persist/mongodb --opt o=bind grafana-mongo-db
 
+.. tip::
+
+   In Docker lingo, this is called *creating a persistent volume*.
+
 .. _grafana-docker-container:
-   
+
 Build and launch the Docker container
 -------------------------------------
 
@@ -73,6 +79,7 @@ directory to begin.
 
 .. code-block:: bash
 
+   $ cd grafana
    $ sudo docker-compose build
    $ sudo docker-compose up -d
 

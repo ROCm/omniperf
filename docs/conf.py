@@ -34,9 +34,49 @@ with open("../VERSION", encoding="utf-8") as f:
         raise ValueError("VERSION not found!")
     version_number = match[1]
 
-extensions = ["rocm_docs", "sphinxcontrib.datatemplates"]
+extensions = ["rocm_docs", "sphinx.ext.extlinks", "sphinxcontrib.datatemplates"]
 external_toc_path = "./sphinx/_toc.yml"
+exclude_patterns = ["*/includes/*"]
+# frequently used external resources
+extlinks = {
+    "dev-sample": ("https://github.com/ROCm/omniperf/blob/dev/sample/%s", "%s"),
+    "prod-page": (
+        "https://www.amd.com/en/products/accelerators/instinct/%s.html",
+        "%s",
+    ),
+    "llvm-docs": ("https://llvm.org/docs/AMDGPUUsage.html#%s", "%s"),
+    "amd-lab-note": ("https://gpuopen.com/learn/amd-lab-notes/%s", "%s"),
+    "cdna2-white-paper": (
+        "https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf#page=%s",
+        "CDNA2 white paper (page %s)",
+    ),
+    "gcn-crash-course": (
+        "https://www.slideshare.net/DevCentralAMD/gs4106-the-amd-gcn-architecture-a-crash-course-by-layla-mah#%s",
+        "The AMD GCN Architecture - A Crash Course (slide %s)",
+    ),
+    "hip-training-pdf": (
+        "https://www.olcf.ornl.gov/wp-content/uploads/2019/09/AMD_GPU_HIP_training_20190906.pdf#page=%s",
+        "Introduction to AMD GPU Programming with HIP (slide %s)",
+    ),
+    "mantor-gcn-pdf": (
+        "https://old.hotchips.org/wp-content/uploads/hc_archives/hc24/HC24-3-ManyCore/HC24.28.315-AMD.GCN.mantor_v1.pdf#page=%s",
+        "AMD Radeon HD7970 with GCN Architecture (slide %s)",
+    ),
+    "mantor-vega10-pdf": (
+        "https://old.hotchips.org/wp-content/uploads/hc_archives/hc29/HC29.21-Monday-Pub/HC29.21.10-GPU-Gaming-Pub/HC29.21.120-Radeon-Vega10-Mantor-AMD-f1.pdf#page=%s",
+        "AMD Radeon Next Generation GPU Architecture - Vega10 (slide %s)",
+    ),
+    "mi200-isa-pdf": (
+        "https://www.amd.com/system/files/TechDocs/instinct-mi200-cdna2-instruction-set-architecture.pdf#page=%s",
+        "AMD Instinct MI200 ISA Reference Guide (page %s)",
+    ),
+    "hsa-runtime-pdf": (
+        "http://hsafoundation.com/wp-content/uploads/2021/02/HSA-Runtime-1.2.pdf#page=%s",
+        "HSA Runtime Programmer's Reference Manual (page %s)",
+    ),
+}
 
+# project info
 left_nav_title = f"Omniperf {version_number} documentation"
 html_theme = "rocm_docs_theme"
 html_theme_options = {"flavor": "rocm"}

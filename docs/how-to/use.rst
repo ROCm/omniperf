@@ -89,6 +89,8 @@ workload path.
 ``-p``, ``--path``
    Enables you to analyze existing profiling data in the Omniperf CLI.
 
+See :doc:`cli` for more detailed information.
+
 .. _basic-analyze-grafana:
 
 Analyze in the Grafana GUI
@@ -97,18 +99,110 @@ Analyze in the Grafana GUI
 To conduct a more in-depth analysis of profiling results, it's suggested to use
 a Grafana GUI with Omniperf. To interact with profiling results, import your
 data to the MongoDB instance included in the Omniperf Dockerfile. See
-:doc:`../install/grafana-setup`.
+:doc:`grafana-setup`.
 
 To interact with Grafana data, stored in the Omniperf database, enter
-``database`` :ref:`mode <modes>`; for example:
+``database`` :ref:`mode <modes-database>`; for example:
 
 .. code-block:: shell
 
    $ omniperf database --import [CONNECTION OPTIONS]
 
-.. include:: ./includes/modes.rst
+See :ref:`grafana-analysis` for more detailed information.
 
-.. include:: ./includes/global-options.rst
+.. _modes:
+
+Modes
+=====
+
+Modes change the fundamental behavior of the Omniperf command line tool.
+Depending on which mode you choose, different command line options become
+available.
+
+.. _modes-profile:
+
+Profile mode
+------------
+
+``profile``
+   Launches the target application on the local system using
+   :doc:`ROCProfiler <rocprofiler:index>`. Depending on the profiling options
+   chosen, selected kernels, dispatches, and or hardware components used by the
+   application are profiled. It stores results locally in an output folder:
+   ``./workloads/\<name>``.
+
+   .. code-block:: shell
+
+      $ omniperf profile --help
+
+See :doc:`profile/mode` to learn about this mode in depth and to get started
+profiling with Omniperf.
+
+.. _modes-analyze:
+
+Analyze mode
+------------
+
+``analyze``
+   Loads profiling data from the ``--path`` (``-p``) directory into the Omniperf
+   CLI analyzer where you have immediate access to profiling results and
+   generated metrics. It generates metrics from the entirety of your profiled
+   application or a subset identified through the Omniperf CLI analysis filters.
+
+   To generate a lightweight GUI interface, you can add the ``--gui`` flag to your
+   analysis command.
+
+   This mode is a middle ground to the highly detailed Omniperf Grafana GUI and
+   is great if you want immediate access to a hardware component you’re already
+   familiar with.
+
+   .. code-block:: shell
+
+      $ omniperf analyze --help
+
+See :doc:`analyze/mode` to learn about this mode in depth and to get started
+with analysis using Omniperf.
+
+.. _modes-database:
+
+Database mode
+-------------
+
+``database``
+   The Grafana analyzer GUI is built on a MongoDB database. ``--import``
+   profiling results to the DB to interact with the workload in Grafana or
+   ``--remove`` the workload from the DB.
+
+   Connection options need to be specified. See :ref:`grafana-analysis` for
+   more details.
+
+   .. code-block:: shell
+
+      $ omniperf database --help
+
+See :doc:`grafana-setup` to learn about setting up a Grafana server and database
+instance to make your profiling data more digestible and shareable.
+
+.. _global-options:
+
+Global options
+==============
+
+The Omniperf command line tool has a set of *global* utility options that are
+available across all modes. 
+
+``-v``, ``--version``
+   Prints the Omniperf version and exits.
+
+``-V``, ``--verbose``
+   Increases output verbosity. Use multiple times for higher levels of
+   verbosity.
+
+``-q``, ``--quiet``
+   Reduces output verbosity and runs quietly.
+
+``-s``, ``--specs``
+   Prints system specs and exits.
 
 .. note::
 

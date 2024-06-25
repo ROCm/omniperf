@@ -1,8 +1,14 @@
-.. _def-kernel-time:
-.. _def-kernel cycles:
+.. meta::
+   :description: Omniperf documentation and reference
+   :keywords: Omniperf, ROCm, glossary, definitions, terms, profiler, tool,
+              Instinct, accelerator, AMD
 
-Common terms
-============
+********
+Glossary
+********
+
+The following table briefly defines some terminology used in Omniperf interfaces
+and in this documentation.
 
 .. list-table::
    :header-rows: 1
@@ -27,7 +33,7 @@ Common terms
    * - Total CU cycles
      - The number of cycles the accelerator was active doing *any* work
        (that is, kernel cycles), multiplied by the number of
-       :ref:`compute units <def-cu>` on the accelerator. A
+       :doc:`compute units <compute-unit>` on the accelerator. A
        measure of the total possible active cycles the compute units could be
        doing work, useful for the normalization of metrics inside the CU.
      - Cycles
@@ -124,3 +130,96 @@ Common terms
        for instance, the :ref:`VALU <def-valu>` to need to execute both
        branches of a conditional with different sets of work-items active.
      - N/A
+
+.. include:: ./includes/normalization-units.rst
+
+.. _memory-spaces:
+
+Memory spaces
+=============
+
+AMD Instinct MI accelerators can access memory through multiple address spaces
+which may map to different physical memory locations on the system. The
+[table below](mspace-table) provides a view of how various types of memory used
+in HIP map onto these constructs:
+
+.. list-table::
+   :header-rows: 1
+
+   * - LLVM Address Space
+     - Hardware Memory Space
+     - HIP Terminology
+
+   * - Generic
+     - Flat
+     - N/A
+
+   * - Global
+     - Global
+     - Global
+
+   * - Local
+     - LDS
+     - LDS/Shared
+
+   * - Private
+     - Scratch
+     - Private
+
+   * - Constant
+     - Same as global
+     - Constant
+
+Below is a high-level description of the address spaces in the AMDGPU backend
+of LLVM:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Address space
+     - Description
+
+   * - Global
+     - Memory that can be seen by all threads in a process, and may be backed by
+       the local accelerator's HBM, a remote accelerator's HBM, or the CPU's
+       DRAM.
+
+   * - Local
+     - Memory that is only visible to a particular workgroup. On AMD's Instinct
+       accelerator hardware, this is stored in [LDS](LDS) memory.
+
+   * - Private
+     - Memory that is only visible to a particular [work-item](workitem)
+       (thread), stored in the scratch space on AMD's Instinct(tm) accelerators.
+
+   * - Constant
+     - Read-only memory that is in the global address space and stored on the
+       local accelerator's HBM.
+
+   * - Generic
+     - Used when the compiler cannot statically prove that a pointer is
+       addressing memory in a single (non-generic) address space. Mapped to Flat
+       on AMD's Instinct(tm) accelerators, the pointer could dynamically address
+       global, local, private or constant memory.
+
+`LLVM's documentation for AMDGPU Backend <https://llvm.org/docs/AMDGPUUsage.html#address-spaces>`
+will always have the most up-to-date information, and the interested reader is
+referred to this source for a more complete explanation.
+
+.. _memory-type:
+
+Memory type
+===========
+
+AMD Instinct accelerators contain a number of different memory allocation
+types to enable the HIP language's
+:doc:`memory coherency model <hip:how-to/programming_manual>`.
+These memory types are broadly similar between AMD Instinct accelerator
+generations, but may differ in exact implementation.
+
+In addition, these memory types *might* differ between accelerators on the same
+system, even when accessing the same memory allocation.
+
+For example, an :ref:`MI2XX <mixxx-note>` accelerator accessing "fine-grained"
+memory allocated local to that device may see the allocation as coherently
+cacheable, while a remote accelerator might see the same allocation as uncached.

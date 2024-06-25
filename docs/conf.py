@@ -28,32 +28,22 @@
 
 import re
 
-from rocm_docs import ROCmDocs
-
 with open("../VERSION", encoding="utf-8") as f:
     match = re.search(r"([0-9.]+)[^0-9.]+", f.read())
     if not match:
         raise ValueError("VERSION not found!")
     version_number = match[1]
 
+extensions = ["rocm_docs", "sphinxcontrib.datatemplates"]
+external_toc_path = "./sphinx/_toc.yml"
+
+left_nav_title = f"Omniperf {version_number} documentation"
+html_theme = "rocm_docs_theme"
+html_theme_options = {"flavor": "rocm"}
+html_title = left_nav_title
+
 project = "omniperf"
 author = "Advanced Micro Devices, Inc."
 copyright = "Copyright (c) 2024 Advanced Micro Devices, Inc. All rights reserved."
 version = version_number
 release = version_number
-html_title = f"Omniperf {version} documentation"
-
-external_toc_path = "./sphinx/_toc.yml"
-extensions = []
-
-docs_core = ROCmDocs(html_title)
-docs_core.setup()
-
-for sphinx_var in ROCmDocs.SPHINX_VARS:
-    globals()[sphinx_var] = getattr(docs_core, sphinx_var)
-
-# A string of rST that will be included at the beginning of every source file
-# that is read. Adds substitutions that should be available in every file.
-rst_prolog = """
-.. |TM| replace:: ™
-"""

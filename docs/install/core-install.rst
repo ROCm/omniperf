@@ -9,7 +9,7 @@ Installing and deploying Omniperf
 
 Omniperf consists of two installation components.
 
-* :ref:`Omniperf core installation <core-install>`
+* :ref:`Omniperf core installation <core-install>` (client-side)
 
   * Provides the core application profiling capability.
   * Allows the collection of performance counters, filtering by hardware
@@ -17,7 +17,7 @@ Omniperf consists of two installation components.
   * Provides a CLI-based analysis mode.
   * Provides a standalone web interface for importing analysis metrics.
 
-* :doc:`Grafana server for Omniperf <grafana-setup>` (optional)
+* :doc:`Grafana server for Omniperf <grafana-setup>` (server-side) (*optional*)
 
   * Hosts the MongoDB backend and Grafana instance.
   * Is packaged in a Docker container for easy setup.
@@ -96,31 +96,35 @@ Installation steps
    from `<https://github.com/ROCm/omniperf/releases>`__. From there, untar and
    navigate into the top-level directory.
 
-   .. code-block:: shell
+   .. datatemplate:nodata::
 
-      tar xfz omniperf-v{__VERSION__}.tar.gz
-      cd omniperf-v{__VERSION__}
+      .. code-block:: shell
+
+         tar xfz omniperf-v{{ config.version }}.tar.gz
+         cd omniperf-v{{ config.version }}
 
 #. Next, install Python dependencies and complete the Omniperf configuration and
    install process.
 
-   .. code-block:: shell
+   .. datatemplate:nodata::
 
-      # define top-level install path
-      export INSTALL_DIR=<your-top-level-desired-install-path>
+      .. code-block:: shell
 
-      # install python deps
-      python3 -m pip install -t ${INSTALL_DIR}/python-libs -r requirements.txt
+         # define top-level install path
+         export INSTALL_DIR=<your-top-level-desired-install-path>
 
-      # configure Omniperf for shared install
-      mkdir build
-      cd build
-      cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/{__VERSION__} \
-              -DPYTHON_DEPS=${INSTALL_DIR}/python-libs \
-              -DMOD_INSTALL_PATH=${INSTALL_DIR}/modulefiles ..
+         # install python deps
+         python3 -m pip install -t ${INSTALL_DIR}/python-libs -r requirements.txt
 
-      # install
-      make install
+         # configure Omniperf for shared install
+         mkdir build
+         cd build
+         cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}/{{ config.version }} \
+                 -DPYTHON_DEPS=${INSTALL_DIR}/python-libs \
+                 -DMOD_INSTALL_PATH=${INSTALL_DIR}/modulefiles ..
+
+         # install
+         make install
 
    .. tip::
 
@@ -130,10 +134,12 @@ Installation steps
 #. Upon successful installation, your top-level installation directory should
    look like this.
 
-   .. code-block:: shell
+   .. datatemplate:nodata::
 
-      $ ls $INSTALL_DIR
-      modulefiles  {__VERSION__}  python-libs
+      .. code-block:: shell
+
+         $ ls $INSTALL_DIR
+         modulefiles  {{ config.version }}  python-libs
 
 .. _core-install-modulefiles:
 
@@ -145,17 +151,19 @@ use with `Lmod <https://lmod.readthedocs.io>`_. On systems that support Lmod,
 you can register the Omniperf modulefile directory and setup your environment
 for execution of Omniperf as follows.
 
-.. code-block:: shell
+.. datatemplate:nodata::
 
-   $ module use $INSTALL_DIR/modulefiles
-   $ module load omniperf
-   $ which omniperf
-   /opt/apps/omniperf/{__VERSION__}/bin/omniperf
+   .. code-block:: shell
 
-   $ omniperf --version
-   ROC Profiler:   /opt/rocm-5.1.0/bin/rocprof
+      $ module use $INSTALL_DIR/modulefiles
+      $ module load omniperf
+      $ which omniperf
+      /opt/apps/omniperf/{{ config.version }}/bin/omniperf
 
-   omniperf (v{__VERSION__})
+      $ omniperf --version
+      ROC Profiler:   /opt/rocm-5.1.0/bin/rocprof
+
+      omniperf (v{{ config.version }})
 
 .. tip::
 
@@ -171,10 +179,12 @@ settings to enable access to the command line binary. If you installed Python
 dependencies in a shared location, also update your ``PYTHONPATH``
 configuration.
 
-.. code-block:: shell
+.. datatemplate:nodata::
 
-   export PATH=$INSTALL_DIR/{__VERSION__}/bin:$PATH
-   export PYTHONPATH=$INSTALL_DIR/python-libs
+   .. code-block:: shell
+
+      export PATH=$INSTALL_DIR/{{ config.version }}/bin:$PATH
+      export PYTHONPATH=$INSTALL_DIR/python-libs
 
 .. _core-install-rocprof-var:
 

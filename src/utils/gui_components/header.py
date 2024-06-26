@@ -22,8 +22,8 @@
 # SOFTWARE.
 ##############################################################################el
 
-from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash import html, dcc
 
 from utils import schema
 
@@ -43,7 +43,58 @@ def create_span(input):
     return {"label": html.Span(str(input), title=str(input)), "value": str(input)}
 
 
-def get_header(raw_pmc, input_filters, kernel_names):
+def get_bottleneck_section(bottleneck_obj):
+    if not bottleneck_obj:
+        return html.Div(
+            children=[
+                html.H3(
+                    "Bottleneck Classification not available.", style={"color": "white"}
+                ),
+                html.P(
+                    "No .proto file detected in workload directory. Ensure omnitrace is available on PATH and reprofile or explicitly provide the path to the .proto file using --trace flag. See 'omniperf analyze --help' for more information."
+                ),
+            ],
+        )
+    else:
+        return html.Div(
+            className="float-container",
+            children=[
+                html.Div(
+                    className="float-child",
+                    children=[
+                        html.H3("E2E Runtime Classification: CPU, GPU, Communication"),
+                        dcc.Graph(figure=bottleneck_obj.end_to_end_plot),
+                    ],
+                ),
+                html.Div(
+                    className="float-child",
+                    children=[
+                        html.H3(
+                            "GPU Kernel Runtime Breakdowns by Bottlenecks and Performance"
+                        ),
+                        dcc.Graph(figure=bottleneck_obj.gpu_bottleneck_plot),
+                    ],
+                ),
+                html.Div(
+                    className="disclaimer",
+                    children=[
+                        html.P(
+                            [
+                                "Note: Bottleneck Classification is still an experimental feature and may exhibit some inaccuracies. Please see ",
+                                html.A(
+                                    "https://github.com/ROCm/omniperf/discussions/378",
+                                    href="https://github.com/ROCm/omniperf/discussions/378",
+                                ),
+                                " for known issues and workarounds.",
+                            ]
+                        )
+                    ],
+                ),
+            ],
+        )
+
+
+def get_header(raw_pmc, input_filters, bottleneck_obj, kernel_names):
     kernel_names = list(
         map(
             str,
@@ -318,10 +369,7 @@ def get_header(raw_pmc, input_filters, kernel_names):
             html.Div(
                 className="row banner",
                 children=[
-                    html.H3(
-                        children=["Placeholder. Guided Analysis coming soon..."],
-                        style={"color": "white"},
-                    ),
+                    get_bottleneck_section(bottleneck_obj),
                 ],
             ),
             html.P(

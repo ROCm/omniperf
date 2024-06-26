@@ -29,6 +29,7 @@ import logging
 import sys
 import os
 import re
+import shutil
 from utils.utils import (
     capture_subprocess_output,
     run_prof,
@@ -39,6 +40,7 @@ from utils.utils import (
     console_debug,
     console_error,
     console_warning,
+    detect_omnitrace,
     print_status,
 )
 import config
@@ -53,6 +55,7 @@ class OmniProfiler_Base:
         self.__perfmon_dir = os.path.join(
             str(config.omniperf_home), "omniperf_soc", "profile_configs"
         )
+        self.__omnitrace_path = None
 
     def get_args(self):
         return self.__args
@@ -265,72 +268,9 @@ class OmniProfiler_Base:
         else:
             return df
 
-    # ----------------------------------------------------
-    # Required methods to be implemented by child classes
-    # ----------------------------------------------------
-    @abstractmethod
-    def pre_processing(self):
-        """Perform any pre-processing steps prior to profiling."""
-        console_debug("profiling", "pre-processing using %s profiler" % self.__profiler)
-
-        # verify soc compatibility
-        if self.__profiler not in self._soc.get_compatible_profilers():
-            console_error(
-                "%s is not enabled in %s. Available profilers include: %s"
-                % (
-                    self._soc.get_arch(),
-                    self.__profiler,
-                    self._soc.get_compatible_profilers(),
-                )
-            )
-        # verify not accessing parent directories
-        if ".." in str(self.__args.path):
-            console_error(
-                "Access denied. Cannot access parent directories in path (i.e. ../)"
-            )
-
-        # verify correct formatting for application binary
-        self.__args.remaining = self.__args.remaining[1:]
-        if self.__args.remaining:
-            if not os.path.isfile(self.__args.remaining[0]):
-                console_error(
-                    "Your command %s doesn't point to a executable. Please verify."
-                    % self.__args.remaining[0]
-                )
-            self.__args.remaining = " ".join(self.__args.remaining)
-        else:
-            console_error(
-                "Profiling command required. Pass application executable after -- at the end of options.\n\t\ti.e. omniperf profile -n vcopy -- ./vcopy 1048576 256"
-            )
-
-        # verify name meets MongoDB length requirements and no illegal chars
-        if len(self.__args.name) > 35:
-            console_error("-n/--name exceeds 35 character limit. Try again.")
-        if self.__args.name.find(".") != -1 or self.__args.name.find("-") != -1:
-            console_error("'-' and '.' are not permitted in -n/--name")
-
-    @abstractmethod
-    def run_profiling(self, version: str, prog: str):
-        """Run profiling."""
-        console_debug(
-            "profiling", "performing profiling using %s profiler" % self.__profiler
-        )
-
-        # log basic info
-        console_log(str(prog).title() + " version: " + str(version))
-        console_log("Profiler choice: %s" % self.__profiler)
-        console_log("Path: " + str(os.path.abspath(self.__args.path)))
-        console_log("Target: " + str(self._soc._mspec.gpu_model))
-        console_log("Command: " + str(self.__args.remaining))
-        console_log("Kernel Selection: " + str(self.__args.kernel))
-        console_log("Dispatch Selection: " + str(self.__args.dispatch))
-        if self.__args.ipblocks == None:
-            console_log("Hardware Blocks: All")
-        else:
-            console_log("Hardware Blocks: " + str(self.__args.ipblocks))
-
-        print_status("Collecting Performance Counters")
-
+    @demarcate
+    def run_profiler(self):
+        """Profile the application using selected profiler"""
         # show status bar in error-only mode
         disable_tqdm = True
         if self.__args.loglevel >= logging.ERROR:
@@ -400,6 +340,89 @@ class OmniProfiler_Base:
                 # TODO: Finish logic
                 console_error("Profiler not supported")
 
+    # ----------------------------------------------------
+    # Required methods to be implemented by child classes
+    # ----------------------------------------------------
+    @abstractmethod
+    def pre_processing(self):
+        """Perform any pre-processing steps prior to profiling."""
+        console_debug("profiling", "pre-processing using %s profiler" % self.__profiler)
+
+        # verify soc compatibility
+        if self.__profiler not in self._soc.get_compatible_profilers():
+            console_error(
+                "%s is not enabled in %s. Available profilers include: %s"
+                % (
+                    self._soc.get_arch(),
+                    self.__profiler,
+                    self._soc.get_compatible_profilers(),
+                )
+            )
+        # verify not accessing parent directories
+        if ".." in str(self.__args.path):
+            console_error(
+                "Access denied. Cannot access parent directories in path (i.e. ../)"
+            )
+
+        # verify correct formatting for application binary
+        self.__args.remaining = self.__args.remaining[1:]
+        if self.__args.remaining:
+            if not os.path.isfile(self.__args.remaining[0]):
+                console_error(
+                    "Your command %s doesn't point to a executable. Please verify."
+                    % self.__args.remaining[0]
+                )
+            self.__args.remaining = " ".join(self.__args.remaining)
+        else:
+            console_error(
+                "Profiling command required. Pass application executable after -- at the end of options.\n\t\ti.e. omniperf profile -n vcopy -- ./vcopy 1048576 256"
+            )
+
+        # verify name meets MongoDB length requirements and no illegal chars
+        if len(self.__args.name) > 35:
+            console_error("-n/--name exceeds 35 character limit. Try again.")
+        if self.__args.name.find(".") != -1 or self.__args.name.find("-") != -1:
+            console_error("'-' and '.' are not permitted in -n/--name")
+
+        # verify Omnitrace installation
+        if not self.__args.no_trace:
+            self.__omnitrace_path = detect_omnitrace()
+
+    @abstractmethod
+    def run_profiling(self, version: str, prog: str):
+        """Run profiling."""
+        # log basic info
+        console_log(str(prog).title() + " version: " + str(version))
+        console_log("Profiler choice: %s" % self.__profiler)
+        console_log("Path: " + str(os.path.abspath(self.__args.path)))
+        console_log("Target: " + str(self._soc._mspec.gpu_model))
+        console_log("Command: " + str(self.__args.remaining))
+        (
+            console_log("Binary Instumentation: ON")
+            if self.__omnitrace_path
+            else console_log("Binary Instumentation: OFF")
+        )
+        console_log("Kernel Selection: " + str(self.__args.kernel))
+        console_log("Dispatch Selection: " + str(self.__args.dispatch))
+        (
+            console_log("Hardware Blocks: All")
+            if self.__args.ipblocks == None
+            else console_log("Hardware Blocks: " + str(self.__args.ipblocks))
+        )
+
+        # Instrument the application via Omnitrace if available
+        if self.__omnitrace_path:
+            console_debug("profiling", "performing instrumentation")
+            print_status("Running Binary Instrumentation")
+            run_omnitrace(self.__args.path, self.__omnitrace_path, self.__args.remaining)
+
+        # Collect required perfmon
+        console_debug(
+            "profiling", "performing profiling using %s profiler" % self.__profiler
+        )
+        print_status(f"Collecting Performance Counters")
+        self.run_profiler()
+
     @abstractmethod
     def post_processing(self):
         """Perform any post-processing steps prior to profiling."""
@@ -421,3 +444,26 @@ class OmniProfiler_Base:
 
 def test_df_column_equality(df):
     return df.eq(df.iloc[:, 0], axis=0).all(1).all()
+
+
+def run_omnitrace(path, omnitrace, cmd):
+    """Instrument the application via Omnitrace"""
+    success, output = capture_subprocess_output(
+        [
+            omnitrace,
+            "--env",
+            f"OMNITRACE_OUTPUT_PATH={path}/omnitrace",
+            f"OMNITRACE_PERFETTO_FILE=instrumentation-output.proto",
+            "OMNITRACE_TIME_OUTPUT=OFF",
+            "OMNITRACE_USE_PID=OFF",
+            "--",
+            cmd,
+        ],
+        profile_type="trace",
+    )
+    if not success:
+        for line in output.split("\n"):
+            console_warning(line)
+        console_error(
+            "Instrumentation failed. Note: Instrumentation can be disabled with the '--no-trace' option."
+        )

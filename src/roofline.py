@@ -25,7 +25,7 @@
 from abc import ABC, abstractmethod
 import os
 import time
-from dash import dcc
+from dash import dcc, html
 from utils.utils import (
     mibench,
     gen_sysinfo,
@@ -34,7 +34,6 @@ from utils.utils import (
     console_log,
     console_debug,
 )
-from dash import html
 import plotly.graph_objects as go
 from utils.roofline_calc import calc_ai, constuct_roof
 import numpy as np

@@ -13,3 +13,4 @@ dash-bootstrap-components
 kaleido
 setuptools
 plotille
+perfetto

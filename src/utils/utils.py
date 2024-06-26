@@ -37,6 +37,7 @@ from pathlib import Path as path
 import config
 
 rocprof_cmd = ""
+omnitrace_cmd = ""
 
 
 def demarcate(function):
@@ -177,7 +178,27 @@ def detect_rocprof():
         return rocprof_cmd  # TODO: Do we still need to return this? It's not being used in the function call
 
 
-def capture_subprocess_output(subprocess_args, new_env=None, profileMode=False):
+def detect_omnitrace() -> str:
+    """Detect loaded omnitrace version. Resolve path and set cmd globally."""
+    global omnitrace_cmd
+    # detect omnitrace path
+    omnitrace_cmd = "omnitrace-instrument"
+    omnitrace_path = shutil.which(omnitrace_cmd)
+    if not omnitrace_path:
+        console_warning(
+            "tracing",
+            "Please verify installation of omnitrace. 'omnitrace-instrument' must be in PATH to enable Bottleneck Characterization.",
+        )
+        return None
+    else:
+        return omnitrace_cmd
+
+
+def capture_subprocess_output(subprocess_args, new_env=None, profile_type: str = None):
+    if profile_type and (profile_type != "perfmon" and profile_type != "trace"):
+        console_error(
+            f"Invalid profile type: {profile_type}. Choose from ['perfmon', 'trace']"
+        )
     console_debug("subprocess", subprocess_args)
     # Start subprocess
     # bufsize = 1 means output is line buffered
@@ -209,8 +230,10 @@ def capture_subprocess_output(subprocess_args, new_env=None, profileMode=False):
         # line to read when this function is called
         line = stream.readline()
         buf.write(line)
-        if profileMode:
+        if profile_type == "perfmon":
             console_log(rocprof_cmd, line.strip(), indent_level=1)
+        elif profile_type == "trace":
+            console_log(omnitrace_cmd, line.strip(), indent_level=1)
         else:
             console_log(line.strip())
 
@@ -269,11 +292,11 @@ def run_prof(fname, profiler_options, workload_dir, mspec, loglevel):
     # profile the app
     if new_env:
         success, output = capture_subprocess_output(
-            [rocprof_cmd] + options, new_env=new_env, profileMode=True
+            [rocprof_cmd] + options, new_env=new_env, profile_type="perfmon"
         )
     else:
         success, output = capture_subprocess_output(
-            [rocprof_cmd] + options, profileMode=True
+            [rocprof_cmd] + options, profile_type="perfmon"
         )
 
     if not success:

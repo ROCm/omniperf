@@ -77,7 +77,12 @@ class webui_analysis(OmniAnalyze_Base):
             children=[
                 dbc.Spinner(
                     children=[
-                        get_header(base_data.raw_pmc, input_filters, filt_kernel_names),
+                        get_header(
+                            base_data.raw_pmc,
+                            input_filters,
+                            self._bottleneck_characterization,
+                            filt_kernel_names,
+                        ),
                         html.Div(id="container", children=[]),
                     ],
                     fullscreen=True,
@@ -296,7 +301,7 @@ class webui_analysis(OmniAnalyze_Base):
 
     @demarcate
     def run_analysis(self):
-        """Run CLI analysis."""
+        """Run GUI analysis."""
         super().run_analysis()
         args = self.get_args()
         input_filters = {

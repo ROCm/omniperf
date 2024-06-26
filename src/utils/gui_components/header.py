@@ -45,11 +45,15 @@ def create_span(input):
 
 def get_bottleneck_section(bottleneck_obj):
     if not bottleneck_obj:
-        return html.H3(
+        return html.Div(
             children=[
-                "Include the '--bottleneck-trace' option to load a bottleneck classification for your workload."
+                html.H3(
+                    "Bottleneck Classification not available.", style={"color": "white"}
+                ),
+                html.P(
+                    "No .proto file detected in workload directory. Ensure omnitrace is available on PATH and reprofile or explicitly provide the path to the .proto file using --trace flag. See 'omniperf analyze --help' for more information."
+                ),
             ],
-            style={"color": "white"},
         )
     else:
         return html.Div(

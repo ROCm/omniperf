@@ -197,6 +197,13 @@ Examples:
             "--kernel-summaries", default=False, dest="summaries", help=argparse.SUPPRESS
         )
     profile_group.add_argument(
+        "--no-trace",
+        required=False,
+        default=False,
+        action="store_true",
+        help="\t\t\tExplicitly disable binary instrumentation via Omnitrace. Used for Bottleneck Characterization.",
+    )
+    profile_group.add_argument(
         "--join-type",
         metavar="",
         required=False,
@@ -457,7 +464,7 @@ Examples:
         help="\t\tActivate a GUI to interate with Omniperf metrics.\n\t\tOptionally, specify port to launch application (DEFAULT: 8050)",
     )
     analyze_group.add_argument(
-        "--bottleneck-trace",
+        "--trace",
         required=False,
         metavar="",
         help="\t\tSpecify path to Omnitrace (.proto) output to be used in bottleneck characterization.",

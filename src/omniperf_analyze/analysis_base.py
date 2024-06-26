@@ -233,19 +233,29 @@ class OmniAnalyze_Base:
     def run_analysis(self):
         """Run analysis."""
         console_debug("analysis", "generating analysis")
-        if self.get_args().bottleneck_trace:
-            self._bottleneck_characterization = get_bottleneck_characterization(
-                self.get_args()
-            )
+        self._bottleneck_characterization = get_bottleneck_characterization(
+            self.get_args()
+        )
 
 
 def get_bottleneck_characterization(args):
+    # Default path for omnitrace output (can be overriden using --trace flag)
+    default_omnitrace_proto = args.path[0][0] + "/omnitrace/instrumentation-output.proto"
     # Instantiate the Bottleneck Classification object
-    bc = Bottleneck_Classification(
-        omniperf_dir=args.path[0][0],
-        omnitrace_dir=args.bottleneck_trace,
-        treshold_ratio=0.8,
-    )
+    if args.trace:
+        bc = Bottleneck_Classification(
+            omniperf_dir=args.path[0][0],
+            omnitrace_dir=args.trace,
+            treshold_ratio=0.8,
+        )
+    elif os.path.isfile(default_omnitrace_proto):
+        bc = Bottleneck_Classification(
+            omniperf_dir=args.path[0][0],
+            omnitrace_dir=default_omnitrace_proto,
+            treshold_ratio=0.8,
+        )
+    else:
+        return None
     # make sure that the gpu ids match between omnitrace and omniperf
     if not (
         list(bc.omnitrace_data["gpu_ids"]).sort()

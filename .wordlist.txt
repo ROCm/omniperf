@@ -1,0 +1,5 @@
+Grafana
+MobaXterm
+Normalizations
+Omniperf's
+roofline

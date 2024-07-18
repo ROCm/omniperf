@@ -90,13 +90,21 @@ def show_all(args, runs, archConfigs, output):
                         elif header not in comparable_columns:
                             if (
                                 type == "raw_csv_table"
-                                and table_config["source"] == "pmc_kernel_top.csv"
+                                and (
+                                    table_config["source"] == "pmc_kernel_top.csv"
+                                    or table_config["source"] == "pmc_dispatch_info.csv"
+                                )
                                 and header == "Kernel_Name"
                             ):
                                 # NB: the width of kernel name might depend on the header of the table.
-                                adjusted_name = base_df["Kernel_Name"].apply(
-                                    lambda x: string_multiple_lines(x, 40, 3)
-                                )
+                                if table_config["source"] == "pmc_kernel_top.csv":
+                                    adjusted_name = base_df["Kernel_Name"].apply(
+                                        lambda x: string_multiple_lines(x, 40, 3)
+                                    )
+                                else:
+                                    adjusted_name = base_df["Kernel_Name"].apply(
+                                        lambda x: string_multiple_lines(x, 80, 4)
+                                    )
                                 df = pd.concat([df, adjusted_name], axis=1)
                             elif type == "raw_csv_table" and header == "Info":
                                 for run, data in runs.items():
@@ -155,17 +163,17 @@ def show_all(args, runs, archConfigs, output):
                                             + "%)"
                                         )
                                         df = pd.concat([df, t_df], axis=1)
-                                        df["Abs Diff"] = absolute_diff
 
                                         # DEBUG: When in a CI setting and flag is set,
                                         #       then verify metrics meet threshold requirement
-                                        if args.report_diff:
-                                            if (
-                                                header in ["Value", "Count", "Avg"]
-                                                and t_df_pretty.abs()
-                                                .gt(args.report_diff)
-                                                .any()
-                                            ):
+                                        if (
+                                            header in ["Value", "Count", "Avg"]
+                                            and t_df_pretty.abs()
+                                            .gt(args.report_diff)
+                                            .any()
+                                        ):
+                                            df["Abs Diff"] = absolute_diff
+                                            if args.report_diff:
                                                 violation_idx = t_df_pretty.index[
                                                     t_df_pretty.abs() > args.report_diff
                                                 ]

@@ -23,12 +23,12 @@
 ##############################################################################el
 
 import os
+import shlex
 from omniperf_profile.profiler_base import OmniProfiler_Base
 from utils.utils import (
     demarcate,
     console_log,
     replace_timestamps,
-    fixup_rocprofv2_dispatch_ids,
 )
 
 
@@ -43,17 +43,13 @@ class rocprof_v2_profiler(OmniProfiler_Base):
 
     def get_profiler_options(self, fname):
         fbase = os.path.splitext(os.path.basename(fname))[0]
-        app_cmd = self.get_args().remaining
+        app_cmd = shlex.split(self.get_args().remaining)
         args = [
             # v2 requires output directory argument
             "-d",
             self.get_args().path + "/" + "out",
-            # v2 does not require csv extension
-            "-o",
-            fbase,
-            # v2 doen not require quotes on cmd
-            app_cmd,
         ]
+        args.extend(app_cmd)
         return args
 
     # -----------------------
@@ -87,7 +83,5 @@ class rocprof_v2_profiler(OmniProfiler_Base):
         if self.ready_to_profile:
             # Manually join each pmc_perf*.csv output
             self.join_prof()
-            # Correct dispatch ids
-            fixup_rocprofv2_dispatch_ids(self.get_args().path)
             # Replace timestamp data to solve a known rocprof bug
             replace_timestamps(self.get_args().path)

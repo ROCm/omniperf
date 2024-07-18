@@ -9,13 +9,13 @@ Omniperf.
 
 This example is compiled using ``c++17`` support:
 
-.. code:: shell
+.. code-block:: shell
 
    $ hipcc -O3 ipc.hip -o ipc -std=c++17
 
 and was run on an MI250 CDNA2 accelerator:
 
-.. code:: shell
+.. code-block:: shell
 
    $ omniperf profile -n ipc --no-roof -- ./ipc
 
@@ -30,7 +30,7 @@ Design note
 The kernels in this example all execute a specific assembly operation
 ``N`` times (1000, by default), for instance the ``vmov`` kernel:
 
-.. code:: cpp
+.. code-block:: cpp
 
    template<int N=1000>
    __device__ void vmov_op() {
@@ -58,7 +58,7 @@ Now we can use our test to measure the achieved instructions-per-cycle
 of various types of instructions. We start with a simple :ref:`VALU <desc-valu>`
 operation, i.e., a ``v_mov_b32`` instruction, e.g.:
 
-.. code:: asm
+.. code-block:: asm
 
    v_mov_b32 v0, v1
 
@@ -66,7 +66,7 @@ This instruction simply copies the contents from the source register
 (``v1``) to the destination register (``v0``). Investigating this kernel
 with Omniperf, we see:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf analyze -p workloads/ipc/mi200/ --dispatch 7 -b 11.2
    <...>
@@ -267,13 +267,13 @@ we choose a ``s_nop`` instruction, which according to the
 
 Here we choose to use a no-op of:
 
-.. code:: asm
+.. code-block:: asm
 
    s_nop 0x0
 
 to make our point. Running this kernel through Omniperf yields:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf analyze -p workloads/ipc/mi200/ --dispatch 9 -b 11.2
    <...>
@@ -331,7 +331,7 @@ logical question then is, ‘what *is* this metric counting in our
 
 The generated assembly looks something like:
 
-.. code:: asm
+.. code-block:: asm
 
    ;;#ASMSTART
    s_nop 0x0
@@ -366,7 +366,7 @@ Next, we explore a simple `SALU <desc-salu>` kernel in our on-going IPC and
 utilization example. For this case, we select a simple scalar move
 operation, e.g.:
 
-.. code:: asm
+.. code-block:: asm
 
    s_mov_b32 s0, s1
 
@@ -374,7 +374,7 @@ which, in analogue to our :ref:`v_mov <ipc-valu-utilization>` example, copies th
 contents of the source scalar register (``s1``) to the destination
 scalar register (``s0``). Running this kernel through Omniperf yields:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf analyze -p workloads/ipc/mi200/ --dispatch 10 -b 11.2
    <...>
@@ -422,7 +422,7 @@ VALU Active Threads
 For our final IPC/Utilization example, we consider a slight modification
 of our `v_mov <ipc-valu-utlization>` example:
 
-.. code:: cpp
+.. code-block:: cpp
 
    template<int N=1000>
    __global__ void vmov_with_divergence() {
@@ -434,7 +434,7 @@ That is, we wrap our :ref:`VALU <desc-valu>` operation inside a conditional
 where only one lane in our wavefront is active. Running this kernel
 through Omniperf yields:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf analyze -p workloads/ipc/mi200/ --dispatch 11 -b 11.2
    <...>

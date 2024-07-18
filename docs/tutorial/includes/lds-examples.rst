@@ -15,7 +15,7 @@ v5.6.0, and Omniperf v2.0.0.
 
    $ hipcc -O3 lds.hip -o lds
 
-Finally, we generate our omniperf profile as:
+Finally, we generate our ``omniperf profile`` as:
 
 .. code-block:: shell-session
 

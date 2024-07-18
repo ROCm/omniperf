@@ -705,7 +705,7 @@ Arithmetic Operations
 
 .. figure:: ../../data/analyze/grafana/cu-arith-ops_panel.png
    :align: center
-   :alt: Arithmentic Operations panel in Omniperf Grafana
+   :alt: Arithmetic Operations panel in Omniperf Grafana
 
    The total number of floating-point and integer operations executed in various
    precisions.

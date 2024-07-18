@@ -478,7 +478,7 @@ VMEM instruction mix
 
 This section breaks down the types of vector memory (VMEM) instructions
 that were issued. Refer to the
-`Instruction Counts metrics section <desc-ta>` of address-processor frontend of
+`Instruction Counts metrics section <desc-ta>` of address-processor front end of
 the vL1D cache for a description of these VMEM instructions.
 
 .. _mfma-instruction-mix:

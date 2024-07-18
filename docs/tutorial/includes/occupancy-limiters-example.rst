@@ -199,7 +199,7 @@ LDS limited
 
 To examine an LDS limited example, we must change our kernel slightly:
 
-.. code:: cpp
+.. code-block:: cpp
 
    constexpr size_t fully_allocate_lds = 64ul * 1024ul / sizeof(double);
    __launch_bounds__(256)
@@ -305,7 +305,7 @@ SGPR limited
 Finally, we modify our kernel once more to make it limited by
 `SGPRs <salu>`__:
 
-.. code:: cpp
+.. code-block:: cpp
 
    constexpr int sgprlim = 1;
    __launch_bounds__(1024, 8)
@@ -331,7 +331,7 @@ use ``sgprlim``) of the array to reduce VGPR/Scratch usage.
 
 This results in the following assembly metadata for this kernel:
 
-.. code:: asm
+.. code-block:: asm
 
            .size   _Z9sgprboundiPd, .Lfunc_end3-_Z9sgprboundiPd
                                            ; -- End function
@@ -349,7 +349,7 @@ This results in the following assembly metadata for this kernel:
 
 Analyzing this workload yields:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf analyze -p workloads/occupancy/mi200/ -b 2.1.15 6.2 7.1.5 7.1.6 7.1.7 7.1.8 7.1.9 --dispatch 5
    <...>

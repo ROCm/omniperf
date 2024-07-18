@@ -46,7 +46,7 @@ Design note
 ^^^^^^^^^^^
 
 This section explains some of the more peculiar lines of code in the
-example, for example, the use of compiler builtins and explicit address space
+example, for example, the use of compiler built-ins and explicit address space
 casting, and so forth.
 
 .. code-block:: cpp

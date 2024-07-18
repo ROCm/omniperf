@@ -9,7 +9,7 @@ Infinity Fabric transactions
 
 This following code snippet launches a simple read-only kernel.
 
-.. code:: cpp
+.. code-block:: cpp
 
    // the main streaming kernel
    __global__ void kernel(int* x, size_t N, int zero) {
@@ -25,12 +25,12 @@ This following code snippet launches a simple read-only kernel.
      }
    }
 
-This happens twice -- once as a warmup and once for analysis. Note that the
+This happens twice -- once as a warm-up and once for analysis. Note that the
 buffer ``x`` is initialized to all zeros via a call to ``hipMemcpy`` on the
 host before the kernel is ever launched. Therefore, the following conditional
 is identically false -- and thus we expect no writes.
 
-.. code:: cpp
+.. code-block:: cpp
 
    if (sum != 0) { ...
 
@@ -62,7 +62,7 @@ Experiment #1:  Coarse-grained, accelerator-local HBM reads
 In our first experiment, we consider the simplest possible case, a
 ``hipMalloc``\ ’d buffer that is local to our current accelerator:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n coarse_grained_local --no-roof -- ./fabric -t 1 -o 0
    Using:
@@ -129,7 +129,7 @@ In addition, we see a small amount of :ref:`uncached <memory-type>` reads
 
 * Kernel arguments
 
-* Coordinate parameters (e.g., blockDim.z) that were not initialized by the
+* Coordinate parameters (e.g., ``blockDim.z``) that were not initialized by the
   hardware, etc. and may account for some of our ‘remote’ read requests
   (**17.5.4**), e.g., reading from CPU DRAM.
 
@@ -161,7 +161,7 @@ accelerator. Our code uses the ``hipExtMallocWithFlag`` API with the
    to set the environment variable ``HSA_FORCE_FINE_GRAIN_PCIE=1`` to enable
    this memory type.
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n fine_grained_local --no-roof -- ./fabric -t 0 -o 0
    Using:
@@ -241,7 +241,7 @@ finally resetting the device back to the default, e.g.,
 Although we have not changed our code significantly, we do see a
 substantial change in the L2-Fabric metrics:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n fine_grained_remote --no-roof -- ./fabric -t 0 -o 2
    Using:
@@ -331,7 +331,7 @@ In this experiment, we move our :ref:`fine-grained <memory-type>` allocation to
 be owned by the CPU’s DRAM. We accomplish this by allocating host-pinned
 fine-grained memory using the ``hipHostMalloc`` API:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n fine_grained_host --no-roof -- ./fabric -t 0 -o 1
    Using:
@@ -384,8 +384,8 @@ fine-grained memory using the ``hipHostMalloc`` API:
 
 Here we see *almost* the same results as in the
 :ref:`previous experiment <infinity-fabric-ex3>`, however now as we are crossing
-a PCIe bus to the CPU, we see that the Infinity Fabric Read stalls (17.4.1)
-have shifted to be a PCIe stall (17.4.2). In addition, as (on this
+a PCIe bus to the CPU, we see that the Infinity Fabric Read stalls (**17.4.1**)
+have shifted to be a PCIe stall (**17.4.2**). In addition, as (on this
 system) the PCIe bus has a lower peak bandwidth than the AMD Infinity
 Fabric connection between two accelerators, we once again observe an
 increase in the percentage of stalls on this interface.
@@ -395,7 +395,7 @@ increase in the percentage of stalls on this interface.
    Had we performed this same experiment on an
    `MI250X system <https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf>`_,
    these transactions would again have been marked as Infinity Fabric Read
-   stalls (17.4.1), as the CPU is connected to the accelerator via AMD Infinity
+   stalls (**17.4.1**), as the CPU is connected to the accelerator via AMD Infinity
    Fabric.
 
 .. _infinity-fabric-ex5:
@@ -408,7 +408,7 @@ In our next fabric experiment, we change our CPU memory allocation to be
 ``hipHostMalloc`` API the ``hipHostMallocNonCoherent`` flag, to mark the
 allocation as coarse-grained:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n coarse_grained_host --no-roof -- ./fabric -t 1 -o 1
    Using:
@@ -459,11 +459,11 @@ allocation as coarse-grained:
    │ 17.5.4  │ Remote Read     │ 671088645.00 │ 671088645.00 │ 671088645.00 │ Req per kernel │
    ╘═════════╧═════════════════╧══════════════╧══════════════╧══════════════╧════════════════╛
 
-Here we see a similar result to our `previous
-experiment <Fabric_exp_4>`__, with one key difference: our accesses are
-no longer marked as Uncached Read requests (17.2.3, 17.5.1), but instead
-are 64B read requests (17.5.2), as observed in our `Coarse-grained,
-accelerator-local HBM <Fabric_exp_1>`__ experiment.
+Here we see a similar result to our
+:ref:`previous experiment <infinity-fabric-ex4>`, with one key difference: our
+accesses are no longer marked as Uncached Read requests (**17.2.3, 17.5.1**), but instead
+are 64B read requests (**17.5.2**), as observed in our
+:ref:`Coarse-grained, accelerator-local HBM <infinity-fabric-ex1>` experiment.
 
 .. _infinity-fabric-ex6:
 
@@ -471,12 +471,12 @@ Experiment #6: Fine-grained, CPU-DRAM writes
 --------------------------------------------
 
 Thus far in our exploration of the L2-Fabric interface, we have
-primarily focused on read operations. However, in `our request flow
-diagram <fabric-fig>`__, we note that writes are counted separately. To
-obeserve this, we use the ‘-p’ flag to trigger write operations to
-fine-grained memory allocated on the host:
+primarily focused on read operations. However, in
+:ref:`our request flow diagram <l2-request-flow>`, we note that writes are
+counted separately. To observe this, we use the ``-p`` flag to trigger write
+operations to fine-grained memory allocated on the host:
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n fine_grained_host_write --no-roof -- ./fabric -t 0 -o 1 -p 1
    Using:
@@ -533,25 +533,29 @@ fine-grained memory allocated on the host:
    │ 17.5.10 │ Atomic                  │         0.00 │         0.00 │         0.00 │ Req per kernel │
    ╘═════════╧═════════════════════════╧══════════════╧══════════════╧══════════════╧════════════════╛
 
-Here we notice a few changes in our request pattern: - As expected, the
-requests have changed from 64B Reads to 64B Write requests (17.5.7), -
-these requests are homed in on a “remote” destination (17.2.6, 17.5.9),
-as expected, and, - these are also counted as a single Uncached Write
-request (17.5.6).
+Here we notice a few changes in our request pattern:
+
+* As expected, the requests have changed from 64B Reads to 64B Write requests
+  (**17.5.7**),
+
+* these requests are homed in on a “remote” destination (**17.2.6, 17.5.9**), as
+  expected, and,
+
+* these are also counted as a single Uncached Write request (**17.5.6**).
 
 In addition, there rather significant changes in the bandwidth values
-reported: - the “L2-Fabric Write and Atomic” bandwidth metric (17.2.4)
-reports about 40GiB of data written across Infinity Fabric(tm) while, -
-the “Remote Write and Traffic” metric (17.2.5) indicates that nearly
+reported: - the “L2-Fabric Write and Atomic” bandwidth metric (**17.2.4**)
+reports about 40GiB of data written across Infinity Fabric while, -
+the “Remote Write and Traffic” metric (**17.2.5**) indicates that nearly
 100% of these request are being directed to a remote source
 
 The precise meaning of these metrics are explored in the
 :ref:`subsequent experiment <infinity-fabric-ex7>`.
 
-Finally, we note that we see no write stalls on the PCIe(r) bus
-(17.4.3). This is because writes over a PCIe(r) bus `are
-non-posted <https://members.pcisig.com/wg/PCI-SIG/document/10912>`__,
-i.e., they do not require acknowledgement.
+Finally, we note that we see no write stalls on the PCIe bus
+(**17.4.3**). This is because writes over a PCIe bus `are
+non-posted <https://members.pcisig.com/wg/PCI-SIG/document/10912>`_,
+that is, they do not require acknowledgement.
 
 .. _infinity-fabric-ex7:
 
@@ -561,7 +565,7 @@ Experiment #7: Fine-grained, CPU-DRAM atomicAdd
 Next, we change our experiment to instead target ``atomicAdd``
 operations to the CPU’s DRAM.
 
-.. code:: shell-session
+.. code-block:: shell-session
 
    $ omniperf profile -n fine_grained_host_add --no-roof -- ./fabric -t 0 -o 1 -p 2
    Using:
@@ -618,14 +622,18 @@ operations to the CPU’s DRAM.
    │ 17.5.10 │ Atomic                  │ 13421773.00 │ 13421773.00 │ 13421773.00 │ Req per kernel │
    ╘═════════╧═════════════════════════╧═════════════╧═════════════╧═════════════╧════════════════╛
 
-In this case, there is quite a lot to unpack: - For the first time, the
-32B Write requests (17.5.5) are heavily used. - These correspond to
-Atomic requests (17.2.7, 17.5.10), and are counted as Uncached Writes
-(17.5.6). - The L2-Fabric Write and Atomic bandwidth metric (17.2.4)
-shows about 0.4 GiB of traffic. For convenience, the sample reduces the
-default problem size for this case due to the speed of atomics across a
-PCIe(r) bus, and finally, - The traffic is directed to a remote device
-(17.2.6, 17.5.9)
+In this case, there is quite a lot to unpack:
+
+- For the first time, the 32B Write requests (**17.5.5**) are heavily used.
+
+- These correspond to Atomic requests (**17.2.7, 17.5.10**), and are counted as
+  Uncached Writes (**17.5.6**).
+
+- The L2-Fabric Write and Atomic bandwidth metric (**17.2.4**) shows about 0.4
+  GiB of traffic. For convenience, the sample reduces the default problem size
+  for this case due to the speed of atomics across a PCIe bus, and finally,
+
+- The traffic is directed to a remote device (**17.2.6, 17.5.9**)
 
 Let us consider what an “atomic” request means in this context. Recall
 that we are discussing memory traffic flowing from the L2 cache, the
@@ -634,9 +642,8 @@ MI250, to e.g., the CPU’s DRAM. In this light, we see that these
 requests correspond to *system scope* atomics, and specifically in the
 case of the MI250, to fine-grained memory!
 
-.. raw:: html
-
-   <!-- Leave as possible future experiment to add
+..
+   `Leave as possible future experiment to add
 
 
    ### Experiment #2 - Non-temporal writes
@@ -647,9 +654,8 @@ case of the MI250, to fine-grained memory!
    ```
    template<typename T>
    __device__ void store (T* ptr, T val) {
-     __builtin_nontemporal_store(val, ptr);
+    __builtin_nontemporal_store(val, ptr);
    }
    ```
 
-   On an AMD [MI2XX](2xxnote) accelerator, for FP32 values this will generate a `global_store_dword` instruction, with the `glc` and `slc` bits set, described in [section 10.1](https://developer.amd.com/wp-content/resources/CDNA2_Shader_ISA_4February2022.pdf) of the CDNA2 ISA guide.
-    -->
+   On an AMD MI2XX accelerator, for FP32 values this will generate a `global_store_dword` instruction, with the `glc` and `slc` bits set, described in [section 10.1](https://developer.amd.com/wp-content/resources/CDNA2_Shader_ISA_4February2022.pdf) of the CDNA2 ISA guide.`

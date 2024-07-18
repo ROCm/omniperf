@@ -136,7 +136,7 @@ Busy / stall metrics
 
 When executing vector memory instructions, the compute unit must send an
 address (and in the case of writes/atomics, data) to the address
-processing unit. When the frontend cannot accept any more addresses, it
+processing unit. When the front-end cannot accept any more addresses, it
 must backpressure the wave-issue logic for the VMEM pipe and prevent the
 issue of a vector memory instruction until a previously issued memory
 operation has been processed.
@@ -500,7 +500,7 @@ vL1D cache access metrics
 -------------------------
 
 The vL1D cache access metrics broadly indicate the type of requests
-incoming from the :ref:`cache frontend <desc-ta>`, the number of requests that
+incoming from the :ref:`cache front-end <desc-ta>`, the number of requests that
 were serviced by the vL1D, and the number & type of outgoing requests to
 the :doc:`L2 cache <l2-cache>`. In addition, this section includes the
 approximate latencies of accesses to the cache itself, along with
@@ -728,7 +728,7 @@ Omniperf reports the following vL1D data-return path metrics:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`. This is expected to be
        the sum of global/generic and spill/stack stores counted by the
-       :ref:`vL1D cache-frontend <ta-instruction-counts>`.
+       :ref:`vL1D cache-front-end <ta-instruction-counts>`.
 
      - Instructions per normalization unit
 

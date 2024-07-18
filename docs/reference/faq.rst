@@ -17,7 +17,7 @@ backend. You can do this using :ref:`database <modes-database>` mode.
 
 Pass in the directory of your desired workload as follows.
 
-.. code:: shell
+.. code-block:: shell
 
     $ omniperf database --import -w <path-to-results> -H <hostname> -u <username> -t <team-name>
 

@@ -13,7 +13,6 @@ VALU arithmetic instruction mix
    However, the actual experiment results in this section were collected on an
    :ref:`MI2XX <mixxx-note>` accelerator.
 
-
 .. _valu-experiment-design:
 
 Design note
@@ -22,12 +21,12 @@ Design note
 This code uses a number of inline assembly instructions to cleanly
 identify the types of instructions being issued, as well as to avoid
 optimization / dead-code elimination by the compiler. While inline
-assembly is inherently unportable, this example is expected to work on
+assembly is inherently not portable, this example is expected to work on
 all GCN GPUs and CDNA accelerators.
 
 We reproduce a sample of the kernel as follows:
 
-.. code:: cpp
+.. code-block:: cpp
 
    // fp32: add, mul, transcendental and fma
    float f1, f2;

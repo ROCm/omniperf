@@ -141,18 +141,18 @@ kernel:
 
 Here we:
 
-- Allocate an :doc:`LDS <local-data-share>` array of size
+* Allocate an :doc:`LDS </conceptual/local-data-share>` array of size
   :math:`32*256*4{B}=32{KiB}`
 
-- Fake a write to the LDS using the ``flag``
+* Fake a write to the LDS using the ``flag``
   variable (always set to zero on the host) to avoid dead-code elimination
 
-- Read a single integer per work-item from index
-``threadIdx.x * nbanks`` of the LDS array
+* Read a single integer per work-item from index
+  ``threadIdx.x * nbanks`` of the LDS array
 
-- If the integer is equal to a
-magic number (always false), write the value out to global memory to,
-again, avoid dead-code elimination.
+* If the integer is equal to a
+  magic number (always false), write the value out to global memory to,
+  again, avoid dead-code elimination.
 
 On the host, we again repeatedly launch this kernel, varying the number
 of work-items:
@@ -221,14 +221,14 @@ such that each work-item we add to the dispatch results in another bank
 conflict!
 
 Recalling our discussion of bank conflicts in our
-:doc:`LDS <local-data-share>` description:
+:doc:`LDS </conceptual/local-data-share>` description:
 
-   A bank conflict occurs when two (or more) work-items in a wavefront
-   want to read, write, or atomically update different addresses that
-   map to the same bank in the same cycle. In this case, the conflict
-   detection hardware will determined a new schedule such that the
-   **access is split into multiple cycles with no conflicts in any
-   single cycle.**
+A bank conflict occurs when two (or more) work-items in a wavefront
+want to read, write, or atomically update different addresses that
+map to the same bank in the same cycle. In this case, the conflict
+detection hardware will determined a new schedule such that the
+access is split into multiple cycles with no conflicts in any
+single cycle.
 
 Here we see the conflict resolution hardware in action! Because we have
 engineered our kernel to generate conflicts, we expect our bank conflict

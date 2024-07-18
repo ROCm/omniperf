@@ -2,6 +2,8 @@
 Local data share (LDS)
 **********************
 
+.. _lds-sol:
+
 LDS Speed-of-Light
 ==================
 
@@ -76,6 +78,8 @@ the LDS as a comparison with the peak achievable values of those metrics.
 .. [#2] The maximum value of the bank conflict rate is less than 100%
    (specifically: 96.875%), as the first cycle in the
    :ref:`LDS scheduler <desc-lds>` is never considered contended.
+
+.. _lds-stats:
 
 Statistics
 ==========

@@ -7,17 +7,17 @@ Find setup instructions in :doc:`../../install/grafana-setup`.
 The Omniperf Grafana analysis dashboard GUI supports the following features to
 facilitate MI accelerator performance profiling and analysis:
 
-* System and Hardware Component (Hardware Block)
+* System and hardware component (hardware block)
 
 * :ref:`Speed-of-Light <analysis-sol>` (SOL)
 
 * :ref:`Multiple normalization options <analysis-normalizations>`
   
-* Baseline comparisons
+* :ref:`Baseline comparisons <analysis-baseline-comparison>`
 
 * :ref:`Regex-based dispatch ID filtering <analysis-regex-dispatch-id>`
 
-* Roofline Analysis
+* Roofline analysis
 
 * Detailed performance counters and metrics per hardware component, such as:
 
@@ -266,39 +266,39 @@ There are currently 18 main panel categories available for analyzing the compute
 workload performance. Each category contains several panels for close inspection
 of the system performance.
 
-- Kernel Statistics
+- :ref:`Kernel Statistics <grafana-panel-kernel-stats>`
 
   - Kernel time histogram
 
-  - Top Ten bottleneck kernels
+  - Top ten bottleneck kernels
 
-- System Speed-of-Light
+- :ref:`System Speed-of-Light <grafana-panel-system-sol>`
 
   - Speed-of-Light
 
   - System Info table
 
-- Memory Chart Analysis
+- :ref:`Memory Chart Analysis <grafana-panel-memory-chart-analysis>`
 
-- Roofline Analysis
+- :ref:`Roofline Analysis <grafana-panel-roofline-analysis>`
 
   - FP32/FP64
 
   - FP16/INT8
 
-- Command Processor
+- :ref:`Command Processor <grafana-panel-cp>`
 
   - Command Processor - Fetch (CPF)
 
   - Command Processor - Controller (CPC)
 
-- Workgroup Manager or Shader Processor Input (SPI)
+- :ref:`Workgroup Manager or Shader Processor Input (SPI) <grafana-panel-spi>`
 
   - SPI Stats
 
   - SPI Resource Allocations
 
-- Wavefront Launch
+- :ref:`Wavefront Launch <grafana-panel-wavefront>`
 
   - Wavefront Launch Stats
 
@@ -306,7 +306,7 @@ of the system performance.
 
   - per-SE Wavefront Scheduling performance
 
-- Wavefront Lifetime
+- :ref:`Wavefront Lifetime <grafana-panel-wavefront>`
 
   - Wavefront lifetime breakdown
 
@@ -314,13 +314,13 @@ of the system performance.
 
   - per-SE wavefront life (histogram)
 
-- Wavefront Occupancy
+- :ref:`Wavefront Occupancy <grafana-panel-wavefront>`
 
   - per-SE wavefront occupancy
 
   - per-CU wavefront occupancy
 
-- Compute Unit - Instruction Mix
+- :ref:`Compute Unit - Instruction Mix <grafana-panel-cu-instruction-mix>`
 
   - per-wave Instruction mix
 
@@ -328,7 +328,7 @@ of the system performance.
 
   - per-wave MFMA Arithmetic instruction mix
 
-- Compute Unit - Compute Pipeline
+- :ref:`Compute Unit - Compute Pipeline <grafana-panel-cu-compute-pipeline>`
 
   - Speed-of-Light: Compute Pipeline
 
@@ -338,13 +338,13 @@ of the system performance.
 
   - Memory latencies
 
-- Local Data Share (LDS)
+- :ref:`Local Data Share (LDS) <grafana-panel-lds>`
 
   - Speed-of-Light: LDS
 
   - LDS stats
 
-- Instruction Cache
+- :ref:`Instruction Cache <grafana-panel-instruction-cache>`
 
   - Speed-of-Light: Instruction Cache
 
@@ -376,7 +376,7 @@ of the system performance.
 
   - L1 - UTCL1 Interface stats
 
-- L2 Cache
+- :ref:`L2 Cache <grafana-panel-l2-cache>`
 
   - Speed-of-Light: L2 Cache
 
@@ -386,7 +386,7 @@ of the system performance.
 
   - L2 - EA Stalls
 
-- L2 Cache Per Channel Performance
+- :ref:`L2 Cache Per Channel Performance <grafana-panel-l2-cache-per-channel>`
 
   - Per-channel L2 Hit rate
 
@@ -416,6 +416,8 @@ Most panels are designed around a specific hardware component block to
 thoroughly understand its behavior. Additional panels, including custom panels,
 could also be added to aid the performance analysis.
 
+.. _grafana-panel-sys-info:
+
 System Info Panel
 ^^^^^^^^^^^^^^^^^
 
@@ -424,6 +426,8 @@ System Info Panel
    :alt: System details logged from the host machine
 
    System details logged from the host machine.
+
+.. _grafana-panel-kernel-stats:
 
 Kernel statistics
 ^^^^^^^^^^^^^^^^^
@@ -464,14 +468,22 @@ Current and Baseline Dispatch IDs (Filtered)
 
    List of all kernel dispatches.
 
+.. _grafana-panel-system-sol:
+
 System Speed-of-Light
 ^^^^^^^^^^^^^^^^^^^^^
+
+.. tip::
+
+   See :doc:`/conceptual/system-speed-of-light` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/sol_panel.png
    :align: center
    :alt: System Speed-of-Light panel in Omniperf Grafana
 
    Key metrics from various sections of Omniperf’s profiling report.
+
+.. _grafana-panel-memory-chart-analysis:
 
 Memory Chart Analysis
 ^^^^^^^^^^^^^^^^^^^^^
@@ -488,6 +500,9 @@ Memory Chart Analysis
 
    A graphical representation of performance data for memory blocks on the GPU.
 
+
+.. _grafana-panel-roofline-analysis:
+
 Empirical Roofline Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -497,8 +512,15 @@ Empirical Roofline Analysis
 
    Visualize achieved performance relative to a benchmarked peak performance.
 
+
+.. _grafana-panel-cp:
+
 Command Processor
 ^^^^^^^^^^^^^^^^^
+
+.. tip::
+
+   See :doc:`/conceptual/command-processor` to learn about reported metrics.
 
 Command Processor Fetcher
 +++++++++++++++++++++++++
@@ -521,10 +543,14 @@ Command Processor Compute
    fetched commands, and (for kernels) passes them to the Workgroup Managers
    (SPIs) for scheduling.
 
-See :doc:`/conceptual/command-processor` to learn about reported metrics.
+.. _grafana-panel-spi:
 
 Shader Processor Input (SPI)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. tip::
+
+   See :ref:`desc-spi` to learn about reported metrics.
 
 SPI Stats
 +++++++++
@@ -546,11 +572,17 @@ SPI Resource Allocation
 ..
    TODO: Add caption after merge
 
+.. _grafana-panel-wavefront:
+
 Wavefront
 ^^^^^^^^^
 
 Wavefront Launch Stats
 ++++++++++++++++++++++
+
+.. tip::
+
+   See :ref:`wavefront-launch-stats` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/wavefront-launch-stats_panel.png
    :align: center
@@ -561,17 +593,27 @@ Wavefront Launch Stats
 Wavefront Runtime Stats
 +++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`wavefront-runtime-stats` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/wavefront-runtime-stats_panel.png
    :align: center
    :alt: Wavefront Runtime Stats panel in Omniperf Grafana.
 
    High-level overview of the execution of wavefronts in a kernel.
 
+.. _grafana-panel-cu-instruction-mix:
+
 Compute Unit - Instruction Mix
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Instruction Mix
 +++++++++++++++
+
+.. tip::
+
+   See :ref:`instruction-mix` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/cu-inst-mix_panel.png
    :align: center
@@ -583,6 +625,10 @@ Instruction Mix
 VALU Arithmetic Instruction Mix
 +++++++++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`valu-arith-instruction-mix` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/cu-value-arith-instr-mix_panel.png
    :align: center
    :alt: VALU Arithmetic Instruction Mix panel in Omniperf Grafana
@@ -593,6 +639,10 @@ VALU Arithmetic Instruction Mix
 MFMA Arithmetic Instruction Mix
 +++++++++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`mfma-instruction-mix` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/cu-mafma-arith-instr-mix_panel.png
    :align: center
    :alt: MFMA Arithmetic Instruction Mix panel in Omniperf Grafana
@@ -602,17 +652,27 @@ MFMA Arithmetic Instruction Mix
 VMEM Arithmetic Instruction Mix
 +++++++++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`vmem-instruction-mix` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/cu-vmem-instr-mix_panel.png
    :align: center
    :alt: VMEM Arithmetic Instruction Mix panel in Omniperf Grafana
 
    The types of vector memory (VMEM) instructions that were issued.
 
+.. _grafana-panel-cu-compute-pipeline:
+
 Compute Unit - Compute Pipeline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`compute-speed-of-light` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/cu-sol_panel.png
    :align: center
@@ -625,6 +685,10 @@ Speed-of-Light
 Pipeline Stats
 ++++++++++++++
 
+.. tip::
+
+   See :ref:`pipeline-stats` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/cu-pipeline-stats_panel.png
    :align: center
    :alt: Pipeline Stats panel in Omniperf Grafana
@@ -635,6 +699,10 @@ Pipeline Stats
 Arithmetic Operations
 +++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`arithmetic-operations` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/cu-arith-ops_panel.png
    :align: center
    :alt: Arithmentic Operations panel in Omniperf Grafana
@@ -642,11 +710,17 @@ Arithmetic Operations
    The total number of floating-point and integer operations executed in various
    precisions.
 
+.. _grafana-panel-lds:
+
 Local Data Share (LDS)
 ^^^^^^^^^^^^^^^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`lds-sol` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/lds-sol_panel.png
    :align: center
@@ -658,17 +732,27 @@ Speed-of-Light
 LDS Stats
 +++++++++
 
+.. tip::
+
+   See :ref:`lds-stats` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/lds-stats_panel.png
    :align: center
    :alt: LDS Stats panel in Omniperf Grafana
 
    More detailed view of the Local Data Share (LDS) performance.
 
+.. _grafana-panel-instruction-cache:
+
 Instruction Cache
 ^^^^^^^^^^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`desc-l1i-sol` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/instr-cache-sol_panel.png
    :align: center
@@ -680,17 +764,27 @@ Speed-of-Light
 Instruction Cache Stats
 +++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`desc-l1i-stats` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/instr-cache-accesses_panel.png
    :align: center
    :alt: Instruction Cache Stats panel in Omniperf Grafana
 
    More detail on the hit/miss statistics of the L1 Instruction (L1I) cache.
 
+.. _grafana-panel-sl1d-cache:
+
 Scalar L1D Cache
 ^^^^^^^^^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`desc-sl1d-sol` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/sl1d-sol_panel.png
    :align: center
@@ -702,6 +796,10 @@ Speed-of-Light
 Scalar L1D Cache Accesses
 +++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`desc-sl1d-stats` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/sl1d-cache-accesses_panel.png
    :align: center
    :alt: Scalar L1D Cache Accesses panel in Omniperf Grafana
@@ -712,6 +810,10 @@ Scalar L1D Cache Accesses
 Scalar L1D Cache - L2 Interface
 +++++++++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`desc-sl1d-l2-interface` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/sl1d-l12-interface_panel.png
    :align: center
    :alt: Scalar L1D Cache - L2 Interface panel in Omniperf Grafana
@@ -719,11 +821,21 @@ Scalar L1D Cache - L2 Interface
    More detail on the data requested across the Scalar L1 Data (sL1D) cache <->
    L2 interface.
 
+.. tip::
+
+   See :ref:`desc-sl1d` to learn about reported metrics.
+
+.. _grafana-panel-ta:
+
 Texture Address and Texture Data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Texture Addresser
 +++++++++++++++++
+
+.. tip::
+
+   See :ref:`desc-ta` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/ta_panel.png
    :align: center
@@ -736,6 +848,10 @@ Texture Addresser
 Texture Data
 ++++++++++++
 
+.. tip::
+
+   See :ref:`desc-td` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/td_panel.png
    :align: center
    :alt: Texture Data panel in Omniperf Grafana
@@ -743,11 +859,17 @@ Texture Data
    Metrics specific to texture data (TD) which routes data back to the
    requesting Compute Unit (CU).
 
+.. _grafana-panel-vl1d:
+
 Vector L1 Data Cache
 ^^^^^^^^^^^^^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`vl1d-sol` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/vl1d-sol_panel.png
    :align: center
@@ -759,6 +881,10 @@ Speed-of-Light
 L1D Cache Stalls
 ++++++++++++++++
 
+.. tip::
+
+   See :ref:`vl1d-cache-stall-metrics` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/vl1d-cache-stalls_panel.png
    :align: center
    :alt: L1D Cache Stalls panel in Omniperf Grafana
@@ -768,6 +894,10 @@ L1D Cache Stalls
 
 L1D Cache Accesses
 ++++++++++++++++++
+
+.. tip::
+
+   See :ref:`vl1d-cache-access-metrics` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/vl1d-cache-accesses_panel.png
    :align: center
@@ -780,6 +910,10 @@ L1D Cache Accesses
 L1D - L2 Transactions
 +++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`vl1d-l2-transaction-detail` to learn more.
+
 .. figure:: ../../data/analyze/grafana/vl1d-l2-transactions_panel.png
    :align: center
    :alt: L1D - L2 Transactions in Omniperf Grafana
@@ -788,6 +922,10 @@ L1D - L2 Transactions
 
 L1D Addr Translation
 ++++++++++++++++++++
+
+.. tip::
+
+   See :ref:`desc-utcl1` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/vl1d-addr-translation_panel.png
    :align: center
@@ -798,11 +936,17 @@ L1D Addr Translation
    from a virtual to physical address. These metrics provide more details on the
    L1 Translation Lookaside Buffer (TLB) which handles this process.
 
+.. _grafana-panel-l2-cache:
+
 L2 Cache
 ^^^^^^^^
 
 Speed-of-Light
 ++++++++++++++
+
+.. tip::
+
+   See :ref:`l2-sol` to learn about reported metrics.
 
 .. figure:: ../../data/analyze/grafana/l2-sol_panel.png
    :align: center
@@ -815,6 +959,10 @@ Speed-of-Light
 L2 Cache Accesses
 +++++++++++++++++
 
+.. tip::
+
+   See :ref:`l2-cache-accesses` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/l2-accesses_panel.png
    :align: center
    :alt: L2 Cache Accesses panel in Omniperf Grafana
@@ -825,6 +973,10 @@ L2 Cache Accesses
 L2 - Fabric Transactions
 ++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`l2-fabric` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/l2-fabric-transactions_panel.png
    :align: center
    :alt: L2 - Fabric Transactions panel in Omniperf Grafana
@@ -834,6 +986,10 @@ L2 - Fabric Transactions
 L2 - Fabric Interface Stalls
 ++++++++++++++++++++++++++++
 
+.. tip::
+
+   See :ref:`l2-fabric-stalls` to learn about reported metrics.
+
 .. figure:: ../../data/analyze/grafana/l2-fabric-interface-stalls_panel.png
    :align: center
    :alt: L2 - Fabric Interface Stalls panel in Omniperf Grafana
@@ -842,8 +998,18 @@ L2 - Fabric Interface Stalls
    (e.g., read vs write), and to which locations (e.g., to the accelerator’s
    local memory, or to remote accelerators/CPUs).
 
+.. tip::
+
+   See :doc:`/conceptual/l2-cache` to learn about reported metrics.
+
+.. _grafana-panel-l2-cache-per-channel:
+
 L2 Cache Per Channel
 ^^^^^^^^^^^^^^^^^^^^
+
+.. tip::
+
+   See :ref:`l2-sol` for more information.
 
 Aggregate Stats
 +++++++++++++++

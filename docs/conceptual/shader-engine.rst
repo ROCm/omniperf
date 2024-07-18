@@ -101,6 +101,8 @@ cache as a comparison with the peak achievable values of those metrics:
 
      - Percent
 
+.. _desc-sl1d-stats:
+
 Scalar L1D cache accesses
 -------------------------
 
@@ -205,6 +207,8 @@ and the hit/miss statistics.
        (64B), per :ref:`normalization unit <normalization-units>`.
 
      - Requests per normalization unit
+
+.. _desc-sl1d-l2-interface:
 
 sL1D ↔ L2 Interface
 -------------------
@@ -347,6 +351,8 @@ metrics:
        :doc:`CU <compute-unit>`.
 
      - Cycles
+
+.. _desc-l1i-stats:
 
 L1I cache accesses
 ------------------

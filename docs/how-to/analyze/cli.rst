@@ -6,7 +6,7 @@ The following is a look into Omniperf's CLI analysis features.
 
 * **Derived metrics**: All of Omniperf's built-in metrics.
 
-* :ref:`Baseline comparison <analyis-baseline-comparison>`: Compare multiple
+* :ref:`Baseline comparison <analysis-baseline-comparison>`: Compare multiple
   runs in a side-by-side manner.
 
 * :ref:`Metric customization <cli-analysis-options>`: Isolate a subset of

@@ -188,6 +188,8 @@ operation.
    :ref:`MI2XX <mixxx-note>` accelerator using ROCm 5.6.0, and may change
    depending on ROCm versions and the targeted hardware architecture.
 
+.. _generic-write-ex:
+
 Generic write to LDS
 ^^^^^^^^^^^^^^^^^^^^
 

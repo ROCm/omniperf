@@ -6,7 +6,7 @@ Occupancy limiters example
 For this example, consider the
 :dev-sample:`occupancy <occupancy.hip>` included with Omniperf. We will
 investigate the use of the resource allocation panel in the
-:doc:`Workgroup Manager <desc-spi>`’s metrics section to determine occupancy
+:ref:`Workgroup Manager <desc-spi>`’s metrics section to determine occupancy
 limiters. This code contains several kernels to explore how both various
 kernel resources impact achieved occupancy, and how this is reported in
 Omniperf.
@@ -59,7 +59,8 @@ Here we try to use as many :ref:`VGPRs <desc-valu>` as possible, to this end:
 
 * We specify ``__launch_bounds___(256)``
   to increase the number of VPGRs available to the kernel (by limiting the
-  number of wavefronts that can be resident on a :doc:`CU <compute-unit>`).
+  number of wavefronts that can be resident on a
+  :doc:`CU </conceptual/compute-unit>`).
 
 * Write a unique non-compile time constant to each element of the array.
 
@@ -181,7 +182,7 @@ reaching only :math:`\sim50\%` of peak occupancy. As a result, we see
 that:
 
 - We are not scheduling workgroups :math:`\sim25\%` of
-  :ref:`total scheduler-pipe cycles <total-pipe-cycles>`__ (**6.2.1**); recall
+  :ref:`total scheduler-pipe cycles <total-pipe-cycles>` (**6.2.1**); recall
   from the discussion of the `workgroup manager <desc-spi>`, 25% is the maximum.
 
 - The scheduler-pipe is stalled (**6.2.2**) from scheduling workgroups due to
@@ -418,36 +419,36 @@ Analyzing this workload yields:
    │ 7.1.9   │ Scratch Allocation │ 60.00 │ 60.00 │ 60.00 │ Bytes/workitem │
    ╘═════════╧════════════════════╧═══════╧═══════╧═══════╧════════════════╛
 
-Here we see that our wavefront launch stats (7.1) have changed to
+Here we see that our wavefront launch stats (**7.1**) have changed to
 reflect the metadata seen in the ``--save-temps`` output. Of particular
 interest, we see:
 
-* The SGPR allocation (7.1.7) is 80 registers, slightly more than the 76
+* The SGPR allocation (**7.1.7**) is 80 registers, slightly more than the 76
   requested by the compiler due to allocation granularity, and
 
 * We have a :ref:`‘scratch’ <memory-spaces>`, that is, private memory,
   allocation of 60 bytes per work-item.
 
-Analyzing the resource allocation block (6.2) we now see that for the
-first time, the ‘Not-scheduled Rate (Workgroup Manager)’ metric (6.2.0)
+Analyzing the resource allocation block (**6.2**) we now see that for the
+first time, the ‘Not-scheduled Rate (Workgroup Manager)’ metric (**6.2.0**)
 has become non-zero. This is because the workgroup manager is
 responsible for management of scratch, which we see also contributes to
-our occupancy limiters in the ‘Scratch Stall Rate’ (6.2.3). We note that
+our occupancy limiters in the ‘Scratch Stall Rate’ (**6.2.3**). We note that
 the sum of the workgroup manager not-scheduled rate and the
 scheduler-pipe non-scheduled rate is still :math:`\sim25\%`, as in our
 previous examples
 
-Next, we see that the scheduler-pipe stall rate (6.2.2), i.e., how often
+Next, we see that the scheduler-pipe stall rate (**6.2.2**), i.e., how often
 we could not schedule a workgroup to a CU was only about
 :math:`\sim8\%`. This hints that perhaps, our kernel is not
 *particularly* occupancy limited by resources, and indeed checking the
-wave occupancy metric (2.1.15) shows that this kernel is reaching nearly
+wave occupancy metric (**2.1.15**) shows that this kernel is reaching nearly
 99% occupancy!
 
 Finally, we inspect the occupancy limiter metrics and see a roughly even
-split between :ref:`waveslots <desc-valu>` (6.2.4), :ref:`VGPRs <desc-valu>`
-(6.2.5), and :ref:`SGPRs <desc-salu>` (6.2.6) along with the scratch stalls
-(6.2.3) previously mentioned.
+split between :ref:`waveslots <desc-valu>` (**6.2.4**), :ref:`VGPRs <desc-valu>`
+(**6.2.5**), and :ref:`SGPRs <desc-salu>` (**6.2.6**) along with the scratch stalls
+(**6.2.3**) previously mentioned.
 
 This is yet another reminder to view occupancy holistically. While these
 metrics tell you why a workgroup cannot be scheduled, they do *not* tell

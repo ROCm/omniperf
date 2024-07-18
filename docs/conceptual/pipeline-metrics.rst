@@ -812,6 +812,8 @@ and instruction issue.
    omitted for simplicity, but may result in small amounts of branch utilization
    (less than 1%) for otherwise branch-less kernels.
 
+.. _arithmetic-operations:
+
 Arithmetic operations
 ---------------------
 

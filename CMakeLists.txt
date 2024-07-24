@@ -376,6 +376,17 @@ if(INSTALL_TESTS)
 endif()
 message(STATUS "Install tests: ${INSTALL_TESTS}")
 
+# Package Python dependencies
+option(INSTALL_PYTHON_DEPS "Install Python dependencies" OFF)
+if(DEFINED PYTHON_DEPS AND DEFINED INSTALL_PYTHON_DEPS)
+    install(
+        DIRECTORY ${PYTHON_DEPS}
+        DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}
+        COMPONENT main
+        PATTERN "__pycache__" EXCLUDE
+    )
+endif()
+
 # ----------
 # Packaging
 # ----------

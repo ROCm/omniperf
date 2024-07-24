@@ -16,6 +16,7 @@ __pycache__
 saved_analysis
 pmc_kernel_top.csv
 VERSION.sha
+/python-libs
 
 # temp files
 /tests/Testing

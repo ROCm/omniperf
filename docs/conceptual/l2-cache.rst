@@ -307,7 +307,7 @@ Request flow
 The following is a diagram that illustrates how L2↔Fabric requests are reported
 by Omniperf:
 
-.. figure:: ../data/performance-model/fabric.*
+.. figure:: ../data/performance-model/fabric.png
    :align: center
    :alt: L2-Fabric transaction flow on AMD Instinct MI-series accelerators
 
@@ -760,4 +760,9 @@ remote accelerators or CPUs.
    technology can be used to connect multiple accelerators to achieve advanced
    peer-to-peer connectivity and enhanced bandwidths over traditional PCIe
    connections. Some AMD Instinct MI accelerators like the MI250X,
-   `feature coherent CPU↔accelerator connections built using AMD Infinity Fabric <https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf>`_
+   `feature coherent CPU↔accelerator connections built using AMD Infinity Fabric <https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf>`_.
+
+.. rubric:: Disclaimer
+
+PCIe® is a registered trademark of PCI-SIG Corporation.
+

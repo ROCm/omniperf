@@ -39,8 +39,8 @@ processor’s metrics therefore are focused on reporting, for example:
 
 .. _cpf-metrics:
 
-Command Processor Fetcher (CPF) metrics
-=======================================
+Command processor fetcher (CPF)
+===============================
 
 .. list-table::
    :header-rows: 1
@@ -88,8 +88,8 @@ Command Processor Fetcher (CPF) metrics
 
 .. _cpc-metrics:
 
-Command Processor Packet Processor (CPC) metrics
-================================================
+Command processor packet processor (CPC)
+========================================
 
 .. list-table::
    :header-rows: 1

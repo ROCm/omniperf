@@ -264,7 +264,7 @@ the :doc:`various compute pipelines </conceptual/pipeline-descriptions>` on the
 
      - The total number of vector arithmetic logic unit (VALU) operations
        issued. These are the workhorses of the
-       :doc:`compute unit <compute-unit>`, and are used to execute wide range of
+       :doc:`compute unit <compute-unit>`, and are used to execute a wide range of
        instruction types including floating point operations, non-uniform
        address calculations, transcendental operations, integer operations,
        shifts, conditional evaluation, etc.
@@ -478,8 +478,9 @@ VMEM instruction mix
 
 This section breaks down the types of vector memory (VMEM) instructions
 that were issued. Refer to the
-`Instruction Counts metrics section <desc-ta>` of address-processor front end of
-the vL1D cache for a description of these VMEM instructions.
+:ref:`Instruction Counts metrics section <ta-instruction-counts>` under address
+processor front end of the vL1D cache for descriptions of these VMEM
+instructions.
 
 .. _mfma-instruction-mix:
 
@@ -786,7 +787,7 @@ and instruction issue.
        kernel in cycles. Computed as the ratio of the total number of cycles the
        MFMA unit was busy over the total number of MFMA instructions. Compare
        to, for example, the
-       `AMD Matrix Instruction Calculator <https://github.com/RadeonOpenCompute/amd_matrix_instruction_calculator>`.
+       `AMD Matrix Instruction Calculator <https://github.com/RadeonOpenCompute/amd_matrix_instruction_calculator>`_.
 
      - Cycles per instruction
 
@@ -810,7 +811,7 @@ and instruction issue.
    other instruction types (namely: ``s_endpgm``) that are *typically* a very
    small percentage of the overall kernel execution. This complication is
    omitted for simplicity, but may result in small amounts of branch utilization
-   (less than 1%) for otherwise branch-less kernels.
+   (typically less than 1%) for otherwise branch-less kernels.
 
 .. _arithmetic-operations:
 
@@ -823,7 +824,7 @@ operations executed in various precisions. Unlike the
 :ref:`VALU <desc-valu>` and :ref:`MFMA <desc-mfma>` operations of the same precision
 (e.g., F32) in the same metric. Additionally, this panel lets the user
 control how the data is normalized (i.e., control the
-`normalization unit <normalization-units>`), while the speed-of-light panel does
+:ref:`normalization unit <normalization-units>`), while the speed-of-light panel does
 not. For more detail on how operations are counted see the
 :ref:`FLOP counting convention <metrics-flop-count>` section.
 

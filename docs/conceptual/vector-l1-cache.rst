@@ -11,24 +11,24 @@ operations issued by a wavefront. The vL1D cache consists of several components:
   write/atomic data from the :doc:`compute unit <compute-unit>`, and coalesces
   them into fewer requests for the cache to process.
 
-* An address translation unit, also known as the L1 Unified Translation
-  Cache (UTCL1), that translates requests from virtual to physical
-  addresses for lookup in the cache. The translation unit has an L1
-  translation lookaside buffer (L1TLB) to reduce the cost of repeated
-  translations.
+* An address translation unit, also known as the
+  :ref:`L1 Unified Translation Cache (UTCL1) <desc-utcl1>`, that translates
+  requests from virtual to physical addresses for lookup in the cache. The
+  translation unit has an L1 translation lookaside buffer (L1TLB) to reduce the
+  cost of repeated translations.
 
 * A Tag RAM that looks up whether a requested cache line is already
   present in the :ref:`cache <desc-tc>`.
 
 * The result of the Tag RAM lookup is placed in the L1 cache controller
-  for routing to the correct location, e.g., the `L2 Memory
-  Interface <TCP_TCC_Transactions_Detail>`__ for misses or the
+  for routing to the correct location; for instance, the
+  :ref:`L2 Memory Interface <vl1d-l2-transaction-detail>` for misses or the
   :ref:`cache RAM <desc-tc>` for hits.
 
-* The cache RAM, also known as the `texture cache (TC) <desc-tc>`, stores
+* The cache RAM, also known as the :ref:`texture cache (TC) <desc-tc>`, stores
   requested data for potential reuse. Data returned from the
   :doc:`L2 cache <l2-cache>` is placed into the cache RAM before going down the
-  `data-return path <TD>`__.
+  :ref:`data-return path <desc-td>`.
 
 * A backend data processing unit, also known as the
   :ref:`texture data (TD) <desc-td>` that routes data back to the requesting
@@ -138,8 +138,7 @@ When executing vector memory instructions, the compute unit must send an
 address (and in the case of writes/atomics, data) to the address
 processing unit. When the front-end cannot accept any more addresses, it
 must backpressure the wave-issue logic for the VMEM pipe and prevent the
-issue of a vector memory instruction until a previously issued memory
-operation has been processed.
+issue of further vector memory instructions.
 
 .. list-table::
    :header-rows: 1
@@ -542,7 +541,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
 
      - Bytes per normalization unit
 
-   * - Cache Hit Rate
+   * - Cache Hit Rate [#vl1d-hit]_
 
      - The ratio of the number of vL1D cache line requests that hit in vL1D
        cache over the total number of cache line requests to the
@@ -556,7 +555,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
 
      - Cache lines
 
-   * - Cache Hits
+   * - Cache Hits [#vl1d-hit]_
 
      - The number of cache accesses minus the number of outgoing requests to the
        :doc:`L2 cache <l2-cache>`, that is, the number of cache line requests
@@ -597,8 +596,8 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
 
    * - L1-L2 Writes
 
-     - The number of post-coalescing write requests that are sent through the
-       vL1D to the :doc:`L2 cache <l2-cache>`, per
+     - The number of write requests to a vL1D cache line that were sent through
+       the vL1D to the :doc:`L2 cache <l2-cache>`, per
        :ref:`normalization unit <normalization-units>`.
 
      - Requests per normalization unit
@@ -660,7 +659,7 @@ Vector L1 data-return path or Texture Data (TD)
 The data-return path of the vL1D cache, also known as the Texture Data
 (TD) unit, is responsible for routing data returned from the
 :ref:`vL1D cache RAM <desc-tc>` back to a wavefront on a SIMD. As described in
-the `vL1D cache front-end <desc-ta>` section, the data-return path is passed
+the :ref:`vL1D cache front-end <desc-ta>` section, the data-return path is passed
 information about the space requirements and routing for data requests
 from the :ref:`VALU <desc-valu>`. When data is returned from the
 :ref:`vL1D cache RAM <desc-tc>`, it is matched to this previously stored request
@@ -695,7 +694,9 @@ Omniperf reports the following vL1D data-return path metrics:
 
    * - Workgroup manager → Data-return Stall
 
-     - Percent of the :ref:`total CU cycles <total-cu-cycles>` the data-return unit was stalled by the [workgroup manager](SPI) due to initialization of registers as a part of launching new workgroups.
+     - Percent of the :ref:`total CU cycles <total-cu-cycles>` the data-return
+       unit was stalled by the :ref:`workgroup manager <desc-spi>` due to
+       initialization of registers as a part of launching new workgroups.
 
      - Percent
 

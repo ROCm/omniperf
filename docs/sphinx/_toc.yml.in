@@ -45,6 +45,7 @@ subtrees:
         title: Command processor
       - file: conceptual/system-speed-of-light.rst
         title: System Speed-of-Light
+      - file: conceptual/references.rst
     - file: conceptual/definitions.rst
 
   - caption: Tutorials

@@ -48,7 +48,7 @@ Omniperf standalone GUI analyzer
    enable basic performance analysis without the need to import data into a
    database instance.
 
-.. figure:: ./data/install/omniperf_server_vs_client_install.png
+.. image:: data/install/omniperf_server_vs_client_install.png
    :align: center
    :alt: Architectural design of Omniperf
 

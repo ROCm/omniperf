@@ -161,13 +161,13 @@ convention:
 
 .. code-block:: shell
 
-    ``omniperf_<team>_<database>_<soc>``
+    omniperf_<team>_<database>_<soc>
 
 For example:
 
 .. code-block:: shell
 
-   ``omniperf_asw_vcopy_mi200``.
+   omniperf_asw_vcopy_mi200
 
 When using :ref:`database mode <modes-database>`, be sure to tailor the
 connection options to the machine hosting your

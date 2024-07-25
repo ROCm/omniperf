@@ -103,7 +103,7 @@ LDS instruction at a time, but both pairs may issue concurrently.
 On CDNA accelerators, the LDS contains 32 banks and each bank is 4B wide.
 The LDS is designed such that each bank can be read from, written to, or
 atomically updated every cycle, for a total throughput of 128B/clock
-:gcn-crash-course:`40`.
+(:gcn-crash-course:`40`).
 
 On each of the two ports to the SIMDs, 64B can be sent in each direction per
 cycle. So, a single wavefront, coming from one of the 2 SIMDs in a pair, can
@@ -122,10 +122,10 @@ determine a new schedule such that the access is split into multiple cycles with
 no conflicts in any single cycle.
 
 When multiple work-items want to read from the same address within a bank, the
-result can be efficiently broadcasted :gcn-crash-course:`41`. Multiple
+result can be efficiently broadcasted (:gcn-crash-course:`41`). Multiple
 work-items writing to the same address within a bank typically results undefined
-behavior in HIP and other languages, as the LDS will write the value from the
-last work-item as determined by the hardware scheduler :gcn-crash-course:`41`.
+behavior in HIP and other high-level languages, as the LDS will write the value from the
+last work-item as determined by the hardware scheduler (:gcn-crash-course:`41`).
 This behavior may be useful in the very specific case of storing a uniform
 value.
 
@@ -160,7 +160,9 @@ clock cycle, the scheduler:
 
 * Issues up to one instruction per each of the instruction categories among the waves on the selected SIMD:
 
-  * :ref:`VALU <desc-valu>` / :ref:`VMEM <desc-valu>` operations
+  * :ref:`VALU <desc-valu>`
+
+  * :ref:`VMEM <desc-vmem>` operations
 
   * :ref:`SALU <desc-salu>` / SMEM operations
 
@@ -200,7 +202,7 @@ operation types and supported formats may vary by accelerator. Refer to the
 blog post on GPUOpen for a general discussion of these hardware units.
 In addition, to explore the available MFMA instructions in-depth on
 various AMD accelerators (including the CDNA line), we recommend the
-`AMD Matrix Instruction Calculator <https://github.com/ROCm/amd_matrix_instruction_calculator>`_.
+`AMD Matrix Instruction Calculator <https://github.com/ROCm/amd_matrix_instruction_calculator>`_:
 
 .. code-block:: shell
    :caption: Partial snapshot of the AMD Matrix Instruction Calculator Tool
@@ -231,7 +233,7 @@ various AMD accelerators (including the CDNA line), we recommend the
 
 For the purposes of Omniperf, the MFMA unit is typically treated as a separate
 pipeline from the :ref:`VALU <desc-valu>`, as other VALU instructions (along
-with other execution pipelines such as the :ref:`SALU <desc-salu>`) can be
+with other execution pipelines such as the :ref:`SALU <desc-salu>`) typically can be
 issued during a portion of the total duration of an MFMA operation.
 
 .. note::
@@ -239,7 +241,7 @@ issued during a portion of the total duration of an MFMA operation.
    The exact details of VALU and MFMA operation co-execution vary by
    instruction, and can be explored in more detail via the following fields in
    the
-   `AMD Matrix Instruction Calculator's detailed instruction information <https://github.com/ROCm/amd_matrix_instruction_calculator#example-of-querying-instruction-information>`_.
+   `AMD Matrix Instruction Calculator's detailed instruction information <https://github.com/ROCm/amd_matrix_instruction_calculator#example-of-querying-instruction-information>`_:
 
    * ``Can co-execute with VALU``
 
@@ -259,7 +261,7 @@ Barrier
 ^^^^^^^
 
 Barriers are resources on the compute-unit of a CDNA accelerator that
-are used to implement synchronization primitives; for example, HIP’s
+are used to implement synchronization primitives (for example, HIP’s
 ``__syncthreads``). Barriers are allocated to any workgroup that
 consists of more than a single wavefront.
 

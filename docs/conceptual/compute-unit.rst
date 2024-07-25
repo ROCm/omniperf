@@ -14,7 +14,7 @@ The :doc:`/conceptual/pipeline-descriptions` section details the various
 execution pipelines -- VALU, SALU, LDS, scheduler, and so forth. The metrics
 presented by Omniperf for these pipelines are described in
 :doc:`pipeline-metrics`. The :doc:`vL1D <vector-l1-cache>` cache and
-:doc:`LDS <local-data-share>` are described their own chapters.
+:doc:`LDS <local-data-share>` are described in their own sections.
 
 * The :ref:`desc-valu` is composed of multiple SIMD (single
   instruction, multiple data) vector processors, vector general purpose

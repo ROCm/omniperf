@@ -2,20 +2,20 @@
    :description: Omniperf documentation and reference
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD
 
-********
-Omniperf
-********
+**********************
+Omniperf documentation
+**********************
 
-Omniperf documentation provides a detailed breakdown of all facets of Omniperf.
+Omniperf documentation provides a comprehensive overview of Omniperf.
 In addition to a full deployment guide with installation instructions, this
 documentation also explains the ideas motivating the design behind the tool and
 its components.
 
-Omniperf is open source and hosted at `<https://github.com/ROCm/omniperf>`__.
-
 If you're new to Omniperf, familiarize yourself with the tool by reviewing the
 chapters that follow and gradually learn its more advanced features. To get
 started, see :doc:`What is Omniperf? <what-is-omniperf>`.
+
+Omniperf is open source and hosted at `<https://github.com/ROCm/omniperf>`__.
 
 .. grid:: 2
    :gutter: 3

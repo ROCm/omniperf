@@ -36,7 +36,8 @@ Core installation
 =================
 
 The core Omniperf application requires the following basic software
-dependencies. The core Omniperf is included with your ROCm installation.
+dependencies. As of ROCm 6.2, the core Omniperf is included with your ROCm
+installation.
 
 * Python ``>= 3.8``
 * CMake ``>= 3.19``
@@ -89,8 +90,8 @@ follows.
 
 .. _core-install-steps:
 
-Installation steps
-------------------
+Install from source
+-------------------
 
 #. A typical install begins by downloading the latest release tarball available
    from `<https://github.com/ROCm/omniperf/releases>`__. From there, untar and
@@ -188,6 +189,39 @@ configuration.
 
       export PATH=$INSTALL_DIR/{{ config.version }}/bin:$PATH
       export PYTHONPATH=$INSTALL_DIR/python-libs
+
+.. _core-install-package:
+
+Install via package manager
+---------------------------
+
+Once ROCm (minimum version 6.2.0) is installed, you can install Omniperf using
+your operating system's native package manager using the following commands.
+See :doc:`rocm-install-on-linux:index` for guidance on installing the ROCm
+software stack.
+
+.. tab-set::
+
+   .. tab-item:: Ubuntu
+
+      .. code-block:: shell
+
+         $ sudo apt install omniperf
+         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
+
+   .. tab-item:: Red Hat Enterprise Linux
+
+      .. code-block:: shell
+
+         $ sudo yum install omniperf
+         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
+
+   .. tab-item:: SUSE Linux Enterprise Server
+
+      .. code-block:: shell
+
+         $ sudo zypper install omniperf
+         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
 
 .. _core-install-rocprof-var:
 

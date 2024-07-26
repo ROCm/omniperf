@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf analysis: Grafana GUI
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, Grafana, panels, GUI, import
+
 ********************
 Grafana GUI analysis
 ********************
@@ -844,6 +848,8 @@ Texture Addresser
    Metric specific to texture addresser (TA) which receives commands (e.g.,
    instructions) and write/atomic data from the Compute Unit (CU), and coalesces
    them into fewer requests for the cache to process.
+
+.. _grafana-panel-td:
 
 Texture Data
 ++++++++++++

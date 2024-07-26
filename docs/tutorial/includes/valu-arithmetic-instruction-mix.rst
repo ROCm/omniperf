@@ -9,7 +9,7 @@ VALU arithmetic instruction mix
 
 .. note::
 
-   The examples in the section are expected to work on all CDNA accelerators.
+   The examples in the section are expected to work on all CDNA™ accelerators.
    However, the actual experiment results in this section were collected on an
    :ref:`MI2XX <mixxx-note>` accelerator.
 
@@ -22,7 +22,7 @@ This code uses a number of inline assembly instructions to cleanly
 identify the types of instructions being issued, as well as to avoid
 optimization / dead-code elimination by the compiler. While inline
 assembly is inherently not portable, this example is expected to work on
-all GCN GPUs and CDNA accelerators.
+all GCN™ GPUs and CDNA accelerators.
 
 We reproduce a sample of the kernel as follows:
 
@@ -42,13 +42,13 @@ These instructions correspond to:
 
 * A 32-bit floating point addition,
 
-* A 32-bit floating point multiplication,
+* a 32-bit floating point multiplication,
 
-* A 32-bit floating point square-root transcendental operation, and
+* a 32-bit floating point square-root transcendental operation, and
 
-* A 32-bit floating point fused multiply-add operation.
+* a 32-bit floating point fused multiply-add operation.
 
-For more detail, refer to (e.g.,) the `CDNA2 ISA
+For more detail, refer to the `CDNA2 ISA
 Guide <https://www.amd.com/system/files/TechDocs/instinct-mi200-cdna2-instruction-set-architecture.pdf>`__.
 
 Instruction mix

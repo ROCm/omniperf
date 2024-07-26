@@ -1,7 +1,7 @@
 .. meta::
-   :description: Omniperf client-side installation and deployment
+   :description: Omniperf Grafana server installation and deployment
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD,
-              install, deploy, Grafana, server, configuration,
+              install, deploy, Grafana, server, configuration, GUI
 
 ****************************************
 Setting up a Grafana server for Omniperf

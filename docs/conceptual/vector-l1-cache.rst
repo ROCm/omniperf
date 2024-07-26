@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: Vector L1 cache (vL1D)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD, vector, l1, cache, vl1d
+
 **********************
 Vector L1 cache (vL1D)
 **********************
@@ -37,7 +41,7 @@ operations issued by a wavefront. The vL1D cache consists of several components:
 Together, this complex is known as the vL1D, or Texture Cache per Pipe
 (TCP). A simplified diagram of the vL1D is presented below:
 
-.. figure:: ../data/performance-model/l1perf_model.*
+.. figure:: ../data/performance-model/l1perf_model.png
    :align: center
    :alt: Performance model of the vL1D Cache on AMD Instinct
 
@@ -52,7 +56,7 @@ vL1D Speed-of-Light
 
    The theoretical maximum throughput for some metrics in this section are
    currently computed with the maximum achievable clock frequency, as reported
-   by ``rocminfo``, for an accelerator.  This may not be realistic for all
+   by ``rocminfo``, for an accelerator. This may not be realistic for all
    workloads.
 
 The vL1D’s speed-of-light chart shows several key metrics for the vL1D
@@ -89,7 +93,7 @@ as a comparison with the peak achievable values of those metrics.
 
    * - Utilization
 
-     - Indicates how busy the :ref:`vL1D Cache RAM <desc-TC>` was during the
+     - Indicates how busy the :ref:`vL1D Cache RAM <desc-tc>` was during the
        kernel execution. The number of cycles where the vL1D Cache RAM is
        actively processing any request divided by the number of cycles where the
        vL1D is active [#vl1d-activity]_.
@@ -100,7 +104,7 @@ as a comparison with the peak achievable values of those metrics.
 
      - Indicates how well memory instructions were coalesced by the
        :ref:`address processing unit <desc-ta>`, ranging from uncoalesced (25%)
-       to fully coalesced (100%). The average number of
+       to fully coalesced (100%). Calculated as the average number of
        :ref:`thread-requests <thread-requests>` generated per instruction
        divided by the ideal number of thread-requests per instruction.
 
@@ -167,7 +171,7 @@ issue of further vector memory instructions.
    * - Data Stall
 
      - Percent of the :ref:`total CU cycles <total-cu-cycles>` the address
-       processor was stalled from sending write/atomic data further into the 
+       processor was stalled from sending write/atomic data further into the
        vL1D pipeline
 
      - Percent
@@ -221,7 +225,7 @@ kernel. These are broken down into a few major categories:
 
      - Private memory, or "scratch" memory, is only visible to a particular
        :ref:`work-item <desc-work-item>` in a particular
-       :ref:`workgroup <desc-workgroup>`. On AMD Instinct MI-series
+       :ref:`workgroup <desc-workgroup>`. On AMD Instinct™ MI-series
        accelerators, private memory is used to implement both register spills
        and stack memory accesses.
 
@@ -242,7 +246,7 @@ The address processor counts these instruction types as follows:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Global/Generic Read
 
@@ -250,7 +254,7 @@ The address processor counts these instruction types as follows:
        all :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Global/Generic Write
 
@@ -258,7 +262,7 @@ The address processor counts these instruction types as follows:
        on all :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Global/Generic Atomic
 
@@ -266,7 +270,7 @@ The address processor counts these instruction types as follows:
        return) instructions executed on all :doc:`compute units <compute-unit>`
        on the accelerator, per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack
 
@@ -274,7 +278,7 @@ The address processor counts these instruction types as follows:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack Read
 
@@ -282,7 +286,7 @@ The address processor counts these instruction types as follows:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack Write
 
@@ -290,7 +294,7 @@ The address processor counts these instruction types as follows:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instruction per normalization unit
+     - Instruction per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack Atomic
 
@@ -300,7 +304,7 @@ The address processor counts these instruction types as follows:
        Typically unused as these memory operations are typically used to
        implement thread-local storage.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
 .. note::
 
@@ -343,7 +347,7 @@ stage for spill/stack memory, and thus reports:
        spill/stack instructions, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack Coalesced Read Cycles
 
@@ -351,7 +355,7 @@ stage for spill/stack memory, and thus reports:
        coalesced spill/stack read instructions, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Spill/Stack Coalesced Write Cycles
 
@@ -359,7 +363,7 @@ stage for spill/stack memory, and thus reports:
        coalesced spill/stack write instructions, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
 .. _desc-utcl1:
 
@@ -389,14 +393,14 @@ Omniperf reports the following L1 TLB metrics:
      - The number of translation requests made to the UTCL1 per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Hits
 
      - The number of translation requests that hit in the UTCL1, and could be
        reused, per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Hit Ratio
 
@@ -411,16 +415,16 @@ Omniperf reports the following L1 TLB metrics:
        translation not being present in the cache, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Permission Misses
 
      - The total number of translation requests that missed in the UTCL1 due to
        a permission error, per :ref:`normalization unit <normalization-units>`.
        This is unused and expected to be zero in most configurations for modern
-       CDNA accelerators.
+       CDNA™ accelerators.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
 .. note::
 
@@ -527,7 +531,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        :ref:`address processing unit <desc-ta>` after coalescing per
        :ref:`normalization unit <normalization-units>`
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Cache Bandwidth
 
@@ -539,7 +543,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        instance, if only a single value is requested in a cache line, the data
        movement will still be counted as a full cache line.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`
 
    * - Cache Hit Rate [#vl1d-hit]_
 
@@ -562,7 +566,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        serviced by the :ref:`vL1D Cache RAM <desc-tc>` per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cache lines per normalization unit
+     - Cache lines per :ref:`normalization unit <normalization-units>`
 
    * - Invalidations
 
@@ -571,7 +575,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        :ref:`normalization unit <normalization-units>`.  This may be triggered
        by, for instance, the ``buffer_wbinvl1`` instruction.
 
-     - Invalidations per normalization unit
+     - Invalidations per :ref:`normalization unit <normalization-units>`
 
    * - L1-L2 Bandwidth
 
@@ -583,7 +587,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        instance, if only a single value is requested in a cache line, the data
        movement will still be counted as a full cache line.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`
 
    * - L1-L2 Reads
 
@@ -592,7 +596,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        :doc:`L2 Cache <l2-cache>` per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - L1-L2 Writes
 
@@ -600,7 +604,7 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        the vL1D to the :doc:`L2 cache <l2-cache>`, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - L1-L2 Atomics
 
@@ -609,27 +613,27 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
        :ref:`normalization unit <normalization-units>`. This includes requests
        for atomics with, and without return.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - L1 Access Latency
 
-     - The average number of cycles that a vL1D cache line request spent in the
-       vL1D cache pipeline.
+     - Calculated as the average number of cycles that a vL1D cache line request
+       spent in the vL1D cache pipeline.
 
      - Cycles
 
    * - L1-L2 Read Access Latency
 
-     - The average number of cycles that the vL1D cache took to issue and
-       receive read requests from the :doc:`L2 Cache <l2-cache>`. This number
-       also includes requests for atomics with return values.
+     - Calculated as the average number of cycles that the vL1D cache took to
+       issue and receive read requests from the :doc:`L2 Cache <l2-cache>`. This
+       number also includes requests for atomics with return values.
 
      - Cycles
 
    * - L1-L2 Write Access Latency
 
-     - The average number of cycles that the vL1D cache took to issue and
-       receive acknowledgement of a write request to the
+     - Calculated as the average number of cycles that the vL1D cache took to
+       issue and receive acknowledgement of a write request to the
        :doc:`L2 Cache <l2-cache>`. This number also includes requests for
        atomics without return values.
 
@@ -639,7 +643,22 @@ latencies of read/write memory operations to the :doc:`L2 cache <l2-cache>`.
 
    All cache accesses in vL1D are for a single cache line's worth of data.
    The size of a cache line may vary, however on current AMD Instinct MI CDNA
-   accelerators and GCN GPUs the L1 cache line size is 64B.
+   accelerators and GCN™ GPUs the L1 cache line size is 64B.
+
+.. rubric :: Footnotes
+
+.. [#vl1d-hit] The vL1D cache on AMD Instinct MI-series CDNA accelerators
+   uses a "hit-on-miss" approach to reporting cache hits. That is, if while
+   satisfying a miss, another request comes in that would hit on the same
+   pending cache line, the subsequent request will be counted as a "hit".
+   Therefore, it is also important to consider the access latency metric in the
+   :ref:`Cache access metrics <vl1d-cache-stall-metrics>` section when
+   evaluating the vL1D hit rate.
+
+.. [#vl1d-activity] Omniperf considers the vL1D to be active when any part of
+   the vL1D (excluding the :ref:`address processor <desc-ta>` and
+   :ref:`data return <desc-td>` units) are active, for example, when performing
+   a translation, waiting for data, accessing the Tag or Cache RAMs, etc.
 
 .. _vl1d-l2-transaction-detail:
 
@@ -707,7 +726,7 @@ Omniperf reports the following vL1D data-return path metrics:
        :ref:`address processor <desc-ta>` that were found to be coalescable, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Read Instructions
 
@@ -717,9 +736,9 @@ Omniperf reports the following vL1D data-return path metrics:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`. This is expected to be
        the sum of global/generic and spill/stack reads in the
-       :ref:`address processor <ta-instruction-counts>`.
+       :ref:`address processor <desc-ta>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Write Instructions
 
@@ -731,7 +750,7 @@ Omniperf reports the following vL1D data-return path metrics:
        the sum of global/generic and spill/stack stores counted by the
        :ref:`vL1D cache-front-end <ta-instruction-counts>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Atomic Instructions
 
@@ -741,22 +760,7 @@ Omniperf reports the following vL1D data-return path metrics:
        :doc:`compute units <compute-unit>` on the accelerator, per
        :ref:`normalization unit <normalization-units>`. This is expected to be
        the sum of global/generic and spill/stack atomics in the
-       :ref:`address processor <ta-instruction-counts>`.
+       :ref:`address processor <desc-ta>`.
 
-     - Instructions per normalization unit
-
-.. rubric :: Footnotes
-
-.. [#vl1d-hit] The vL1D cache on AMD Instinct MI-series CDNA accelerators
-   uses a "hit-on-miss" approach to reporting cache hits. That is, if while
-   satisfying a miss, another request comes in that would hit on the same
-   pending cache line, the subsequent request will be counted as a "hit".
-   Therefore, it is also important to consider the access latency metric in the
-   :ref:`Cache access metrics <vl1d-cache-stall-metrics>` section when
-   evaluating the vL1D hit rate.
-
-.. [#vl1d-activity] Omniperf considers the vL1D to be active when any part of
-   the vL1D (excluding the :ref:`address processor <desc-ta>` and
-   :ref:`data return <desc-td>` units) are active, for example, when performing
-   a translation, waiting for data, accessing the Tag or Cache RAMs, etc.
+     - Instructions per :ref:`normalization unit <normalization-units>`
 

@@ -63,7 +63,7 @@ casting, and so forth.
    }
 
 One of the aims of this example is to demonstrate the use of the
-:llvm-docs:`'generic' FLAT <address-space-identifier>` address space. This
+:llvm-docs:`"generic" FLAT <address-space-identifier>` address space. This
 address space is typically used when the compiler cannot statically prove where
 the backing memory is located.
 
@@ -73,9 +73,9 @@ compiler treat it as a function call (that is, on the other side of which, the
 address space may not be known). However, in a trivial example such as this, the
 compiler may choose to specialize the ``generic_store`` function to the two
 address spaces that might provably be used from our translation unit, that is,
-:ref:`‘local’ (a.k.a., LDS) <memory-spaces>` and `‘global’ <memory-spaces>`.
+:ref:`"local" (or, LDS) <memory-spaces>` and :ref:`"global" <memory-spaces>`.
 Hence, we forcibly cast the address space to
-:ref:`‘generic’ (i.e., FLAT) <memory-spaces>` to avoid this compiler
+:ref:`"generic" (or, FLAT) <memory-spaces>` to avoid this compiler
 optimization.
 
 .. warning::
@@ -153,7 +153,7 @@ First, we demonstrate our simple ``global_write`` kernel:
    ╘═════════╧═════════════════════════════╧═══════╧═══════╧═══════╧══════════════════╛
 
 Here, we have presented both the information in the VMEM Instruction Mix
-table (**10.3**) and the Address Processing Unit (15.1). We note that this
+table (**10.3**) and the Address Processing Unit (**15.1**). We note that this
 data is expected to be identical, and hence we omit table 15.1 in our
 subsequent examples.
 
@@ -244,7 +244,7 @@ Examining this kernel in the VMEM Instruction Mix table yields:
 
 As expected we see a single generic write (**10.3.2**). In the assembly
 generated for this kernel (in particular, we care about the
-``generic_store`` function). We see that this corresponds to a
+``generic_store`` function), we see that this corresponds to a
 ``flat_store_dword`` instruction:
 
 .. code-block:: asm
@@ -296,10 +296,13 @@ Next, we examine a simple global read operation:
      }
    }
 
-Here we observe a now familiar pattern: - Read a value in from global
-memory - Have a write hidden behind a conditional that is impossible for
-the compiler to statically eliminate, but is identically false. In this
-case, our ``main()`` function initializes the data in ``ptr`` to zero.
+Here we observe a now familiar pattern:
+
+- Read a value in from global memory.
+
+- Have a write hidden behind a conditional that is impossible for
+  the compiler to statically eliminate, but is identically false. In this
+  case, our ``main()`` function initializes the data in ``ptr`` to zero.
 
 Running Omniperf on this kernel yields:
 
@@ -591,28 +594,32 @@ Running this kernel through Omniperf shows:
    │ 16.3.12 │ L1-L2 Atomic │  1.00 │  1.00 │  1.00 │ Req per kernel │
    ╘═════════╧══════════════╧═══════╧═══════╧═══════╧════════════════╛
 
-That is, we see: - A single generic atomic instruction (**10.3.3**) that
-maps to both - an LDS instruction (**12.2.0**), and - an L1-L2 atomic
-request (**16.3**)
+That is, we see:
+
+- A single generic atomic instruction (**10.3.3**) that maps to both
+
+- An LDS instruction (**12.2.0**), and
+
+- An L1-L2 atomic request (**16.3**)
 
 We have demonstrated the ability of the generic address space to
-*dynamically* target different backing memory!
+*dynamically* target different backing memory.
 
 .. _spill-scratch:
 
 Spill/Scratch (BUFFER)
 ----------------------
 
-Next we examine the use of ‘Spill/Scratch’ memory. On current CDNA
+Next we examine the use of "Spill/Scratch" memory. On current CDNA
 accelerators such as the :ref:`MI2XX <mixxx-note>`, this is implemented using
 the :ref:`private <memory-spaces>` memory space, which maps to
-:llvm-docs:`'scratch' memory <amdgpu-address-spaces>` in AMDGPU hardware
+:llvm-docs:`"scratch" memory <amdgpu-address-spaces>` in AMDGPU hardware
 terminology. This type of memory can be accessed via different instructions
 depending on the specific architecture targeted. However, current CDNA
 accelerators such as the :ref:`MI2XX <mixxx-note>` use so called ``buffer``
 instructions to access private memory in a simple (and typically) coalesced
 manner. See
-:mi200-isa-pdf:`Sec. 9.1, ‘Vector Memory Buffer Instructions’ of the CDNA2 ISA guide <>`
+:mi200-isa-pdf:`Sec. 9.1, "Vector Memory Buffer Instructions" of the CDNA2 ISA guide <>`
 for further reading on this instruction type.
 
 We develop a `simple

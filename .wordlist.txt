@@ -42,6 +42,7 @@ conf
 gcn
 isa
 latencies
+lds
 lookaside
 mantor
 modulefile

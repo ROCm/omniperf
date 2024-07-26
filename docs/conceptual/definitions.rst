@@ -19,7 +19,7 @@ and in this documentation.
 Memory spaces
 =============
 
-AMD Instinct MI accelerators can access memory through multiple address spaces
+AMD Instinct™ MI-series accelerators can access memory through multiple address spaces
 which may map to different physical memory locations on the system. The
 following table provides a view into how various types of memory used
 in HIP map onto these constructs:
@@ -107,3 +107,46 @@ memory allocated local to that device may see the allocation as coherently
 cacheable, while a remote accelerator might see the same allocation as
 *uncached*.
 
+These memory types include:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Memory type
+     - Description
+
+   * - Uncached Memory (UC)
+     - Memory that will not be cached in this accelerator. On
+       :ref:`MI2XX <mixxx-note>` accelerators, this corresponds “fine-grained”
+       (or, “coherent”) memory allocated on a remote accelerator or the host,
+       for example, using ``hipHostMalloc`` or ``hipMallocManaged`` with default
+       allocation flags.
+
+   * - Non-hardware-Coherent Memory (NC)
+     - Memory that will be cached by the accelerator, and is only guaranteed to
+       be consistent at kernel boundaries / after software-driven
+       synchronization events. On :ref:`MI2XX <mixxx-note>` accelerators, this
+       type of memory maps to, for example, “coarse-grained” ``hipHostMalloc``’d
+       memory -- that is, allocated with the ``hipHostMallocNonCoherent``
+       flag -- or ``hipMalloc``’d memory allocated on a remote accelerator.
+
+   * - Coherently Cachable (CC)
+     - Memory for which only reads from the accelerator where the memory was
+       allocated will be cached. Writes to CC memory are uncached, and trigger
+       invalidations of any line within this accelerator. On
+       :ref:`MI2XX <mixxx-note>` accelerators, this type of memory maps to
+       “fine-grained” memory allocated on the local accelerator using, for
+       example, the ``hipExtMallocWithFlags`` API using the
+       ``hipDeviceMallocFinegrained`` flag.
+
+   * - Read/Write Coherent Memory (RW)
+     - Memory that will be cached by the accelerator, but may be invalidated by
+       writes from remote devices at kernel boundaries / after software-driven
+       synchronization events. On :ref:`MI2XX <mixxx-note>` accelerators, this
+       corresponds to “coarse-grained” memory allocated locally to the
+       accelerator, using for example, the default ``hipMalloc`` allocator.
+
+Find a good discussion of coarse and fine-grained memory allocations and what
+type of memory is returned by various combinations of memory allocators, flags
+and arguments in the
+`Crusher quick-start guide <https://docs.olcf.ornl.gov/systems/crusher_quick_start_guide.html#floating-point-fp-atomic-operations-and-coarse-fine-grained-memory-allocations>`_.

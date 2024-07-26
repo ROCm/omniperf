@@ -1,5 +1,5 @@
 .. meta::
-   :description: Omniperf documentation and reference
+   :description: Omniperf performance model
    :keywords: Omniperf, ROCm, performance, model, profiler, tool, Instinct,
               accelerator, AMD
 
@@ -9,7 +9,7 @@ Performance model
 
 Omniperf makes available an extensive list of metrics to better understand
 achieved application performance on AMD Instinct™ MI-series accelerators
-including Graphics Core Next™ (GCN) GPUs like the AMD Instinct MI50, CDNA
+including Graphics Core Next™ (GCN) GPUs like the AMD Instinct MI50, CDNA™
 accelerators like the MI100, and CDNA2 accelerators such as the MI250X, MI250,
 and MI210.
 

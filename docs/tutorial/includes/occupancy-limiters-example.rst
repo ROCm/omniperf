@@ -426,24 +426,24 @@ interest, we see:
 * The SGPR allocation (**7.1.7**) is 80 registers, slightly more than the 76
   requested by the compiler due to allocation granularity, and
 
-* We have a :ref:`‘scratch’ <memory-spaces>`, that is, private memory,
+* We have a :ref:`"scratch" <memory-spaces>`, that is, private memory,
   allocation of 60 bytes per work-item.
 
 Analyzing the resource allocation block (**6.2**) we now see that for the
-first time, the ‘Not-scheduled Rate (Workgroup Manager)’ metric (**6.2.0**)
+first time, the "Not-scheduled Rate (Workgroup Manager)" metric (**6.2.0**)
 has become non-zero. This is because the workgroup manager is
 responsible for management of scratch, which we see also contributes to
-our occupancy limiters in the ‘Scratch Stall Rate’ (**6.2.3**). We note that
+our occupancy limiters in the "Scratch Stall Rate" (**6.2.3**). Note that
 the sum of the workgroup manager not-scheduled rate and the
 scheduler-pipe non-scheduled rate is still :math:`\sim25\%`, as in our
-previous examples
+previous examples.
 
-Next, we see that the scheduler-pipe stall rate (**6.2.2**), i.e., how often
-we could not schedule a workgroup to a CU was only about
+Next, we see that the scheduler-pipe stall rate (**6.2.2**), that is, how often
+we could not schedule a workgroup to a CU, was only about
 :math:`\sim8\%`. This hints that perhaps, our kernel is not
-*particularly* occupancy limited by resources, and indeed checking the
+*particularly* occupancy limited by resources. Indeed, checking the
 wave occupancy metric (**2.1.15**) shows that this kernel is reaching nearly
-99% occupancy!
+99% occupancy.
 
 Finally, we inspect the occupancy limiter metrics and see a roughly even
 split between :ref:`waveslots <desc-valu>` (**6.2.4**), :ref:`VGPRs <desc-valu>`

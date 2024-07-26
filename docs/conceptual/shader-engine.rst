@@ -1,8 +1,12 @@
+.. meta::
+   :description: Omniperf performance model: Shader engine (SE)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, shader, engine, sL1D, L1I, workgroup manager, SPI
+
 ******************
 Shader engine (SE)
 ******************
 
-The :doc:`compute units <compute-unit>` on a CDNA accelerator are grouped
+The :doc:`compute units <compute-unit>` on a CDNA™ accelerator are grouped
 together into a higher-level organizational unit called a shader engine (SE):
 
 .. figure:: ../data/performance-model/selayout.png
@@ -12,9 +16,9 @@ together into a higher-level organizational unit called a shader engine (SE):
    Example of CU-grouping into shader engines on AMD Instinct MI-series
    accelerators.
 
-The number of CUs on a SE varies from chip to chip -- see for example 
+The number of CUs on a SE varies from chip to chip -- see for example
 :hip-training-pdf:`20`. In addition, newer accelerators such as the AMD
-Instinct MI 250X have 8 SEs per accelerator.
+Instinct™ MI 250X have 8 SEs per accelerator.
 
 For the purposes of Omniperf, we consider resources that are shared between
 multiple CUs on a single SE as part of the SE's metrics.
@@ -36,7 +40,7 @@ The Scalar L1 Data cache (sL1D) can cache data accessed from scalar load
 instructions (and scalar store instructions on architectures where they exist)
 from wavefronts in the :doc:`CUs <compute-unit>`. The sL1D is shared between
 multiple CUs (:gcn-crash-course:`36`) -- the exact number of CUs depends on the
-architecture in question (3 CUs in GCN GPUs and MI100, 2 CUs in
+architecture in question (3 CUs in GCN™ GPUs and MI100, 2 CUs in
 :ref:`MI2XX <mixxx-note>`) -- and is backed by the :doc:`L2 cache <l2-cache>`.
 
 In typical usage, the data in the sL1D is comprised of:
@@ -80,7 +84,7 @@ cache as a comparison with the peak achievable values of those metrics:
 
      - The number of bytes looked up in the sL1D cache, as a percent of the peak
        theoretical bandwidth. Calculated as the ratio of sL1D requests over the
-       :ref:`total sL1D cycles <total-sl1d-cycles>`. 
+       :ref:`total sL1D cycles <total-sl1d-cycles>`.
 
      - Percent
 
@@ -123,14 +127,14 @@ and the hit/miss statistics.
      - The total number of requests, of any size or type, made to the sL1D per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Hits
 
      - The total number of sL1D requests that hit on a previously loaded cache
        line, per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Misses - Non Duplicated
 
@@ -139,7 +143,7 @@ and the hit/miss statistics.
        :ref:`normalization unit <normalization-units>`. See :ref:`desc-sl1d-sol`
        for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Misses - Duplicated
 
@@ -148,7 +152,7 @@ and the hit/miss statistics.
        :ref:`normalization unit <normalization-units>`. See
        :ref:`desc-sl1d-sol` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Cache Hit Rate
 
@@ -163,7 +167,7 @@ and the hit/miss statistics.
      - The total number of sL1D read requests of any size, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Atomic Requests
 
@@ -171,42 +175,42 @@ and the hit/miss statistics.
        :ref:`normalization unit <normalization-units>`. Typically unused on CDNA
        accelerators.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests (1 DWord)
 
      - The total number of sL1D read requests made for a single dword of data
        (4B), per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests (2 DWord)
 
      - The total number of sL1D read requests made for a two dwords of data
        (8B), per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests (4 DWord)
 
      - The total number of sL1D read requests made for a four dwords of data
        (16B), per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests (8 DWord)
 
      - The total number of sL1D read requests made for a eight dwords of data
        (32B), per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests (16 DWord)
 
      - The total number of sL1D read requests made for a sixteen dwords of data
        (64B), per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
 .. _desc-sl1d-l2-interface:
 
@@ -214,7 +218,8 @@ sL1D ↔ L2 Interface
 -------------------
 
 This panel gives more detail on the data requested across the
-sL1D↔:doc:`L2 <l2-cache>` interface.
+sL1D↔
+:doc:`L2 <l2-cache>` interface.
 
 .. list-table::
    :header-rows: 1
@@ -233,14 +238,14 @@ sL1D↔:doc:`L2 <l2-cache>` interface.
        and atomics are typically unused on current CDNA accelerators, so in the
        majority of cases this can be interpreted as an sL1D→L2 read bandwidth.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`
 
    * - Read Requests
 
      - The total number of read requests from sL1D to the :doc:`L2 <l2-cache>`,
        per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Write Requests
 
@@ -248,7 +253,7 @@ sL1D↔:doc:`L2 <l2-cache>` interface.
        per :ref:`normalization unit <normalization-units>`. Typically unused on
        current CDNA accelerators.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Atomic Requests
 
@@ -257,14 +262,15 @@ sL1D↔:doc:`L2 <l2-cache>` interface.
        :ref:`normalization unit <normalization-units>`. Typically unused on
        current CDNA accelerators.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Stall Cycles
 
-     - The total number of cycles the sL1D↔:doc:`L2 <l2-cache>` interface was
-       stalled, per :ref:`normalization unit <normalization-units>`.
+     - The total number of cycles the sL1D↔
+       :doc:`L2 <l2-cache>` interface was stalled, per
+       :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
 .. rubric:: Footnotes
 
@@ -304,7 +310,7 @@ L1I Speed-of-Light
 
    The theoretical maximum throughput for some metrics in this section are
    currently computed with the maximum achievable clock frequency, as reported
-   by ``rocminfo``, for an accelerator.  This may not be realistic for all
+   by ``rocminfo``, for an accelerator. This may not be realistic for all
    workloads.
 
 The L1 Instruction Cache speed-of-light chart shows some key metrics of
@@ -373,14 +379,14 @@ This panel gives more detail on the hit/miss statistics of the L1I:
      - The total number of requests made to the L1I per
        :ref:`normalization-unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Hits
 
      - The total number of L1I requests that hit on a previously loaded cache
        line, per :ref:`normalization-unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Misses - Non Duplicated
 
@@ -389,7 +395,7 @@ This panel gives more detail on the hit/miss statistics of the L1I:
        :ref:`normalization-unit <normalization-units>`. See note in
        :ref:`desc-l1i-sol` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Misses - Duplicated
 
@@ -398,13 +404,13 @@ This panel gives more detail on the hit/miss statistics of the L1I:
        :ref:`normalization-unit <normalization-units>`. See note in
        :ref:`desc-l1i-sol` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`
 
    * - Cache Hit Rate
 
      - The percent of L1I requests that hit [#l1i-cache]_ on a previously loaded
        line the cache. Calculated as the ratio of the number of L1I requests
-       that hit over the the number of all L1I requests.
+       that hit over the number of all L1I requests.
 
      - Percent
 
@@ -428,7 +434,7 @@ L1I-:doc:`L2 <l2-cache>` interface.
      - The total number of bytes read across the L1I-:doc:`L2 <l2-cache>`
        interface, per :ref:`normalization unit <normalization-units>`.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`
 
 .. rubric:: Footnotes
 
@@ -528,7 +534,7 @@ hardware components it interacts with.
 
      - The percent of :ref:`total shader engine cycles <total-se-cycles>` in the
        kernel where any CU in a shader-engine was actively doing any work,
-       normalized over all shader-engines.  Low values (e.g., << 100%) indicate
+       normalized over all shader-engines. Low values (e.g., << 100%) indicate
        that the accelerator was not fully saturated by the kernel, or a
        potential load-imbalance issue.
 

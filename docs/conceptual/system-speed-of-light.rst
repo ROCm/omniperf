@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: System Speed-of-Light
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD, system, speed of light
+
 *********************
 System Speed-of-Light
 *********************
@@ -9,12 +13,12 @@ of Omniperf’s profiling report.
 
    The theoretical maximum throughput for some metrics in this section are
    currently computed with the maximum achievable clock frequency, as reported
-   by :doc:`rocminfo:index`, for an accelerator. This may not be realistic for
+   by ``rocminfo``, for an accelerator. This may not be realistic for
    all workloads.
 
    Also, not all metrics -- such as FLOP counters -- are available on all AMD
-   Instinct(tm) MI accelerators. For more detail on how operations are counted,
-   see the :ref:`metrics-flop-count` section.
+   Instinct™ MI-series accelerators. For more detail on how operations are
+   counted, see the :ref:`metrics-flop-count` section.
 
 .. list-table::
    :header-rows: 1
@@ -285,7 +289,7 @@ of Omniperf’s profiling report.
 
      - The number of bytes looked up in the sL1D cache per unit time. This is
        also presented as a percent of the peak theoretical bandwidth achievable
-       on the specific accelerator. 
+       on the specific accelerator.
 
      - GB/s
 
@@ -293,7 +297,7 @@ of Omniperf’s profiling report.
 
      - The number of bytes looked up in the L1I cache per unit time. This is
        also presented as a percent of the peak theoretical bandwidth achievable
-       on the specific accelerator. 
+       on the specific accelerator.
 
      - GB/s
 

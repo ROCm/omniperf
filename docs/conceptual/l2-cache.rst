@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: L2 cache (TCC)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, L2, cache, infinity fabric, metrics
+
 **************
 L2 cache (TCC)
 **************
@@ -9,7 +13,7 @@ on the device. Besides serving requests from the
 for servicing requests from the :ref:`L1 instruction caches <desc-l1i>`, the
 :ref:`scalar L1 data caches <desc-sL1D>` and the
 :doc:`command processor <command-processor>`. The L2 cache is composed of a
-number of distinct channels (32 on MI100/:ref:`MI2XX <mixxx-note>` series CDNA
+number of distinct channels (32 on MI100 and :ref:`MI2XX <mixxx-note>` series CDNA
 accelerators at 256B address interleaving) which can largely operate
 independently. Mapping of incoming requests to a specific L2 channel is
 determined by a hashing mechanism that attempts to evenly distribute requests
@@ -132,14 +136,14 @@ This section details the incoming requests to the L2 cache from the
        if only a single value is requested in a cache line, the data movement
        will still be counted as a full cache line.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`.
 
    * - Requests
 
      - The total number of incoming requests to the L2 from all clients for all
        request types, per :ref:`normalization unit <normalization-units>`.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Read Requests
 
@@ -221,7 +225,7 @@ This section details the incoming requests to the L2 cache from the
      - The total number of L2 cache lines written back to memory for internal
        hardware reasons, per :ref:`normalization unit <normalization-units>`.
 
-     - Cache lines per normalization unit
+     - Cache lines per :ref:`normalization unit <normalization-units>`.
 
    * - Writebacks (vL1D Req)
 
@@ -229,14 +233,14 @@ This section details the incoming requests to the L2 cache from the
        initiated by the :doc:`vL1D cache <vector-l1-cache>`, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cache lines per normalization unit
+     - Cache lines per :ref:`normalization unit <normalization-units>`.
 
    * - Evictions (Normal)
 
      - The total number of L2 cache lines evicted from the cache due to capacity
        limits, per :ref:`normalization unit <normalization-units>`.
 
-     - Cache lines per normalization unit
+     - Cache lines per :ref:`normalization unit <normalization-units>`.
 
    * - Evictions (vL1D Req)
 
@@ -245,7 +249,7 @@ This section details the incoming requests to the L2 cache from the
        :doc:`vL1D cache <vector-l1-cache>`, per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cache lines per normalization unit
+     - Cache lines per :ref:`normalization unit <normalization-units>`.
 
    * - Non-hardware-Coherent Requests
 
@@ -253,25 +257,25 @@ This section details the incoming requests to the L2 cache from the
        memory allocations, per :ref:`normalization unit <normalization-units>`.
        See the :ref:`memory-type` for more information.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Uncached Requests
 
-     - The total number of requests to the L2 that to uncached (UC) memory
+     - The total number of requests to the L2 that go to Uncached (UC) memory
        allocations. See the :ref:`memory-type` for more information.
 
      - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Coherently Cached Requests
 
-     - The total number of requests to the L2 that to coherently cacheable (CC)
+     - The total number of requests to the L2 that go to Coherently Cacheable (CC)
        memory allocations. See the :ref:`memory-type` for more information.
 
      - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Read/Write Coherent Requests
 
-     - The total number of requests to the L2 that to Read-Write coherent memory
+     - The total number of requests to the L2 that go to Read-Write coherent memory
        (RW) allocations. See the :ref:`memory-type` for more information.
 
      - Requests per :ref:`normalization unit <normalization-units>`.
@@ -396,7 +400,7 @@ Metrics
      - The total number of bytes read by the L2 cache from Infinity Fabric per
        :ref:`normalization unit <normalization-units>`.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`.
 
    * - HBM Read Traffic
 
@@ -446,7 +450,7 @@ Metrics
        :ref:`uncached memory <memory-type>` allocations on the
        MI2XX.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`.
 
    * - HBM Write and Atomic Traffic
 
@@ -529,7 +533,7 @@ Metrics
    * - Read Stall
 
      - The ratio of the total number of cycles the L2-Fabric interface was
-       stalled on a read request to any destination (local HBM, remote PCIe
+       stalled on a read request to any destination (local HBM, remote PCIe®
        connected accelerator or CPU, or remote Infinity Fabric connected
        accelerator [#inf]_ or CPU) over the
        :ref:`total active L2 cycles <total-active-l2-cycles>`.
@@ -571,7 +575,7 @@ transaction breakdown table:
        :ref:`l2-request-flow` for more detail. Typically unused on CDNA
        accelerators.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Uncached Read Requests
 
@@ -581,7 +585,7 @@ transaction breakdown table:
        uncached data are counted as two 32B uncached data requests. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - 64B Read Requests
 
@@ -590,7 +594,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - HBM Read Requests
 
@@ -599,7 +603,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Remote Read Requests
 
@@ -608,7 +612,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - 32B Write and Atomic Requests
 
@@ -617,7 +621,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Uncached Write and Atomic Requests
 
@@ -626,7 +630,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - 64B Write and Atomic Requests
 
@@ -635,7 +639,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - HBM Write and Atomic Requests
 
@@ -644,7 +648,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Remote Write and Atomic Requests
 
@@ -654,7 +658,7 @@ transaction breakdown table:
        :ref:`normalization unit <normalization-units>`. See
        :ref:`l2-request-flow` for more detail.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
    * - Atomic Requests
 
@@ -668,7 +672,7 @@ transaction breakdown table:
        :ref:`fine-grained memory <memory-type>` allocations or
        :ref:`uncached memory <memory-type>` allocations on the MI2XX.
 
-     - Requests per normalization unit
+     - Requests per :ref:`normalization unit <normalization-units>`.
 
 .. _l2-fabric-stalls:
 
@@ -759,7 +763,7 @@ remote accelerators or CPUs.
    `Infinity Fabric <https://www.amd.com/en/technologies/infinity-architecture>`_
    technology can be used to connect multiple accelerators to achieve advanced
    peer-to-peer connectivity and enhanced bandwidths over traditional PCIe
-   connections. Some AMD Instinct MI accelerators like the MI250X,
+   connections. Some AMD Instinct MI-series accelerators like the MI250X
    `feature coherent CPU↔accelerator connections built using AMD Infinity Fabric <https://www.amd.com/system/files/documents/amd-cdna2-white-paper.pdf>`_.
 
 .. rubric:: Disclaimer

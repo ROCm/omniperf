@@ -315,19 +315,19 @@ First, we see that the IPC metric (**11.2.0**) tops our theoretical maximum
 of 5 instructions per cycle (discussed in the :ref:`scheduler <desc-scheduler>`
 section). How can this be?
 
-Recall that Layla’s slides say “no functional unit” for the internal
+Recall that :gcn-crash-course:`27` say “no functional unit” for the internal
 instructions. This removes the limitation on the IPC. If we are *only*
 issuing internal instructions, we are not issuing to any execution
 units! However, workloads such as these are almost *entirely* artificial
-(i.e., repeatedly issuing internal instructions almost exclusively). In
+(that is, repeatedly issuing internal instructions almost exclusively). In
 practice, a maximum of IPC of 5 is expected in almost all cases.
 
-Secondly, we note that our “Issued” IPC (**11.2.1**) is still identical to
-one here. Again, this has to do with the details of “internal”
+Secondly, note that our “Issued” IPC (**11.2.1**) is still identical to
+the one here. Again, this has to do with the details of “internal”
 instructions. Recall in our :ref:`previous example <issued-ipc>` we defined
 this metric as explicitly excluding internal instruction counts. The
-logical question then is, ‘what *is* this metric counting in our
-``s_nop`` kernel?’
+logical question then is, "what *is* this metric counting in our
+``s_nop`` kernel?"
 
 The generated assembly looks something like:
 
@@ -352,19 +352,19 @@ states:
 
    End of program; terminate wavefront.
 
-This is not on our list of internal instructions from Layla’s tutorial,
-and is therefore counted as part of our Issued IPC (**11.2.1**). Thus: the
-issued IPC being equal to one here indicates that we issued an
-``s_endpgm`` instruction every cycle the :ref:`scheduler <desc-scheduler>` was
-active for non-internal instructions, which is expected as this was our
-*only* non-internal instruction!
+This is not on our list of internal instructions from
+:gcn-crash-course:`The AMD GCN Architecture <>`, and is therefore counted as part
+of our Issued IPC (**11.2.1**). Thus, the issued IPC being equal to one here
+indicates that we issued an ``s_endpgm`` instruction every cycle the
+:ref:`scheduler <desc-scheduler>` was active for non-internal instructions, which
+is expected as this was our *only* non-internal instruction.
 
 SALU Utilization
 ----------------
 
-Next, we explore a simple `SALU <desc-salu>` kernel in our on-going IPC and
+Next, we explore a simple :ref:`SALU <desc-salu>` kernel in our on-going IPC and
 utilization example. For this case, we select a simple scalar move
-operation, e.g.:
+operation, for instance:
 
 .. code-block:: asm
 
@@ -412,15 +412,19 @@ scalar register (``s0``). Running this kernel through Omniperf yields:
    │ 11.2.8  │ MFMA Instr Cycles   │       │       │       │ Cycles/instr │
    ╘═════════╧═════════════════════╧═══════╧═══════╧═══════╧══════════════╛
 
-Here we see that: - both our IPC (**11.2.0**) and Issued IPC (**11.2.1**) are
-:math:`\sim1.0` as expected, and, - the SALU Utilization (**11.2.2**) was
-nearly 100% as it was active for almost the entire kernel.
+Here we see that:
+
+- Both our IPC (**11.2.0**) and Issued IPC (**11.2.1**) are
+  :math:`\sim1.0` as expected, and
+
+- The SALU Utilization (**11.2.2**) was
+  nearly 100% as it was active for almost the entire kernel.
 
 VALU Active Threads
 -------------------
 
 For our final IPC/Utilization example, we consider a slight modification
-of our `v_mov <ipc-valu-utlization>` example:
+of our :ref:`v_mov <ipc-valu-utlization>` example:
 
 .. code-block:: cpp
 

@@ -1,3 +1,8 @@
+.. meta::
+   :description: Omniperf performance model: Pipeline metrics
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, pipeline, wavefront, metrics, launch, runtime
+              VALU, MFMA, instruction mix, FLOPs, arithmetic, operations
+
 ****************
 Pipeline metrics
 ****************
@@ -47,7 +52,7 @@ kernel launch:
    * - Total Wavefronts
 
      - The total number of wavefronts launched as part of the kernel dispatch.
-       On AMD Instinct CDNA accelerators and GCN GPUs, the wavefront size is
+       On AMD Instinct™ CDNA™ accelerators and GCN™ GPUs, the wavefront size is
        always 64 work-items.  Thus, the total number of wavefronts should be
        equivalent to the ceiling of grid size divided by 64.
 
@@ -212,11 +217,11 @@ execution of wavefronts in a kernel:
 .. note::
 
    As mentioned earlier, the measurement of kernel cycles and time typically
-   cannot directly be compared to e.g., Wave Cycles. This is due to two factors:
+   cannot be directly compared to, for example, wave cycles. This is due to two factors:
    first, the kernel cycles/timings are measured using a counter that is
    impacted by scheduling overhead, this is particularly noticeable for
    "short-running" kernels (less than 1ms) where scheduling overhead forms a
-   significant portion of the overall kernel runtime. Secondly, the Wave Cycles
+   significant portion of the overall kernel runtime. Secondly, the wave cycles
    metric is incremented per-wavefront scheduled to a SIMD every cycle whereas
    the kernel cycles counter is incremented only once per-cycle when *any*
    wavefront is scheduled.
@@ -240,9 +245,9 @@ instructions.
    change regardless of the execution mask of the wavefront. Note that even if
    the execution mask is identically zero (meaning that *no lanes are active*)
    the instruction will still be counted, as CDNA accelerators still consider
-   these instructions *issued*. See for example
-   :mi200-isa-pdf:`EXECute Mask, section 3.3 of the CDNA2 ISA guide<19>` and
-   further details.
+   these instructions *issued*. See
+   :mi200-isa-pdf:`EXECute Mask, section 3.3 of the CDNA2 ISA guide<19>` for
+   examples and further details.
 
 Overall instruction mix
 -----------------------
@@ -355,14 +360,14 @@ additions executed as part of an MFMA instruction using the same precision.
      - The total number of instructions operating on 32-bit integer operands
        issued to the VALU per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - INT64
 
      - The total number of instructions operating on 64-bit integer operands
        issued to the VALU per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F16-ADD
 
@@ -370,7 +375,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F16-MUL
 
@@ -378,7 +383,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F16-FMA
 
@@ -386,7 +391,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F16-TRANS
 
@@ -394,7 +399,7 @@ additions executed as part of an MFMA instruction using the same precision.
        on 16-bit floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F32-ADD
 
@@ -402,7 +407,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F32-MUL
 
@@ -410,7 +415,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F32-FMA
 
@@ -418,7 +423,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F32-TRANS
 
@@ -426,7 +431,7 @@ additions executed as part of an MFMA instruction using the same precision.
        operating on 32-bit floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F64-ADD
 
@@ -434,7 +439,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F64-MUL
 
@@ -442,7 +447,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F64-FMA
 
@@ -450,7 +455,7 @@ additions executed as part of an MFMA instruction using the same precision.
        floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - F64-TRANS
 
@@ -458,7 +463,7 @@ additions executed as part of an MFMA instruction using the same precision.
        operating on 64-bit floating-point operands issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Conversion
 
@@ -466,7 +471,7 @@ additions executed as part of an MFMA instruction using the same precision.
        to or from F32↔F64) issued to the VALU per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
 For an example of these counters in action, refer to
 :ref:`valu-arith-instruction-mix-ex`.
@@ -485,7 +490,7 @@ instructions.
 .. _mfma-instruction-mix:
 
 MFMA instruction mix
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 .. warning::
 
@@ -512,35 +517,35 @@ MFMA instructions are classified by the type of input data they operate on, and
      - The total number of 8-bit integer :ref:`MFMA <desc-mfma>` instructions
        issued per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - MFMA-F16 Instructions
 
      - The total number of 16-bit floating point :ref:`MFMA <desc-mfma>`
        instructions issued per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - MFMA-BF16 Instructions
 
      - The total number of 16-bit brain floating point :ref:`MFMA <desc-mfma>`
        instructions issued per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - MFMA-F32 Instructions
 
      - The total number of 32-bit floating-point :ref:`MFMA <desc-mfma>`
        instructions issued per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - MFMA-F64 Instructions
 
      - The total number of 64-bit floating-point :ref:`MFMA <desc-mfma>`
        instructions issued per :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
 Compute pipeline
 ================
@@ -686,9 +691,9 @@ Pipeline statistics
 
 This section reports a number of key performance characteristics of
 various execution units on the :doc:`CU <compute-unit>`. Refer to
-:ref:`ipc-example` for a detailed dive into these metrics, and
-:ref:`scheduler <desc-scheduler>` for a high-level overview of execution units
-and instruction issue.
+:ref:`ipc-example` for a detailed dive into these metrics, and the
+:ref:`scheduler <desc-scheduler>` the for a high-level overview of execution
+units and instruction issue.
 
 .. list-table::
    :header-rows: 1
@@ -756,7 +761,7 @@ and instruction issue.
      - Indicates what percent of the kernel's duration the
        :ref:`branch <desc-branch>` unit was busy executing instructions.
        Computed as the ratio of the total number of cycles spent by the
-       :ref:`scheduler <desc-scheduler>` issuing branch instructions over the 
+       :ref:`scheduler <desc-scheduler>` issuing branch instructions over the
        :ref:`total CU cycles <total-cu-cycles>`.
 
      - Percent
@@ -850,7 +855,7 @@ not. For more detail on how operations are counted see the
        :ref:`VALU <desc-valu>` or :ref:`MFMA <desc-mfma>` units, per
        :ref:`normalization unit <normalization-units>`.
 
-     - FLOP per normalization unit
+     - FLOP per :ref:`normalization unit <normalization-units>`
 
    * - IOPs (Total)
 
@@ -858,7 +863,7 @@ not. For more detail on how operations are counted see the
        :ref:`VALU <desc-valu>` or :ref:`MFMA <desc-mfma>` units, per
        :ref:`normalization unit <normalization-units>`.
 
-     - IOP per normalization unit
+     - IOP per :ref:`normalization unit <normalization-units>`
 
    * - F16 OPs
 
@@ -866,7 +871,7 @@ not. For more detail on how operations are counted see the
        :ref:`VALU <desc-valu>` or :ref:`MFMA <desc-mfma>` units, per
        :ref:`normalization unit <normalization-units>`.
 
-     - FLOP per normalization unit
+     - FLOP per :ref:`normalization unit <normalization-units>`
 
    * - BF16 OPs
 
@@ -875,7 +880,7 @@ not. For more detail on how operations are counted see the
        :ref:`normalization unit <normalization-units>`. Note: on current CDNA
        accelerators, the VALU has no native BF16 instructions.
 
-     - FLOP per normalization unit
+     - FLOP per :ref:`normalization unit <normalization-units>`
 
    * - F32 OPs
 
@@ -883,7 +888,7 @@ not. For more detail on how operations are counted see the
        the :ref:`VALU <desc-valu>` or :ref:`MFMA <desc-mfma>` units, per
        :ref:`normalization unit <normalization-units>`.
 
-     - FLOP per normalization unit
+     - FLOP per :ref:`normalization unit <normalization-units>`
 
    * - F64 OPs
 
@@ -891,7 +896,7 @@ not. For more detail on how operations are counted see the
        the :ref:`VALU <desc-valu>` or :ref:`MFMA <desc-mfma>` units, per
        :ref:`normalization unit <normalization-units>`.
 
-     - FLOP per normalization unit
+     - FLOP per :ref:`normalization unit <normalization-units>`
 
    * - INT8 OPs
 
@@ -900,5 +905,5 @@ not. For more detail on how operations are counted see the
        :ref:`normalization unit <normalization-units>`. Note: on current CDNA
        accelerators, the VALU has no native INT8 instructions.
 
-     - IOPs per normalization unit
+     - IOPs per :ref:`normalization unit <normalization-units>`
 

@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: Local data share (LDS)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, local, data, share, LDS
+
 **********************
 Local data share (LDS)
 **********************
@@ -38,7 +42,7 @@ the LDS as a comparison with the peak achievable values of those metrics.
 
    * - Access Rate
 
-     - Indicates the percentage of SIMDs in the :ref:`VALU <desc-valu>` [#1]_
+     - Indicates the percentage of SIMDs in the :ref:`VALU <desc-valu>` [#lds-workload]_
        actively issuing LDS instructions, averaged over the lifetime of the
        kernel. Calculated as the ratio of the total number of cycles spent by
        the :ref:`scheduler <desc-scheduler>` issuing :ref:`LDS <desc-lds>`
@@ -61,13 +65,13 @@ the LDS as a comparison with the peak achievable values of those metrics.
      - Indicates the percentage of active LDS cycles that were spent servicing
        bank conflicts. Calculated as the ratio of LDS cycles spent servicing
        bank conflicts over the number of LDS cycles that would have been
-       required to move the same amount of data in an uncontended access. [#2]_
+       required to move the same amount of data in an uncontended access. [#lds-bank-conflict]_
 
      - Percent
 
 .. rubric:: Footnotes
 
-.. [#1] Here we assume the typical case where the workload evenly distributes
+.. [#lds-workload] Here we assume the typical case where the workload evenly distributes
    LDS operations over all SIMDs in a CU (that is, waves on different SIMDs are
    executing similar code). For highly unbalanced workloads, where e.g., one
    SIMD pair in the CU does not issue LDS instructions at all, this metric is
@@ -75,7 +79,7 @@ the LDS as a comparison with the peak achievable values of those metrics.
    :ref:`SIMD pairs <desc-lds>` that are actively using the LDS, averaged over
    the lifetime of the kernel.
 
-.. [#2] The maximum value of the bank conflict rate is less than 100%
+.. [#lds-bank-conflict] The maximum value of the bank conflict rate is less than 100%
    (specifically: 96.875%), as the first cycle in the
    :ref:`LDS scheduler <desc-lds>` is never considered contended.
 
@@ -101,7 +105,7 @@ The LDS statistics panel gives a more detailed view of the hardware:
        read/write/atomics and HIP's ``__shfl`` instructions) executed per
        :ref:`normalization unit <normalization-units>`.
 
-     - Instructions per normalization unit
+     - Instructions per :ref:`normalization unit <normalization-units>`
 
    * - Theoretical Bandwidth
 
@@ -112,7 +116,7 @@ The LDS statistics panel gives a more detailed view of the hardware:
        executed. See the
        :ref:`LDS bandwidth example <lds-bandwidth>` for more detail.
 
-     - Bytes per normalization unit
+     - Bytes per :ref:`normalization unit <normalization-units>`
 
    * - LDS Latency
 
@@ -136,14 +140,14 @@ The LDS statistics panel gives a more detailed view of the hardware:
      - The total number of cycles spent in the :ref:`LDS scheduler <desc-lds>`
        over all operations per :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Atomic Return Cycles
 
      - The total number of cycles spent on LDS atomics with return per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Bank Conflicts
 
@@ -151,7 +155,7 @@ The LDS statistics panel gives a more detailed view of the hardware:
        due to bank conflicts (as determined by the conflict resolution hardware)
        per :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Address Conflicts
 
@@ -159,7 +163,7 @@ The LDS statistics panel gives a more detailed view of the hardware:
        due to address conflicts (as determined by the conflict resolution
        hardware) per :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Unaligned Stall
 
@@ -167,13 +171,13 @@ The LDS statistics panel gives a more detailed view of the hardware:
        due to stalls from non-dword aligned addresses per
        :ref:`normalization unit <normalization-units>`.
 
-     - Cycles per normalization unit
+     - Cycles per :ref:`normalization unit <normalization-units>`
 
    * - Memory Violations
 
      - The total number of out-of-bounds accesses made to the LDS, per
        :ref:`normalization unit <normalization-units>`. This is unused and
-       expected to be zero in most configurations for modern CDNA accelerators.
+       expected to be zero in most configurations for modern CDNA™ accelerators.
 
-     - Accesses per normalization unit
+     - Accesses per :ref:`normalization unit <normalization-units>`
 

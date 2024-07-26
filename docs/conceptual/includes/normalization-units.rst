@@ -36,10 +36,12 @@ include:
 
 By default, Omniperf uses the ``per_wave`` normalization.
 
-The ideal normalization varies depending on your use case. For instance, a
-``per_second`` normalization might be useful for FLOP or bandwidth
-comparisons, while a ``per_wave`` normalization could be useful to see how many
-(and what types) of instructions are used per wavefront. A ``per_kernel``
-normalization can be useful to get the total aggregate values of metrics for
-comparison between different configurations.
+.. tip::
+
+   The best normalization may vary depending on your use case. For instance, a
+   ``per_second`` normalization might be useful for FLOP or bandwidth
+   comparisons, while a ``per_wave`` normalization could be useful to see how many
+   (and what types) of instructions are used per wavefront. A ``per_kernel``
+   normalization can be useful to get the total aggregate values of metrics for
+   comparison between different configurations.
 

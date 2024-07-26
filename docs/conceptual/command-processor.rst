@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: Command processor (CP)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, command, processor, fetcher, packet processor, CPF, CPC
+
 **********************
 Command processor (CP)
 **********************
@@ -23,7 +27,7 @@ The command processor consists of two sub-components:
 Before scheduling work to the accelerator, the command processor can
 first acquire a memory fence to ensure system consistency 
 :hsa-runtime-pdf:`Section 2.6.4 <91>`. After the work is complete, the
-command processor can apply a memory-release fence. Depending on the AMD CDNA
+command processor can apply a memory-release fence. Depending on the AMD CDNA™
 accelerator under question, either of these operations *might* initiate a cache
 write-back or invalidation.
 

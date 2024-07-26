@@ -1,5 +1,5 @@
 .. meta::
-   :description: Omniperf basic usage documentation.
+   :description: Omniperf basic usage
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD,
               basics, usage, operations
 

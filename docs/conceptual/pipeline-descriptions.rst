@@ -1,3 +1,8 @@
+.. meta::
+   :description: Omniperf performance model: Shader engine (SE)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, pipeline, VALU, SALU, VMEM, SMEM, LDS, branch,
+              scheduler, MFMA, AGPRs
+
 *********************
 Pipeline descriptions
 *********************
@@ -14,8 +19,8 @@ Vector arithmetic logic unit (VALU)
 
 The vector arithmetic logic unit (VALU) executes vector instructions
 over an entire wavefront, each :ref:`work-item <desc-work-item>` (or,
-vector-lane) potentially operating on distinct data. The VALU of a CDNA
-accelerator or GCN GPU typically consists of:
+vector-lane) potentially operating on distinct data. The VALU of a CDNA™
+accelerator or GCN™ GPU typically consists of:
 
 *  Four 16-wide SIMD processors (see :hip-training-pdf:`24` for more details).
 
@@ -282,13 +287,12 @@ instructions (``v_accvgpr_*``). These data movement instructions may be
 used by the compiler to implement lower-cost register-spill/fills on
 architectures with AGPRs.
 
-AGPRs are not available on all AMD Instinct accelerators. GCN GPUs,
+AGPRs are not available on all AMD Instinct™ accelerators. GCN GPUs,
 such as the AMD Instinct MI50 had a 256 KiB VGPR file. The AMD
 Instinct MI100 (CDNA) has a 2x256 KiB register file, where one half
 is available as general-purpose VGPRs, and the other half is for matrix
 math accumulation VGPRs (AGPRs). The AMD Instinct :ref:`MI2XX <mixxx-note>`
 (CDNA2) has a 512 KiB VGPR file per CU, where each wave can dynamically request
 up to 256 KiB of VGPRs and an additional 256 KiB of AGPRs. For more information,
-refer to 
-`<https://github.com/RadeonOpenCompute/ROCm/issues/1689#issuecomment-1553751913>`__.
+refer to `this comment <https://github.com/ROCm/ROCm/issues/1689#issuecomment-1553751913>`_.
 

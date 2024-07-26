@@ -56,7 +56,7 @@ further understand their meaning.
 
 .. _infinity-fabric-ex1:
 
-Experiment #1:  Coarse-grained, accelerator-local HBM reads
+Experiment 1:  Coarse-grained, accelerator-local HBM reads
 -----------------------------------------------------------
 
 In our first experiment, we consider the simplest possible case, a
@@ -114,13 +114,13 @@ In our first experiment, we consider the simplest possible case, a
 Here, you can make the following observations.
 
 - The vast majority of L2-Fabric requests (>99%) are 64B
-  read requests (**17.5.2**)
+  read requests (**17.5.2**).
 
 - Nearly 100% of the read requests (**17.2.1**) are homed in on the
   accelerator-local HBM (**17.5.3**), while some small fraction of these reads are
-  routed to a “remote” device (**17.5.4**)
+  routed to a “remote” device (**17.5.4**).
 
-- These drive a :math:`\sim40`\ GiB per kernel read-bandwidth (**17.2.0**)
+- These drive a :math:`\sim40`\ GiB per kernel read-bandwidth (**17.2.0**).
 
 In addition, we see a small amount of :ref:`uncached <memory-type>` reads
 (**17.5.1**), these correspond to things like:
@@ -129,25 +129,25 @@ In addition, we see a small amount of :ref:`uncached <memory-type>` reads
 
 * Kernel arguments
 
-* Coordinate parameters (e.g., ``blockDim.z``) that were not initialized by the
+* Coordinate parameters (such as ``blockDim.z``) that were not initialized by the
   hardware, etc. and may account for some of our ‘remote’ read requests
-  (**17.5.4**), e.g., reading from CPU DRAM.
+  (**17.5.4**), for example, reading from CPU DRAM
 
 The above list is not exhaustive, nor are all of these guaranteed to be
-‘uncached’ – the exact implementation depends on the accelerator and
+"uncached" – the exact implementation depends on the accelerator and
 ROCm versions used. These read requests could be interrogated further in
 the :ref:`Scalar L1 Data Cache <desc-sl1d>` and
 :ref:`Instruction Cache <desc-l1i>` metric sections.
 
 .. note::
 
-   The Traffic metrics in Sec 17.2 are presented as a percentage of the total
-   number of requests, e.g. 'HBM Read Traffic' is the percent of read requests
+   The Traffic metrics in Sec **17.2** are presented as a percentage of the total
+   number of requests. For example, 'HBM Read Traffic' is the percent of read requests
    (**17.5.0** - **17.5.2**) that were directed to the accelerators' local HBM (**17.5.3**).
 
 .. _infinity-fabric-ex2:
 
-Experiment #2: Fine-grained, accelerator-local HBM reads
+Experiment 2: Fine-grained, accelerator-local HBM reads
 ---------------------------------------------------------
 
 In this experiment, we change the :ref:`granularity <memory-type>` of our
@@ -157,7 +157,7 @@ accelerator. Our code uses the ``hipExtMallocWithFlag`` API with the
 
 .. note::
 
-   On some systems (e.g., those with only PCIe connected accelerators), you need
+   On some systems (such as those with only PCIe® connected accelerators), you need
    to set the environment variable ``HSA_FORCE_FINE_GRAIN_PCIE=1`` to enable
    this memory type.
 
@@ -213,9 +213,11 @@ accelerator. Our code uses the ``hipExtMallocWithFlag`` API with the
    ╘═════════╧═════════════════╧══════════════╧══════════════╧══════════════╧════════════════╛
 
 Comparing with our :ref:`previous example <infinity-fabric-ex1>`, we see a
-relatively similar result, namely: - The vast majority of L2-Fabric
-requests are 64B read requests (**17.5.2**) - Nearly all these read requests
-are directed to the accelerator-local HBM (**17.2.1**)
+relatively similar result, namely:
+
+- The vast majority of L2-Fabric requests are 64B read requests (**17.5.2**)
+
+- Nearly all these read requests are directed to the accelerator-local HBM (**17.2.1**)
 
 In addition, we now see a small percentage of HBM Read Stalls (**17.4.2**),
 as streaming fine-grained memory is putting more stress on Infinity
@@ -228,7 +230,7 @@ Fabric.
 
 .. _infinity-fabric-ex3:
 
-Experiment #3: Fine-grained, remote-accelerator HBM reads
+Experiment 3: Fine-grained, remote-accelerator HBM reads
 ----------------------------------------------------------
 
 In this experiment, we move our :ref:`fine-grained <memory-type>` allocation to
@@ -305,11 +307,16 @@ Requests, as reflected in the :ref:`request-flow diagram <l2-request-flow>`.
 This is also why the Uncached Read Traffic metric (**17.2.3**) is at the
 counter-intuitive value of 200%!
 
-In addition, we also observe that: - we no longer see any significant
-number of HBM Read Requests (**17.2.1**, **17.5.3**), nor HBM Read Stalls
-(**17.4.2**), but instead - we observe that almost all of these requests are
+In addition, observe that:
+
+- We no longer see any significant number of HBM Read Requests (**17.2.1**, **17.5.3**), nor HBM Read Stalls
+(**17.4.2**), but instead
+
+- we observe that almost all of these requests are
 considered “remote” (**17.2.2**, **17.5.4**) are being routed to another
-accelerator, or the CPU — in this case HIP Device 1 — and - we observe a
+accelerator, or the CPU — in this case HIP Device 1 — and
+
+- we observe a
 significantly larger percentage of AMD Infinity Fabric Read Stalls
 (**17.4.1**) as compared to the HBM Read Stalls in the
 :ref:`previous example <infinity-fabric-ex2>`.
@@ -324,7 +331,7 @@ only PCIe connected accelerators, these observations will differ.
 
 .. _infinity-fabric-ex4:
 
-Experiment #4: Fine-grained, CPU-DRAM reads
+Experiment 4: Fine-grained, CPU-DRAM reads
 --------------------------------------------
 
 In this experiment, we move our :ref:`fine-grained <memory-type>` allocation to
@@ -400,7 +407,7 @@ increase in the percentage of stalls on this interface.
 
 .. _infinity-fabric-ex5:
 
-Experiment #5: Coarse-grained, CPU-DRAM reads
+Experiment 5: Coarse-grained, CPU-DRAM reads
 ----------------------------------------------
 
 In our next fabric experiment, we change our CPU memory allocation to be
@@ -467,7 +474,7 @@ are 64B read requests (**17.5.2**), as observed in our
 
 .. _infinity-fabric-ex6:
 
-Experiment #6: Fine-grained, CPU-DRAM writes
+Experiment 6: Fine-grained, CPU-DRAM writes
 --------------------------------------------
 
 Thus far in our exploration of the L2-Fabric interface, we have
@@ -543,11 +550,14 @@ Here we notice a few changes in our request pattern:
 
 * these are also counted as a single Uncached Write request (**17.5.6**).
 
-In addition, there rather significant changes in the bandwidth values
-reported: - the “L2-Fabric Write and Atomic” bandwidth metric (**17.2.4**)
-reports about 40GiB of data written across Infinity Fabric while, -
-the “Remote Write and Traffic” metric (**17.2.5**) indicates that nearly
-100% of these request are being directed to a remote source
+In addition, there are rather significant changes in the bandwidth values
+reported:
+
+- The “L2-Fabric Write and Atomic” bandwidth metric (**17.2.4**)
+  reports about 40GiB of data written across Infinity Fabric while,
+
+- The “Remote Write and Traffic” metric (**17.2.5**) indicates that nearly
+  100% of these request are being directed to a remote source.
 
 The precise meaning of these metrics are explored in the
 :ref:`subsequent experiment <infinity-fabric-ex7>`.
@@ -559,7 +569,7 @@ that is, they do not require acknowledgement.
 
 .. _infinity-fabric-ex7:
 
-Experiment #7: Fine-grained, CPU-DRAM atomicAdd
+Experiment 7: Fine-grained, CPU-DRAM atomicAdd
 ------------------------------------------------
 
 Next, we change our experiment to instead target ``atomicAdd``
@@ -633,14 +643,19 @@ In this case, there is quite a lot to unpack:
   GiB of traffic. For convenience, the sample reduces the default problem size
   for this case due to the speed of atomics across a PCIe bus, and finally,
 
-- The traffic is directed to a remote device (**17.2.6, 17.5.9**)
+- The traffic is directed to a remote device (**17.2.6, 17.5.9**).
 
-Let us consider what an “atomic” request means in this context. Recall
+Let's consider what an “atomic” request means in this context. Recall
 that we are discussing memory traffic flowing from the L2 cache, the
 device-wide coherence point on current CDNA accelerators such as the
-MI250, to e.g., the CPU’s DRAM. In this light, we see that these
+MI250, to for example, the CPU’s DRAM. In this light, we see that these
 requests correspond to *system scope* atomics, and specifically in the
-case of the MI250, to fine-grained memory!
+case of the MI250, to fine-grained memory.
+
+
+.. rubric:: Disclaimer
+
+PCIe® is a registered trademark of PCI-SIG Corporation.
 
 ..
    `Leave as possible future experiment to add

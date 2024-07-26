@@ -1,5 +1,5 @@
 .. meta::
-   :description: What is Omniperf?
+   :description: Omniperf: Profiling by example
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD
 
 ********************

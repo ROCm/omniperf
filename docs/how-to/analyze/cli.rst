@@ -1,10 +1,14 @@
+.. meta::
+   :description: Omniperf analysis: CLI analysis
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, command line, analyze, filtering, metrics, baseline, comparison
+
 ************
 CLI analysis
 ************
 
-The following is a look into Omniperf's CLI analysis features.
+This section provides an overview of Omniperf's CLI analysis features.
 
-* **Derived metrics**: All of Omniperf's built-in metrics.
+* :ref:`Derived metrics <cli-list-metrics>`: All of Omniperf's built-in metrics.
 
 * :ref:`Baseline comparison <analysis-baseline-comparison>`: Compare multiple
   runs in a side-by-side manner.
@@ -22,7 +26,7 @@ Run ``omniperf analyze -h`` for more details.
 Walkthrough
 ===========
 
-#. To begin, generate a high-level analysis report using Omniperf's ``-b`` (or ``--block``) flag. 
+1. To begin, generate a high-level analysis report using Omniperf's ``-b`` (or ``--block``) flag. 
 
    .. code-block:: shell
 
@@ -126,7 +130,9 @@ Walkthrough
 
       ...
 
-#. Use ``--list-metrics`` to generate a list of available metrics for inspection.
+.. _cli-list-metrics:
+
+2. Use ``--list-metrics`` to generate a list of available metrics for inspection.
 
    .. code-block:: shell
 
@@ -178,7 +184,7 @@ Walkthrough
                       2.1.30 -> L1I Fetch Latency
       ...
 
-#. Choose your own customized subset of metrics with the ``-b`` (or ``--block``)
+3. Choose your own customized subset of metrics with the ``-b`` (or ``--block``)
    option. Or, build your own configuration following
    `config_template <https://github.com/ROCm/omniperf/blob/main/src/omniperf_analyze/configs/panel_config_template.yaml>`_.
    The following snippet shows how to generate a report containing only metric 2
@@ -271,10 +277,10 @@ Walkthrough
       Some cells may be blank indicating a missing or unavailable hardware
       counter or NULL value.
 
-#. Optimize the application, iterate, and re-profile to inspect performance
+4. Optimize the application, iterate, and re-profile to inspect performance
    changes.
 
-#. Redo a comprehensive analysis with Omniperf CLI at any optimization
+5. Redo a comprehensive analysis with Omniperf CLI at any optimization
    milestone.
 
 .. _cli-analysis-options:

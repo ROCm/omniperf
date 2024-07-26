@@ -213,7 +213,7 @@ software stack.
 
       .. code-block:: shell
 
-         $ sudo yum install omniperf
+         $ sudo dnf install omniperf
          $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
 
    .. tab-item:: SUSE Linux Enterprise Server

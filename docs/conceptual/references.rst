@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf performance model: References
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, HIP, GCN, LLVM, docs, documentation, training
+
 **********
 References
 **********

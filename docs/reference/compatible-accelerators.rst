@@ -1,5 +1,5 @@
 .. meta::
-   :description: Omniperf - compatible accelerators and GPUs
+   :description: Omniperf support: compatible accelerators and GPUs
    :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, AMD, GPU
 
 ***********************
@@ -23,7 +23,7 @@ GPU specifications.
     * - Platform
       - Status
 
-    * - AMD Instinct MI300
+    * - AMD Instinct™ MI300
       - Supported ✅
 
     * - AMD Instinct MI200

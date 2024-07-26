@@ -1,9 +1,14 @@
+.. meta::
+   :description: Omniperf performance model: Compute unit (CU)
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, GCN, compute, unit, pipeline, workgroup, wavefront,
+              CDNA
+
 *****************
 Compute unit (CU)
 *****************
 
 The compute unit (CU) is responsible for executing a user's kernels on
-CDNA-based accelerators. All :ref:`wavefronts <desc-wavefront>` of a
+CDNA™-based accelerators. All :ref:`wavefronts <desc-wavefront>` of a
 :ref:`workgroup <desc-workgroup>` are scheduled on the same CU.
 
 .. image:: ../data/performance-model/gcn_compute_unit.png
@@ -44,7 +49,7 @@ presented by Omniperf for these pipelines are described in
   write-through. The vL1D caches from multiple compute units are kept coherent
   with one another through software instructions.
 
-* CDNA accelerators -- that is, AMD Instinct MI100 and newer -- contain
+* CDNA accelerators -- that is, AMD Instinct™ MI100 and newer -- contain
   specialized matrix-multiplication accelerator pipelines known as the
   :ref:`desc-mfma`.
 

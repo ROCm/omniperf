@@ -45,6 +45,7 @@ kernel:
    }
 
 Here we:
+
 * Create an array of 256 integers in :doc:`LDS </conceptual/local-data-share>`
 
 * Fake a write to the LDS using the ``flag`` variable (always set to zero on the

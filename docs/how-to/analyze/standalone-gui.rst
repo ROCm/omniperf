@@ -1,3 +1,7 @@
+.. meta::
+   :description: Omniperf analysis: Standalone GUI
+   :keywords: Omniperf, ROCm, profiler, tool, Instinct, accelerator, GUI, standalone, filter
+
 ***********************
 Standalone GUI analysis
 ***********************

@@ -72,39 +72,41 @@ high level.
 
 * :doc:`GUI analyzer via Grafana and MongoDB </how-to/analyze/grafana-gui>`
 
-  * *System Info* panel
+  * :ref:`System Info panel <grafana-panel-sys-info>`
 
-  * *System Speed-of-Light* panel
+  * :ref:`Kernel Statistic panel <grafana-panel-kernel-stats>`
 
-  * *Kernel Statistic* panel
+  * :ref:`System Speed-of-Light panel <grafana-panel-system-sol>`
 
-  * *Memory Chart Analysis* panel
+  * :ref:`Memory Chart Analysis panel <grafana-panel-memory-chart-analysis>`
 
-  * *Roofline Analysis* panel (*Supported on MI200 only, Ubuntu 20.04, SLES 15 SP3 or RHEL8*)
+  * :ref:`Roofline Analysis panel <grafana-panel-roofline-analysis>`
+    (*Supported on MI200 only, Ubuntu 20.04, SLES 15 SP3 or RHEL8*)
 
-  * *Command Processor (CP)* panel
+  * :ref:`Command Processor (CP) panel <grafana-panel-cp>`
 
-  * *Workgroup Manager (SPI)* panel
+  * :ref:`Workgroup Manager (SPI) panel <grafana-panel-spi>`
 
-  * *Wavefront Launch* panel
+  * :ref:`Wavefront Launch panel <grafana-panel-wavefront>`
 
-  * *Compute Unit - Instruction Mix* panel
+  * :ref:`Compute Unit - Instruction Mix panel <grafana-panel-cu-instruction-mix>`
 
-  * *Compute Unit - Pipeline* panel
+  * :ref:`Compute Unit - Pipeline panel <grafana-panel-cu-compute-pipeline>`
 
-  * *Local Data Share (LDS)* panel
+  * :ref:`Local Data Share (LDS) panel <grafana-panel-lds>`
 
-  * *Instruction Cache* panel
+  * :ref:`Instruction Cache panel <grafana-panel-instruction-cache>`
 
-  * *Scalar L1D Cache* panel
+  * :ref:`Scalar L1D Cache panel <grafana-panel-sl1d-cache>`
 
-  * *L1 Address Processing Unit*, or, *Texture Addresser (TA)* and *L1 Backend Data Processing Unit*, or, *Texture Data (TD)* panels
+  * :ref:`L1 Address Processing Unit, or, Texture Addresser (TA) <grafana-panel-ta>`
+    and :ref:`L1 Backend Data Processing Unit, or, Texture Data (TD) <grafana-panel-td>` panels
 
-  * *Vector L1D Cache* panel
+  * :ref:`Vector L1D Cache panel <grafana-panel-vl1d>`
 
-  * *L2 Cache* panel
+  * :ref:`L2 Cache panel <grafana-panel-l2-cache>`
 
-  * *L2 Cache (per-channel)* panel
+  * :ref:`L2 Cache (per-channel) panel <grafana-panel-l2-cache-per-channel>`
 
 * :ref:`Filtering <filtering>` to reduce profiling time
 

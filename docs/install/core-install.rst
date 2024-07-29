@@ -29,6 +29,7 @@ right for you.
 .. image:: ../data/install/install-decision-tree.png
    :align: center
    :alt: Decision tree for installing and deploying Omniperf
+   :width: 800
 
 .. _core-install:
  

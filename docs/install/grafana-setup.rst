@@ -107,6 +107,7 @@ Grafana setup are:
 .. figure:: ../data/install/grafana_welcome.png
    :align: center
    :alt: Grafana dashboard welcome screen
+   :width: 800
 
    Grafana's welcome screen.
 
@@ -122,6 +123,7 @@ connection.
 .. figure:: ../data/install/datasource_config.jpg
    :align: center
    :alt: Grafana data source configuration
+   :width: 800
 
    Grafana's Configuration page.
 
@@ -145,6 +147,7 @@ connection is successful.
 .. figure:: ../data/install/datasource_settings.jpg
    :align: center
    :alt: Grafana data source settings
+   :width: 800
 
    Grafana data source settings.
 
@@ -168,6 +171,7 @@ uniquely identify the dashboard. Click **Import** to complete the process.
 .. figure:: ../data/install/import_dashboard.png
    :align: center
    :alt: Grafana's import dashboard
+   :width: 800
 
    Grafana's Import dashboard.
 
@@ -182,6 +186,7 @@ available dashboards and selecting the dashboard you have just imported.
 .. figure:: ../data/install/opening_dashboard.png
    :align: center
    :alt: Opening your Omniperf dashboard in Grafana
+   :width: 800
 
    Opening your Omniperf profiling dashboard in Grafana.
 
@@ -195,6 +200,7 @@ from the workload dropdown located at the top of your Grafana dashboard.
 .. figure:: ../data/install/grafana_workload_selection.png
    :align: center
    :alt: Omniperf workload selection in Grafana
+   :width: 800
 
    Selecting your Omniperf workload in Grafana.
 

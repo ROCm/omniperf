@@ -27,30 +27,38 @@ The architecture of Omniperf consists of three major components shown in the
 following diagram.
 
 Core Omniperf profiler
-   Acquires raw performance counters via application replay using ``rocprof``.
-   Counters are stored in a comma-separated-values format for further
-   :doc:`analysis <how-to/analyze/mode>`. It runs a set of accelerator-specific
-   micro-benchmarks to acquire hierarchical roofline data. The roofline model is
-   not available on accelerators pre-MI200.
+----------------------
+
+Acquires raw performance counters via application replay using ``rocprof``.
+Counters are stored in a comma-separated-values format for further
+:doc:`analysis <how-to/analyze/mode>`. It runs a set of accelerator-specific
+micro-benchmarks to acquire hierarchical roofline data. The roofline model is
+not available on accelerators pre-MI200.
 
 Grafana server for Omniperf
-   * **Grafana database import**: All raw performance counters are imported into
-     a :ref:`backend MongoDB database <grafana-mongodb-setup>` to support
-     analysis and visualization in the Grafana GUI. Compatibility with
-     previously generated data using older Omniperf versions is not guaranteed.
-   * **Grafana analysis dashboard GUI**: The
-     :doc:`Grafana dashboard <how-to/analyze/grafana-gui>` retrieves the raw
-     counters information from the backend database. It displays the relevant
-     performance metrics and visualization.
+---------------------------
+
+* **Grafana database import**: All raw performance counters are imported into
+  a :ref:`backend MongoDB database <grafana-mongodb-setup>` to support
+  analysis and visualization in the Grafana GUI. Compatibility with
+  previously generated data using older Omniperf versions is not guaranteed.
+
+* **Grafana analysis dashboard GUI**: The
+  :doc:`Grafana dashboard <how-to/analyze/grafana-gui>` retrieves the raw
+  counters information from the backend database. It displays the relevant
+  performance metrics and visualization.
 
 Omniperf standalone GUI analyzer
-   Omniperf provides a :doc:`standalone GUI <how-to/analyze/standalone-gui>` to
-   enable basic performance analysis without the need to import data into a
-   database instance.
+--------------------------------
+
+Omniperf provides a :doc:`standalone GUI <how-to/analyze/standalone-gui>` to
+enable basic performance analysis without the need to import data into a
+database instance. Find setup instructions in :doc:`install/grafana-setup`
 
 .. image:: data/install/omniperf_server_vs_client_install.png
    :align: center
    :alt: Architectural design of Omniperf
+   :width: 800
 
 Omniperf features
 =================

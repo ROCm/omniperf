@@ -63,6 +63,7 @@ At this point, you can launch your web browser of choice and navigate to
 .. image:: ../../data/analyze/standalone_gui.png
    :align: center
    :alt: Omniperf standalone GUI home screen
+   :width: 800
 
 .. tip::
 

@@ -44,6 +44,7 @@ Together, this complex is known as the vL1D, or Texture Cache per Pipe
 .. figure:: ../data/performance-model/l1perf_model.png
    :align: center
    :alt: Performance model of the vL1D Cache on AMD Instinct
+   :width: 800
 
    Performance model of the vL1D Cache on AMD Instinct MI-series accelerators.
 

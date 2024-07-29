@@ -424,7 +424,7 @@ VALU Active Threads
 -------------------
 
 For our final IPC/Utilization example, we consider a slight modification
-of our :ref:`v_mov <ipc-valu-utlization>` example:
+of our :ref:`v_mov <ipc-valu-utilization>` example:
 
 .. code-block:: cpp
 

@@ -96,6 +96,7 @@ coordinate between wavefronts in a workgroup.
    :align: center
    :alt: Performance model of the local data share (LDS) on AMD Instinct
          accelerators
+   :width: 800
 
    Performance model of the local data share (LDS) on AMD Instinct MI-series
    accelerators.

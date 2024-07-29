@@ -54,18 +54,21 @@ How can I SSH tunnel in MobaXterm?
    .. image:: ../data/faq/tunnel_demo1.png
       :align: center
       :alt: MobaXterm Tunnel button
+      :width: 800
 
    This pop-up should appear.
 
    .. image:: ../data/faq/tunnel_demo2.png
       :align: center
       :alt: MobaXterm pop-up
+      :width: 800
 
 3. Select **New SSH tunnel**.
 
    .. image:: ../data/faq/tunnel_demo3.png
       :align: center
       :alt: MobaXterm pop-up
+      :width: 800
 
 4. Configure the SSH tunnel.
 

@@ -101,10 +101,11 @@ theoretical bandwidth metric (**12.2.1**) as compared to the effective (or
 achieved) bandwidth of this kernel, varying the number of work-items
 launched from 1 to 256:
 
-.. figure:: ../data/profiling-by-example/ldsbandwidth.*
+.. figure:: ../data/profiling-by-example/ldsbandwidth.png
    :align: center
    :alt: Comparison of effective bandwidth versus the theoretical bandwidth
          metric in Omniperf for our simple example.
+   :width: 800
 
    Comparison of effective bandwidth versus the theoretical bandwidth
    metric in Omniperf for our simple example.
@@ -235,10 +236,11 @@ Here we see the conflict resolution hardware in action! Because we have
 engineered our kernel to generate conflicts, we expect our bank conflict
 metric to scale linearly with the number of work-items:
 
-.. figure:: ../data/profiling-by-example/ldsconflicts.*
+.. figure:: ../data/profiling-by-example/ldsconflicts.png
    :align: center
    :alt: Comparison of LDS conflict cycles versus access cycles for our simple
          example.
+   :width: 800
 
    Comparison of LDS conflict cycles versus access cycles for our simple
    example.
@@ -258,9 +260,10 @@ $$
 
 Plotting this, we see:
 
-.. figure:: ../data/profiling-by-example/ldsconflictrate.*
+.. figure:: ../data/profiling-by-example/ldsconflictrate.png
    :align: center
    :alt: LDS bank conflict rate example
+   :width: 800
 
    LDS Bank Conflict rate for our simple example.
 

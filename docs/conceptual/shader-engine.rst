@@ -12,6 +12,7 @@ together into a higher-level organizational unit called a shader engine (SE):
 .. figure:: ../data/performance-model/selayout.png
    :align: center
    :alt: Example of CU-grouping into shader engines
+   :width: 800
 
    Example of CU-grouping into shader engines on AMD Instinct MI-series
    accelerators.

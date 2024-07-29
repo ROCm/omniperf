@@ -451,4 +451,5 @@ plot.
 .. image:: ../../data/profile/sample-roof-plot.png
    :align: center
    :alt: Sample Omniperf roofline output
+   :width: 800
 

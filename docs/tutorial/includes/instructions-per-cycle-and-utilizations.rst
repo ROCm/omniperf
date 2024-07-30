@@ -211,26 +211,15 @@ In contrast to our :ref:`VALU IPC example <ipc-valu-utilization>`, we now see
 that the IPC metric (**11.2.0**) and Issued IPC (**11.2.1**) metric differ
 substantially. First, we see the VALU utilization (**11.2.3**) has decreased
 substantially, from nearly 100% to :math:`\sim6.25\%`. We note that this matches
-the ratio of:
-
-.. math::
-
-   ((Execution\ cycles) - (VALU\ coexecution\ cycles)) / (Execution\ cycles)
-
+the ratio of: :math:`((Execution\ cycles) - (VALU\ coexecution\ cycles)) / (Execution\ cycles)`
 reported by the matrix calculator, while the MFMA utilization (**11.2.7**)
 has increased to nearly 100%.
 
-Recall: our ``v_mfma_f32_32x32x8bf16_1k`` instruction takes 64 cycles to
+Recall that our ``v_mfma_f32_32x32x8bf16_1k`` instruction takes 64 cycles to
 execute, or 16 quad-cycles, matching our observed MFMA Instruction
 Cycles (**11.2.8**). That is, we have a single instruction executed every 16
-quad-cycles, or:
-
-.. math::
-
-   1/16 = 0.0625
-
-which is almost identical to our IPC metric (**11.2.0**). Why then is the
-Issued IPC metric (**11.2.1**) equal to 1.0 then?
+quad-cycles, or :math:`1/16 = 0.0625`, which is almost identical to our IPC
+metric (**11.2.0**). Why then is the Issued IPC metric (**11.2.1**) equal to 1.0?
 
 Instead of simply counting the number of instructions issued and
 dividing by the number of cycles the :doc:`CUs </conceptual/compute-unit>` on
@@ -265,13 +254,13 @@ we choose a ``s_nop`` instruction, which according to the
 
  Does nothing; it can be repeated in hardware up to eight times.
 
-Here we choose to use a no-op of:
+Here we choose to use the following no-op to make our point:
 
 .. code-block:: asm
 
    s_nop 0x0
 
-to make our point. Running this kernel through Omniperf yields:
+Running this kernel through Omniperf yields:
 
 .. code-block:: shell-session
 

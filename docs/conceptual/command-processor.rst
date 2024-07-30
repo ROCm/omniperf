@@ -26,7 +26,7 @@ The command processor consists of two sub-components:
 
 Before scheduling work to the accelerator, the command processor can
 first acquire a memory fence to ensure system consistency 
-:hsa-runtime-pdf:`Section 2.6.4 <91>`. After the work is complete, the
+(:hsa-runtime-pdf:`Section 2.6.4 <91>`). After the work is complete, the
 command processor can apply a memory-release fence. Depending on the AMD CDNA™
 accelerator under question, either of these operations *might* initiate a cache
 write-back or invalidation.
@@ -78,7 +78,7 @@ Command processor fetcher (CPF)
 
    * - CPF-L2 Stall
 
-     - Percent of CPF-L2 busy cycles where the CPF-:doc:`L2 <l2-cache>`
+     - Percent of CPF-:doc:`L2 <l2-cache>` L2 busy cycles where the CPF-L2
        interface was stalled for any reason.
 
      - Percent
@@ -146,8 +146,9 @@ Command processor packet processor (CPC)
 
    * - CPC-UTCL2 Utilization
 
-     - Percent of total cycles counted by the CPC's L2 address translation
-       interface where the CPC was busy doing address translation work.
+     - Percent of total cycles counted by the CPC's :doc:`L2 <l2-cache>` address
+       translation interface where the CPC was busy doing address translation
+       work.
 
      - Percent
 

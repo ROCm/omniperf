@@ -130,7 +130,7 @@ In addition, we see a small amount of :ref:`uncached <memory-type>` reads
 * Kernel arguments
 
 * Coordinate parameters (such as ``blockDim.z``) that were not initialized by the
-  hardware, etc. and may account for some of our ‘remote’ read requests
+  hardware, etc. and may account for some of our "remote" read requests
   (**17.5.4**), for example, reading from CPU DRAM
 
 The above list is not exhaustive, nor are all of these guaranteed to be
@@ -142,7 +142,7 @@ the :ref:`Scalar L1 Data Cache <desc-sl1d>` and
 .. note::
 
    The Traffic metrics in Sec **17.2** are presented as a percentage of the total
-   number of requests. For example, 'HBM Read Traffic' is the percent of read requests
+   number of requests. For example, "HBM Read Traffic" is the percent of read requests
    (**17.5.0** - **17.5.2**) that were directed to the accelerators' local HBM (**17.5.3**).
 
 .. _infinity-fabric-ex2:
@@ -235,9 +235,9 @@ Experiment 3: Fine-grained, remote-accelerator HBM reads
 
 In this experiment, we move our :ref:`fine-grained <memory-type>` allocation to
 be owned by a remote accelerator. We accomplish this by first changing
-the HIP device using e.g., ``hipSetDevice(1)`` API, then allocating
+the HIP device using, for instance, the ``hipSetDevice(1)`` API, then allocating
 fine-grained memory (as described :ref:`previously <infinity-fabric-ex2>`), and
-finally resetting the device back to the default, e.g.,
+finally resetting the device back to the default, for instance,
 ``hipSetDevice(0)``.
 
 Although we have not changed our code significantly, we do see a
@@ -309,17 +309,16 @@ counter-intuitive value of 200%!
 
 In addition, observe that:
 
-- We no longer see any significant number of HBM Read Requests (**17.2.1**, **17.5.3**), nor HBM Read Stalls
-(**17.4.2**), but instead
+- We no longer see any significant number of HBM Read Requests (**17.2.1**,
+  **17.5.3**), nor HBM Read Stalls (**17.4.2**), but instead,
 
-- we observe that almost all of these requests are
-considered “remote” (**17.2.2**, **17.5.4**) are being routed to another
-accelerator, or the CPU — in this case HIP Device 1 — and
+- we see that almost all of these requests are considered “remote”
+  (**17.2.2**, **17.5.4**) are being routed to another
+  accelerator, or the CPU — in this case HIP Device 1 — and,
 
-- we observe a
-significantly larger percentage of AMD Infinity Fabric Read Stalls
-(**17.4.1**) as compared to the HBM Read Stalls in the
-:ref:`previous example <infinity-fabric-ex2>`.
+- we see a significantly larger percentage of AMD Infinity Fabric Read Stalls
+  (**17.4.1**) as compared to the HBM Read Stalls in the
+  :ref:`previous example <infinity-fabric-ex2>`.
 
 These stalls correspond to reads that are going out over the AMD
 Infinity Fabric connection to another MI250 accelerator. In
@@ -546,7 +545,7 @@ Here we notice a few changes in our request pattern:
   (**17.5.7**),
 
 * these requests are homed in on a “remote” destination (**17.2.6, 17.5.9**), as
-  expected, and,
+  expected, and
 
 * these are also counted as a single Uncached Write request (**17.5.6**).
 
@@ -554,7 +553,7 @@ In addition, there are rather significant changes in the bandwidth values
 reported:
 
 - The “L2-Fabric Write and Atomic” bandwidth metric (**17.2.4**)
-  reports about 40GiB of data written across Infinity Fabric while,
+  reports about 40GiB of data written across Infinity Fabric while
 
 - The “Remote Write and Traffic” metric (**17.2.5**) indicates that nearly
   100% of these request are being directed to a remote source.

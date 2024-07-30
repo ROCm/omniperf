@@ -13,13 +13,13 @@ facilitate MI accelerator performance profiling and analysis:
 
 * System and hardware component (hardware block)
 
-* :ref:`Speed-of-Light <analysis-sol>` (SOL)
+* Speed-of-Light (SOL)
 
-* :ref:`Multiple normalization options <analysis-normalizations>`
+* Multiple normalization options
 
-* :ref:`Baseline comparisons <analysis-baseline-comparison>`
+* Baseline comparisons
 
-* :ref:`Regex-based dispatch ID filtering <analysis-regex-dispatch-id>`
+* Regex-based dispatch ID filtering
 
 * Roofline analysis
 
@@ -40,6 +40,8 @@ facilitate MI accelerator performance profiling and analysis:
 
   * L2 Cache (TCC) (both aggregated and per-channel perf info)
 
+See the full list of :ref:`Omniperf's analysis panels <panels>`.
+
 .. _analysis-sol:
 
 Speed-of-Light
@@ -47,8 +49,8 @@ Speed-of-Light
 
 Speed-of-Light panels are provided at both the system and per hardware component
 level to help diagnosis performance bottlenecks. The performance numbers of the
-workload under testing are compared to the theoretical maximum, (e.g. floating
-point operations, bandwidth, cache hit rate, etc.), to indicate the available
+workload under testing are compared to the theoretical maximum, such as floating
+point operations, bandwidth, cache hit rate, etc., to indicate the available
 room to further utilize the hardware capability.
 
 .. _analysis-normalizations:

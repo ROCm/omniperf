@@ -45,7 +45,7 @@ extensions = ["rocm_docs", "sphinx.ext.extlinks", "sphinxcontrib.datatemplates"]
 html_theme = "rocm_docs_theme"
 html_theme_options = {"flavor": "rocm"}
 html_title = f"{project} {version_number} documentation"
-exclude_patterns = ["*/includes/*"]
+exclude_patterns = ["archive", "*/includes"]
 
 html_static_path = ["sphinx/static/css"]
 html_css_files = ["o_custom.css"]

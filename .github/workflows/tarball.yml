@@ -2,9 +2,7 @@ name: tarball
 
 on:
   push:
-    branches:
-      - main amd-mainline
-      - 2.x
+    branches: [ main, amd-mainline, 2.x ]
   pull_request:
 
 concurrency:

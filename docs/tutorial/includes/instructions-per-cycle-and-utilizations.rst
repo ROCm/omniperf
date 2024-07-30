@@ -140,6 +140,7 @@ instruction at the end of every wavefront.
 .. _issued-ipc:
 
 Exploring “issued” IPC via MFMA operations
+------------------------------------------
 
 .. warning::
 

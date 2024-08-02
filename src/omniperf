@@ -24,18 +24,18 @@
 # SOFTWARE.
 ##############################################################################el
 
-import logging
+# import logging
 import os
 import sys
-from pip._internal.req import parse_requirements
-from pathlib import Path
-from importlib import import_module, metadata
 import re
 
 try:
+    from pathlib import Path
+    from importlib import metadata
     from omniperf_base import Omniperf
     from utils.utils import console_error
-except:
+except ImportError as e:
+    # print("Failed to import required modules: " + str(e))
     pass
 
 
@@ -57,7 +57,14 @@ def verify_deps_version(localVer, desiredVer, operator):
 
 def verify_deps():
     """Utility to read library dependencies from requirements.txt and endeavor to load them within current execution environment. 
-    Used in top-level omniperf to provide error messages if necessary dependencies are not available. """
+    Used in top-level omniperf to provide error messages if necessary dependencies are not available."""
+
+    # Check which version of python is being used
+    if sys.version_info[0] < 3 or sys.version_info[1] < 8:
+        print("[ERROR] Python 3.8 or higher is required to run omniperf."
+              f" The current version is {sys.version_info[0]}.{sys.version_info[1]}.")
+        sys.exit(1)
+
     bindir = Path(__file__).resolve().parent
     depsLocation = ["requirements.txt", "../requirements.txt"]
 

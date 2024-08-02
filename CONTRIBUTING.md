@@ -33,7 +33,7 @@ and apply your changes there.
 
 - Ensure the PR is based on the `amd-staging` branch of the Omniperf GitHub repository.
 
-- Omniperf requires new commits to include a "Signed-off-by" token in the commit message (typically enabled via the `git commit -s` option), indicating your agreement to the projects's [Developer's Certificate of Origin](https://developercertificate.org/) and compatability with the project [LICENSE](https://github.com/ROCm/omniperf/blob/main/LICENSE):
+- Omniperf requires new commits to include a "Signed-off-by" token in the commit message (typically enabled via the `git commit -s` option), indicating your agreement to the projects's [Developer's Certificate of Origin](https://developercertificate.org/) and compatability with the project [LICENSE](LICENSE):
 
 
 > (a) The contribution was created in whole or in part by me and I

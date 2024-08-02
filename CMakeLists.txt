@@ -401,7 +401,6 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Omniperf: tool for GPU performance profil
 set(CPACK_RPM_PACKAGE_DESCRIPTION "Omniperf is a performance analysis tool for profiling
 machine learning/HPC workloads running on AMD GPUs.")
 set(CPACK_PACKAGE_VENDOR "Advanced Micro Devices, Inc.")
-set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
 # Package versioning
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})

@@ -32,7 +32,7 @@ right for you.
    :width: 800
 
 .. _core-install:
- 
+
 Core installation
 =================
 
@@ -200,6 +200,12 @@ Once ROCm (minimum version 6.2.0) is installed, you can install Omniperf using
 your operating system's native package manager using the following commands.
 See :doc:`rocm-install-on-linux:index` for guidance on installing the ROCm
 software stack.
+
+.. note::
+
+   Omniperf will use the first verion of ``Python3`` found in your system's
+   ``PATH``. If the default version of Python3 is older than 3.8, you may need to
+   update your system's ``PATH`` to point to a newer version of Python3.
 
 .. tab-set::
 

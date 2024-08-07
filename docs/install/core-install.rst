@@ -203,7 +203,7 @@ software stack.
 
 .. note::
 
-   Omniperf will use the first verion of ``Python3`` found in your system's
+   Omniperf will use the first version of ``Python3`` found in your system's
    ``PATH``. If the default version of Python3 is older than 3.8, you may need to
    update your system's ``PATH`` to point to a newer version of Python3.
 

@@ -65,7 +65,7 @@ def verify_deps():
     dependencies are not available."""
 
     # Check which version of python is being used
-    if sys.version_info[0] < 3 or sys.version_info[1] < 8:
+    if sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 8):
         print("[ERROR] Python 3.8 or higher is required to run omniperf."
               f" The current version is {sys.version_info[0]}.{sys.version_info[1]}.")
         sys.exit(1)

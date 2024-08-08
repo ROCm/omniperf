@@ -66,6 +66,19 @@ following steps illustrate how to install the necessary Python dependencies
 using `pip <https://packaging.python.org/en/latest/>`_ and Omniperf into a
 shared location controlled by the ``INSTALL_DIR`` environment variable.
 
+.. note::
+
+   Omniperf will use the first version of ``Python3`` found in your system's
+   ``PATH``. If the default version of Python3 is older than 3.8, you may need to
+   update your system's ``PATH`` to point to a newer version of Python3.
+
+.. tip::
+
+   To always run Omniperf with a particular version of python, you can create a
+   bash alias. For example, to run Omniperf with Python 3.10, you can run the
+   following:
+   ``alias omniperf-mypython="/usr/bin/python3.10 /opt/rocm/bin/omniperf"``
+
 .. _core-install-cmake-vars:
 
 Configuration variables
@@ -200,12 +213,6 @@ Once ROCm (minimum version 6.2.0) is installed, you can install Omniperf using
 your operating system's native package manager using the following commands.
 See :doc:`rocm-install-on-linux:index` for guidance on installing the ROCm
 software stack.
-
-.. note::
-
-   Omniperf will use the first version of ``Python3`` found in your system's
-   ``PATH``. If the default version of Python3 is older than 3.8, you may need to
-   update your system's ``PATH`` to point to a newer version of Python3.
 
 .. tab-set::
 

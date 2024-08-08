@@ -214,21 +214,21 @@ software stack.
       .. code-block:: shell
 
          $ sudo apt install omniperf
-         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
+         $ python3 -m pip install -r /opt/rocm/libexec/omniperf/requirements.txt
 
    .. tab-item:: Red Hat Enterprise Linux
 
       .. code-block:: shell
 
          $ sudo dnf install omniperf
-         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
+         $ python3 -m pip install -r /opt/rocm/libexec/omniperf/requirements.txt
 
    .. tab-item:: SUSE Linux Enterprise Server
 
       .. code-block:: shell
 
          $ sudo zypper install omniperf
-         $ pip install -r /opt/rocm/libexec/omniperf/requirements.txt
+         $ python3 -m pip install -r /opt/rocm/libexec/omniperf/requirements.txt
 
 .. _core-install-rocprof-var:
 

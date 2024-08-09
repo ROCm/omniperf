@@ -1,7 +1,8 @@
-## Maintainers Guide to Omniperf
+# Maintainers Guide to Omniperf
 
-### Publishing a release
-Before publishing a new Omniperf release, please review this checklist to ensure all required prerequisits are met:
+## Publishing a release
+
+Before publishing a new Omniperf release, please review this checklist to ensure all prerequisites are met:
 
 1) **Ensure [VERSION](VERSION) file is updated** to reflect your desired release version.
 2) **Sync `amd-mainline` with `amd-staging`**. A rebase may be required to pull all of the desired patches from the development branch to our stable mainline. Click [here]() to begin that process.

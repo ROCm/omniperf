@@ -249,6 +249,15 @@ class OmniProfiler_Base:
                     self._soc.get_compatible_profilers(),
                 )
             )
+
+        # verify profiler version compatibility
+        if self.__profiler == 'rocprofv2':
+            # verify kernel filtering is not called on rocprofv2
+            if not self.__args.kernel == None:
+                console_error(
+                    "-k/--kernel is not supported in rocprofv2. Remove kernel filtering and try again."
+                )
+        
         # verify not accessing parent directories
         if ".." in str(self.__args.path):
             console_error(

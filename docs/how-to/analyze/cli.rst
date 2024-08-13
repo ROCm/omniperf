@@ -26,18 +26,18 @@ Run ``omniperf analyze -h`` for more details.
 Walkthrough
 ===========
 
-1. To begin, generate a high-level analysis report using Omniperf's ``-b`` (or ``--block``) flag. 
+1. To begin, generate a high-level analysis report using Omniperf's ``-b`` (or ``--block``) flag.
 
    .. code-block:: shell
 
       $ omniperf analyze -p workloads/vcopy/MI200/ -b 2
 
-        ___                  _                  __ 
+        ___                  _                  __
        / _ \ _ __ ___  _ __ (_)_ __   ___ _ __ / _|
-      | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_ 
+      | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_
       | |_| | | | | | | | | | | |_) |  __/ |  |  _|
-       \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|  
-                              |_|                  
+       \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|
+                              |_|
 
       Analysis mode = cli
       [analysis] deriving Omniperf metrics...
@@ -138,12 +138,12 @@ Walkthrough
 
       $ omniperf analyze -p workloads/vcopy/MI200/ --list-metrics gfx90a
 
-        ___                  _                  __ 
+        ___                  _                  __
        / _ \ _ __ ___  _ __ (_)_ __   ___ _ __ / _|
-      | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_ 
+      | | | | '_ ` _ \| '_ \| | '_ \ / _ \ '__| |_
       | |_| | | | | | | | | | | |_) |  __/ |  |  _|
-       \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|  
-                              |_|                  
+       \___/|_| |_| |_|_| |_|_| .__/ \___|_|  |_|
+                              |_|
 
       Analysis mode = cli
       [analysis] deriving Omniperf metrics...
@@ -186,7 +186,7 @@ Walkthrough
 
 3. Choose your own customized subset of metrics with the ``-b`` (or ``--block``)
    option. Or, build your own configuration following
-   `config_template <https://github.com/ROCm/omniperf/blob/main/src/omniperf_analyze/configs/panel_config_template.yaml>`_.
+   `config_template <https://github.com/ROCm/omniperf/blob/amd-mainline/src/omniperf_soc/analysis_configs/panel_config_template.yaml>`_.
    The following snippet shows how to generate a report containing only metric 2
    (:doc:`System Speed-of-Light </conceptual/system-speed-of-light>`).
 

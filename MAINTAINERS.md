@@ -6,7 +6,7 @@ Before publishing a new Omniperf release, please review this checklist to ensure
 
 1) **Ensure [VERSION](VERSION) file is updated** to reflect your desired release version.
 2) **Sync `amd-mainline` with `amd-staging`**. A rebase may be required to pull all of the desired patches from the development branch to our stable mainline. Click [here](https://github.com/ROCm/omniperf/compare/amd-mainline...amd-staging) to begin that process.
-3) **Update [CHANGES](CHANGES)** to reflect all major modifications to the codebase since the last release. When modifying [CHANGES](CHANGES) please reference formatting from previous releases to ensure consistency.
+3) **Update [CHANGES](CHANGES)** to reflect all major modifications to the codebase since the last release. When modifying [CHANGES](CHANGES) please ensure formatting is consistent with the rest of the ROCm software stack. See [this template](https://github.com/ROCm/hipTensor/blob/develop/CHANGELOG.md) for reference.
 4) **Confirm all CI tests are passing**. You can easily confirm this by peeking the passing status of all GitHub continuous integration tests.
 5) **Create a tag from `amd-mainline`**. More information on tagging can be found at [Git Docs - Tagging](https://git-scm.com/book/en/v2/Git-Basics-Tagging). 
 

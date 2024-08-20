@@ -48,7 +48,7 @@ jobs:
       - name: Determine release name
         run: |
           if [[ ${{github.ref_name}} == rocm-* ]]; then
-            echo "RELEASE_NAME=Omniperf ${{ env.VERSION }} for ROCm ${{github.ref_name}}"
+            echo "RELEASE_NAME=Omniperf ${{ env.VERSION }} for ${{github.ref_name}}"
           else
             echo "RELEASE_NAME=Omniperf ${{ env.VERSION }}"
           fi >> $GITHUB_ENV
@@ -60,4 +60,4 @@ jobs:
           draft: True
           name: ${{ env.RELEASE_NAME }}
           files: |
-            omniperf-*.tar.gz
+            build/omniperf-${{github.ref_name}}.tar.gz

@@ -33,6 +33,7 @@ from utils.utils import demarcate, console_debug, console_log, console_error
 from pathlib import Path
 
 from omniperf_base import SUPPORTED_ARCHS
+from omniperf_base import MI300_CHIP_IDS
 
 
 class OmniSoC_Base:
@@ -154,6 +155,11 @@ class OmniSoC_Base:
             if key != None:
                 self._mspec.workgroup_max_size = key
                 continue
+
+            key = search(r"^\s*Chip ID:\s+ ([a-zA-Z0-9]+)\s*", linetext)
+            if key != None:
+                self._mspec.chip_id = key
+                continue            
 
             key = search(r"^\s*Max Waves Per CU:\s+ ([a-zA-Z0-9]+)\s*", linetext)
             if key != None:

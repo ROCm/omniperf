@@ -57,6 +57,7 @@ SUPPORTED_ARCHS = {
 
 MI300_CHIP_IDS = {
     "29856" : "MI300A_A1",
+    "29857" : "MI300X_A1",
     "29858" : "MI308X",
 }
 

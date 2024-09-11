@@ -203,6 +203,9 @@ class OmniSoC_Base:
             # We need to distinguish MI308X by peeking reported num CUs
             elif self._mspec.cu_per_gpu == "80" or "MI308X" in self.check_arch_override():
                 self._mspec.gpu_model = "MI308X"
+            # Use Chip ID to distinguish the gpu model by using built-in dictionary
+            elif self._mspec.chip_id in MI300_CHIP_IDS:
+                self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]
             else:
                 console_error(
                     "Cannot parse MI300 details from rocminfo. Please verify output or set the arch using (e.g.,) "

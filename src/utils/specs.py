@@ -406,10 +406,10 @@ class MachineSpecs:
     chip_id: str = field(
         default=None,
         metadata={
-            "doc":"<>",
+            "doc": "<>",
             "name": "Chip ID",
         },
-    )     
+    )
     max_waves_per_cu: str = field(
         default=None,
         metadata={

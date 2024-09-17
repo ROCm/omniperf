@@ -159,7 +159,7 @@ class OmniSoC_Base:
             key = search(r"^\s*Chip ID:\s+ ([a-zA-Z0-9]+)\s*", linetext)
             if key != None:
                 self._mspec.chip_id = key
-                continue            
+                continue
 
             key = search(r"^\s*Max Waves Per CU:\s+ ([a-zA-Z0-9]+)\s*", linetext)
             if key != None:
@@ -200,9 +200,6 @@ class OmniSoC_Base:
                 or "MI300X" in self.check_arch_override()
             ):
                 self._mspec.gpu_model = "MI300X_A1"
-            # We need to distinguish MI308X by peeking reported num CUs
-            elif self._mspec.cu_per_gpu == "80" or "MI308X" in self.check_arch_override():
-                self._mspec.gpu_model = "MI308X"
             # Use Chip ID to distinguish the gpu model by using built-in dictionary
             elif self._mspec.chip_id in MI300_CHIP_IDS:
                 self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]

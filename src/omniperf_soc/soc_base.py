@@ -100,11 +100,6 @@ class OmniSoC_Base:
         # assume no SoC specific options and return empty list by default
         return []
 
-    def check_arch_override(self):
-        if "OMNIPERF_ARCH_OVERRIDE" in os.environ.keys():
-            return os.environ["OMNIPERF_ARCH_OVERRIDE"]
-        return ""
-
     @demarcate
     def populate_mspec(self):
         from utils.specs import search, run, total_sqc, total_xcds
@@ -185,18 +180,10 @@ class OmniSoC_Base:
         self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].keys())[
             0
         ].upper()
-        if self._mspec.gpu_model == "MI300":
-            self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].values())[
-                0
-            ][0]
-        # Use Chip ID to distinguish the gpu model by using built-in dictionary
-        if self._mspec.chip_id in MI300_CHIP_IDS:
-            self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]
-        else:
-            console_error(
-                "Cannot parse MI300 details from rocminfo. Please verify output or set the arch using (e.g.,) "
-                'export OMNIPERF_ARCH_OVERRIDE="MI300A"'
-            )
+        if self._mspec.gpu_model == "MI300": 
+            # Use Chip ID to distinguish MI300 gpu model using the built-in dictionary
+            if self._mspec.chip_id in MI300_CHIP_IDS:
+                self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]
 
         self._mspec.num_xcd = str(
             total_xcds(self._mspec.gpu_model, self._mspec.compute_partition)

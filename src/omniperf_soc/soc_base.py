@@ -189,25 +189,14 @@ class OmniSoC_Base:
             self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].values())[
                 0
             ][0]
-        if self._mspec.gpu_arch == "gfx942":
-            if (
-                "MI300A" in "\n".join(self._mspec._rocminfo)
-                or "MI300A" in self.check_arch_override()
-            ):
-                self._mspec.gpu_model = "MI300A_A1"
-            elif (
-                "MI300X" in "\n".join(self._mspec._rocminfo)
-                or "MI300X" in self.check_arch_override()
-            ):
-                self._mspec.gpu_model = "MI300X_A1"
-            # Use Chip ID to distinguish the gpu model by using built-in dictionary
-            elif self._mspec.chip_id in MI300_CHIP_IDS:
-                self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]
-            else:
-                console_error(
-                    "Cannot parse MI300 details from rocminfo. Please verify output or set the arch using (e.g.,) "
-                    'export OMNIPERF_ARCH_OVERRIDE="MI300A"'
-                )
+        # Use Chip ID to distinguish the gpu model by using built-in dictionary
+        if self._mspec.chip_id in MI300_CHIP_IDS:
+            self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]
+        else:
+            console_error(
+                "Cannot parse MI300 details from rocminfo. Please verify output or set the arch using (e.g.,) "
+                'export OMNIPERF_ARCH_OVERRIDE="MI300A"'
+            )
 
         self._mspec.num_xcd = str(
             total_xcds(self._mspec.gpu_model, self._mspec.compute_partition)

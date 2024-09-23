@@ -69,11 +69,9 @@ class gfx942_soc(OmniSoC_Base):
         )
         # self.roofline_obj = Roofline(args, self._mspec)
 
-        # --showmclkrange is broken in MI308X, hardcode freq
-        if self._mspec.gpu_model == "MI308X":
-            self._mspec.max_mclk = 1300
-            self._mspec.cur_mclk = 1300
-        elif self._mspec.gpu_model == "MI300X_A1":
+        # Workaround for broken --showmclkrange
+        # MI300X/MI300A/MI308X all seem to have 1300MHz mclk
+        if self._mspec.gpu_model in ["MI308X", "MI300X_A1", "MI300A_A1"]:
             self._mspec.max_mclk = 1300
             self._mspec.cur_mclk = 1300
 

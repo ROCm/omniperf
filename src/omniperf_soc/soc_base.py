@@ -180,7 +180,7 @@ class OmniSoC_Base:
         self._mspec.gpu_model = list(SUPPORTED_ARCHS[self._mspec.gpu_arch].keys())[
             0
         ].upper()
-        if self._mspec.gpu_model == "MI300": 
+        if self._mspec.gpu_model == "MI300":
             # Use Chip ID to distinguish MI300 gpu model using the built-in dictionary
             if self._mspec.chip_id in MI300_CHIP_IDS:
                 self._mspec.chip_id = MI300_CHIP_IDS[self._mspec.chip_id]

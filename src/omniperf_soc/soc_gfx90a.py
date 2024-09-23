@@ -71,6 +71,12 @@ class gfx90a_soc(OmniSoC_Base):
         )
         self.roofline_obj = Roofline(args, self._mspec)
 
+        # Workaround for broken --showmclkrange
+        # MI210/MI250/MI250X all seem to have 1600MHz mclk
+        if self._mspec.gpu_model == "MI200":
+            self._mspec.max_mclk = 1600
+            self._mspec.cur_mclk = 1600
+
         # Set arch specific specs
         self._mspec._l2_banks = 32
         self._mspec.lds_banks_per_cu = 32

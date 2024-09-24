@@ -101,8 +101,8 @@ class OmniSoC_Base:
         return []
 
     def check_arch_override(self):
-        if "OMNIPERF_ARCH_OVERRIDE" in os.environ.keys():
-            return os.environ["OMNIPERF_ARCH_OVERRIDE"]
+        if "ROCPROFCOMPUTE_ARCH_OVERRIDE" in os.environ.keys():
+            return os.environ["ROCPROFCOMPUTE_ARCH_OVERRIDE"]
         return ""
 
     @demarcate
@@ -201,7 +201,7 @@ class OmniSoC_Base:
             else:
                 console_error(
                     "Cannot parse MI300 details from rocminfo. Please verify output or set the arch using (e.g.,) "
-                    'export OMNIPERF_ARCH_OVERRIDE="MI300A"'
+                    'export ROCPROFCOMPUTE_ARCH_OVERRIDE="MI300A"'
                 )
 
         self._mspec.num_xcd = str(

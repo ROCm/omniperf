@@ -53,11 +53,10 @@ jobs:
             echo "RELEASE_NAME=Omniperf ${{ env.VERSION }}"
           fi >> $GITHUB_ENV
       - name: Upload tarball Release Asset
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'ROCm/omniperf'
         with:
           fail_on_unmatched: True
           draft: True
-          name: ${{ env.RELEASE_NAME }}
           files: |
             build/omniperf-${{github.ref_name}}.tar.gz

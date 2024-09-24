@@ -57,6 +57,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'ROCm/omniperf'
         with:
           fail_on_unmatched: True
-          draft: True
           files: |
             build/omniperf-${{github.ref_name}}.tar.gz

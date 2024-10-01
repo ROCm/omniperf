@@ -25,26 +25,26 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-        The changelog has been updated based on the commit history. Please review the changes below:
-        ```
-        $(cat CHANGES.tmp)
-        ```
-        If you approve, please comment with "APPROVE CHANGELOG".
+            The changelog has been updated based on the commit history. Please review the changes below:
+            ```
+            $(cat CHANGES.tmp)
+            ```
+            If you approve, please comment with "APPROVE CHANGELOG".
 
       - name: Await approval
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-        const prNumber = context.issue.number;
-        const { data: comments } = await github.issues.listComments({
-          ...context.repo,
-          issue_number: prNumber,
-        });
-        const approved = comments.some(comment => comment.body.includes('APPROVE CHANGELOG'));
-        if (!approved) {
-          throw new Error('Changelog update not approved');
-        }
+            const prNumber = context.issue.number;
+            const { data: comments } = await github.issues.listComments({
+              ...context.repo,
+              issue_number: prNumber,
+            });
+            const approved = comments.some(comment => comment.body.includes('APPROVE CHANGELOG'));
+            if (!approved) {
+              throw new Error('Changelog update not approved');
+            }
 
       - name: Commit and push changelog
         if: success()

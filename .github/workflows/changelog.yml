@@ -2,9 +2,9 @@ name: Update Changelog
 
 on:
   # TODO: Change this to on "pull-request" and the amd-mainline branch
-  push:
+  pull_request:
     branches:
-      - colramos/auto-changelog
+      - colramos/test
 
 jobs:
   update-changelog:

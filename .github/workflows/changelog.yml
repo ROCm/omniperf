@@ -1,0 +1,57 @@
+name: Update Changelog
+
+on:
+  # TODO: Change this to on "pull-request" and the amd-mainline branch
+  push:
+    branches:
+      - colramos/auto-changelog
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate changelog
+        run: |
+          git fetch --prune --unshallow
+          git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD > CHANGES.tmp
+          echo -e "## $(date +'%Y-%m-%d')\n$(cat CHANGES.tmp)\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
+
+      - name: Create pull request comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+        The changelog has been updated based on the commit history. Please review the changes below:
+        ```
+        $(cat CHANGES.tmp)
+        ```
+        If you approve, please comment with "APPROVE CHANGELOG".
+
+      - name: Await approval
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+        const prNumber = context.issue.number;
+        const { data: comments } = await github.issues.listComments({
+          ...context.repo,
+          issue_number: prNumber,
+        });
+        const approved = comments.some(comment => comment.body.includes('APPROVE CHANGELOG'));
+        if (!approved) {
+          throw new Error('Changelog update not approved');
+        }
+
+      - name: Commit and push changelog
+        if: success()
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add CHANGELOG.md
+          git commit -m 'Update CHANGELOG.md'
+          git push origin HEAD:${{ github.head_ref }}
+      

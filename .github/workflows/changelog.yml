@@ -4,7 +4,7 @@ on:
   # TODO: Change this to on "pull-request" and the amd-mainline branch
   pull_request:
     branches:
-      - colramos/test
+      - colramos/auto-changelog
 
 jobs:
   update-changelog:

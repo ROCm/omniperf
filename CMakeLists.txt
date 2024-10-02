@@ -189,46 +189,51 @@ message(STATUS "Pytest CPU threadcount: ${PYTEST_NUMPROCS}")
 
 add_test(
     NAME test_profile_kernel_execution
-    COMMAND pytest -m kernel_execution --junitxml=tests/test_profile_kernel_execution.xml
-            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND
+        ${Python3_EXECUTABLE} -m pytest -m kernel_execution
+        --junitxml=tests/test_profile_kernel_execution.xml ${COV_OPTION}
+        ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_ipblocks
-    COMMAND pytest -m block --junitxml=tests/test_profile_blocks.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND
+        ${Python3_EXECUTABLE} -m pytest -m block --junitxml=tests/test_profile_blocks.xml
+        ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_property(TEST test_profile_ipblocks PROPERTY COST 11)
 
 add_test(
     NAME test_profile_dispatch
-    COMMAND pytest -m dispatch --junitxml=tests/test_profile_dispatch.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND
+        ${Python3_EXECUTABLE} -m pytest -m dispatch
+        --junitxml=tests/test_profile_dispatch.xml ${COV_OPTION}
+        ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_property(TEST test_profile_ipblocks PROPERTY COST 5)
 
 add_test(
     NAME test_profile_mem
-    COMMAND pytest -m mem --junitxml=tests/test_profile_mem.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND ${Python3_EXECUTABLE} -m pytest -m mem --junitxml=tests/test_profile_mem.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_join
-    COMMAND pytest -m join --junitxml=tests/test_profile_join.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND ${Python3_EXECUTABLE} -m pytest -m join --junitxml=tests/test_profile_join.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_sort
-    COMMAND pytest -m sort --junitxml=tests/test_profile_sort.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND ${Python3_EXECUTABLE} -m pytest -m sort --junitxml=tests/test_profile_sort.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_test(
     NAME test_profile_misc
-    COMMAND pytest -m misc --junitxml=tests/test_profile_misc.xml ${COV_OPTION}
-            ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
+    COMMAND ${Python3_EXECUTABLE} -m pytest -m misc --junitxml=tests/test_profile_misc.xml
+            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_profile_general.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 set_tests_properties(
@@ -247,8 +252,10 @@ set_tests_properties(
 
 add_test(
     NAME test_analyze_commands
-    COMMAND pytest -n ${PYTEST_NUMPROCS} --junitxml=tests/test_analyze_commands.xml
-            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
+    COMMAND
+        ${Python3_EXECUTABLE} -m pytest -n ${PYTEST_NUMPROCS}
+        --junitxml=tests/test_analyze_commands.xml ${COV_OPTION}
+        ${PROJECT_SOURCE_DIR}/tests/test_analyze_commands.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 # ---------------------------
@@ -257,8 +264,10 @@ add_test(
 
 add_test(
     NAME test_analyze_workloads
-    COMMAND pytest -n ${PYTEST_NUMPROCS} --junitxml=tests/test_analyze_workloads.xml
-            ${COV_OPTION} ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
+    COMMAND
+        ${Python3_EXECUTABLE} -m pytest -n ${PYTEST_NUMPROCS}
+        --junitxml=tests/test_analyze_workloads.xml ${COV_OPTION}
+        ${PROJECT_SOURCE_DIR}/tests/test_analyze_workloads.py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 # ---------
@@ -407,6 +416,7 @@ set(CPACK_RPM_PACKAGE_PROVIDES "${CPACK_PACKAGE_NAME}")
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 set(CPACK_RPM_PACKAGE_RELEASE_DIST ON)
 set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
+set(CPACK_RPM_SPEC_MORE_DEFINE "%undefine __brp_mangle_shebangs")
 
 if(DEFINED CPACK_PACKAGING_INSTALL_PREFIX)
     set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "${CPACK_PACKAGING_INSTALL_PREFIX}")
@@ -424,6 +434,11 @@ set(PACKAGE_REQUIRES
 set(CPACK_RPM_PACKAGE_REQUIRES ${PACKAGE_REQUIRES})
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${PACKAGE_REQUIRES})
 
+# Disable automatic dependency generation
+set(CPACK_RPM_PACKAGE_AUTOREQPROV OFF)
+set(CPACK_RPM_PACKAGE_AUTOREQ OFF)
+set(CPACK_RPM_PACKAGE_AUTOPROV OFF)
+
 if(INSTALL_TESTS)
     set(CPACK_RPM_TESTS_PACKAGE_REQUIRES ${CPACK_PACKAGE_NAME})
     set(CPACK_DEBIAN_TESTS_PACKAGE_DEPENDS ${CPACK_PACKAGE_NAME})
@@ -434,14 +449,14 @@ if(DEFINED ENV{ROCM_LIBPATCH_VERSION})
     set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}.$ENV{ROCM_LIBPATCH_VERSION}")
 endif()
 
-if(DEFINED CPACK_RPM_PACKAGE_RELEASE)
-    set(CPACK_RPM_PACKAGE_RELEASE ${CPACK_RPM_PACKAGE_RELEASE})
+if(DEFINED ENV{CPACK_RPM_PACKAGE_RELEASE})
+    set(CPACK_RPM_PACKAGE_RELEASE $ENV{CPACK_RPM_PACKAGE_RELEASE})
 else()
     set(CPACK_RPM_PACKAGE_RELEASE "local")
 endif()
 
-if(DEFINED CPACK_DEBIAN_PACKAGE_RELEASE)
-    set(CPACK_DEBIAN_PACKAGE_RELEASE ${CPACK_DEBIAN_PACKAGE_RELEASE})
+if(DEFINED ENV{CPACK_DEBIAN_PACKAGE_RELEASE})
+    set(CPACK_DEBIAN_PACKAGE_RELEASE $ENV{CPACK_DEBIAN_PACKAGE_RELEASE})
 else()
     set(CPACK_DEBIAN_PACKAGE_RELEASE "local")
 endif()

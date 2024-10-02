@@ -4,17 +4,17 @@
 [![Docs](https://github.com/ROCm/omniperf/actions/workflows/docs.yml/badge.svg)](https://rocm.github.io/omniperf/)
 [![DOI](https://zenodo.org/badge/561919887.svg)](https://zenodo.org/badge/latestdoi/561919887)
 
-
 # Omniperf
 
 ## General
+
 Omniperf is a system performance profiling tool for machine
 learning/HPC workloads running on AMD MI GPUs. The tool presently
 targets usage on MI100, MI200, and MI300 accelerators.
 
 * For more information on available features, installation steps, and
 workload profiling and analysis, please refer to the online
-[documentation](https://rocm.github.io/omniperf).
+[documentation](https://rocm.docs.amd.com/projects/omniperf/en/latest/).
 
 * Omniperf is an AMD open source research project and is not supported
 as part of the ROCm software stack. We welcome contributions and
@@ -29,10 +29,10 @@ contribution process.
 Omniperf follows a
 [main-dev](https://nvie.com/posts/a-successful-git-branching-model/)
 branching model. As a result, our latest stable release is shipped
-from the `main` branch, while new features are developed in our
-`dev` branch.
+from the `amd-mainline` branch, while new features are developed in our
+`amd-staging` branch.
 
-Users may checkout `dev` to preview upcoming features.
+Users may checkout `amd-staging` to preview upcoming features.
 
 ## How to Cite
 

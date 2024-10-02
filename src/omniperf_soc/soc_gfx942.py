@@ -50,7 +50,7 @@ class gfx942_soc(OmniSoC_Base):
                     str(config.omniperf_home), "omniperf_soc", "profile_configs", "gfx940"
                 )
             )
-        self.set_compatible_profilers(["rocprofv2"])
+        self.set_compatible_profilers(["rocprofv1", "rocprofv2"])
         # Per IP block max number of simultaneous counters. GFX IP Blocks
         self.set_perfmon_config(
             {
@@ -64,7 +64,7 @@ class gfx942_soc(OmniSoC_Base):
                 "SPI": 2,
                 "GRBM": 2,
                 "GDS": 4,
-                "TCC_channels": 32,
+                "TCC_channels": 16,
             }
         )
         # self.roofline_obj = Roofline(args, self._mspec)

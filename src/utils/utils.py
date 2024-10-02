@@ -214,8 +214,9 @@ def capture_subprocess_output(subprocess_args, new_env=None, profileMode=False):
                 console_log(rocprof_cmd, line.strip(), indent_level=1)
             else:
                 console_log(line.strip())
-        except UnicodeDecodeError as e:
-            console_log(str(e), indent_level=1)
+        except UnicodeDecodeError:
+            # Skip this line
+            pass
 
     # Register callback for an "available for read" event from subprocess' stdout stream
     selector = selectors.DefaultSelector()

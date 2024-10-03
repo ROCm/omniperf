@@ -32,7 +32,6 @@ right for you.
    :width: 800
 
 .. _core-install:
-
 Core installation
 =================
 

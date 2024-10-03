@@ -205,7 +205,7 @@ def capture_subprocess_output(subprocess_args, new_env=None, profileMode=False):
     buf = io.StringIO()
 
     def handle_output(stream, mask):
-        try:   
+        try:
             # Because the process' output is line buffered, there's only ever one
             # line to read when this function is called
             line = stream.readline()

@@ -52,9 +52,7 @@ class cli_analysis(OmniAnalyze_Base):
                 d[0], self.get_args().kernel_verbose, self.get_args().verbose
             )
             # demangle and overwrite original 'Kernel_Name'
-            kernel_name_shortener(
-                self._runs[i].raw_pmc, self.get_args().kernel_verbose
-            )
+            kernel_name_shortener(self._runs[i].raw_pmc, self.get_args().kernel_verbose)
 
             # create the loaded table
             parser.load_table_data(
@@ -73,17 +71,13 @@ class cli_analysis(OmniAnalyze_Base):
             tty.show_kernel_stats(
                 self.get_args(),
                 self._runs,
-                self._arch_configs[
-                    self._runs[0].sys_info.iloc[0]["gpu_arch"]
-                ],
+                self._arch_configs[self._runs[0].sys_info.iloc[0]["gpu_arch"]],
                 self._output,
             )
         else:
             tty.show_all(
                 self.get_args(),
                 self._runs,
-                self._arch_configs[
-                    self._runs[0].sys_info.iloc[0]["gpu_arch"]
-                ],
+                self._arch_configs[self._runs[0].sys_info.iloc[0]["gpu_arch"]],
                 self._output,
             )

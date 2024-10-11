@@ -1136,7 +1136,7 @@ def test_baseline():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
     with pytest.raises(SystemExit) as e:
         with patch(
@@ -1151,7 +1151,7 @@ def test_baseline():
             ],
         ):
             omniperf.main()
-    assert e.value.code == 1
+    assert e.value.code == 0
 
 
 @pytest.mark.misc

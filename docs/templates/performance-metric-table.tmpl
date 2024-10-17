@@ -1,0 +1,30 @@
+.. -*- mode: rst -*-
+
+.. note::
+
+   START
+
+{% for data_source in data["Panel Config"]["data source"] %}
+
+{{ data_source.metric_table.id }}
+
+{{ data_source.metric_table.title }}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Metric
+     - Description
+     - Unit
+
+   {% for k in data_source.metric_table %}
+   * - {{ k.metric }}
+     - two
+     - three
+   {% endfor %}
+
+{% endfor %}
+
+.. note::
+
+   END

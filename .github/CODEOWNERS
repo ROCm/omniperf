@@ -5,9 +5,12 @@ docs/ @ROCm/rocm-documentation
 *.md @ROCm/rocm-documentation
 *.rst @ROCm/rocm-documentation
 .readthedocs.yaml @ROCm/rocm-documentation
+<<<<<<< HEAD
 
 # Packaging
 cmake/ @koomie
 tests/ @koomie
 CMakeLists.txt @koomie
 utils/ @koomie
+=======
+>>>>>>> 0e7085ccccbe27f9a804e1f5c9237026213d9da2

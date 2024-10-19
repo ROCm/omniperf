@@ -140,3 +140,15 @@ Panel Config:
             unit: Wavefronts
             coll_level: SQ_LEVEL_WAVES
             tips:
+          Wave Execution Efficiency:
+            avg:
+              AVG(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU / $wave_size * 100) if (SQ_ACTIVE_INST_VALU
+              != 0) else None))
+            min:
+              MIN(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU / $wave_size  * 100) if (SQ_ACTIVE_INST_VALU
+              != 0) else None))
+            max:
+              MAX(((SQ_THREAD_CYCLES_VALU / SQ_ACTIVE_INST_VALU / $wave_size  * 100) if (SQ_ACTIVE_INST_VALU
+              != 0) else None))
+            unit: pct
+            tips: # VALU Active Threads / wavefront size

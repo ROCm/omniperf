@@ -49,6 +49,7 @@ exclude_patterns = ["archive", "*/includes"]
 
 html_static_path = ["sphinx/static/css"]
 html_css_files = ["o_custom.css"]
+templates_path = ["templates"]
 
 external_toc_path = "./sphinx/_toc.yml"
 external_projects_current_project = "omniperf"

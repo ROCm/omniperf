@@ -46,6 +46,9 @@ processor’s metrics therefore are focused on reporting, for example:
 Command processor fetcher (CPF)
 ===============================
 
+.. datatemplate:yaml:: ../../src/omniperf_soc/analysis_configs/gfx90a/0500_command-processor.yaml
+   :template: ../templates/performance-metric-table.tmpl
+
 .. list-table::
    :header-rows: 1
 

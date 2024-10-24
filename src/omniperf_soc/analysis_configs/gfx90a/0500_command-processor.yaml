@@ -2,6 +2,18 @@
 # Add description/tips for each metric in this section.
 # So it could be shown in hover.
 Metric Description:
+  CPF_Utilization: &CPF_Utilization_tip
+    Percent of total cycles where the CPF was busy actively doing any work. The
+    ratio of CPF busy cycles over total cycles counted by the CPF.
+  CPF_Stall: &CPF_Stall_tip
+    Percent of CPF busy cycles where the CPF was stalled for any reason.
+  CPF-L2_Utilization: &CPF-L2_Utilization_tip
+    Percent of total cycles counted by the CPF-L2 interface where the CPF-L2
+    interface was active doing any work. The ratio of CPF-L2 busy cycles over total cycles counted by the CPF-L2.
+  CPF-L2_Stall: &CPF-L2_Stall_tip
+    Percent of CPF-L2 busy cycles where the CPF-L2 interface was stalled for any reason.
+  CPF-UTCL1_Stall: &CPF-UTCL1_Stall_tip
+    Percent of CPF busy cycles where the CPF was stalled by address translation.
 
 # Define the panel properties and properties of each metric in the panel.
 Panel Config:
@@ -27,7 +39,7 @@ Panel Config:
             max: MAX((((100 * CPF_CPF_STAT_BUSY) / (CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE))
               if ((CPF_CPF_STAT_BUSY + CPF_CPF_STAT_IDLE) != 0) else None))
             unit: pct
-            tips: 
+            tips: *CPF_Utilization_tip
           CPF Stall:
             avg: AVG((((100 * CPF_CPF_STAT_STALL) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
               != 0) else None))
@@ -36,7 +48,7 @@ Panel Config:
             max: MAX((((100 * CPF_CPF_STAT_STALL) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
               != 0) else None))
             unit: pct
-            tips: 
+            tips: *CPF_Stall_tip
           CPF-L2 Utilization:
             avg: AVG((((100 * CPF_CPF_TCIU_BUSY) / (CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE))
               if ((CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE) != 0) else None))
@@ -45,7 +57,7 @@ Panel Config:
             max: MAX((((100 * CPF_CPF_TCIU_BUSY) / (CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE))
               if ((CPF_CPF_TCIU_BUSY + CPF_CPF_TCIU_IDLE) != 0) else None))
             unit: pct
-            tips: 
+            tips: *CPF-L2_Utilization_tip
           CPF-L2 Stall:
             avg: AVG((((100 * CPF_CPF_TCIU_STALL) / CPF_CPF_TCIU_BUSY) if (CPF_CPF_TCIU_BUSY
               != 0) else None))
@@ -54,7 +66,7 @@ Panel Config:
             max: MAX((((100 * CPF_CPF_TCIU_STALL) / CPF_CPF_TCIU_BUSY) if (CPF_CPF_TCIU_BUSY
               != 0) else None))
             unit: pct
-            tips: 
+            tips: *CPF-L2_Stall_tip
           CPF-UTCL1 Stall:
             avg: AVG(((100 * CPF_CMP_UTCL1_STALL_ON_TRANSLATION) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
               != 0) else None)
@@ -63,7 +75,7 @@ Panel Config:
             max: MAX(((100 * CPF_CMP_UTCL1_STALL_ON_TRANSLATION) / CPF_CPF_STAT_BUSY) if (CPF_CPF_STAT_BUSY
               != 0) else None)
             unit: pct
-            tips:
+            tips: *CPF-UTCL1_Stall_tip
 
     - metric_table:
         id: 502

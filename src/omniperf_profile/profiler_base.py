@@ -26,6 +26,7 @@ from abc import ABC, abstractmethod
 from tqdm import tqdm
 import glob
 import logging
+import shlex
 import sys
 import os
 import re
@@ -263,7 +264,7 @@ class OmniProfiler_Base:
                     "Your command %s doesn't point to a executable. Please verify."
                     % self.__args.remaining[0]
                 )
-            self.__args.remaining = " ".join(self.__args.remaining)
+            self.__args.remaining = " ".join(shlex.quote(arg) for arg in self.__args.remaining)
         else:
             console_error(
                 "Profiling command required. Pass application executable after -- at the end of options.\n\t\ti.e. omniperf profile -n vcopy -- ./vcopy -n 1048576 -b 256"
